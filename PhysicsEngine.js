@@ -65,6 +65,7 @@ function RegisterPhysicsObject(){//Register an Object that has x and y propertie
 	this.KinematicTrackTotalIncrementX={};
 	this.KinematicTrackTotalIncrementY={};
 	
+	this.KinematicComponentRemoveBoolean={};
 	this.KinematicCurrentVelocityValue={};
 	
 	PhysicsObj[PhysicsObj.length] = this;//Store the registered Object component
@@ -85,7 +86,7 @@ function KinematicEquation (PhysicsTick)
 			let t = (PhysicsEngineTick.GetCurrentTotalTick()- Element.KinematicTrackCurrentTick[Name])/TicksPerSecond;//in terms of seconds
 			
 			//Check if the Component Removal Time expires
-			if (Element.KinematicIsComponentRemovableAfterXSeconds[Name] && (t>Element.KinematicTrackEndTick[Name]/TicksPerSecond))
+			if ((Element.KinematicIsComponentRemovableAfterXSeconds[Name] && (t>Element.KinematicTrackEndTick[Name]/TicksPerSecond))||Element.KinematicComponentRemoveBoolean[Name])
 			{
 				console.log('x:'+Element.x+' Y:'+Element.y);
 				
@@ -98,6 +99,7 @@ function KinematicEquation (PhysicsTick)
 				delete Element.KinematicTrackTotalIncrementX[Name];
 				delete Element.KinematicTrackTotalIncrementY[Name];
 				delete Element.KinematicCurrentVelocityValue[Name];
+				delete Element.KinematicComponentRemoveBoolean[Name];
 				
 				Element.KinematicComponentName.splice(Index, 1);
 				
@@ -205,7 +207,9 @@ RegisterPhysicsObject.prototype.SetKinematicParameters = function(String, Veloci
 		console.log('Without Countdown');
 	}
 	
-	this.KinematicCurrentVelocityValue[Name]={x:0,y:0};
+	this.KinematicCurrentVelocityValue[Name]={x:0,y:0};//default value
+	this.KinematicComponentRemoveBoolean[Name]=false;//default value
+	
 	
 }
 
@@ -216,6 +220,7 @@ RegisterPhysicsObject.prototype.RemoveKinematicParameters = function(Name){
 		console.log('Removing '+Name);
 		this.KinematicIsComponentRemovableAfterXSeconds[Name]=true;//Execution of the following two statements will trigger deletion in the next execution of PhysicsEngineTick function
 		this.KinematicTrackEndTick[Name]=0;
+		this.KinematicComponentRemoveBoolean[Name]=true;
 	}
 	else //Throw Error If Name Doesnt Exists
 	{
