@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<body>
+<canvas id='canvas' height=800 width=600></canvas>
+<script type="text/javascript" src="https://cdn.rawgit.com/marcustansoon/PhysicsEngine/c4771636/PhysicsEngine.js"></script>
+
+
+<script>
+PhysicsEngineTick.Start();//Start the Physics Engine Time Tick
+
+
+var Canvas=document.getElementById('canvas');
+var Context=Canvas.getContext('2d');//Get canvas
+
+
+function Animation(){
+		 Context.clearRect(0, 0, Canvas.width, Canvas.height);	
+         	Context.drawImage(CoinImage,//Image
+            					0,		//Source Starting Point x
+                                0,		//Source Starting Point y
+                                CoinImage.height,//Image height
+                                CoinImage.width,//Image width
+                                Coin.x,//Position x of the image
+                                Coin.y,//Position y of the image
+                                CoinImage.height,//Image height
+                                CoinImage.width//Image width
+                                );
+   
+    
+    
+    Bounce();//Induce upward motion (bouncing ) when the Coin's height reaches certain point
+    
+    
+    
+    requestAnimationFrame(Animation);
+    
+    
+    
+    
+    
+}
+
+function YourObj (x,y){//An Object with X and Y properties included
+	this.x=x;
+    this.y=y;//Both X and Y properties are REQUIRED!!!
+    
+    RegisterPhysicsObject.call(this);//Register the object so that kinematic motion can be attached to that object
+}
+
+
+
+
+//-------------------------------Must Inherit the engine prototype func!!!--------------------
+
+YourObj.prototype = Object.create(RegisterPhysicsObject.prototype);//Inherit the Prototype properties of Physics Engine
+YourObj.prototype.constructor = YourObj;//Inherit the Prototype properties of Physics Engine
+
+//-------------------------------Must Inherit the engine prototype func!!!--------------------
+
+
+
+
+
+
+
+var Coin = new YourObj(20,20);//Create an Object with x and  y properties
+
+var CoinImage=new Image();//Create Image Object
+
+
+CoinImage.src="http://img8.downloadapk.net/8/54/e5daa0_150.png";//Image src
+
+
+CoinImage.onload=function(){
+	Animation();//Start the animation function
+  
+  
+  
+  
+    //------------Parameters:--Name --Velocity--Acceleration--Angle in degree--Any Unique Name--Motion Expire Time---
+    Coin.SetKinematicParameters("Add",80,-8,0,6,"AnyName");
+    //Attach an Kinematic component to that Coin, with velocity of 80, acceleration of -8, Angle of Zero and 6 seconds expire countdown (Automatically remove this kinematic component after 6 seconds)
+    
+    
+    
+    Coin.SetKinematicParameters("Add",0,35,-90,0,"Gravity");//Attach Gravity acting downward(-90 degree) with acceleration of 9.8, 
+    
+    
+    
+    
+    
+    
+    //Note: Attaching kinematic component allows it to alter the x and y properties of the registered object, hence, it is necessary for that object to have both x and y properties before registeration of that object
+    
+  
+}
+
+
+var count=0;
+
+function Bounce(){//Introduce upward motion
+
+	if (Coin.y>300 && Coin.CheckIfKinematicComponentExists('Gravity'))//Add bounce effect when coin height is above 300
+    {
+    	Coin.SetKinematicParameters("Change",115,-35,90,0,"Gravity");//Change the previously attached Gravity Component, by adding upward velocity, inducing bounce effect		
+        
+        count++;//increment count
+        if (count===3)//Remove Bounce motion after a total of two bounces
+        {
+        	Coin.RemoveKinematicParameters("Gravity");//Remove 'Gravity' component
+        }	
+    }
+}
+</script>
+
+</body>
+</html>
