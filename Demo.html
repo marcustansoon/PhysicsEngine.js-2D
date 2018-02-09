@@ -2,7 +2,7 @@
 <html>
 <body>
 <canvas id='canvas' height=800 width=600></canvas>
-<script type="text/javascript" src="https://cdn.rawgit.com/marcustansoon/PhysicsEngine/c4771636/PhysicsEngine.js"></script>
+<script type="text/javascript" src="https://rawgit.com/marcustansoon/PhysicsEngine/master/PhysicsEngine.js"></script>
 
 
 <script>
@@ -107,7 +107,7 @@ function Bounce(){//Introduce upward motion
         count++;//increment count
         if (count===3)//Remove Bounce motion after a total of two bounces
         {
-        	Coin.RemoveKinematicParameters("Gravity");//Remove 'Gravity' component
+        console.log('Removed');	Coin.RemoveKinematicParameters("Gravity");//Remove 'Gravity' component
         }	
     }
 }
