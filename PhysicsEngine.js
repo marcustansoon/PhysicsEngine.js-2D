@@ -256,7 +256,11 @@ RegisterPhysicsObject.prototype.GetInstantaneousDistanceTravelled = function (Na
 	
 	
 }
-
+// checks if a particular kinematic component exists
+RegisterPhysicsObject.prototype.CheckIfKinematicComponentExists=function(Name)
+{
+	return this.KinematicComponentName.includes(Name);
+}
 function DegreeToRadians ()//Convert Angle In Degree To Radian
 {
 	return ((arguments[0]/180)*Math.PI);//Return Angle in Rads
