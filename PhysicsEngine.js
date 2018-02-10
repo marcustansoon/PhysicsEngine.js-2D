@@ -2,19 +2,27 @@
 
 "use strict";
 /*-----------------------------------------------------------------------------*/
+const Physics = {
+	TickLoopRate:20 //Represent the Physics Time Tick Rate -> Default is 20 (every 20 milliseconds, increment one Time Tick)
+};
 
-const TickLoopRate = 20;//Represent the Physics Time Tick Rate -> Default is 20 (every 20 milliseconds, increment one Time Tick)
-
-const TicksPerSecond = 1/TickLoopRate*1000;//Determine the number of Ticks Per Second
-
-const GravitationalAccelerationConstant = -9.8;// assuming to be real life scenario m/s^2
 
 //IMPORTANT : In order for this Physics Engine Codes to work -> Remember to invoke the Start func (eg : 'PhysicsEngineTick.Start();') Put that statement at the startup of your game
+
 function PhysicsEngineTick (){}//empty function for now
 
-PhysicsEngineTick.prototype.Start=function()//Function that starts the Time Tick Count with 50 Ticks per Second
+PhysicsEngineTick.prototype.Start=function()//Function that starts the Time Tick Count with 50 Ticks per Second (default)
 {
-	console.log("Running Physics Engine Time Tick at rate of "+ TickLoopRate +'milliseconds with '+TicksPerSecond+' Ticks per second');
+	if (!isNaN(arguments[0]))
+	{
+		Physics.TickLoopRate = arguments[0];
+	}
+	Physics.TicksPerSecond=1/Physics.TickLoopRate*1000;//Determine the number of Ticks Per Second
+	
+	Object.freeze(Physics);
+	Object.preventExtensions(Physics);
+	
+	console.log("Running Physics Engine Time Tick at rate of "+ Physics.TickLoopRate +'milliseconds with '+ Physics.TicksPerSecond+' Ticks per second');
 	let CurrentTick = 0,
     CurrentMegaTick=0;
 	
@@ -27,14 +35,14 @@ PhysicsEngineTick.prototype.Start=function()//Function that starts the Time Tick
 			
 		}
 
-	,TickLoopRate);//20milliseconds Fixed Loop
+	,Physics.TickLoopRate);//20milliseconds Fixed Loop
 	
 	this.GetCurrentTotalTick = function()//Return Total time tick
 	{
 		return CurrentTick+CurrentMegaTick*1000000;
 	}
 	
-	function IncrementCurrentTick ()//func that increment tick -> 50 ticks per second
+	function IncrementCurrentTick ()//func that increment tick. default:-> 50 ticks per second
 	{
 		CurrentTick++;//Increment Current Tick
 			
@@ -83,10 +91,10 @@ function KinematicEquation (PhysicsTick)
 		Element.KinematicComponentName.forEach(function(Name,Index)
 		{
 			
-			let t = (PhysicsEngineTick.GetCurrentTotalTick()- Element.KinematicTrackCurrentTick[Name])/TicksPerSecond;//in terms of seconds
+			let t = (PhysicsEngineTick.GetCurrentTotalTick()- Element.KinematicTrackCurrentTick[Name])/Physics.TicksPerSecond;//in terms of seconds
 			
 			//Check if the Component Removal Time expires
-			if ((Element.KinematicIsComponentRemovableAfterXSeconds[Name] && (t>Element.KinematicTrackEndTick[Name]/TicksPerSecond))||Element.KinematicComponentRemoveBoolean[Name])
+			if ((Element.KinematicIsComponentRemovableAfterXSeconds[Name] && (t>Element.KinematicTrackEndTick[Name]/Physics.TicksPerSecond))||Element.KinematicComponentRemoveBoolean[Name])
 			{
 				console.log('x:'+Element.x+' Y:'+Element.y);
 				
@@ -197,7 +205,7 @@ RegisterPhysicsObject.prototype.SetKinematicParameters = function(String, Veloci
 	//Check if the component needs to be removed after X seconds
 	if (RemoveAfterXSeconds>0)
 	{
-		this.KinematicTrackEndTick[Name]=/*PhysicsEngineTick.CurrentTick +*/ RemoveAfterXSeconds*TicksPerSecond;//Convert the Seconds into Total Ticks (1 second = 50 ticks)
+		this.KinematicTrackEndTick[Name]=/*PhysicsEngineTick.CurrentTick +*/ RemoveAfterXSeconds*Physics.TicksPerSecond;//Convert the Seconds into Total Ticks. Default: (1 second = 50 ticks)
 		this.KinematicIsComponentRemovableAfterXSeconds[Name]=true;
 		console.log('With Countdown');
 	}
