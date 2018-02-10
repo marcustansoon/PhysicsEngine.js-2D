@@ -1,6 +1,7 @@
 # PhysicsEngine
 Sample Demo:-
 https://www.w3schools.com/code/tryit.asp?filename=FOAOK1X1NHYC
+https://jsfiddle.net/1suk5ejt/
 
 Brief Descriptions :-
 This engine allows you to apply kinematic motion component (velocity, acceleration) to an canvas object, using ```Kinematic Equation (S=U*t + 1/2*a*t*t)```. 
