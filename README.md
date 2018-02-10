@@ -33,7 +33,7 @@ YourObj.prototype.constructor = YourObj;//declare 'Obj' as the parent root which
 ```
 
 
-Features/Functions provided :-
+Features/Functions provided for Registered Object:-
 
 1) Attach an Kinematic Component
 ```javascript
