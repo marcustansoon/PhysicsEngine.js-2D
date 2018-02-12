@@ -1,9 +1,9 @@
 # PhysicsEngine
 Sample Demo with p5 collision .js:-
 
-https://www.w3schools.com/code/tryit.asp?filename=FODI53WAUJEH
+https://www.w3schools.com/code/tryit.asp?filename=FODK89T1QF0L
 
-https://jsfiddle.net/1suk5ejt/1/
+https://jsfiddle.net/1suk5ejt/2/
 
 Brief Descriptions :-
 This engine allows you to apply kinematic motion component (velocity, acceleration) aimed at a specified angle to an canvas object, using ```Kinematic Equation (S=U*t + 1/2*a*t*t)```. Multiple motions acted on the same object are also supported.
