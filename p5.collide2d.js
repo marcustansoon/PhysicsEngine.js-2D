@@ -5,7 +5,7 @@ GNU LGPL 2.1 License
 Version 0.1 | January 10th, 2016
 */
 console.log("### p5.collide ###")
-var p5;
+const p5=function(){};
 p5.prototype._collideDebug = false;
 
 p5.prototype.collideDebug = function(debugMode){
