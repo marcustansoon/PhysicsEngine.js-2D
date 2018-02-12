@@ -1,12 +1,12 @@
 # PhysicsEngine
-Sample Demo:-
+Sample Demo with p5 collision .js:-
 
-https://www.w3schools.com/code/tryit.asp?filename=FOAOK1X1NHYC
+https://www.w3schools.com/code/tryit.asp?filename=FODHOMV7B5TO
 
 https://jsfiddle.net/1suk5ejt/
 
 Brief Descriptions :-
-This engine allows you to apply kinematic motion component (velocity, acceleration) to an canvas object, using ```Kinematic Equation (S=U*t + 1/2*a*t*t)```. 
+This engine allows you to apply kinematic motion component (velocity, acceleration) aimed at a specified angle to an canvas object, using ```Kinematic Equation (S=U*t + 1/2*a*t*t)```. Multiple motions acted on the same object are also supported.
 This engine can be utilised in many fields such as game development. It does have its own Fixed Timer Tick. Do remember to start the Physics Timer at the startup of your project.
 
 ```javascript
