@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<style>
+hml, body, div, canvas {
+    margin: 0;
+    padding: 0;
+}
+</style>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <script type="text/javascript" src='https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/src/p5.collide2d.js'></script>
+  
+  <script type="text/javascript" src='https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/src/2DRigidbodyCollisionHandler.js'></script>
+  
+</head>
+<body>
+
+  <canvas id="canvas"></canvas>
+  <div id="display"></div>
+  <div id="status"></div>
+  
+  
+  <script>
+  
+
+
+  //Repeating Timer for executing the checkcollision func
+  function Timer(){}
+  Timer.prototype.Start=function ()
+  {
+    setInterval(function(){
+    //var per = window.performance.now();
+    //console.time('Function #1');
+
+document.getElementById("status").innerHTML=' ';
+      Rigidbody.CheckRigidbodyCollision();
+      
+      //console.log(window.performance.now()-per);
+     // console.timeEnd('Function #1');
+
+    },100);
+  }
+
+
+
+  var Rigidbody = new Game2DEngine.Rigidbody();
+
+
+
+
+  Rigidbody.RegisterRigidbodyGroup('Bullet',['wall','enemy','Player']); 
+  Rigidbody.RegisterRigidbodyGroup('wall',['Bullet','enemy','Player']); 
+  Rigidbody.RegisterRigidbodyGroup('enemy',['Player','wall','Bullet']); 
+  Rigidbody.RegisterRigidbodyGroup('Player',['wall','enemy']); 
+
+
+
+  var PlayerCallback = function()//obj.RigidbodyColliderID, obj.RigidbodyColliderGroupName
+  {
+      //console.log('player collided');
+      //console.log(Player.RigidbodyColliderGroupName);
+      //console.log(Player.RigidbodyColliderID);
+
+
+  }
+  var BulletCallback = function()
+  {
+    document.getElementById("status").innerHTML='collided';
+      //console.log('bu collided');
+    //console.log(Bullet.RigidbodyColliderGroupName);
+   // console.log(Bullet.RigidbodyColliderID);
+  }
+
+
+  function YourObj()
+  {
+      this.x=0;
+      this.y=0;
+
+      //Rigidbody.AddRigidbody.call(this,'Rectangular','Player',1/*id*/,15,15,PlayerCallback);
+  }
+  function BulletObj()
+  {
+      this.x=25;
+      this.y=35;
+
+     //Rigidbody.AddRigidbody.call(this,'Rectangular','Bullet',2,15,15,BulletCallback);
+  }
+
+  var Player=new YourObj();
+  Rigidbody.AddRigidbody('Rectangular','Player',1/*id*/,15,15,PlayerCallback,Player);
+  var Bullet=new BulletObj();
+  Rigidbody.AddRigidbody.call(this,'Rectangular','Bullet',2,15,15,BulletCallback,Bullet);
+
+  console.log(Rigidbody.CheckIfRigidbodyGroupCollidableWithOtherRigidbodyGroup('enemy','Player'));
+
+
+  document.onkeydown=function(e)
+  {
+    if (e.key ===' ')
+      {
+        Rigidbody.RemoveRigidbody(Player);
+      }
+    if (e.key ==='r')
+      {
+        Rigidbody.RemoveRigidbodyGroup('Player',false);
+      }
+    if (e.key ==='d')
+      {
+        Rigidbody.Announce();
+      }
+     if (e.key ==='z')
+      {
+        console.log(Rigidbody.CheckIfObjectHasRigidbody(Player));
+      }
+    if (e.key ==='p')
+      {
+        Rigidbody.ActivateRigidbody(Player);
+      }
+     if (e.key ==='o')
+      {
+        Rigidbody.DeactivateRigidbody(Player);
+      }
+
+  }
+  
+document.onmousemove=function(e){
+  document.getElementById("display").innerHTML=e.clientX + ' '+e.clientY;
+  Player.x=e.clientX;
+  Player.y=e.clientY;
+  
+  
+}
+  var test=new Timer();
+  test.Start();
+
+
+
+var c = document.getElementById("canvas");
+var ctx = c.getContext("2d");
+
+
+function animate()
+{
+
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.strokeRect(Player.x,Player.y,15,15);
+  ctx.strokeRect(Bullet.x,Bullet.y,15,15);
+  
+  requestAnimationFrame(animate);
+}
+animate();
+
+
+  </script>
+</body>
+</html>
