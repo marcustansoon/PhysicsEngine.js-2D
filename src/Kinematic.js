@@ -118,7 +118,7 @@ Kinematic.prototype.KinematicHandler = function (Tick)
 
 //Allow Addition of new Kinematic Component
 //Allow pre-existing Kinematic Component's attributes to be altered
-Kinematic.prototype.AddKinematicParameters = function(String, Velocity,Acceleration,AngleInDegree,RemoveAfterXSeconds,Name,Tick,Object)
+Kinematic.prototype.SetKinematicParameters = function(String, Velocity,Acceleration,AngleInDegree,RemoveAfterXSeconds,Name,Tick,Object)
 {
 	let _this = Object;
 	//Ensure the Name of the Component to be ADDED is unique
