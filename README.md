@@ -1,9 +1,9 @@
 # PhysicsEngine
 Sample Demo with p5 collision .js:-
 
-https://www.w3schools.com/code/tryit.asp?filename=FODK89T1QF0L
+https://www.w3schools.com/code/tryit.asp?filename=FOKCUDCTTZ1G
 
-https://jsfiddle.net/1suk5ejt/2/
+https://jsfiddle.net/1suk5ejt/4/
 
 https://marcustansoon.github.io/PhysicsEngine.js-2D/
 
