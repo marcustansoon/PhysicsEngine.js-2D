@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<body>
+	
+<h1>Using Physics Engine 2D to apply Kinematic Motion</h1>
+<h2>Using p5 collision.js to check for collision between the bottom boundary and the canvas obj (coin)</h2>
+<canvas id='canvas' height=500 width=700></canvas>
+<script type="text/javascript" src='https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/src/p5.collide2d.js'></script>
+<script type="text/javascript" src='https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/src/EngineTick.js'></script>
+<script type="text/javascript" src='https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/src/Kinematic.js'></script>
+<div id = 'motion'></div>
+	
+<script>
+var enginetick=new Game2DEngine.EngineTick();
+
+var Kinematic=new Game2DEngine.Kinematic();
+
+function CallBackFunc(){//define the function to be invoked each time the Engine Tick is incremented
+
+	Kinematic.KinematicHandler(enginetick);//invoke the Kinematic HANDLER which control the motions of an object
+}
+
+enginetick.Start(CallBackFunc);
+//Start the engine with 20millisecond tick loop rate (default) and specify the function to be invoked
+//Note: The tick loop rate can be altered by including the tick loop rate as the 1st param, for instance, enginetick.Start(30,CallBackFunc); , indicating 30 millisecond tick loop rate
+
+
+var Canvas=document.getElementById('canvas');
+var Context=Canvas.getContext('2d');//Get canvas
+
+
+var stringB=[];
+var stringA=[];
+function Animation(){
+		Context.clearRect(0, 0, Canvas.width, Canvas.height);	//clear canvas
+		 
+         
+		Context.font = "10px Arial";//set font size
+		
+        for (let x=0;x<=4;x++){//display motion status on canvas
+		Context.fillText(stringA[x],Coin.x-40,Coin.y+x*10-20);
+        Context.fillText(stringB[x],Coin.x+110,Coin.y+x*10-20);
+        }
+		
+         Context.drawImage(CoinImage,//Image
+            					0,		//Source Starting Point x
+                                0,		//Source Starting Point y
+                                CoinImage.height,//Image height
+                                CoinImage.width,//Image width
+                                Coin.x,//Position x of the image
+                                Coin.y,//Position y of the image
+                                CoinImage.height,//Image height
+                                CoinImage.width//Image width
+                                );
+   
+    
+    
+    Bounce();//Induce upward motion (bouncing ) when the Coin's height reaches certain point
+    
+    
+    
+	if (!Kinematic.CheckIfKinematicComponentExists('AnyName',Coin))//Check if 'AnyName' component is removed
+	{
+		stringB[0]='Component Name		: AnyName -REMOVED-';
+		stringB[1]='Velocity			: 0';
+		stringB[2]='Acceleration		: 0';
+		stringB[3]='Angle				: 0';
+		stringB[4]='Motion Expire Time	: 0';
+	}
+	
+	
+	
+    requestAnimationFrame(Animation);//Redraw canvas
+   
+}
+function YourObj (x,y){//An Object with X and Y properties included
+	this.x=x;
+    this.y=y;//Both X and Y properties are REQUIRED!!!
+    //X and Y will be modified by the Kinematic Handler
+}
+
+var Coin =new YourObj(50,50);//Create an Object with x and  y properties
+
+Kinematic.RegisterKinematicObject(Coin);//Register the Coin as Kinematic Object
+
+var CoinImage=new Image();//Create Image Object
+CoinImage.src="http://img8.downloadapk.net/8/54/e5daa0_150.png";//Image src
+var p5_collision = new p5();//using p5 collision detection
+CoinImage.onload=function(){
+	Animation();//Start the animation function
+  
+	stringB[0]='Component Name		: AnyName ';
+	stringB[1]='Velocity			: 80';
+	stringB[2]='Acceleration		: -8';
+	stringB[3]='Angle				: 0';
+	stringB[4]='Motion Expire Time	: 6seconds';
+  
+	//------------Parameters:--Name --Velocity--Acceleration--Angle in degree--Any Unique Name--Motion Expire Time---
+    Kinematic.AddKinematicParameters("Add",80,-8,0,6,"AnyName",enginetick,Coin);
+    //Attach an Kinematic component to that Coin, with velocity of 80, acceleration of -8, Angle of Zero and 6 seconds expire countdown (Automatically remove this kinematic component after 6 seconds)
+    
+    
+    stringA[0]='Component Name		: Bounce';
+	stringA[1]='Velocity			: 0';
+	stringA[2]='Acceleration		: 35';
+	stringA[3]='Angle				: -90';
+	stringA[4]='Motion Expire Time	: Permanent';
+    Kinematic.AddKinematicParameters("Add",0,35,-90,0,"Bounce",enginetick,Coin);//Attach Bounce acting downward(-90 degree) with acceleration of 9.8, 
+    
+    
+    
+    
+    //Note: Attaching kinematic component allows it to alter the x and y properties of the registered object, hence, it is necessary for that object to have both x and y properties before registeration of that object
+    
+  
+}
+function Bounce(){//Introduce upward motion
+	if (p5_collision.collideLineRect(0,400,Canvas.width, 400, Coin.x,Coin.y,CoinImage.width,CoinImage.height)/*Coin.y>300*/ && Kinematic.CheckIfKinematicComponentExists('Bounce',Coin))//Add bounce effect when coin height is above 400
+    {
+    	Kinematic.AddKinematicParameters("Change",115,-35,90,0,"Bounce",enginetick,Coin);//Change the previously attached Bounce Component, by adding upward velocity, inducing bounce effect		
+        
+		stringA[0]='Component Name		: Bounce';
+		stringA[1]='Velocity			: 115';
+		stringA[2]='Acceleration		: -35';
+		stringA[3]='Angle				: 90';
+		stringA[4]='Motion Expire Time	: Permanent';
+    }
+}
+document.onkeydown = function(e)
+{
+	
+	if (e.key===' ')//remove 'Bounce' component when space bar is pressed
+	{
+		console.log('Removed');	
+        Kinematic.RemoveKinematicParameters("Bounce",Coin);//Remove 'Bounce' component
+        
+		stringA[0]='Component Name		: Bounce -REMOVED-';
+		stringA[1]='Velocity			: 0';
+		stringA[2]='Acceleration		: 0';
+		stringA[3]='Angle				: 0';
+		stringA[4]='Motion Expire Time	: 0';
+	}
+}
+
+</script>
+
+		<p style="color:green;font-size:15px;">To remove 'Bounce' motion, <strong>press Space Bar</strong></p>
+<h3><a href="https://github.com/marcustansoon/PhysicsEngine.js-2D">Interested? Check out our Engine source code and Documentation</a></h3>
+</body>
+</html>
