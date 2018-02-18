@@ -33,7 +33,7 @@ Kinematic.prototype.RegisterKinematicObject= function(Object){
 	_this.KinematicCurrentVelocityValue={};
 	
 	PhysicsObj[PhysicsObj.length] = _this;//Store the registered Object component
-}
+};
 
 Kinematic.prototype.KinematicHandler = function (Tick)
 //function KinematicEquation (PhysicsTick)
@@ -114,7 +114,7 @@ Kinematic.prototype.KinematicHandler = function (Tick)
 		
 	});
 	
-}
+};
 
 //Allow Addition of new Kinematic Component
 //Allow pre-existing Kinematic Component's attributes to be altered
@@ -179,7 +179,7 @@ Kinematic.prototype.AddKinematicParameters = function(String, Velocity,Accelerat
 	_this.KinematicComponentRemoveBoolean[Name]=false;//default value
 	
 	
-}
+};
 
 //Remove Any Added Kinematic Parameters by incorporating the 'name' representing that component
 Kinematic.prototype.RemoveKinematicParameters = function(Name,Object){
@@ -195,7 +195,7 @@ Kinematic.prototype.RemoveKinematicParameters = function(Name,Object){
 	{
 		throw  Error ("Kinematic Name Given Does not Exists");
 	}
-}
+};
 
 //Obtain Instantaneous Velocity in the specified Direction
 //'Name' is the name of the Kinematic component
@@ -213,7 +213,7 @@ Kinematic.prototype.GetInstantaneousVelocity = function (Name,String,Object){
 	}
 	
 	
-}
+};
 
 //Obtain Instantaneous Acceleration in the specified Direction
 //'Name' is the name of the Kinematic component
@@ -231,13 +231,13 @@ Kinematic.prototype.GetInstantaneousDistanceTravelled = function (Name,String,Ob
 	}
 	
 	
-}
+};
 // checks if a particular kinematic component exists
 Kinematic.prototype.CheckIfKinematicComponentExists=function(Name,Object)
 {
 	let _this = Object;
 	return _this.KinematicComponentName.includes(Name);
-}
+};
 function DegreeToRadians ()//Convert Angle In Degree To Radian
 {
 	return ((arguments[0]/180)*Math.PI);//Return Angle in Rads
