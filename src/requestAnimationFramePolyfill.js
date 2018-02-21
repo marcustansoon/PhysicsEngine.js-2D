@@ -3,7 +3,7 @@
 
 // requestAnimationFrame polyfill by Erik Möller
 // fixes from Paul Irish and Tino Zijdel
-
+console.log('Running requestAnimationFramePolyfill.js' );
 (function() {
 
 var lastTime = 0;
