@@ -9,7 +9,7 @@ https://marcustansoon.github.io/PhysicsEngine.js-2D/
 
 
 
-https://www.w3schools.com/code/tryit.asp?filename=FOPFXA8073CH
+https://www.w3schools.com/code/tryit.asp?filename=FOPG1DUW22G1 parallel scrolling world
 
 
 
