@@ -8,6 +8,12 @@ https://jsfiddle.net/1suk5ejt/4/
 https://marcustansoon.github.io/PhysicsEngine.js-2D/
 
 
+
+https://www.w3schools.com/code/tryit.asp?filename=FOPFIKOSE11X
+
+
+
+
 ## Brief Descriptions :-
 
 This engine allows you to apply kinematic motion component (velocity, acceleration) aimed at a specified angle to an canvas object, using ```Kinematic Equation (S=U*t + 1/2*a*t*t)```. **Multiple motions acted on the same object** are also supported.
