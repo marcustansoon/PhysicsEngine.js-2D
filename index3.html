@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<!--
+Created using JS Bin
+http://jsbin.com
+using Collision js
+Copyright (c) 2018 by anonymous (http://jsbin.com/mitimecuxu/1/edit)
+
+Released under the MIT license: http://jsbin.mit-license.org
+-->
+<meta name="robots" content="noindex">
+<html>
+  <style>* {padding: 0; margin: 0}</style>
+  <script type='text/javascript' src='https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/src/collision.js'></script>
+  
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  </head>
+<body>
+
+  
+  <canvas width='500' height ='500' style="border: 1px dashed black"></canvas>
+<script id="jsbin-javascript">
+let canvas=document.querySelector('canvas'),
+    context=canvas.getContext('2d'),
+    Collision=new Game.Collision();
+
+let spriteObject={
+  sourcex:0,
+  sourcey:0,
+  sourcewidth:0,
+  sourceheight:0,
+  
+  desx:0,
+  desy:0,
+  deswidth:0,
+  desheight:0,
+  
+  left:function(){
+    return this.desx;
+  },
+  
+  right:function(){
+    return this.desx+this.deswidth;
+  },
+  
+  bottom:function(){
+    return this.desy+this.desheight;
+  },
+  top:function(){
+    return this.desy;
+  },
+  
+  
+  
+  radius:function(){
+    return this.deswidth/2;
+  },
+  
+  centerx:function(){
+    return this.desx+this.deswidth/2;
+  },
+  
+  centery:function(){
+    return this.desy+this.desheight/2;
+  }
+};
+let sprites=[];
+let message="";
+
+let image=new Image();
+image.src='https://raw.githubusercontent.com/Apress/foundation-game-design-w-html5-javascript/master/Code%20-%20Published/chapter08/circles.png';
+//image.addEventListener('load',animate,false);
+
+
+let imagesq=new Image();
+imagesq.src='https://raw.githubusercontent.com/Apress/foundation-game-design-w-html5-javascript/master/Code%20-%20Published/chapter08/squares.png';
+imagesq.addEventListener('load',animate,false);
+
+let square=Object.create(spriteObject);
+square.sourcewidth=64;
+square.sourceheight=64;
+
+square.desheight=64;
+square.deswidth=64;
+
+square.desx=canvas.width/2-square.deswidth/2;
+square.desy=canvas.height/2-square.desheight/2;
+
+sprites.push(square);
+
+
+/*
+let circle=Object.create(spriteObject);
+circle.sourcewidth=64;
+circle.sourceheight=64;
+
+circle.desheight=64;
+circle.deswidth=64;
+
+circle.desx=canvas.width/2-circle.deswidth/2;
+circle.desy=canvas.height/2-circle.desheight/2;
+
+
+sprites.push(circle);
+*/
+let mouse=Object.create(spriteObject);
+mouse.sourcex=64;
+mouse.sourcewidth=64;
+mouse.sourceheight=64;
+
+mouse.desheight=64;
+mouse.deswidth=64;
+sprites.push(mouse);
+
+
+canvas.addEventListener('mousemove',mousemovehandler,false);
+
+function mousemovehandler(e){
+  
+  mouse.desx=e.pageX-canvas.offsetLeft;
+  mouse.desy=e.pageY-canvas.offsetTop;
+}
+
+
+
+
+function animate()
+{
+  context.clearRect(0,0,canvas.width,canvas.height);
+  
+  sprites.forEach(function(element){
+    context.drawImage(imagesq,element.sourcex,element.sourcey,element.sourcewidth,element.sourceheight,
+                      element.desx,element.desy,element.deswidth,element.desheight);
+    
+    
+  });
+  
+  
+  context.fillStyle = "#000";
+  context.textBaseline = "top";
+  //context.fillText(PointRectCollision(mouse,square),25,25);
+  
+  //context.fillText(CircleCircleCollision(circle,mouse),25,25);
+  context.fillText(Collision.RectRect(square,mouse,false),25,25);
+  window.requestAnimationFrame(animate,canvas);
+}
+  
+
+  
+  
+</script>
+</body>
+</html>
