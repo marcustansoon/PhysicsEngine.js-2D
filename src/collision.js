@@ -5,12 +5,12 @@ let Game={};
   "use strict";
   function Collision(){}
 
-  Collision.prototype.PointRect(Point,Rect){
+  Collision.prototype.PointRect=function(Point,Rect){
   //function PointRectCollision(Point,Rect){
     return Point.desx>Rect.left() && Point.desx<Rect.right() && Point.desy>Rect.top() && Point.desy<Rect.bottom();
-  }
+  };
 
-  Collision.prototype.CircleCircle(Circle1,Circle2,CanMoveThrough)//left as movable obj, right as static obj
+  Collision.prototype.CircleCircle=function(Circle1,Circle2,CanMoveThrough)//left as movable obj, right as static obj
   //function CircleCircleCollision(Circle1,Circle2,CanMoveThrough)//left as movable obj, right as static obj
   {
     let totalradius=Circle1.radius()+Circle2.radius(),
@@ -31,9 +31,9 @@ let Game={};
       }
 
     return distancebetweenCircle<totalradius;
-  }
+  };
 
-  Collision.prototype.RectRect(Rect1,Rect2,CanMoveThrough)//left as movable obj, right as static obj
+  Collision.prototype.RectRect=function(Rect1,Rect2,CanMoveThrough)//left as movable obj, right as static obj
   //function RectRectCollision(Rect1,Rect2,CanMoveThrough)//left as movable obj, right as static obj
   {
     let totalHalfWidth = Rect1.deswidth/2 + Rect2.deswidth/2 ;
@@ -82,7 +82,7 @@ let Game={};
     return totalHalfWidth>Math.abs(dx)&&totalHalfHeight>Math.abs(dy);
 
 
-  }
+  };
 
 
   Game.Collision=Collision;
