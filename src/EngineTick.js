@@ -1,4 +1,3 @@
-"use strict";
 
 var Game2DEngine={};
 
