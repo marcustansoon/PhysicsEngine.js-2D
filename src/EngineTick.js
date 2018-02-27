@@ -5,7 +5,7 @@ var Game2DEngine={};
 (function(){
 
 
-const TickSetting = {
+let TickSetting = {
 	TickLoopRate:20 //Represent the Physics Time Tick Rate -> Default is 20 (every 20 milliseconds, increment one Time Tick)
 };
 
