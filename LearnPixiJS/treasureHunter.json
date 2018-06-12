@@ -1,6 +1,6 @@
 {"frames": {
 
-"https://raw.githubusercontent.com/Apress/learn-pixi.js/master/chapter01/images/blob.png":
+"blob.png":
 {
 	"frame": {"x":55,"y":2,"w":32,"h":24},
 	"rotated": false,
@@ -9,7 +9,7 @@
 	"sourceSize": {"w":32,"h":24},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"https://raw.githubusercontent.com/Apress/learn-pixi.js/master/chapter01/images/door.png":
+"door.png":
 {
 	"frame": {"x":89,"y":2,"w":32,"h":32},
 	"rotated": false,
@@ -18,7 +18,7 @@
 	"sourceSize": {"w":32,"h":32},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"https://raw.githubusercontent.com/Apress/learn-pixi.js/master/chapter01/images/dungeon.png":
+"dungeon.png":
 {
 	"frame": {"x":2,"y":36,"w":512,"h":512},
 	"rotated": false,
@@ -36,7 +36,7 @@
 	"sourceSize": {"w":21,"h":32},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"https://raw.githubusercontent.com/Apress/learn-pixi.js/master/chapter01/images/treasure.png":
+"treasure.png":
 {
 	"frame": {"x":25,"y":2,"w":28,"h":24},
 	"rotated": false,
