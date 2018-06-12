@@ -27,7 +27,7 @@
 	"sourceSize": {"w":512,"h":512},
 	"pivot": {"x":0.5,"y":0.5}
 },
-"https://raw.githubusercontent.com/Apress/learn-pixi.js/master/chapter01/images/explorer.png":
+"explorer.png":
 {
 	"frame": {"x":2,"y":2,"w":21,"h":32},
 	"rotated": false,
