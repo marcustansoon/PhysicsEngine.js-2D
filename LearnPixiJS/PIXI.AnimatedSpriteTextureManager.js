@@ -1,4 +1,4 @@
-
+//https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/LearnPixiJS/PIXI.AnimatedSpriteTextureManager.js
 //For extracting animation frames of a given img url
 
 class AnimatedSpriteTextureManager {
