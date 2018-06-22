@@ -14,7 +14,7 @@ class AnimatedSpriteManager extends PIXI.extras.AnimatedSprite {
     if (Array.isArray(frames)) //check is an animation state consists of multiple frames
     {
       let textures = [];//create an empty array
-      if (frames.length > this.totalFrames) //check if total frame number exceeded total combined animation frames
+      if (frames.length > this._totalTextures.length) //check if total frame number exceeded total combined animation frames
       {
         throw new Error("Animated State Frames is more than total frames");
       }
