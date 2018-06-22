@@ -1,3 +1,4 @@
+//https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/LearnPixiJS/PIXI.AnimatedSpriteManager.js
 //Allow assignment and control of multiple animation states (attack,walk,jump,etc) of a sprite
 
 class AnimatedSpriteManager extends PIXI.extras.AnimatedSprite {
