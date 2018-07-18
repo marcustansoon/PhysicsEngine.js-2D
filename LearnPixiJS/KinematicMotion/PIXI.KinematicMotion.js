@@ -1,11 +1,11 @@
 //example usage : https://jsfiddle.net/6ad5ugs3/127/ 
 //example usage : https://jsfiddle.net/ftz5n6co/4/   --cleaner version
 
-//method :    registerChild(sprite)             -> registeration must be done first before attaching any kineamtic motion
-//            unregisterChild(sprite)           -> remove all previously added kinematic-related properties from sprite
-//            addMotion(obj,name:string,sprite)  obj-> {angle:in degree,v:velocity,a:acceleration}, add new kinematic motion to sprite if name supplied is unique(motion hasnt been added), else, alter the old motion properties
-//            hasMotion(name,sprite)            ->verify if sprite has specified motion attached
-//            removeMotion(name:string,sprite)  -> remove a particular motion from sprite
+//method :    registerChild(SPRITE)             -> registeration must be done first before attaching any kineamtic motion
+//            unregisterChild(SPRITE)           -> remove all previously added kinematic-related properties from sprite
+//            addMotion(PROPERTIES,MOTION_NAME,SPRITE)  PROPERTIES-> {angle:in degree,v:velocity,a:acceleration}, add new kinematic motion to sprite if name supplied is unique(motion hasnt been added), else, alter the old motion properties
+//            hasMotion(MOTION_NAME,SPRITE)            ->verify if sprite has specified motion attached
+//            removeMotion(MOTION_NAME,SPRITE)  -> remove a particular motion from sprite
 //            updateMotion()                    -> implement the effect of all added kinemation motions on sprite movement, invoke it in gameloop
 
 //properties added/accesible
