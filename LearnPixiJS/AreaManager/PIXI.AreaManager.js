@@ -1,6 +1,6 @@
 //class for handling the creating,and handling area properties including checking for area collision between two parties
 //Example Usage : https://www.w3schools.com/code/tryit.asp?filename=FTE4LRA421SZ
-//                
+//     		  https://jsfiddle.net/yjsrvxqf/2/   --cleaner version           
     
     
 //method :    createArea(AREA_NAME,PROPERTIES)           -> create a new area
