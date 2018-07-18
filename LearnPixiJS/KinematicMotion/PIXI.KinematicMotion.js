@@ -1,4 +1,5 @@
-//example usage : https://jsfiddle.net/6ad5ugs3/127/
+//example usage : https://jsfiddle.net/6ad5ugs3/127/ 
+//example usage : https://jsfiddle.net/ftz5n6co/4/   --cleaner version
 
 //method :    registerChild(sprite)             -> registeration must be done first before attaching any kineamtic motion
 //            unregisterChild(sprite)           -> remove all previously added kinematic-related properties from sprite
