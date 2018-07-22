@@ -10,7 +10,7 @@ class MultiAnimatedSprite extends PIXI.extras.AnimatedSprite {
     super(tex, autoUpdate);//call the super class
     
     this._texturesStartFrame = 0;//default
-    this._texturesEndFrame = tex.length;//default
+    this._texturesEndFrame = tex.length;//default-can be changed using playAnimation method
 
 		//replace the old currentFrame method
     //due to errors, the method is only replaced after super class is called
@@ -24,7 +24,7 @@ class MultiAnimatedSprite extends PIXI.extras.AnimatedSprite {
         }
         if (currentFrame==0)//check if currentframe is at index zero
         {
-        	//currentFrame=this._texturesStartFrame;//not necessary
+          //currentFrame=this._texturesStartFrame;//not necessary to update sprite.currentframe instantly,as it will automatically updated on next call of 'currentFrame' method
           this._currentTime+=this._texturesStartFrame;//if so, update the currentframe to be at the specific animation startframe
           //this can be done by adding the currentTime by the  animation startframe index
         	
@@ -35,7 +35,7 @@ class MultiAnimatedSprite extends PIXI.extras.AnimatedSprite {
     });
   }
   playAnimation(startframe, endframe) {//play specific animation starting from startframe to endframe-1
-  	this.stop();
+    this.stop();
     this._texturesStartFrame = startframe;
     this._texturesEndFrame = endframe;
     this.gotoAndPlay(startframe);    
