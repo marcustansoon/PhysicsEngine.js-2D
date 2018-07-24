@@ -1,3 +1,4 @@
+//https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/LearnPixiJS/KinematicMotion/PIXI.KinematicMotion.js
 //example usage : https://jsfiddle.net/6ad5ugs3/127/ 
 //example usage : https://jsfiddle.net/ftz5n6co/4/   --cleaner version
 
