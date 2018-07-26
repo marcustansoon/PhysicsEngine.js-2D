@@ -1,4 +1,4 @@
-////https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/LearnPixiJS/AreaManager/PIXI.AreaManager.js
+////https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/LearnPixiJS/ObjectPooling/PIXI.ObjectPooling.js
 //Class Function : Enable PIXI object to be reuseable
 
 //method :    createSprite()                 -> create new sprite (automatically triggered on demand)
