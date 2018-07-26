@@ -5,10 +5,10 @@
 class ObjectPooling
     {
     	constructor(){
-        	this.PoolObjects=[];
+            this.PoolObjects=[];
         	this.onCreate=null;//triggered on creating new sprite
-          this.onReturn=null;//triggered on returning sprite to objpool arr
-          this.onGet=null;//triggered once sprite is obtained either from objpool arr or newly created 
+            this.onReturn=null;//triggered on returning sprite to objpool arr
+              this.onGet=null;//triggered once sprite is obtained either from objpool arr or newly created 
         }
         //create new sprite
         createSprite(){
@@ -46,3 +46,4 @@ class ObjectPooling
     
     
     }
+PIXI.ObjectPooling=ObjectPooling;
