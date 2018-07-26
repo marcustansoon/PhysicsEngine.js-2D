@@ -12,8 +12,8 @@
 //        sprite.Gposition=0;   (number data type)		-> represent body position of SPRITE, 1->in air,0->in ground
 //        sprite.GneedSyncing=true; (boolean data type)      	-> specify whether sprite.y needs to be synced to the ground level, USAGE: usually manually configured this to true whenver a sprite moves (shown in the example provided)
 //Attachable Callback function
-//	this.onCollision;	-> triggered once the sprite collided/touched the ground boundary
-//	this.OnSyncing;		-> triggered when sprite is synced with ground level
+//	this.onCollision=func(SPRITE);	-> triggered once the sprite collided/touched the ground boundary
+//	this.OnSyncing=function(SPRITE);		-> triggered when sprite is synced with ground level
 
 //Example usage :-
 
