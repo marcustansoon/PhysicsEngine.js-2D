@@ -22,7 +22,7 @@ class GroundBoundary
     	constructor(){
         	this.GroundArr=[];
 		this.onCollision=null;
-		this.OnSyncing=null;
+		this.onSyncing=null;
         }
         //set groundArr (representing the ground level)
         setGroundLevel(groundArr){
