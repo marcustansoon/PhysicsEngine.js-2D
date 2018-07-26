@@ -1,5 +1,19 @@
 //https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/LearnPixiJS/GroundBoundary/PIXI.GroundBoundary.js
 
+//method :    setGroundLevel(groundArr)           			-> set groundArr, representing the ground level
+//            setNumPixel(NUM)                     			->set the number of pixels representing each subdata of 'groundArr'
+//									  For instance, if NumPixel=5 pixels then the ground level from y=0 to 5 is GroundArr[0], for y=6 to 10 is represented in GroundArr[1], and so on;    		
+//            registerChild(SPRITE)					-> register a sprite, add some properties to it (needed for syncing to ground in 'updateSyncing' method )
+//            unregisterChild(SPRITE)   				-> remove all properties added in the 'registerChild' method
+//           updateSyncing(GROUP,onCollisionCallback,OnSyncingCallback)	->GROUP-> can be either array or Set.
+//									-> sync the sprite to the ground,check for collision as well and invoke callback on syncing and collision
+//properties added (Note: these properties are EDITABLE!!!)
+//EDITABLE properties :-
+//        sprite.Gposition=0;   (number data type)		-> represent body position of SPRITE, 1->in air,0->in ground
+//        sprite.GneedSyncing=true; (boolean data type)      	-> specify whether sprite.y needs to be synced to the ground level, USAGE: usually manually configured this to true whenver a sprite moves (shown in the example provided)
+
+//Example usage :-
+
 class GroundBoundary
     {
     	constructor(){
