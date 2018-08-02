@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+<script src="pixi.min.js"></script>
+<script src="PIXI.AnimatedSpriteTextureManager.js"></script>
+<script src="PIXI.MultiAnimatedSprite.js"></script>
+<script src="PIXI.GroundBoundary.js"></script>
+<script src="PIXI.KinematicMotion.js"></script>
+
+<head>
+</head>
+<body>
+</body>
+<script>
+	function loop(){
+    	renderer.render(stage);
+        requestAnimationFrame(loop);
+        
+        //update mvoment
+        updateMovement(playerGroup);
+        syncArea(pa,player);
+    }
+    
+    //idle 1,3
+    //walk 5,10
+    //attack 1 20,25
+    //attack 2 10,15
+    //jump 15,20
+    //dead 30,35
+	function setup(){
+    	let tex = new PIXI.AnimatedSpriteTextureManager(url,false,{row:7,col:5}).extractTexture();
+       
+       	player = new PIXI.MultiAnimatedSprite(tex);
+        stage.addChild(player);
+        player.playAnimation(1,3);
+        player.animationSpeed=0.15;
+        player.anchor.set(0.5);
+        player.scale.set(0.5);
+        player.state=new Set();
+        player.y=150;
+        playerGroup.push(player);//add player to Playergroup
+        player.onLoop=function(){
+        	if (lockOn)
+            {
+            	lockOn=false;updateAnimation(player);
+                console.log('reseted');
+            }
+        };
+        loop();
+  
+        
+    }
+    document.onkeydown=function(e){
+    	if (player.state.has(e.keyCode))
+        	return;
+        
+        
+        player.state.add(e.keyCode);
+        updateAnimation(player);
+    	console.log(e.keyCode);
+    };
+    document.onkeyup=function(e){   	
+        player.state.delete(e.keyCode);
+        updateAnimation(player);
+    	//console.log(e.keyCode);
+    };
+    function updateMovement(group){
+    	group.forEach(function(member){
+        	if (lockOn)return;
+        	if (member.state.has(65))
+            {
+            	member.x--;
+            }
+            if (member.state.has(68))
+            {
+            	member.x++;
+            }
+        });
+    }
+    let lockOn=false;
+    function updateAnimation(member){
+    	if (lockOn)
+        	return;
+    	//group.forEach(function(member){
+          if (member.state.has(65)){//walk left
+              member.playAnimation(5,10);console.log('playing walk');
+              member.scale.set(-0.5,0.5);
+          }//console.log(player.state.size);
+          if (member.state.has(68)){//walk right
+              member.playAnimation(5,10);console.log('playing walk');
+              member.scale.set(0.5,0.5);
+          }
+          if (member.state.has(32)){//attack
+          	member.playAnimation(20,25);console.log('playing attack');
+            lockOn=true;
+          }
+          if (member.state.size==0){//idle
+              member.playAnimation(1,3);console.log('playing idle');
+          }
+        //});
+    }
+    function createRect(w,h,color){
+    	let rec = new PIXI.Graphics();
+        rec.beginFill(color);
+        rec.drawRect(0,0,w,h);
+        rec.endFill();
+        return rec;
+    }
+    function areaInit(){
+    	Area.createArea("pa",{w:10,h:10,offsetX:5,offsetY:0});
+        
+        pa=createRect(10,10,0xffff00);
+        pa.offsetX=5;
+        pa.offsetY=0;
+        stage.addChild(pa);    
+    }
+    function syncArea(area,m){
+    	area.x=m.x+area.offsetX;
+       	area.y=m.y+area.offsetY;
+    }
+</script>
+<script>
+	let _Area={};
+	class AreaManager
+    {
+    	constructor(){
+        }
+        //predefine the area properties 1st
+        createArea(properties){//properties -> name,w,h,offsetX,offsetY
+        	_Area[properties.name]=properties;
+            delete _Area[properties.name].name;
+        }
+        destroyArea(aname){
+        	
+        }
+        addAreaToChild(aname,sprite){
+
+         	if (!sprite.area)
+            	sprite.area={};
+                
+            sprite.area[aname]=_Area[aname];
+            sprite.area[aname].active=true;
+        }
+        removeAreaFromChild(aname,sprite){
+        	delete sprite.area[aname];
+        }
+        checkCollision(group1,area1,group2,area2,callback)//Check whether area1 of group1 is colliding with area2 of group2
+        {
+
+              group1.forEach((member1)=>{//pick every member of group1
+                  if (member1.area[area1].active)//check if area1 for member1 is active
+                  {
+                      
+                      group2.forEach((member2)=>{
+                          if (member2.area[area2].active)//check if area2 of member2 is active
+                          {
+                              let x1 = member1.x+member1.area[area1].offsetX,
+                              y1 = member1.y+member1.area[area1].offsetY,
+                              x2 = member2.x+member2.area[area2].offsetX,
+                              y2 = member2.y+member2.area[area2].offsetY;
+
+                              //check for collision between two areas
+                              if (x1 + member1.area[area1].w >= x2 &&    // r1 right edge past r2 left
+                                x1 <= x2 + member2.area[area2].w &&    // r1 left edge past r2 right
+                                y1 + member1.area[area1].h >= y2 &&    // r1 top edge past r2 bottom
+                                y1 <= y2 + member2.area[area2].h)    
+                              {    
+                                  callback(member2);//invoke the callback func with the collider as the parameter
+                              } 
+                          }
+                      });
+                      
+                  }
+              });
+          }
+    }
+    PIXI.AreaManager=AreaManager;
+    //let test=new Area2();
+    //test.createArea({name:'yo'});
+
+</script>
+
+
+<script>
+"use strict"
+	let renderer = new PIXI.autoDetectRenderer(250,250/*, { backgroundColor: 0x000000}*/),
+    stage = new PIXI.Container(),
+    url="./Spritesheet/gnome.png",
+    player,playerGroup=[],
+    enemy,enemyGroup=[],
+    Area = new PIXI.AreaManager(),
+    pa;
+    
+    areaInit();
+    
+    document.body.appendChild(renderer.view);
+    
+    PIXI.loader
+    .add(url)
+    .load(setup);
+    
+</script>
+
+</html>
+
