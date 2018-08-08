@@ -1,9 +1,35 @@
+////https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/LearnPixiJS/ObjectPooling/PIXI.ObjectPoolingV1.01.js
+//Class Function : Enable PIXI object to be reuseable
+
+//method :    createSprite(TEXTURE)                 -> create new sprite (automatically triggered on demand),TEXTURE is type of PIXI texture
+//              createAnimatedSprite(TEXTURES)      -> NOTE: TEXTURES are of array data type,consisting only PIXI textures (NOT texture URL)
+//              createGraphic(w,h,COLOR)
+//            getSprite(TEXTURES)      -> get a sprite from 'PoolObjects' arr, if its empty, then create a new sprite (trigger createSprite method)
+//            getAnimatedSprite(TEXTURES)  
+//            getGraphic(TEXTURES)  
+//            returnSprite(SPRITE)        -> return a SPRITE to 'PoolObjects' arr, to be reused again later
+//            returnAnimatedSprite(SPRITE) 
+//            returnGraphic(SPRITE)
+
+//properties added/accesible
+//Note : the following properties are added to the main instantiation obj
+//this.Sprites=[];      //for storing the reusable objects
+//this.animatedSprites=[];
+//this.Graphics=[];
+
+//editable//attachable callback func
+//this.onCreate(SPRITE/GRAPHICS/ANIM, NUM)=null;           //triggered on creating new sprite
+//this.onReturn(SPRITE/GRAPHICS/ANIM, NUM)=null;           //triggered on returning sprite to objpool arr
+//this.onGet(SPRITE/GRAPHICS/ANIM, NUM)=null;              //triggered once sprite is obtained either from objpool arr or newly created 
+
+//where NUM used as an indicator (0 -> Sprite, 1 -> animatedSprite, 2 -> Graphic Rect)
+
 class ObjectPooling
     {
     	constructor(){
-            this.Sprites=[];//0
-            this.animatedSprites=[];//1
-            this.Graphics=[];//2
+            this.Sprites=[];//indicated by 0
+            this.animatedSprites=[];//indicated by 1
+            this.Graphics=[];//indicated by 2
         	this.onCreate=null;//triggered on creating new sprite
             this.onReturn=null;//triggered on returning sprite to objpool arr
             this.onGet=null;//triggered once sprite is obtained either from objpool arr or newly created 
@@ -14,10 +40,10 @@ class ObjectPooling
             graphic.beginFill(color);
             graphic.drawRect(0,0,w,h);
             graphic.endFill();
-            console.log('Created a new Graphics');
+            console.log('Created a new Graphic Rect');
             if (this.onCreate)//invoke callback func whenever a new sprite is created
-            	this.onCreate(graphics,2);        
-            return graphics;
+            	this.onCreate(graphic,2);        
+            return graphic;
         }
         createSprite(texture){
         	
@@ -46,13 +72,13 @@ class ObjectPooling
             console.log('Sprite removed');
         	this.Sprites.push(sprite);
             if (this.onReturn)
-            	this.onReturn(sprite); 
+            	this.onReturn(sprite,0); 
         }
         returnAnimatedSprite(sprite){
             console.log('Animated Sprite removed');
         	this.animatedSprites.push(sprite);
             if (this.onReturn)
-            	this.onReturn(sprite); 
+            	this.onReturn(sprite,1); 
         }
         //get a sprite from 'PoolObjects' arr, if its empty, then create a new sprite (trigger createSprite method)
     	getGraphic(w,h,color){
@@ -68,7 +94,7 @@ class ObjectPooling
             }       
             this.Graphics.pop();
             if (this.onGet)//invoke onGet callback func
-            	this.onGet(obj_temp);  
+            	this.onGet(obj_temp,2);  
                 
             return obj_temp;
         }
@@ -85,7 +111,7 @@ class ObjectPooling
             }       
             this.Sprites.pop();
             if (this.onGet)//invoke onGet callback func
-            	this.onGet(obj_temp);  
+            	this.onGet(obj_temp,0);  
                 
             return obj_temp;
         }
@@ -102,7 +128,7 @@ class ObjectPooling
             }       
             this.animatedSprites.pop();
             if (this.onGet)//invoke onGet callback func
-            	this.onGet(obj_temp);  
+            	this.onGet(obj_temp,1);  
                 
             return obj_temp;
         }
