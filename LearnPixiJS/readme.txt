@@ -7,3 +7,48 @@ To bypass it, open cmd.exe
               
 Example of AnimatedSpriteManager and AnimatedSpriteTextureManager usage :-
 http://jsfiddle.net/rh3eqdfk/193/
+
+
+
+
+Backbone script :
+
+<!DOCTYPE html>
+<html>
+<head>
+<script src='pixi.min.js'></script>
+<script src='PIXI.ObjectPoolingV1.01.js'></script>
+<script src='PIXI.AnimatedSpriteTextureManager.js'></script>
+</head>
+<body>
+
+</body>
+<script>
+	let renderer = new PIXI.autoDetectRenderer(250,250),
+    stage=new PIXI.Container(),
+    OP=new PIXI.ObjectPooling();
+    
+    document.body.appendChild(renderer.view);
+    
+    let url="image.png";
+    PIXI.loader
+    .add(url)
+    .load(setup);
+    
+    function setup(){
+    	
+        let textures=new PIXI.AnimatedSpriteTextureManager(url,false,{row:7,col:5}).extractTexture();
+        
+        let player= OP.getAnimatedSprite(textures);
+        stage.addChild(player);
+        player.play();
+        player.animationSpeed=0.1;
+        loop();
+    }
+    function loop(){
+    	renderer.render(stage);
+        requestAnimationFrame(loop);
+    }
+</script>
+</html>
+
