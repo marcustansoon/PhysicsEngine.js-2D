@@ -17,6 +17,7 @@ Backbone script :
 <html>
 <head>
 <script src='pixi.min.js'></script>
+<script src='memory-stats.js'></script>
 <script src='PIXI.ObjectPoolingV1.01.js'></script>
 <script src='PIXI.KinematicMotionV1.01.js'></script>
 <script src='PIXI.MultiAnimatedSprite.js'></script>
@@ -43,7 +44,7 @@ Backbone script :
     function setup(){
     	
         let textures=new PIXI.AnimatedSpriteTextureManager(url,false,{row:7,col:5}).extractTexture();
-        
+        for (let x=0;x<1000;x++)
         let player= OP.getAnimatedSprite(textures);
         stage.addChild(player);
         player.play();
@@ -54,5 +55,19 @@ Backbone script :
     	renderer.render(stage);
         requestAnimationFrame(loop);
     }
+</script>
+<script>
+    let stats = new MemoryStats();
+
+    stats.domElement.style.position = 'fixed';
+    stats.domElement.style.right        = '0px';
+    stats.domElement.style.bottom       = '0px';
+    
+    document.body.appendChild( stats.domElement );
+
+    requestAnimationFrame(function rAFloop(){
+        stats.update();
+        requestAnimationFrame(rAFloop);
+    });
 </script>
 </html>
