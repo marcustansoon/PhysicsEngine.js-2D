@@ -21,7 +21,7 @@
 //this.onCreate(SPRITE/GRAPHICS/ANIM, NUM)=null;           //triggered on creating new sprite
 //this.onReturn(SPRITE/GRAPHICS/ANIM, NUM)=null;           //triggered on returning sprite to objpool arr
 //this.onGet(SPRITE/GRAPHICS/ANIM, NUM)=null;              //triggered once sprite is obtained either from objpool arr or newly created 
-
+//this.onRetrive(SPRITE/GRAPHICS/ANIM, NUM)=null;  
 //where NUM used as an indicator (0 -> Sprite, 1 -> animatedSprite, 2 -> Graphic Rect)
 
 class ObjectPooling
@@ -31,6 +31,7 @@ class ObjectPooling
             this.animatedSprites=[];//indicated by 1
             this.Graphics=[];//indicated by 2
         	this.onCreate=null;//triggered on creating new sprite
+            this.onRetrieve=null;//triggered on creating new sprite
             this.onReturn=null;//triggered on returning sprite to objpool arr
             this.onGet=null;//triggered once sprite is obtained either from objpool arr or newly created 
         }
@@ -40,25 +41,17 @@ class ObjectPooling
             graphic.beginFill(color);
             graphic.drawRect(0,0,w,h);
             graphic.endFill();
-            console.log('Created a new Graphic Rect');
-            if (this.onCreate)//invoke callback func whenever a new sprite is created
-            	this.onCreate(graphic,2);        
+            console.log('Created a new Graphic Rect');       
             return graphic;
         }
-        createSprite(texture){
-        	
+        createSprite(texture){       	
         	let sprite = new PIXI.Sprite(texture);
-            console.log('Created a new Sprite');
-            if (this.onCreate)//invoke callback func whenever a new sprite is created
-            	this.onCreate(sprite,0);        
+            console.log('Created a new Sprite');       
             return sprite;
         }
-        createAnimatedSprite(textures){
-        	
+        createAnimatedSprite(textures){        	
         	let sprite = new PIXI.extras.AnimatedSprite(textures);
-            console.log('Created a new Animated Sprite');
-            if (this.onCreate)//invoke callback func whenever a new sprite is created
-            	this.onCreate(sprite,1);        
+            console.log('Created a new Animated Sprite');       
             return sprite;
         }
         //return a sprite to 'PoolObjects' arr, to be reused again
@@ -86,28 +79,38 @@ class ObjectPooling
         	if (this.Graphics.length==0)//check if 'PoolObjects' arr is empty
             {	
             	obj_temp = this.createGraphic(w,h,color);//if so, create a new sprite
+                if (this.onCreate)//invoke callback func whenever a new sprite is created
+            	    this.onCreate(obj_temp,2);                 
             }
             else
             {
            	 	let index = this.Graphics.length-1;
             	obj_temp = this.Graphics[index];
+                if (this.onRetrieve)
+                    this.onRetrieve(obj_temp,2);    
             }       
             this.Graphics.pop();
             if (this.onGet)//invoke onGet callback func
-            	this.onGet(obj_temp,2);  
+            	this.onGet(obj_temp,2);
                 
             return obj_temp;
         }
-        getSprite(texture){
+        getSprite(texture,boolean){
         	let obj_temp;
         	if (this.Sprites.length==0)//check if 'PoolObjects' arr is empty
             {	
             	obj_temp = this.createSprite(texture);//if so, create a new sprite
+                if (this.onCreate)//invoke callback func whenever a new sprite is created
+            	    this.onCreate(obj_temp,0); 
             }
             else
             {
            	 	let index = this.Sprites.length-1;
             	obj_temp = this.Sprites[index];
+                if (boolean)//check if theres a need to overwrite the texture
+                    obj_temp.textures=textures;
+                if (this.onRetrieve)
+                    this.onRetrieve(obj_temp,0);   
             }       
             this.Sprites.pop();
             if (this.onGet)//invoke onGet callback func
@@ -115,16 +118,22 @@ class ObjectPooling
                 
             return obj_temp;
         }
-    	getAnimatedSprite(textures){
+    	getAnimatedSprite(textures,boolean){
         	let obj_temp;
         	if (this.animatedSprites.length==0)//check if 'PoolObjects' arr is empty
             {	
             	obj_temp = this.createAnimatedSprite(textures);//if so, create a new sprite
+                if (this.onCreate)//invoke callback func whenever a new sprite is created
+            	    this.onCreate(obj_temp,1); 
             }
             else
             {
            	 	let index = this.animatedSprites.length-1;
             	obj_temp = this.animatedSprites[index];
+                if (boolean)//check if theres a need to overwrite the texture
+                    obj_temp.textures=textures;
+                if (this.onRetrieve)
+                    this.onRetrieve(obj_temp,1);
             }       
             this.animatedSprites.pop();
             if (this.onGet)//invoke onGet callback func
