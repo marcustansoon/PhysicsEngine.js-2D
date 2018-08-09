@@ -107,8 +107,8 @@ class ObjectPooling
             {
            	 	let index = this.Sprites.length-1;
             	obj_temp = this.Sprites[index];
-                if (boolean)//check if theres a need to overwrite the texture
-                    obj_temp.textures=textures;
+                if (boolean && obj_temp.texture!=texture)//check if theres a need to overwrite the texture
+                    obj_temp.texture=texture;
                 if (this.onRetrieve)
                     this.onRetrieve(obj_temp,0);   
             }       
@@ -130,7 +130,7 @@ class ObjectPooling
             {
            	 	let index = this.animatedSprites.length-1;
             	obj_temp = this.animatedSprites[index];
-                if (boolean)//check if theres a need to overwrite the texture
+                if (boolean && obj_temp.textures!=textures)//check if theres a need to overwrite the texture
                     obj_temp.textures=textures;
                 if (this.onRetrieve)
                     this.onRetrieve(obj_temp,1);
