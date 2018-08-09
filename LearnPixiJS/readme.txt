@@ -18,15 +18,20 @@ Backbone script :
 <head>
 <script src='pixi.min.js'></script>
 <script src='PIXI.ObjectPoolingV1.01.js'></script>
+<script src='PIXI.KinematicMotionV1.01.js'></script>
+<script src='PIXI.MultiAnimatedSprite.js'></script>
 <script src='PIXI.AnimatedSpriteTextureManager.js'></script>
+<script src='PIXI.AreaManager.js'></script>
 </head>
 <body>
 
 </body>
 <script>
-	let renderer = new PIXI.autoDetectRenderer(250,250),
-    stage=new PIXI.Container(),
-    OP=new PIXI.ObjectPooling();
+	let renderer = new PIXI.autoDetectRenderer(250,250,{backgroundColor:0xffffff}),
+    stage = new PIXI.Container(),
+    OP = new PIXI.ObjectPooling(),
+    KM = new PIXI.KinematicMotion(),
+    AM = new PIXI.AreaManager();
     
     document.body.appendChild(renderer.view);
     
@@ -51,4 +56,3 @@ Backbone script :
     }
 </script>
 </html>
-
