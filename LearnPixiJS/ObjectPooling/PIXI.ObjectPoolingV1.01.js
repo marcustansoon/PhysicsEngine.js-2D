@@ -4,8 +4,8 @@
 //method :    createSprite(TEXTURE)                 -> create new sprite (automatically triggered on demand),TEXTURE is type of PIXI texture
 //              createAnimatedSprite(TEXTURES)      -> NOTE: TEXTURES are of array data type,consisting only PIXI textures (NOT texture URL)
 //              createGraphic(w,h,COLOR)
-//            getSprite(TEXTURES)      -> get a sprite from 'PoolObjects' arr, if its empty, then create a new sprite (trigger createSprite method)
-//            getAnimatedSprite(TEXTURES)  
+//            getSprite(TEXTURES,BOOL)      -> get a sprite from 'PoolObjects' arr, if its empty, then create a new sprite (trigger createSprite method)
+//            getAnimatedSprite(TEXTURES,BOOL)  -> BOOL: boolean, indicate whether or not to overwrite the sprite texture once retrived from obj pool
 //            getGraphic(TEXTURES)  
 //            returnSprite(SPRITE)        -> return a SPRITE to 'PoolObjects' arr, to be reused again later
 //            returnAnimatedSprite(SPRITE) 
@@ -21,7 +21,7 @@
 //this.onCreate(SPRITE/GRAPHICS/ANIM, NUM)=null;           //triggered on creating new sprite
 //this.onReturn(SPRITE/GRAPHICS/ANIM, NUM)=null;           //triggered on returning sprite to objpool arr
 //this.onGet(SPRITE/GRAPHICS/ANIM, NUM)=null;              //triggered once sprite is obtained either from objpool arr or newly created 
-//this.onRetrive(SPRITE/GRAPHICS/ANIM, NUM)=null;  
+//this.onRetrive(SPRITE/GRAPHICS/ANIM, NUM)=null;           //triggered on retrieving obj from Objectpools
 //where NUM used as an indicator (0 -> Sprite, 1 -> animatedSprite, 2 -> Graphic Rect)
 
 class ObjectPooling
