@@ -2,16 +2,15 @@
 //example usage : https://jsfiddle.net/6ad5ugs3/127/ 
 //example usage : https://jsfiddle.net/ftz5n6co/4/   --cleaner version
 
-//method :    registerChild(SPRITE)             -> registeration must be done first before attaching any kineamtic motion
-//            unregisterChild(SPRITE)           -> remove all previously added kinematic-related properties from sprite
+//method :    registerChild(SPRITE)            		-> registeration must be done first before attaching any kineamtic motion
+//            unregisterChild(SPRITE)          		-> remove all previously added kinematic-related properties from sprite
 //            addMotion(PROPERTIES,MOTION_NAME,SPRITE)  PROPERTIES-> {angle:in degree,v:velocity,a:acceleration}, add new kinematic motion to sprite if name supplied is unique(motion hasnt been added), else, alter the old motion properties
-//            hasMotion(MOTION_NAME,SPRITE)            ->verify if sprite has specified motion attached
-//            removeMotion(MOTION_NAME,SPRITE)  -> remove a particular motion from sprite
-//            updateMotion()                    -> implement the effect of all added kinemation motions on sprite movement, invoke it in gameloop
+//            hasMotion(MOTION_NAME,SPRITE)            	->verify if sprite has specified motion attached
+//            removeMotion(MOTION_NAME,SPRITE)  	-> remove a particular motion from sprite
+//            updateMotion(GROUP,name)           	->GROUP: array of objs, name: Name of Motion, implement the effect of the specified kinemation motions on sprite movement(Normal Usage: invoke this method in your gameloop)
 
 //properties added/accesible
-//      sprite.KinematicList            (data type: Set) contain all added motions' names
-//      sprite.Kinematic[MOTION_NAME]   .incrementX,incrementY,previousTruncatedY,previousTruncatedX,totalAX,aX,aY,totalAY
+//      sprite.KinematicMotions[MOTION_NAME]   .incrementX,incrementY,previousTruncatedY,previousTruncatedX,aXMultiplier,aX,aY,aYMultiplier
 
 //attachable callback
 //	sprite.Kinematic[MOTION_NAME].onUpdate=func()   	-> triggered on each Motion.updateMotion method
@@ -64,11 +63,10 @@ class KinematicMotion {
         return sprite.KinematicMotions.hasOwnProperty(name);
     }
     removeMotion(name, sprite) //remove motion from a sprite,given a kinematic motion's name
-    {
-        sprite.KinematicList.delete(name);
-        delete sprite.Kinematic[name];
+    { 
+        delete sprite.KinematicMotions[name];
     }
-    updateMotion(GROUP,name) //update movement of each kinematic's member
+    updateMotion(GROUP,name) //update movement of each kinematic's member,name-> motion name
     {
         //GROUP.forEach((member) => {
 	let length = GROUP.length,member;
