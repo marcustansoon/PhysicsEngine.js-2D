@@ -13,30 +13,18 @@
 //**The following properties area EDITABLE
 //        sprite.area.[AREA_NAME].active=true;    ->for determining whether a particular area is collideable
 //        sprite.area.[AREA_NAME].offsetX,offsetY,w,h    ->for storing properties of an area 
-    
-  let _Area = {};
-  class AreaManager {
-    constructor() {}
-    //predefine a new area and its properties (and store the infomation in _Area)
-    createArea(name, properties) { //properties -> w,h,offsetX,offsetY
-      _Area[name] = properties;
 
-    }
-    destroyArea(aname) { //delete a predefined area from _Area 
-      delete _Area[aname];
-    }
-    addAreaToChild(aname, sprite) { //add a predefined area to a sprite
+  class AreaManager {
+    constructor() {
+      
+    }   
+    addArea(aname,properties,sprite){//properties->{w:w,h:h,offsetX:offsetX,offsetY:offsetY,active:bool}
       if (!sprite.area)
         sprite.area = {};
-
-      sprite.area[aname] = _Area[aname]; //store the area properties
-      sprite.area[aname].active = true;
-    }
-    removeAreaFromChild(aname, sprite) { //remove a specified area from a sprite
+      sprite.area[aname]=properties;
+    }   
+    removeArea(aname, sprite) { //remove a specified area from a sprite
       delete sprite.area[aname];
-    }
-    clearAreasFromChild(aname, sprite) { //clear ALL areas attached to a sprite
-      delete sprite.area;
     }
     checkGroupCollision(group1, area1, group2, area2, callback) //Check whether area1 of group1 is colliding with area2 of group2
     {
@@ -62,7 +50,7 @@
                 x1 <= x2 + member2.area[area2].w && // r1 left edge past r2 right
                 y1 + member1.area[area1].h >= y2 && // r1 top edge past r2 bottom
                 y1 <= y2 + member2.area[area2].h) {
-                callback(member2); //invoke the callback func with the collider as the parameter
+                callback(member1, member2); //invoke the callback func with the collider as the parameter
               }
             }
             //});
@@ -86,7 +74,7 @@
           x1 <= x2 + member2.area[area2].w && // r1 left edge past r2 right
           y1 + member1.area[area1].h >= y2 && // r1 top edge past r2 bottom
           y1 <= y2 + member2.area[area2].h) {
-          callback(member2); //invoke the callback func with the collider as the parameter
+          callback(member1,member2); //invoke the callback func with the collider as the parameter
         }
       }
 
