@@ -12,22 +12,26 @@ http://jsfiddle.net/rh3eqdfk/193/
 
 
 Backbone script :
+//Download stats.js from https://raw.githubusercontent.com/mrdoob/stats.js/master/build/stats.min.js
 
 <!DOCTYPE html>
 <html>
 <head>
 <script src='pixi.min.js'></script>
-<script src='memory-stats.js'></script>
 <script src='PIXI.ObjectPoolingV1.01.js'></script>
 <script src='PIXI.KinematicMotionV1.01.js'></script>
 <script src='PIXI.MultiAnimatedSprite.js'></script>
 <script src='PIXI.AnimatedSpriteTextureManager.js'></script>
 <script src='PIXI.AreaManager.js'></script>
+<script src='Stats.js'></script>
 </head>
 <body>
 
 </body>
 <script>
+    let stats=new Stats();document.body.appendChild(stats.dom);
+	stats.dom.style.top = "300px";
+
 	let renderer = new PIXI.autoDetectRenderer(250,250,{backgroundColor:0xffffff}),
     stage = new PIXI.Container(),
     OP = new PIXI.ObjectPooling(),
@@ -36,38 +40,29 @@ Backbone script :
     
     document.body.appendChild(renderer.view);
     
-    let url="image.png";
+    let url="./Spritesheet/gnome.png";
     PIXI.loader
     .add(url)
     .load(setup);
     
-    function setup(){
-    	
+    function setup(){   	
         let textures=new PIXI.AnimatedSpriteTextureManager(url,false,{row:7,col:5}).extractTexture();
-        for (let x=0;x<1000;x++)
-        let player= OP.getAnimatedSprite(textures);
-        stage.addChild(player);
-        player.play();
-        player.animationSpeed=0.1;
+        for (let x=0;x<1000;x++){
+        	let player= OP.getAnimatedSprite(textures);
+        	stage.addChild(player);
+        	player.play();
+        	player.animationSpeed=0.1;
+        	player.scale.set(0.1);
+            player.x=Math.random()*200;
+            player.y=Math.random()*200;
+        }        
         loop();
     }
     function loop(){
     	renderer.render(stage);
         requestAnimationFrame(loop);
-    }
-</script>
-<script>
-    let stats = new MemoryStats();
-
-    stats.domElement.style.position = 'fixed';
-    stats.domElement.style.right        = '0px';
-    stats.domElement.style.bottom       = '0px';
-    
-    document.body.appendChild( stats.domElement );
-
-    requestAnimationFrame(function rAFloop(){
+        
         stats.update();
-        requestAnimationFrame(rAFloop);
-    });
+    }
 </script>
 </html>
