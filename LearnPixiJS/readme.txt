@@ -8,8 +8,8 @@ To bypass it, open cmd.exe
 Example of AnimatedSpriteManager and AnimatedSpriteTextureManager usage :-
 http://jsfiddle.net/rh3eqdfk/193/
 
-
-
+10/8/18
+https://files.fm/u/jswh3ndu
 
 Backbone script :
 //Download stats.js from https://raw.githubusercontent.com/mrdoob/stats.js/master/build/stats.min.js
