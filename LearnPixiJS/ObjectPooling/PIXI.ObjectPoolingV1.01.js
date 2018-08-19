@@ -44,10 +44,18 @@ class ObjectPooling {
   createGraphic(type, color, p1, p2) {
     let graphic = new PIXI.Graphics();
     graphic.beginFill(color);
-    if (type == 'rect')
-      graphic.drawRect(0, 0, p1, p2);
-    else
-      graphic.drawCircle(0, 0, p1);
+    switch (type) {
+      case "rect":
+      case "Rect":
+      case "r":
+      case "R":
+      case "Rec":
+        graphic.drawRect(0, 0, p1, p2);
+        break;
+      default:
+        graphic.drawCircle(0, 0, p1);
+    }
+    
     graphic.endFill();
     console.log('Created a new Graphic', type);
     return graphic;
