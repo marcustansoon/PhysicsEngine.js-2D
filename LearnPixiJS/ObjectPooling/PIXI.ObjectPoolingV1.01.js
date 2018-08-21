@@ -93,7 +93,7 @@ class ObjectPooling {
       this.onReturn(sprite, 1);
   }
   //get a sprite from 'PoolObjects' arr, if its empty, then create a new sprite (trigger createSprite method)
-  getGraphic(type, color, p1, p2) { //return a PIXI.Rect/Circle (Graphics) obj
+  getGraphic(type, color,boolean, p1, p2) { //return a PIXI.Rect/Circle (Graphics) obj
     let obj_temp;
     if (this.GraphicsLength == 0) //check if 'PoolObjects' arr is empty
     {
@@ -103,6 +103,9 @@ class ObjectPooling {
     } else {
       let index = --this.GraphicsLength;
       obj_temp = this.Graphics[index];
+      if (boolean){
+       obj_temp.graphicsData[0].fillColor=color; 
+      }
       if (this.onRetrieve)
         this.onRetrieve(obj_temp, 2);
       console.log("Retrieved a sprite");
