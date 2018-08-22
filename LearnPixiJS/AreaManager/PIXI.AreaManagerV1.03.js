@@ -19,7 +19,7 @@
       //store areas shown
       this.visibleAreaG=[];//for testing/display purpose
     }   
-    addArea(aname,properties,sprite,showArea,color,stage){//properties->{w:w,h:h,offsetX:offsetX,offsetY:offsetY,active:bool}
+    addArea(aname,properties,sprite,showArea,color,alpha,stage){//properties->{w:w,h:h,offsetX:offsetX,offsetY:offsetY,active:bool}
       if (!sprite.area)
         sprite.area = {};
       sprite.area[aname]=properties;
@@ -28,6 +28,7 @@
         let temp = OP.getGraphic('rect',color,true,properties.w,properties.h);
         this.visibleAreaG.push(temp); 
         temp.follow=sprite;
+        temp.alpha=alpha;
         temp.areaName=aname;
         stage.addChild(temp);
       }
