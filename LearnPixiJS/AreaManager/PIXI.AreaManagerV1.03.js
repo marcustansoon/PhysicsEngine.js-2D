@@ -16,14 +16,15 @@
 
   class AreaManager {
     constructor() {
-      this.visibleAreaG=[];
+      //store areas shown
+      this.visibleAreaG=[];//for testing/display purpose
     }   
     addArea(aname,properties,sprite,showArea,color,stage){//properties->{w:w,h:h,offsetX:offsetX,offsetY:offsetY,active:bool}
       if (!sprite.area)
         sprite.area = {};
       sprite.area[aname]=properties;
       
-      if (showArea){
+      if (showArea){//for testing/display purpose
         let temp = OP.getGraphic('rect',color,true,properties.w,properties.h);
         this.visibleAreaG.push(temp); 
         temp.follow=sprite;
@@ -34,7 +35,8 @@
     removeArea(aname, sprite) { //remove a specified area from a sprite
       delete sprite.area[aname];
     }
-    updateVisibleAreaPosition(){
+    //update the pos of the areas shown
+    updateVisibleAreaPosition(){//for testing/display purpose
       let len = this.visibleAreaG.length;
       for (let loop=0;loop<len;loop++){
         this.visibleAreaG[loop].x=this.visibleAreaG[loop].follow.x+this.visibleAreaG[loop].follow.area[this.visibleAreaG[loop].areaName].offsetX;
