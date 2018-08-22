@@ -27,6 +27,7 @@
         let temp = OP.getGraphic('rect',color,true,properties.w,properties.h);
         this.visibleAreaG.push(temp); 
         temp.follow=sprite;
+        temp.areaName=aname;
         stage.addChild(temp);
       }
     }   
@@ -36,8 +37,8 @@
     updateVisibleAreaPosition(){
       let len = this.visibleAreaG.length;
       for (let loop=0;loop<len;loop++){
-        this.visibleAreaG[loop].x=this.visibleAreaG[loop].follow.x+this.visibleAreaG[loop].follow.offsetX;
-        this.visibleAreaG[loop].y=this.visibleAreaG[loop].follow.y+this.visibleAreaG[loop].follow.offsetY;
+        this.visibleAreaG[loop].x=this.visibleAreaG[loop].follow.x+this.visibleAreaG[loop].follow.area[this.visibleAreaG[loop].areaName].offsetX;
+        this.visibleAreaG[loop].y=this.visibleAreaG[loop].follow.y+this.visibleAreaG[loop].follow.area[this.visibleAreaG[loop].areaName].offsetY;
       }
     }
     checkGroupCollision(group1, area1, group2, area2, callback) //Check whether area1 of group1 is colliding with area2 of group2
