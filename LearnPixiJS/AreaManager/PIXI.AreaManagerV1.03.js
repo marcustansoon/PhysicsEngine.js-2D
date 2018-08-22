@@ -43,7 +43,7 @@
         this.visibleAreaG[loop].y=this.visibleAreaG[loop].follow.y+this.visibleAreaG[loop].follow.area[this.visibleAreaG[loop].areaName].offsetY;
       }
     }
-    checkGroupCollision(group1, area1, group2, area2, callback) //Check whether area1 of group1 is colliding with area2 of group2
+    checkGroupCollision(group1, area1, group2, area2) //Check whether area1 of group1 is colliding with area2 of group2
     {
       let member1, member2, len1 = group1.length,
         len2 = group2.length;
@@ -70,7 +70,7 @@
                 y1 <= y2 + member2.area[area2].h) {
                 callback(member1, member2); //invoke the callback func with the collider as the parameter
               }*/
-              this.checkCollision(member1, area1, member2, area2, callback);
+              this.checkCollision(member1, area1, member2, area2);
             }
             //});
           }
@@ -78,7 +78,7 @@
         //});
       }
     }
-    checkCollision(member1, area1, member2, area2, callback) //Check whether area1 of group1 is colliding with area2 of group2
+    checkCollision(member1, area1, member2, area2) //Check whether area1 of group1 is colliding with area2 of group2
     {
 
       if (member1.area[area1].active && member2.area[area2].active) //check if both areas for both members are active
@@ -93,7 +93,7 @@
           x1 <= x2 + member2.area[area2].w && // r1 left edge past r2 right
           y1 + member1.area[area1].h >= y2 && // r1 top edge past r2 bottom
           y1 <= y2 + member2.area[area2].h) {
-          callback(member1,member2); //invoke the callback func with the collider as the parameter
+          //callback(member1,member2); //invoke the callback func with the collider as the parameter
           return true;
         }
       }
