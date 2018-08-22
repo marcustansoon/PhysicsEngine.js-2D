@@ -66,3 +66,38 @@ Backbone script :
     }
 </script>
 </html>
+
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.1/pixi.min.js"></script>
+<script src="https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/LearnPixiJS/ObjectPooling/PIXI.ObjectPoolingV1.01.js"></script>
+<script src="https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/LearnPixiJS/AreaManager/PIXI.AreaManagerV1.03.js"></script>
+
+<body>
+</body>
+
+<script>
+	let renderer = new PIXI.autoDetectRenderer(250,250),
+    stage = new PIXI.Container(),
+    OP = new PIXI.ObjectPooling();
+    
+    document.body.appendChild(renderer.view);
+    
+    loop();
+    
+    function loop(){
+    	renderer.render(stage);
+        requestAnimationFrame(loop);
+    }
+    
+    
+    
+</script>
+
+</html>
+
