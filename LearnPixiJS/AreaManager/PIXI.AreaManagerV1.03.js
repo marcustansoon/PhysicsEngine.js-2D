@@ -54,6 +54,7 @@
             //group2.forEach((member2)=>{
             if (member2.area[area2].active) //check if area2 of member2 is active
             {
+              /*
               let x1 = member1.x + member1.area[area1].offsetX,
                 y1 = member1.y + member1.area[area1].offsetY,
                 x2 = member2.x + member2.area[area2].offsetX,
@@ -65,7 +66,8 @@
                 y1 + member1.area[area1].h >= y2 && // r1 top edge past r2 bottom
                 y1 <= y2 + member2.area[area2].h) {
                 callback(member1, member2); //invoke the callback func with the collider as the parameter
-              }
+              }*/
+              this.checkCollision(member1, area1, member2, area2, callback);
             }
             //});
           }
@@ -89,6 +91,7 @@
           y1 + member1.area[area1].h >= y2 && // r1 top edge past r2 bottom
           y1 <= y2 + member2.area[area2].h) {
           callback(member1,member2); //invoke the callback func with the collider as the parameter
+          return true;
         }
       }
 
