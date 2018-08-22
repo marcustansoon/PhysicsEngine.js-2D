@@ -18,7 +18,7 @@
     constructor() {
       this.visibleAreaG=[];
     }   
-    addArea(aname,properties,sprite,boolean){//properties->{w:w,h:h,offsetX:offsetX,offsetY:offsetY,active:bool}
+    addArea(aname,properties,sprite,boolean,stage){//properties->{w:w,h:h,offsetX:offsetX,offsetY:offsetY,active:bool}
       if (!sprite.area)
         sprite.area = {};
       sprite.area[aname]=properties;
@@ -27,6 +27,7 @@
         let temp = OP.getGraphic('rect',0x0f0f0f,true,properties.w,properties.h);
         this.visibleAreaG.push(temp); 
         temp.follow=sprite;
+        stage.addChild(temp);
       }
     }   
     removeArea(aname, sprite) { //remove a specified area from a sprite
