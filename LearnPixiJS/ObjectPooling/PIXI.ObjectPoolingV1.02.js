@@ -95,7 +95,7 @@ class ObjectPooling {
   //get a sprite from 'PoolObjects' arr, if its empty, then create a new sprite (trigger createSprite method)
   getGraphic(type, color,boolean, p1, p2) { //return a PIXI.Rect/Circle (Graphics) obj
     let obj_temp;
-    if (this.GraphicsLength == 0) //check if 'PoolObjects' arr is empty
+    if (!this.GraphicsLength) //check if 'PoolObjects' arr is empty
     {
       obj_temp = this.createGraphic(type, color, p1, p2); //if so, create a new sprite
       if (this.onCreate) //invoke callback func whenever a new sprite is created
@@ -117,7 +117,7 @@ class ObjectPooling {
   }
   getSprite(texture, boolean) { //Return a PIXI.Sprite obj
     let obj_temp;
-    if (this.SpritesLength == 0) //check if 'PoolObjects' arr is empty
+    if (!this.SpritesLength) //check if 'PoolObjects' arr is empty
     {
       obj_temp = this.createSprite(texture); //if so, create a new sprite
       if (this.onCreate) //invoke callback func whenever a new sprite is created
@@ -142,7 +142,7 @@ class ObjectPooling {
   }
   getAnimatedSprite(textures, boolean) { //return an animSprite obj
     let obj_temp;
-    if (this.animatedSpritesLength == 0) //check if 'PoolObjects' arr is empty
+    if (!this.animatedSpritesLength) //check if 'PoolObjects' arr is empty
     {
       obj_temp = this.createAnimatedSprite(textures); //if so, create a new sprite
       if (this.onCreate) //invoke callback func whenever a new sprite is created
