@@ -18,6 +18,10 @@
     constructor() {
       //store areas shown
       this.visibleAreaG=[];//for testing/display purpose
+      if (PIXI.ObjectPooling)
+      this.OP=new PIXI.ObjectPooling();
+      else
+        console.log("ObjectPooling.js not found");
     }   
     addArea(aname,properties,sprite,showArea,color,alpha,stage){//properties->{w:w,h:h,offsetX:offsetX,offsetY:offsetY,active:bool}
       if (!sprite.area)
@@ -25,7 +29,7 @@
       sprite.area[aname]=properties;
       
       if (showArea){//for testing/display purpose
-        let temp = OP.getGraphic('rect',color,true,properties.w,properties.h);
+        let temp = this.OP.getGraphic('rect',color,true,properties.w,properties.h);
         this.visibleAreaG.push(temp); 
         temp.follow=sprite;
         temp.alpha=alpha;
