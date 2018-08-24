@@ -169,26 +169,26 @@ class ObjectPooling {
     this[gname]=properties;
     this[gname].g=[];
   }
-  getCustom(gname){
+  getCustom(gname,arg1,arg2){
     let obj,temp=this[gname],length=temp.g.length;
-    if (length&&temp.onCreate){
-      obj=temp.onCreate();
+    if (!length&&temp.onCreate){
+      obj=temp.onCreate(arg1,arg2);
     }
     else{
       let index = --length;
       obj = temp.g[index];
       temp.g.pop();
       if (temp.onRetrieve)
-        temp.onRetrieve(oj);
+        temp.onRetrieve(obj,arg1,arg2);
     }
     if (temp.onGet)
-      temp.onGet(obj);  
+      temp.onGet(obj,arg1,arg2);  
     return obj;
   }
-  returnCustom(sprite,gname){
+  returnCustom(sprite,gname,arg1,arg2){
     this[gname].g.push(sprite);
     if (this[gname].onReturn)
-      this[gname].onReturn(sprite);
+      this[gname].onReturn(sprite,arg1,arg2);
   }
 }
 PIXI.ObjectPooling = ObjectPooling;
