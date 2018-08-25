@@ -35,9 +35,14 @@ class MultiAnimatedSprite extends PIXI.extras.AnimatedSprite {
     });
   }
   playAnimation(startframe, endframe) {//play specific animation starting from startframe to endframe-1
-    this.stop();
+    //this.stop();
     this._texturesStartFrame = startframe;
     this._texturesEndFrame = endframe;
+	  if (startframe==endframe-1){
+		  this.gotoAndStop(startframe);
+		  return;
+	  }
+	  
     this.gotoAndPlay(startframe);    
   }
   update(deltaTime)//replace the old update method
