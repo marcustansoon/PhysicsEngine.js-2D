@@ -40,10 +40,14 @@
     removeArea(aname, sprite) { //remove a specified area from a sprite
       delete sprite.area[aname];
     }
+    showArea(boolean){//show area,boolean->true to show,false to hide visible area
+      for (let loop=0,len = this.visibleAreaG.length;loop<len;loop++){
+          this.visibleAreaG[loop].renderable=boolean;
+      }       
+    }
     //update the pos of the areas shown
     updateVisibleAreaPosition(){//for testing/display purpose
-      let len = this.visibleAreaG.length;
-      for (let loop=0;loop<len;loop++){
+      for (let loop=0,len = this.visibleAreaG.length;loop<len;loop++){
         this.visibleAreaG[loop].x=this.visibleAreaG[loop].follow.x+this.visibleAreaG[loop].follow.area[this.visibleAreaG[loop].areaName].offsetX;
         this.visibleAreaG[loop].y=this.visibleAreaG[loop].follow.y+this.visibleAreaG[loop].follow.area[this.visibleAreaG[loop].areaName].offsetY;
       }
