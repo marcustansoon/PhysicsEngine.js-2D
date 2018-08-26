@@ -31,6 +31,7 @@
       if (showArea){//for testing/display purpose
         let temp = this.OP.getGraphic('rect',color,true,properties.w,properties.h);
         this.visibleAreaG.push(temp); 
+        sprite.area[aname].areaShown=temp;
         temp.follow=sprite;
         temp.alpha=alpha;
         temp.areaName=aname;
@@ -44,6 +45,13 @@
       for (let loop=0,len = this.visibleAreaG.length;loop<len;loop++){
           this.visibleAreaG[loop].renderable=boolean;
       }       
+    }
+    destroyArea(sprite,aname,stage){
+      let temp=sprite.area[aname].areaShown,index = this.visibleAreaG.indexOf(temp);
+       stage.removeChild(temp);
+        console.log('index to  be removed is',index);
+      this.visibleAreaG.splice(index,1);
+       temp.destroy({children:true, texture:true, baseTexture:true});
     }
     //update the pos of the areas shown
     updateVisibleAreaPosition(){//for testing/display purpose
