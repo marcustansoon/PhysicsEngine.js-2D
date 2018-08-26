@@ -48,10 +48,11 @@
     }
     destroyArea(sprite,aname,stage){
       let temp=sprite.area[aname].areaShown,index = this.visibleAreaG.indexOf(temp);
-       stage.removeChild(temp);
-        console.log('index to  be removed is',index);
-      this.visibleAreaG.splice(index,1);
-       temp.destroy({children:true, texture:true, baseTexture:true});
+	  this.visibleAreaG.splice(index,1);
+	  stage.removeChild(temp);
+	  delete sprite.area[aname].areaShown;
+		temp.destroy({children:true, texture:true, baseTexture:true});
+		
     }
     //update the pos of the areas shown
     updateVisibleAreaPosition(){//for testing/display purpose
