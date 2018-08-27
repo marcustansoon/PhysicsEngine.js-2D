@@ -14,7 +14,6 @@
 
 //attachable callback
 //	sprite.Kinematic[MOTION_NAME].onUpdate=func()   	-> triggered on each Motion.updateMotion method
-
 const KinematicConstant = 1 / 180 * Math.PI; //degree to rad formula
 class KinematicMotion {
     constructor() {
@@ -43,13 +42,14 @@ class KinematicMotion {
         sprite.KinematicMotions[name].onUpdate = null;
     }
     //able to either add new motion or edit existing motion
-    addMotion( name,angle,v,a sprite) 
+    addMotion( name,angle,v,a, sprite) 
     {
 
         let temp = angle * KinematicConstant, //convert to rad.
             cos = Math.cos(temp),
             sin = Math.sin(temp);
-	    
+	    console.log('cos',cos);
+		console.log('sin',sin);
         if (!sprite.KinematicMotions) {
             sprite.KinematicMotions = {};
         }
@@ -65,13 +65,13 @@ class KinematicMotion {
         {
             sprite.KinematicMotions[name] = {};
         }
-
-        sprite.KinematicMotions[name].incrementX = cos * v; //cal the amount of fixed increment for x
+		
+        sprite.KinematicMotions[name].incrementX = (cos * v * 1000<<0)/1000; //cal the amount of fixed increment for x
         sprite.KinematicMotions[name].previousTruncatedX = 0; //used to store the truncated decimal potion of x
-
-        sprite.KinematicMotions[name].incrementY = sin * v; //cal the amount of fixed increment for y
+		console.log('incX',sprite.KinematicMotions[name].incrementX);
+        sprite.KinematicMotions[name].incrementY = (sin * v * 1000<<0)/1000; //cal the amount of fixed increment for y
         sprite.KinematicMotions[name].previousTruncatedY = 0; //used to store the truncated decimal potion of y
-
+		console.log(sprite.KinematicMotions[name].incrementY);
         sprite.KinematicMotions[name].aX = cos * a; //store the fixed acceleration
         sprite.KinematicMotions[name].aXMultiplier = 0; //sum up the acc for each increment of x/y
 
@@ -95,24 +95,24 @@ class KinematicMotion {
         for (let loop=0;loop<length;loop++){    
 		member = GROUP[loop];
                 let tempx = member.KinematicMotions[name].incrementX + member.KinematicMotions[name].aX*member.KinematicMotions[name].aXMultiplier + member.KinematicMotions[name].previousTruncatedX, //total up the fixed x increment, acc amount and previous truncated decimal potion
-                    tempy = member.KinematicMotions[name].incrementY + member.KinematicMotions[name].aY*member.KinematicMotions[name].aYMultiplier + member.KinematicMotions[name].previousTruncatedY,
-                    f_tempx = tempx<<0, //round down to whole number
-                    f_tempy = tempy<<0;
+                    tempy = member.KinematicMotions[name].incrementY + member.KinematicMotions[name].aY*member.KinematicMotions[name].aYMultiplier + member.KinematicMotions[name].previousTruncatedY;
 
+				
+                member.x += tempx<<0; //for best performance, sprite x and y will be whole number, instead of decimal
+                member.KinematicMotions[name].previousTruncatedX = tempx%1; //keep track of the truncated decimal potion
 
-                member.x += f_tempx; //for best performance, sprite x and y will be whole number, instead of decimal
-                member.KinematicMotions[name].previousTruncatedX = tempx - f_tempx; //keep track of the truncated decimal potion
-
-                member.y += f_tempy;
-                member.KinematicMotions[name].previousTruncatedY = tempy - f_tempy;
+                member.y += tempy<<0;
+                member.KinematicMotions[name].previousTruncatedY = tempy%1;//get decimal portion
 
                 member.KinematicMotions[name].aXMultiplier++; //increase the total acc in x direction after each increment
                 member.KinematicMotions[name].aYMultiplier++;
 
-                //invoket callback func attached to the motion name if exists
+                //invoke callback func attached to the motion name if exists
                 if (member.KinematicMotions[name].onUpdate) {
                     member.KinematicMotions[name].onUpdate();
                 }
+				console.log('float',member.x);
+				console.log(member.KinematicMotions[name].previousTruncatedY);
 	}    
         //});
     }
