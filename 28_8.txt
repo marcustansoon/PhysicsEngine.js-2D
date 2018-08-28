@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+	*{
+		margin: 0;
+    	padding: 0;
+	}
+</style>
+<div id='test'></div>
+<script src="pixi.min.js"></script>
+<script src="PIXI.ObjectPoolingV1.02.js"></script>
+<script src="PIXI.AnimatedSpriteTextureManager.js"></script>
+<script src="PIXI.MultiAnimatedSprite.js"></script>
+<script src="PIXI.AreaManagerV1.04.js"></script>
+</head>
+<body>
+</body>
+<script>
+class World {
+    	constructor(){
+            this.buildableLoc=new Set();//store buildable loc coordinate
+            this.occupiedLoc=new Set();//store occupied loc coordinate
+            this.showGroup=[];//store all representation for buildable/occupied loc
+            this.OP=new PIXI.ObjectPooling();
+        }
+		//add buildable loc with its coordinate,w,h
+        //'arg' can be of type string ,eg '25,50'
+        //OR array of string,eg ['25,50','50,150']
+        addBuildableLoc(arg,w,h,stage){
+        	let locX,locY,temp,arr;
+        	if(typeof arg=='string'){
+                this.buildableLoc.add(arg);
+            	temp = OP.getGraphic('rect',0xff00ff,true,w,h);
+                let arr = arg.split(',');
+                locX=+arr[0];
+                locY=+arr[1];
+                temp.x=locX;
+                temp.y=locY;
+            	this.showGroup.push(temp);
+                stage.addChild(temp);
+                temp.renderable=false;
+                arr=null;
+                return;
+            }
+           	for (let index=0,len=arg.length;index<len;index++){
+                this.buildableLoc.add(arg[index]);
+            	temp = OP.getGraphic('rect',0x48f442,true,w,h);
+                let arr = arg[index].split(',');
+                locX=+arr[0];
+                locY=+arr[1];
+                temp.x=locX;
+                temp.y=locY;
+            	//temp.isOccupied=false;
+            	this.showGroup.push(temp);
+                stage.addChild(temp);
+                temp.renderable=false;
+                arr=null;
+            }
+            
+        }
+        //set a loc to be buildable/occupied
+        //boolean->true if buildable,false if occupied
+        setBuildableLoc(loc,boolean){
+        	let arr=loc.split(','),locX=+arr[0],locY=+arr[1];
+            if (!this.isLocBuildable(loc)&&!this.isLocOccupied(loc)){
+            	console.log('Loc not found');
+            	return;
+            }
+        	for (let index=0,len=this.showGroup.length;index<len;index++){
+            	
+                if (this.showGroup[index].x==locX&&this.showGroup[index].y==locY){
+                	//this.showGroup[index].isOccupied=boolean;
+                    if (!boolean){//check if occupied
+                    	this.showGroup[index].graphicsData[0].fillColor=0xf44242;
+                        this.buildableLoc.delete(loc);
+                        this.occupiedLoc.add(loc);
+                        break;//red
+                    }
+                    //executed if loc is set to buildable
+                    this.showGroup[index].graphicsData[0].fillColor=0x48f442;
+                    this.buildableLoc.add(loc);
+                    this.occupiedLoc.delete(loc);
+                    break;//green                   
+                }   
+            }
+            arr=null;
+        }
+        isLocBuildable(loc){
+			return this.buildableLoc.has(loc);
+		}
+        isLocOccupied(loc){
+        	return this.occupiedLoc.has(loc);
+        }
+        //show all the previously stored loc,both buildable and occupied
+        //boolean->show if true,hide if false
+        showLoc(boolean){        	
+            	for (let index=0,len=this.showGroup.length;index<len;index++){
+                  this.showGroup[index].renderable=boolean;
+                }
+            
+        }
+    }
+</script>
+
+<script>
+	let renderer = new PIXI.autoDetectRenderer(350,350,{backgroundColor:0xffffff}),
+    stage = new PIXI.Container(),
+    OP = new PIXI.ObjectPooling(),
+    AM = new PIXI.AreaManager(),
+    soldierURL="./spritesheet/soldier_s.png",arrowURL="./spritesheet/arrow.png",
+    towerURL="./spritesheet/tower.png",
+    soldierTextures,arrowTexture,towerTexture,
+    towerGroup=[],interval,
+    projGroup=[],
+    enemyGroup=[],
+    previewedBuilding;
+    
+    stage.alpha=.1;
+    AM.showAreaBoolean=true;//boolean for showing added areas
+	document.body.appendChild(renderer.view);
+
+	let s;
+    
+
+PIXI.loader
+.add(arrowURL)
+.add(soldierURL)
+.add(towerURL)
+.load(start);	    
+    
+	function start(){ 
+    	//init
+    	drawBg();//draw bg lines/boundary
+    	createEntityMovementArea();
+    
+    	towerTexture=PIXI.loader.resources[towerURL].texture
+        soldierTextures=new PIXI.AnimatedSpriteTextureManager(soldierURL,false,{row:1,col:12}).extractTexture();
+        arrowTexture=PIXI.loader.resources[arrowURL].texture;        
+        
+        previewedBuilding=new PIXI.Sprite(arrowTexture);
+        previewedBuilding.renderable=false;
+        //previewedBuilding.anchor.set(0.5);
+        stage.addChild(previewedBuilding);
+        previewedBuilding.space=[];
+        previewedBuilding.preLoc=[];
+        
+        //create entity
+        s=OP.getEntity();//new PIXI.MultiAnimatedSprite(soldierTextures);
+        stage.addChild(s);
+       // s.scale.set(.5);
+        //s.animationSpeed=0.1;
+        //s.play();s.anchor.set(.5);
+        //registerEntity(s);
+        enemyGroup.push(s);
+        //registerHP(100,100,25,5,-12,-25,s,stage);
+        
+        //o-4 walk
+        //4-9 attack
+        //9-12 dead
+        s.isAttacking=false;
+        s.onLoop=function(){
+        	if (s.isAttacking){
+            	s.isAttacking=false;s.playAnimation(0,4);
+                if (s.target&&s.target.currentHealth&&AM.checkCollision(s,'damage',s.target,'base')){
+                  damageHP(-10,s.target);
+                  if (!s.target.currentHealth){
+                    	console.log('twr dead');
+                        destroyTower(s.target,towerGroup);
+                        s.target=null;
+                    }
+                }
+            }
+        }
+        s.playAnimation(0,4);
+        
+        /*
+        let temp=new PIXI.Sprite(arrowTexture);
+       	AM.addArea('base', entityMovementAreaProperties, temp, true, 0xff00ff, 1, stage);
+        temp.x=250;
+        temp.y=250;
+        dummyG.push(temp);*/
+        
+        interval=setInterval(intervalFunc,500);
+        
+    	loop();	
+    }
+    let count=0;
+    function intervalFunc(){
+    	towerAttackHandler(towerGroup,enemyGroup);
+        entityMovementAreaHandler(entityMovementArea,enemyGroup);
+        updateHPPos(enemyGroup);updateHPPos(towerGroup);
+        
+        entityDetectionHandler(enemyGroup,towerGroup);
+        
+        count++;
+        if (count<3)
+        {
+        	let temp=OP.createEntity();
+            temp.x=entityMovementArea[0].x;
+            temp.y=entityMovementArea[0].y;
+            stage.addChild(temp);
+            enemyGroup.push(temp);
+            temp.isAttacking=false;
+        temp.onLoop=function(){
+        	if (temp.isAttacking){
+            	temp.isAttacking=false;temp.playAnimation(0,4);
+                if (temp.target&&temp.target.currentHealth&&AM.checkCollision(temp,'damage',temp.target,'base')){//check if target exist and collision occurs
+                  //if (temp.target.currentHealth){//check if target is alive
+                  	damageHP(-15,temp.target);//damage target if alive
+                    if (!temp.target.currentHealth){//check if target is dead
+                    
+                          console.log('twr dead');
+                          destroyTower(temp.target,towerGroup);
+                          temp.target=null;
+                    }
+                 /* }
+                  else{
+                   	//temp.target=null;
+                    //console.log(temp.target,'return');
+                   	return;
+                  }*/
+                  
+                  
+                }
+            }
+        }
+        }
+    }
+    function loop(){
+    	renderer.render(stage);
+        requestAnimationFrame(loop);
+        AM.updateVisibleAreaPosition();
+       	projMovement(projGroup);
+        entityAttackHandler(enemyGroup);
+        
+        //testmove(enemyGroup);
+    }  
+    function drawBg(){
+    	//setting up upper and lower boundary
+    	for (let index=0;index<2;index++){
+          let bg1 = OP.getGraphic('rect',0x56f442,true,150,5);
+          bg1.y=150+index*50;
+
+          let bg2 = OP.getGraphic('rect',0x56f440,true,100,5);
+          bg2.rotation=-Math.PI*45/180;
+          bg2.x=150;
+          bg2.y=150+index*50;
+
+          let bg3 = OP.getGraphic('rect',0x56f442,true,150,5);
+          bg3.y=150-75+index*50;
+          bg3.x=150+75;
+          
+          stage.addChild(bg3);
+          stage.addChild(bg2);
+          stage.addChild(bg1);
+
+        }    
+	}
+    function registerHP(maxH,currentH,w,h,offsetX,offsetY,en,stage){//properties->{w,h,offsetX,offsetY}
+		en.maxHealth=maxH;
+        en.currentHealth=currentH;
+		en.HPrect = OP.getGraphic('rect',0xff00ff,true,w,h);
+        en.HPrect.offsetX=offsetX;
+        en.HPrect.offsetY=offsetY;
+        stage.addChild(en.HPrect);
+	}
+   	function removeHP(en,stage){
+    	stage.removeChild(en.HPrect);
+        en.maxHealth=null;
+        en.currentHealth=null;
+    	delete en.HPrect ;
+    }
+    function updateHPPos(HPGroup){//update HP position,attaching to its entity
+    	for (let index=0,len=HPGroup.length;index<len;index++){
+        	HPGroup[index].HPrect.x=HPGroup[index].x+HPGroup[index].HPrect.offsetX;
+           HPGroup[index].HPrect.y=HPGroup[index].y+HPGroup[index].HPrect.offsetY; 
+        }
+    }
+    function damageHP(DMGamount,en){
+    	let temp;
+    	en.currentHealth+=DMGamount;//apply damage
+        if (en.currentHealth>en.maxHealth){
+        	en.currentHealth=en.maxHealth;
+        }
+        else if (en.currentHealth<0){
+        	en.currentHealth=0;
+        }
+        
+        temp=en.currentHealth/en.maxHealth*100<<0;
+        temp=temp/100;   
+        en.HPrect.scale.set(temp,1);
+    }	
+    
+    
+    
+    //entity
+    let entityMovementArea=[],entityMovementAreaProperties={w:15,h:35,offsetX:-7,offsetY:-17,active:true};
+    
+    function createEntityMovementArea(){
+    	let temp = {x:310+7,y:85+17};
+        AM.addArea('movement', entityMovementAreaProperties, temp, true, 0xff00ff, 1, stage);entityMovementArea.push(temp);temp=null;
+    
+    	temp = {x:215+7,y:85+17};
+        AM.addArea('movement', entityMovementAreaProperties, temp, true, 0xff00ff, 1, stage);entityMovementArea.push(temp);temp=null;
+    
+    	temp = {x:130+7,y:155+17};
+        AM.addArea('movement', entityMovementAreaProperties, temp, true, 0xff00ff, 1, stage);entityMovementArea.push(temp);temp=null;
+
+        temp = {x:0+7,y:155+17};
+        AM.addArea('movement', entityMovementAreaProperties, temp, true, 0xff00ff, 1, stage);entityMovementArea.push(temp);temp=null;
+        
+    }
+    function entityMovementAreaHandler(enMAreas,enG){
+    	for (let index=0,len=enMAreas.length;index<len;index++){
+        	for (let ind=0,len2=enG.length;ind<len2;ind++){
+              if (AM.checkCollision(enMAreas[index],'movement',enG[ind],'base')){
+              if (enMAreas[index+1]){
+				enG[ind].moveTo=enMAreas[index+1];	
+                //console.log('moveto',enMAreas[index+1].x);
+              }
+              else
+				enG[ind].moveTo=null;	              
+              }
+            }
+        }
+    }
+    
+    let entityBaseArea={offsetX:-10,offsetY:0,w:20,h:20,active:true},
+    entityAttackArea={offsetX:-8,offsetY:3,w:12,h:15,active:true},
+    entityDamageArea={offsetX:-15,offsetY:0,w:22,h:20,active:true},
+    entityDetectionArea={offsetX:-20,offsetY:-20,w:40,h:40,active:true};
+    
+    OP.entityG=[];
+    OP.createEntity=function(){
+    	let temp = new PIXI.MultiAnimatedSprite(soldierTextures);
+        temp.scale.set(0.5);
+        temp.animationSpeed=0.1;
+        temp.anchor.set(0.5);
+        temp.isAttacking=false;
+        registerEntity(temp);
+        registerHP(100,100,25,5,-12,-25,temp,stage);
+        return temp;
+    }
+    OP.getEntity=function(){
+    	let len=OP.entityG.length,temp;
+        if(len){
+        	let index=--len;
+            temp=OP.entityG[index];
+            OP.entityG.pop();
+        }
+        else {
+        	temp=OP.createEntity();
+        }
+        return temp;        
+    }
+    function registerEntity(En){		
+        AM.addArea('base', entityBaseArea, En, false, 0xff00ff, 1, stage);
+        AM.addArea('attack', entityAttackArea, En, false, 0xff0fff, 1, stage);
+        AM.addArea('damage', entityDamageArea, En, false, 0xff00ff, 1, stage);
+        AM.addArea('detection', entityDetectionArea, En, false, 0xff00ff, 1, stage);
+        En.target=null;
+	}
+    function destroyEntity(en,enG){
+    	OP.entityG.push(en);//return to obj pool
+        stage.removeChild(en);
+        let index=enG.indexOf(en);
+        enG.splice(index,1);
+    }
+    function entityDetectionHandler(EnG,EnemyG){
+    	for (let index=0,len=EnG.length;index<len;index++){
+        	if (EnG[index].target && EnG[index].target.currentHealth && AM.checkCollision(EnG[index],'detection',EnG[index].target,'base')){
+            	console.log('old');
+                continue;
+            }
+            EnG[index].target=null;
+            for (let ind=0,len2=EnemyG.length;ind<len2;ind++){
+            	if (AM.checkCollision(EnG[index],'detection',EnemyG[ind],'base')){
+                console.log('new target');
+                    EnG[index].target=EnemyG[ind];
+                    break;
+                }
+            }
+        }
+    }
+	function entityAttackHandler(EnG){
+    	for (let index=0,len=EnG.length;index<len;index++){
+        	if (EnG[index].isAttacking){
+            	continue;
+            }
+        	if (EnG[index].target&&AM.checkCollision(EnG[index],'attack',EnG[index].target,'base')){
+            	EnG[index].playAnimation(4,9);
+                EnG[index].isAttacking=true;
+                //console.log('attacking');
+                continue;
+            }
+            testMove(EnG[index]);//only move when enemy is not within the ''atack' range or Enemy target is not found
+        }
+    }
+    
+    function testMove(en){
+    
+    	let targetLoc;
+        //if (en.isAttacking)return;
+        
+		  if (en.target){
+          	targetLoc = en.target;
+          }
+          else if (en.moveTo){
+          	targetLoc = en.moveTo;
+          }
+          else {
+          	return;
+          }
+          
+          if (en.x>targetLoc.x){
+              en.x--;
+          }
+          else if (en.x<targetLoc.x){
+              en.x++;
+          }
+          if (en.y<targetLoc.y){
+              en.y++;
+          }
+          else if (en.y>targetLoc.y){
+              en.y--;
+          }
+        
+    }  
+    
+    let buildableLoc=new Set(),occupiedLoc=new Set();         
+    let test=new World();
+    test.addBuildableLoc(['50,150','75,150','150,125','175,125','225,75','250,75'],25,25,stage);
+    test.showLoc(true);
+
+    document.onkeydown=function(e){
+    	console.log(e.keyCode);
+    	if (e.keyCode==66 &&!previewedBuilding.renderable){//show preview building    	
+            test.showLoc(true);
+            previewedBuilding.renderable=true;previewedBuilding.anchor.set(.5);
+            previewedBuilding.texture=towerTexture;//chg preview texture
+            //reset the offset occupied space
+            previewedBuilding.space.length=0;//clear the arr content
+            previewedBuilding.space.push(0);//represent x
+            previewedBuilding.space.push(1);//represent y
+            previewedBuilding.space.push(-1);
+            previewedBuilding.space.push(1);
+            //set type
+            previewedBuilding.type=1;  
+        }
+        //check if ESC is pressed
+        if (e.keyCode==27&&previewedBuilding.renderable){//cancel the previewbuilding
+        	test.showLoc(false);
+            //stage.removeChild(previewedBuilding);
+            //delete previewedBuilding.space;
+           //previewedBuilding=null;
+           previewedBuilding.renderable=false;
+        }
+        if (e.keyCode==8){
+        	clearInterval(interval);
+        }
+        if (e.keyCode==84){
+        	//toggle showArea
+            AM.showAreaBoolean=!AM.showAreaBoolean;
+        	AM.showAllVisibleArea(AM.showAreaBoolean);
+        }
+        if (e.keyCode==76)
+        	damageHP(-5,s);
+            
+        if (e.keyCode==80){
+        	//destroyTower(towerGroup[0],towerGroup);
+            console.log(towerGroup.length);
+            //entityDetectionHandler(enemyGroup,DummyGroup);
+            //console.log(Enem)
+        }
+        if (e.keyCode==79){
+        	entityAttackHandler(enemyGroup);
+        }
+    }
+    document.onmousemove=function(e){
+		if (previewedBuilding){//move the previewBuilding sync to the grid size
+        	previewedBuilding.x=(e.clientX/25<<0)*25;
+            previewedBuilding.y=(e.clientY/25<<0)*25;
+        }
+	}
+    document.onmousedown=function(e){
+    	s.x=e.clientX<<0;
+        s.y=e.clientY<<0;    
+        
+    	if (previewedBuilding.renderable){
+        
+        	//let arr=[];
+            previewedBuilding.preLoc.length=0;
+        	for (let index=0,temp,len=previewedBuilding.space.length;index<len;index+=2){
+            	temp=previewedBuilding.y+previewedBuilding.space[index+1]*25;
+                temp=previewedBuilding.x+previewedBuilding.space[index]*25+','+temp;
+                //check if loc is occupied OR the loc is not STORED in the buildable list
+            	if (test.isLocOccupied(temp)||!test.isLocBuildable(temp)){
+                	console.log(temp);
+                	console.log('Loc is occupied');//if so, exit the func
+                	return;
+                }
+                previewedBuilding.preLoc.push(temp);
+            }
+            let tower;
+            switch (previewedBuilding.type){
+              case 1:
+              tower = OP.getTower();//get a tower from object pool
+              towerGroup.push(tower);
+              tower.x=previewedBuilding.x;
+              tower.y=previewedBuilding.y;
+              break;
+           }
+           stage.addChild(tower);
+           
+           AM.showVisibleArea('attack',true,tower);
+          AM.showVisibleArea('base',true,tower);//show the atttack and base area
+          registerHP(100,100,40,5,-20,-40,tower,stage);
+          tower.loc.length=0;//reset tower occupied loc  
+          for (let index=0,len=previewedBuilding.preLoc.length;index<len;index++){
+          	test.setBuildableLoc(previewedBuilding.preLoc[index],false); //occupy the buildable loc
+            tower.loc.push(previewedBuilding.preLoc[index]);
+          }  
+          test.showLoc(false);//hide buildable/occupied loc
+          previewedBuilding.renderable=false;//hide previewed Buidling
+        }
+    }
+</script>
+<script>
+	//Adding new methods to exisitng ObjectPooling
+	OP.towerG=[];//act as objectpools, storing reuseable towers
+    OP.getTower=function(){
+    	let len=OP.towerG.length,temp;
+    	if (len){//check if obj pool is NOT empty
+        	let index = --len;
+            temp=OP.towerG[index];//retrieve the tower from objectPool
+            OP.towerG.pop();console.log('retr t');
+        }
+        else {
+        	temp=OP.createTower();//create new tower
+            console.log('c t');
+        }
+        return temp;
+    }
+    //create new tower
+    OP.createTower=function(){
+		let temp=new PIXI.Sprite(towerTexture);//set up the tower texture
+        registerTower(temp);//register the newly created tower
+        
+        return temp;
+	}
+    //register newly created tower,adding essential areas and properties to it
+	function registerTower(tower){
+		AM.addArea('attack',{w:160,h: 160,offsetX:-80,offsetY:-80,active:true},tower,true,0xff000f,.2,stage);
+        AM.addArea('base',{w:25,h:25,offsetX:-12,offsetY:15,active:true},tower,true,0x000000,1,stage);
+        tower.target=null;
+        tower.loc=[];//store tower occupied loc in string
+        tower.anchor.set(.5);
+	}
+    
+    //check for tower attack and spawn proj 
+    function towerAttackHandler(towerG,enemyG){
+		for (let index=0,len=towerG.length;index<len;index++){
+        	if (towerG[index].target &&towerG[index].target.currentHealth && AM.checkCollision(towerG[index], 'attack', towerG[index].target, 'base')){
+            	//spawn proj
+                spawnProj(towerG[index]);//console.log('old target');
+            	continue;
+            }
+			towerG[index].target=null;
+        	for (let ind=0,len=enemyG.length;ind<len;ind++){
+        		if (AM.checkCollision(towerG[index], 'attack', enemyG[ind], 'base')){
+            		towerG[index].target=enemyG[ind];
+                    spawnProj(towerG[index]);//console.log('new target');
+                    break;
+            	}
+            } 
+            
+        }
+	}
+    //destroy tower
+    function destroyTower(tower,towerG){
+    //console.log('removed');
+    /*
+    	AM.destroyArea(tower, 'attack', stage);//destroy visible area shown
+        AM.destroyArea(tower, 'base', stage);
+        AM.removeArea('attack',tower);
+        AM.removeArea('base',tower);*/
+        let index=towerG.indexOf(tower);
+        OP.towerG.push(towerG[index]);//return tower into obj pool
+        for (let ind=0,len=towerG[index].loc.length;ind<len;ind++){//clear occupied loc
+        	test.setBuildableLoc(towerG[index].loc[ind],true);
+        }
+        stage.removeChild(towerG[index]);//remove child from stage
+        removeHP(towerG[index],stage);//destroy HP rect -> need optimizations
+        AM.showVisibleArea('attack',false,towerG[index]);//hide the 'attack' and 'base' area
+        AM.showVisibleArea('base',false,towerG[index]);//will reused again once this tower is retrieved from obj pool
+        towerG.splice(index,1);
+    }
+    
+    OP.projG=[];//Obj pools for tower proj
+    OP.getProj=function(){
+    	let len=OP.projG.length,temp;
+        if (len){
+        	let index=--len;//retrieve proj from obj pool when available
+            temp = OP.projG[index];
+            OP.projG.pop();
+            //console.log('r p');
+        }
+        else{
+        	temp = OP.createProj();//create new proj 
+            //console.log('c p');
+        }
+        return temp;
+    }
+    OP.createProj=function(){
+    	let temp = new PIXI.Sprite(arrowTexture);
+        AM.addArea('damage',{w:25,h: 25,offsetX:-10,offsetY:-10,active:true},temp,true,0xf0000f,.2,stage);
+        temp.target=null;
+        temp.vx=0;//added essential properties
+        temp.vy=0;
+        temp.count=0;
+        temp.anchor.set(0.5);
+        return temp;
+    }
+    
+    //create tower projectile,set its target and velocity and add necessary areas and properties to it
+    function spawnProj(tower){
+    	//let proj= new PIXI.Sprite(arrowTexture);
+        //AM.addArea('damage',{w:25,h: 25,offsetX:-10,offsetY:-10,active:true},proj,true,0xf0000f,.2,stage);
+        let proj = OP.getProj();
+        //proj.anchor.set(.5);
+        proj.vx=(tower.target.x-tower.x)/20<<0;//set proj speed 
+        proj.vy=(tower.target.y-tower.y)/20<<0;
+        proj.target=tower.target;//set target for proj
+        proj.owner=tower;
+        proj.x=tower.x+0;
+        proj.y=tower.y+0;//spawn proj at tower loc
+        proj.count=0;//reset to default 
+        AM.showVisibleArea('damage',true,proj);//show proj damage'area
+        projGroup.push(proj);//add proj into projGroup
+        stage.addChild(proj);//add proj to stage
+        
+    }
+    //control the movement of tower proj towards the target and handling the damage on collision
+	function projMovement(projG){
+		for (let index=projG.length-1;index>=0;index--){
+        	projG[index].x+=projG[index].vx;
+            projG[index].y+=projG[index].vy;
+            projG[index].count++;
+            //if (projG[index].count>20){
+            	if (AM.checkCollision(projG[index],'damage',projG[index].target,'base')){
+                	damageHP(-10,projG[index].target);console.log('ene dmg');
+                    if (!projG[index].target.currentHealth){//check if hp drops to zero
+                    	console.log('en dead');
+                        projG[index].owner.target=null;
+                        
+                        destroyEntity(projG[index].target,enemyGroup);
+                        
+                    }//remove proj once collided
+                    //AM.destroyVisibleArea('damage',projG[index],stage);
+                    //stage.removeChild(projG[index]);
+                   // projG.splice(index,1);
+                   destroyProj(index,projG);
+                }
+                else if (projG[index].count>25){//remove proj once out of range
+                //AM.destroyVisibleArea('damage',projG[index],stage);
+                //stage.removeChild(projG[index]);
+                //projG.splice(index,1);
+               // projG[index].owner.target=null;
+                destroyProj(index,projG);
+            }
+        
+        }        
+	}
+    function destroyProj(index,projG){//destroy proj
+    	OP.projG.push(projG[index]);//return proj to obj pool
+        stage.removeChild(projG[index]);//remove proj from stage
+        AM.showVisibleArea('damage',false,projG[index]);//hide proj damage area
+        projG.splice(index,1);//remove proj from projGroup
+        
+    }
+</script>
+</html>
