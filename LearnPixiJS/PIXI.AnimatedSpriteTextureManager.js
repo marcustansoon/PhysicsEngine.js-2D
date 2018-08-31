@@ -53,15 +53,15 @@ class AnimatedSpriteTextureManager {
       } 
       else //for non json img file
       {
-        properties.col = Math.floor((base_texture.width - properties.x) / properties.width);
-        properties.row = Math.floor((base_texture.height - properties.y) / properties.height);
+        properties.col = ((base_texture.width - properties.x) / properties.width)<<0;
+        properties.row = ((base_texture.height - properties.y) / properties.height)<<0;
       }
     } 
     else if (!properties.width && !properties.height && properties.row && properties.col) //for row and col given by user
     {
       //console.log('yes rc');
-      properties.width = Math.floor((base_texture.width - properties.x) / properties.col);
-      properties.height = Math.floor((base_texture.height - properties.y) / properties.row);
+      properties.width = ((base_texture.width - properties.x) / properties.col)<<0;
+      properties.height = ((base_texture.height - properties.y) / properties.row)<<0;
 
     }
    
@@ -75,7 +75,7 @@ class AnimatedSpriteTextureManager {
         textures.push(texture_temp);
 
         properties.total_frames--; //decrement total frames to be pushed after each successful push
-        if (properties.total_frames === 0) //check if total frames remaining is zero
+        if (properties.total_frames == 0) //check if total frames remaining is zero
         {
           row = 999;//automatically break the extraction process when total_frames exceeded
           break;
