@@ -1,3 +1,5 @@
+//Original Link -> https://github.com/prettymuchbryce/easystarjs
+//This is the modified and optimised codes of the original version
 let EasyStar =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
