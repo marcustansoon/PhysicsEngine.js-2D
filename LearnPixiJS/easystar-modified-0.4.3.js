@@ -1,7 +1,7 @@
-var EasyStar =
+let EasyStar =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
-/******/ 	var installedModules = {};
+/******/ 	let installedModules = {};
 
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
@@ -11,7 +11,7 @@ var EasyStar =
 /******/ 			return installedModules[moduleId].exports;
 
 /******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
+/******/ 		let module = installedModules[moduleId] = {
 /******/ 			exports: {},
 /******/ 			id: moduleId,
 /******/ 			loaded: false
@@ -53,34 +53,36 @@ var EasyStar =
 	*   Implementation By Bryce Neal (@prettymuchbryce)
 	**/
 
-	var EasyStar = {};
-	var Instance = __webpack_require__(1);
-	var Node = __webpack_require__(2);
-	var Heap = __webpack_require__(3);
+	let EasyStar = {},
+	 Instance = __webpack_require__(1),
+	 Node = __webpack_require__(2),
+	 Heap = __webpack_require__(3);
 
-	const CLOSED_LIST = 0;
-	const OPEN_LIST = 1;
+	const CLOSED_LIST = 0,
+	 OPEN_LIST = 1;
 
 	module.exports = EasyStar;
 
-	var nextInstanceId = 1;
+	let nextInstanceId = 1;
 
 	EasyStar.js = function () {
-	    var STRAIGHT_COST = 1.0;
-	    var DIAGONAL_COST = 1.4;
-	    var syncEnabled = false;
-	    var pointsToAvoid = {};
-	    var collisionGrid;
-	    var costMap = {};
-	    var pointsToCost = {};
-	    var directionalConditions = {};
-	    var allowCornerCutting = true;
-	    var iterationsSoFar;
-	    var instances = {};
-	    var instanceQueue = [];
-	    var iterationsPerCalculation = Number.MAX_VALUE;
-	    var acceptableTiles;
-	    var diagonalsEnabled = false;
+	    let STRAIGHT_COST = 1.0,
+	     DIAGONAL_COST = 1.4,
+	     syncEnabled = false,
+	     pointsToAvoid = {},
+	     collisionGrid,
+	     collisionGrid_0_length = 0,
+	     collisionGrid_length = 0,
+	     costMap = {},
+	     pointsToCost = {},
+	     directionalConditions = {},
+	     allowCornerCutting = true,
+	     iterationsSoFar,
+	     instances = {},
+	     instanceQueue = [],
+	     iterationsPerCalculation = Number.MAX_VALUE,
+	     acceptableTiles,
+	     diagonalsEnabled = false;
 
 	    /**
 	    * Sets the collision grid that EasyStar uses.
@@ -136,10 +138,12 @@ var EasyStar =
 	    **/
 	    this.setGrid = function (grid) {
 	        collisionGrid = grid;
-
+		collisionGrid_0_length = collisionGrid[0].length-1,
+		collisionGrid_length = collisionGrid.length-1;
+		    
 	        //Setup cost map
-	        for (var y = 0; y < collisionGrid.length; y++) {
-	            for (var x = 0; x < collisionGrid[0].length; x++) {
+	        for (let y = 0, len = collisionGrid_length + 1 ; y < len; y++) {
+	            for (let x = 0, len2 = collisionGrid_0_length + 1 ; x < len2; x++) {
 	                if (!costMap[collisionGrid[y][x]]) {
 	                    costMap[collisionGrid[y][x]] = 1;
 	                }
@@ -286,7 +290,7 @@ var EasyStar =
 	    **/
 	    this.findPath = function (startX, startY, endX, endY, callback) {
 	        // Wraps the callback for sync vs async logic
-	        var callbackWrapper = function (result) {
+	        let callbackWrapper = function (result) {
 	            if (syncEnabled) {
 	                callback(result);
 	            } else {
@@ -306,7 +310,7 @@ var EasyStar =
 	        }
 
 	        // Start or endpoint outside of scope.
-	        if (startX < 0 || startY < 0 || endX < 0 || endY < 0 || startX > collisionGrid[0].length - 1 || startY > collisionGrid.length - 1 || endX > collisionGrid[0].length - 1 || endY > collisionGrid.length - 1) {
+	        if (startX < 0 || startY < 0 || endX < 0 || endY < 0 || startX > collisionGrid_0_length  || startY > collisionGrid_length || endX > collisionGrid[0].length - 1 || endY > collisionGrid.length - 1) {
 	            throw new Error("Your start or end point is outside the scope of your grid.");
 	        }
 
@@ -317,9 +321,9 @@ var EasyStar =
 	        }
 
 	        // End point is not an acceptable tile.
-	        var endTile = collisionGrid[endY][endX];
-	        var isAcceptable = false;
-	        for (var i = 0; i < acceptableTiles.length; i++) {
+	        let endTile = collisionGrid[endY][endX];
+	        let isAcceptable = false;
+	        for (let i = 0, len = acceptableTiles.length; i < len; i++) {
 	            if (endTile === acceptableTiles[i]) {
 	                isAcceptable = true;
 	                break;
@@ -332,7 +336,7 @@ var EasyStar =
 	        }
 
 	        // Create the instance
-	        var instance = new Instance();
+	        let instance = new Instance();
 	        instance.openList = new Heap(function (nodeA, nodeB) {
 	            return nodeA.bestGuessDistance() - nodeB.bestGuessDistance();
 	        });
@@ -346,7 +350,7 @@ var EasyStar =
 
 	        instance.openList.push(coordinateToNode(instance, instance.startX, instance.startY, null, STRAIGHT_COST));
 
-	        var instanceId = nextInstanceId++;
+	        let instanceId = nextInstanceId++;
 	        instances[instanceId] = instance;
 	        instanceQueue.push(instanceId);
 	        return instanceId;
@@ -388,8 +392,8 @@ var EasyStar =
 	                iterationsSoFar = 0;
 	            }
 
-	            var instanceId = instanceQueue[0];
-	            var instance = instances[instanceId];
+	            let instanceId = instanceQueue[0];
+	            let instance = instances[instanceId];
 	            if (typeof instance == 'undefined') {
 	                // This instance was cancelled
 	                instanceQueue.shift();
@@ -404,19 +408,19 @@ var EasyStar =
 	                continue;
 	            }
 
-	            var searchNode = instance.openList.pop();
+	            let searchNode = instance.openList.pop();
 
 	            // Handles the case where we have found the destination
 	            if (instance.endX === searchNode.x && instance.endY === searchNode.y) {
-	                var path = [];
+	                let path = [];
 	                path.push({ x: searchNode.x, y: searchNode.y });
-	                var parent = searchNode.parent;
+	                let parent = searchNode.parent;
 	                while (parent != null) {
 	                    path.push({ x: parent.x, y: parent.y });
 	                    parent = parent.parent;
 	                }
 	                path.reverse();
-	                var ip = path;
+	                let ip = path;
 	                instance.callback(ip);
 	                delete instances[instanceId];
 	                instanceQueue.shift();
@@ -424,14 +428,15 @@ var EasyStar =
 	            }
 
 	            searchNode.list = CLOSED_LIST;
-
+			
+			
 	            if (searchNode.y > 0) {
 	                checkAdjacentNode(instance, searchNode, 0, -1, STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y - 1));
 	            }
-	            if (searchNode.x < collisionGrid[0].length - 1) {
+	            if (searchNode.x < collisionGrid_0_length ) {
 	                checkAdjacentNode(instance, searchNode, 1, 0, STRAIGHT_COST * getTileCost(searchNode.x + 1, searchNode.y));
 	            }
-	            if (searchNode.y < collisionGrid.length - 1) {
+	            if (searchNode.y < collisionGrid_length ) {
 	                checkAdjacentNode(instance, searchNode, 0, 1, STRAIGHT_COST * getTileCost(searchNode.x, searchNode.y + 1));
 	            }
 	            if (searchNode.x > 0) {
@@ -445,21 +450,21 @@ var EasyStar =
 	                        checkAdjacentNode(instance, searchNode, -1, -1, DIAGONAL_COST * getTileCost(searchNode.x - 1, searchNode.y - 1));
 	                    }
 	                }
-	                if (searchNode.x < collisionGrid[0].length - 1 && searchNode.y < collisionGrid.length - 1) {
+	                if (searchNode.x < collisionGrid_0_length  && searchNode.y < collisionGrid_length ) {
 
 	                    if (allowCornerCutting || isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y + 1, searchNode) && isTileWalkable(collisionGrid, acceptableTiles, searchNode.x + 1, searchNode.y, searchNode)) {
 
 	                        checkAdjacentNode(instance, searchNode, 1, 1, DIAGONAL_COST * getTileCost(searchNode.x + 1, searchNode.y + 1));
 	                    }
 	                }
-	                if (searchNode.x < collisionGrid[0].length - 1 && searchNode.y > 0) {
+	                if (searchNode.x < collisionGrid_0_length && searchNode.y > 0) {
 
 	                    if (allowCornerCutting || isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y - 1, searchNode) && isTileWalkable(collisionGrid, acceptableTiles, searchNode.x + 1, searchNode.y, searchNode)) {
 
 	                        checkAdjacentNode(instance, searchNode, 1, -1, DIAGONAL_COST * getTileCost(searchNode.x + 1, searchNode.y - 1));
 	                    }
 	                }
-	                if (searchNode.x > 0 && searchNode.y < collisionGrid.length - 1) {
+	                if (searchNode.x > 0 && searchNode.y < collisionGrid_length) {
 
 	                    if (allowCornerCutting || isTileWalkable(collisionGrid, acceptableTiles, searchNode.x, searchNode.y + 1, searchNode) && isTileWalkable(collisionGrid, acceptableTiles, searchNode.x - 1, searchNode.y, searchNode)) {
 
@@ -471,12 +476,12 @@ var EasyStar =
 	    };
 
 	    // Private methods follow
-	    var checkAdjacentNode = function (instance, searchNode, x, y, cost) {
-	        var adjacentCoordinateX = searchNode.x + x;
-	        var adjacentCoordinateY = searchNode.y + y;
+	    let checkAdjacentNode = function (instance, searchNode, x, y, cost) {
+	        let adjacentCoordinateX = searchNode.x + x;
+	        let adjacentCoordinateY = searchNode.y + y;
 
 	        if ((pointsToAvoid[adjacentCoordinateY] === undefined || pointsToAvoid[adjacentCoordinateY][adjacentCoordinateX] === undefined) && isTileWalkable(collisionGrid, acceptableTiles, adjacentCoordinateX, adjacentCoordinateY, searchNode)) {
-	            var node = coordinateToNode(instance, adjacentCoordinateX, adjacentCoordinateY, searchNode, cost);
+	            let node = coordinateToNode(instance, adjacentCoordinateX, adjacentCoordinateY, searchNode, cost);
 
 	            if (node.list === undefined) {
 	                node.list = OPEN_LIST;
@@ -490,19 +495,19 @@ var EasyStar =
 	    };
 
 	    // Helpers
-	    var isTileWalkable = function (collisionGrid, acceptableTiles, x, y, sourceNode) {
-	        var directionalCondition = directionalConditions[y] && directionalConditions[y][x];
+	    let isTileWalkable = function (collisionGrid, acceptableTiles, x, y, sourceNode) {
+	        let directionalCondition = directionalConditions[y] && directionalConditions[y][x];
 	        if (directionalCondition) {
-	            var direction = calculateDirection(sourceNode.x - x, sourceNode.y - y);
-	            var directionIncluded = function () {
-	                for (var i = 0; i < directionalCondition.length; i++) {
+	            let direction = calculateDirection(sourceNode.x - x, sourceNode.y - y);
+	            let directionIncluded = function () {
+	                for (let i = 0, len = directionalCondition.length; i < len; i++) {
 	                    if (directionalCondition[i] === direction) return true;
 	                }
 	                return false;
 	            };
 	            if (!directionIncluded()) return false;
 	        }
-	        for (var i = 0; i < acceptableTiles.length; i++) {
+ 	        for (let i = 0, len = acceptableTiles.length; i < len; i++) {
 	            if (collisionGrid[y][x] === acceptableTiles[i]) {
 	                return true;
 	            }
@@ -516,16 +521,16 @@ var EasyStar =
 	     * -1,  0 | SOURCE | 1,  0
 	     * -1,  1 | 0,  1  | 1,  1
 	     */
-	    var calculateDirection = function (diffX, diffY) {
+	    let calculateDirection = function (diffX, diffY) {
 	        if (diffX === 0 && diffY === -1) return EasyStar.TOP;else if (diffX === 1 && diffY === -1) return EasyStar.TOP_RIGHT;else if (diffX === 1 && diffY === 0) return EasyStar.RIGHT;else if (diffX === 1 && diffY === 1) return EasyStar.BOTTOM_RIGHT;else if (diffX === 0 && diffY === 1) return EasyStar.BOTTOM;else if (diffX === -1 && diffY === 1) return EasyStar.BOTTOM_LEFT;else if (diffX === -1 && diffY === 0) return EasyStar.LEFT;else if (diffX === -1 && diffY === -1) return EasyStar.TOP_LEFT;
 	        throw new Error('These differences are not valid: ' + diffX + ', ' + diffY);
 	    };
 
-	    var getTileCost = function (x, y) {
+	    let getTileCost = function (x, y) {
 	        return pointsToCost[y] && pointsToCost[y][x] || costMap[collisionGrid[y][x]];
 	    };
 
-	    var coordinateToNode = function (instance, x, y, parent, cost) {
+	    let coordinateToNode = function (instance, x, y, parent, cost) {
 	        if (instance.nodeHash[y] !== undefined) {
 	            if (instance.nodeHash[y][x] !== undefined) {
 	                return instance.nodeHash[y][x];
@@ -533,22 +538,22 @@ var EasyStar =
 	        } else {
 	            instance.nodeHash[y] = {};
 	        }
-	        var simpleDistanceToTarget = getDistance(x, y, instance.endX, instance.endY);
+	        let simpleDistanceToTarget = getDistance(x, y, instance.endX, instance.endY);
 	        if (parent !== null) {
-	            var costSoFar = parent.costSoFar + cost;
+	            let costSoFar = parent.costSoFar + cost;
 	        } else {
 	            costSoFar = 0;
 	        }
-	        var node = new Node(parent, x, y, costSoFar, simpleDistanceToTarget);
+	        let node = new Node(parent, x, y, costSoFar, simpleDistanceToTarget);
 	        instance.nodeHash[y][x] = node;
 	        return node;
 	    };
 
-	    var getDistance = function (x1, y1, x2, y2) {
+	    let getDistance = function (x1, y1, x2, y2) {
 	        if (diagonalsEnabled) {
 	            // Octile distance
-	            var dx = Math.abs(x1 - x2);
-	            var dy = Math.abs(y1 - y2);
+	            let dx = Math.abs(x1 - x2);
+	            let dy = Math.abs(y1 - y2);
 	            if (dx < dy) {
 	                return DIAGONAL_COST * dx + dy;
 	            } else {
@@ -556,8 +561,8 @@ var EasyStar =
 	            }
 	        } else {
 	            // Manhattan distance
-	            var dx = Math.abs(x1 - x2);
-	            var dy = Math.abs(y1 - y2);
+	            let dx = Math.abs(x1 - x2);
+	            let dy = Math.abs(y1 - y2);
 	            return dx + dy;
 	        }
 	    };
@@ -628,9 +633,9 @@ var EasyStar =
 /* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Generated by CoffeeScript 1.8.0
+	let __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;// Generated by CoffeeScript 1.8.0
 	(function () {
-	  var Heap, defaultCmp, floor, heapify, heappop, heappush, heappushpop, heapreplace, insort, min, nlargest, nsmallest, updateItem, _siftdown, _siftup;
+	  let Heap, defaultCmp, floor, heapify, heappop, heappush, heappushpop, heapreplace, insort, min, nlargest, nsmallest, updateItem, _siftdown, _siftup;
 
 	  floor = Math.floor, min = Math.min;
 
@@ -658,7 +663,7 @@ var EasyStar =
 	   */
 
 	  insort = function (a, x, lo, hi, cmp) {
-	    var mid;
+	    let mid;
 	    if (lo == null) {
 	      lo = 0;
 	    }
@@ -683,7 +688,7 @@ var EasyStar =
 	  };
 
 	  /*
-	  Push item onto heap, maintaining the heap invariant.
+	  Push item onto heap, maintaining the heap inletiant.
 	   */
 
 	  heappush = function (array, item, cmp) {
@@ -695,11 +700,11 @@ var EasyStar =
 	  };
 
 	  /*
-	  Pop the smallest item off the heap, maintaining the heap invariant.
+	  Pop the smallest item off the heap, maintaining the heap inletiant.
 	   */
 
 	  heappop = function (array, cmp) {
-	    var lastelt, returnitem;
+	    let lastelt, returnitem;
 	    if (cmp == null) {
 	      cmp = defaultCmp;
 	    }
@@ -726,7 +731,7 @@ var EasyStar =
 	   */
 
 	  heapreplace = function (array, item, cmp) {
-	    var returnitem;
+	    let returnitem;
 	    if (cmp == null) {
 	      cmp = defaultCmp;
 	    }
@@ -741,7 +746,7 @@ var EasyStar =
 	   */
 
 	  heappushpop = function (array, item, cmp) {
-	    var _ref;
+	    let _ref;
 	    if (cmp == null) {
 	      cmp = defaultCmp;
 	    }
@@ -757,13 +762,13 @@ var EasyStar =
 	   */
 
 	  heapify = function (array, cmp) {
-	    var i, _i, _j, _len, _ref, _ref1, _results, _results1;
+	    let i, _i, _j, _len, _ref, _ref1, _results, _results1;
 	    if (cmp == null) {
 	      cmp = defaultCmp;
 	    }
 	    _ref1 = function () {
 	      _results1 = [];
-	      for (var _j = 0, _ref = floor(array.length / 2); 0 <= _ref ? _j < _ref : _j > _ref; 0 <= _ref ? _j++ : _j--) {
+	      for (let _j = 0, _ref = floor(array.length / 2); 0 <= _ref ? _j < _ref : _j > _ref; 0 <= _ref ? _j++ : _j--) {
 	        _results1.push(_j);
 	      }
 	      return _results1;
@@ -782,7 +787,7 @@ var EasyStar =
 	   */
 
 	  updateItem = function (array, item, cmp) {
-	    var pos;
+	    let pos;
 	    if (cmp == null) {
 	      cmp = defaultCmp;
 	    }
@@ -799,7 +804,7 @@ var EasyStar =
 	   */
 
 	  nlargest = function (array, n, cmp) {
-	    var elem, result, _i, _len, _ref;
+	    let elem, result, _i, _len, _ref;
 	    if (cmp == null) {
 	      cmp = defaultCmp;
 	    }
@@ -821,7 +826,7 @@ var EasyStar =
 	   */
 
 	  nsmallest = function (array, n, cmp) {
-	    var elem, i, los, result, _i, _j, _len, _ref, _ref1, _results;
+	    let elem, i, los, result, _i, _j, _len, _ref, _ref1, _results;
 	    if (cmp == null) {
 	      cmp = defaultCmp;
 	    }
@@ -851,7 +856,7 @@ var EasyStar =
 	  };
 
 	  _siftdown = function (array, startpos, pos, cmp) {
-	    var newitem, parent, parentpos;
+	    let newitem, parent, parentpos;
 	    if (cmp == null) {
 	      cmp = defaultCmp;
 	    }
@@ -870,7 +875,7 @@ var EasyStar =
 	  };
 
 	  _siftup = function (array, pos, cmp) {
-	    var childpos, endpos, newitem, rightpos, startpos;
+	    let childpos, endpos, newitem, rightpos, startpos;
 	    if (cmp == null) {
 	      cmp = defaultCmp;
 	    }
@@ -958,7 +963,7 @@ var EasyStar =
 	    };
 
 	    Heap.prototype.clone = function () {
-	      var heap;
+	      let heap;
 	      heap = new Heap();
 	      heap.nodes = this.nodes.slice(0);
 	      return heap;
