@@ -136,7 +136,7 @@ class AreaManager {
     return  x >= enX &&
             x <= enX + temp.w &&
             y >= enY &&
-            y >= enY + temp.h;
+            y <= enY + temp.h;
   }
 }
 PIXI.AreaManager = AreaManager;
