@@ -215,6 +215,7 @@ function onBack() {
 }
 
 function main() {
+    alert('yo');
     service = Cocoon.InApp;
     service.on("purchase", {
 
