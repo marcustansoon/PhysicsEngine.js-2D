@@ -215,8 +215,8 @@ function onBack() {
 }
 
 function main() {
-    alert('yo');
-    service = Cocoon.InApp;
+    
+    service = Cocoon.InApp;alert(service);
     service.on("purchase", {
 
         start: function(productId) {
