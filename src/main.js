@@ -33,6 +33,22 @@ function main() {
         }
     });
 
+    
+    // Fetching products from server 
+    service.fetchProducts(productIds, function(products, error){
+       if(error){
+           alert("Error: " + error);
+       }
+       else {
+           var next = [];
+           for (var i = 0; i < products.length; ++i) {
+               var product = products[i];
+               alert(product);
+           }
+       } 
+    });  
+    
+    
 }
 
 document.addEventListener('deviceready', main, false);
