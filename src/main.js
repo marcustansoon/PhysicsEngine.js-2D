@@ -216,20 +216,21 @@ function onBack() {
 
 function main() {
     
-    service = Cocoon.InApp;alert(service);
+    service = Cocoon.InApp;
     service.on("purchase", {
 
         start: function(productId) {
-            console.log("purchase started " + productId);
+            alert("purchase started " + productId);
         },
         error: function(productId, error) {
-            console.log("purchase failed " + productId + " error: " + JSON.stringify(error));
+            alert("purchase failed " + productId + " error: " + JSON.stringify(error));
         },
         complete: function(purchase) {
-            console.log("purchase completed " + JSON.stringify(purchase));
+            alert("purchase completed " + JSON.stringify(purchase));
         }
     });
     service.initialize({}, function(error) {
+        alert(error);
         mainTests = createMainTests();
         showTests(mainTests);
         navigation.push({next:mainTests, error:null});
