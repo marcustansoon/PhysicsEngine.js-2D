@@ -11,6 +11,7 @@ var productIds = [
 function main() {
     
     service = Cocoon.InApp;
+    alert(service.initialize);
     service.on("purchase", {
 
         start: function(productId) {
