@@ -50,7 +50,7 @@ function main() {
          alert("PError: " + error);
     }
     else {
-         alert("Successfully purchased);    
+         alert("Successfully purchased");    
     }
     });
     
