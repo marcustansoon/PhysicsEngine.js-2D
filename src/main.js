@@ -29,7 +29,7 @@ function main() {
     }, 
     function(error){
         if(error){
-            alert("Error: " + error);
+            alert("IError: " + error);
         }
     });
 
@@ -37,7 +37,7 @@ function main() {
     // Fetching products from server 
     service.fetchProducts(productIds, function(products, error){
        if(error){
-           alert("Error: " + error);
+           alert("FError: " + error);
        }
        else {
            var next = [];
