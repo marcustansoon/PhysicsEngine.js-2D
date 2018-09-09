@@ -3,9 +3,7 @@ var mainTests;
 var service;
 var productIds = [
     "io.cocoon.yourproduct1",
-    "io.cocoon.yourproduct2",
-    "io.cocoon.yourproduct3"
-
+    "io.cocoon.yourproduct2"
 ];
 
 function main() {
@@ -47,7 +45,14 @@ function main() {
            }
        } 
     });  
-    
+    Cocoon.InApp.purchase("io.cocoon.yourproduct2", 1, function(error) {
+    if(error){
+         alert("PError: " + error);
+    }
+    else {
+         alert("Successfully purchased);    
+    }
+    });
     
 }
 
