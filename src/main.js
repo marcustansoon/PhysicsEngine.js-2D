@@ -4,8 +4,8 @@ var service;
 var productIds = [
     "io.cocoon.yourproduct1",
     "io.cocoon.yourproduct2",
-    "io.cocoon.yourproduct3",
-    "io.cocoon.yourproduct4",
+    "io.cocoon.yourproduct3"
+
 ];
 
 var navigation = [];
