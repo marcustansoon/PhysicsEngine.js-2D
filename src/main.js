@@ -39,6 +39,15 @@ function main() {
     
     
     
+    
+   let script = document.createElement('script');
+    script.src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.2/pixi.min.js";
+    document.body.appendChild(script);
+    script.onload=function(){
+    
+    	let renderer = new PIXI.autoDetectRenderer(250,250);
+        document.body.appendChild(renderer.view);
+    } 
 }
 
 document.addEventListener('deviceready', main, false);
