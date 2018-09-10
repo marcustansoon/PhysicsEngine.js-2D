@@ -24,6 +24,10 @@ function main() {
             signature: ...
           }
         */
+          return inAppPurchase.consume(data.productType, data.receipt, data.signature);
+      })
+      .then(function () {
+        alert('product was successfully consumed!');
       })
       .catch(function (err) {
         alert(JSON.stringify(err));
