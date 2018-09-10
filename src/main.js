@@ -14,7 +14,7 @@ function main() {
     */
        
         inAppPurchase
-      .buy(productIds[1])
+      .buy(productIds[0])
       .then(function (data) {
         alert(JSON.stringify(data));
         /*
