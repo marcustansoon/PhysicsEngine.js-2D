@@ -14,7 +14,7 @@ function main() {
     */
   })
   .catch(function (err) {
-   alert(err);
+   alert('err', JSON.stringify(err) );
   });
 }
 
