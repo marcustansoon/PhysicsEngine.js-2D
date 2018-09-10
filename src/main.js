@@ -8,7 +8,7 @@ function main() {
    inAppPurchase
   .getProducts(productIds)
   .then(function (products) {
-    alert(products);
+    alert(JSON.stringify(products));
     /*
        [{ productId: 'com.yourapp.prod1', 'title': '...', description: '...', currency: '...', price: '...', priceAsDecimal: '...' }, ...]
     */
