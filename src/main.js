@@ -14,7 +14,7 @@ function main() {
     */
   })
   .catch(function (err) {
-    console.log(err);
+   alert(err);
   });
 }
 
