@@ -17,6 +17,7 @@ function main() {
       .buy(productIds[0])
       .then(function (data) {
         alert(JSON.stringify(data));
+            //when purphase is complete
         /*
           {
             transactionId: ...
@@ -24,8 +25,18 @@ function main() {
             signature: ...
           }
         */
+               inAppPurchase
+              .getReceipt()
+              .then(function (receipt) {
+                alert('receipt',JSON.stringify(receipt));
+              })
+              .catch(function (err) {
+                alert(JSON.stringify(err));
+              });
+            
+            
              div.innerHTML=JSON.stringify(data);
-          alert('returning',inAppPurchase.consume(data.productType, data.receipt, data.signature));
+          alert('returning',inAppPurchase.consume(data.productType, data.receipt, data.signature));//consume the purchased product, allow repurchase
            
       })
       .then(function () {
