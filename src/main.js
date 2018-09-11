@@ -25,6 +25,7 @@ function main() {
           }
         */
           return inAppPurchase.consume(data.productType, data.receipt, data.signature);
+            div.innerHTML=JSON.stringify(data);
       })
       .then(function () {
         alert('product was successfully consumed!');
@@ -38,7 +39,11 @@ function main() {
   });
     
     
+    let div = document.createElement('div');
+    div.id='test';
+    document.body.appendChild(div);
     
+    /*
     
    let script = document.createElement('script');
     script.src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.2/pixi.min.js";
@@ -51,6 +56,7 @@ function main() {
         renderer.view.style.top = "0px";
         renderer.view.style.position = "absolute";
     } 
+    */
 }
 
 document.addEventListener('deviceready', main, false);
