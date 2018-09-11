@@ -24,8 +24,9 @@ function main() {
             signature: ...
           }
         */
-          return inAppPurchase.consume(data.productType, data.receipt, data.signature);
-            div.innerHTML=JSON.stringify(data);
+             div.innerHTML=JSON.stringify(data);
+          alert('returning',inAppPurchase.consume(data.productType, data.receipt, data.signature));
+           
       })
       .then(function () {
         alert('product was successfully consumed!');
