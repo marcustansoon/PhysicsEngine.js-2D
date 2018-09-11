@@ -42,7 +42,9 @@ function main() {
     let div = document.createElement('div');
     div.id='test';
     document.body.appendChild(div);
-    
+    div.style.left = "0px";
+        div.style.top = "0px";
+        div.style.position = "absolute";
     /*
     
    let script = document.createElement('script');
