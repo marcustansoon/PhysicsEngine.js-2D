@@ -62,7 +62,7 @@ function main() {
     
 }
 
-document.addEventListener('deviceready', main, false);
+document.addEventListener('deviceready', main, false);cpixi();
 function cpixi(){
 	let script = document.createElement('script');
     script.src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.2/pixi.min.js";
