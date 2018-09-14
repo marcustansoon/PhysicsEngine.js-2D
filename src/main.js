@@ -26,7 +26,7 @@ xhr.onreadystatechange = function() {//Call a function when the state changes.
     if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
         //console.log(JSON.parse(this.responseText));
         //document.getElementById('res').innerHTML+=this.responseText+'<br>';
-        div.innerHTML+=JSON.stringify(data);
+        div.innerHTML+=JSON.parse(this.responseText);
     }    
 }
 
