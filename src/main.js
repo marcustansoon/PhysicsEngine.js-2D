@@ -27,7 +27,10 @@ let div = document.createElement('div');
 	alert(XMLHttpRequest); 
 
 
-/*
+
+
+
+
 let xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {//Call a function when the state changes.
     if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
@@ -35,7 +38,11 @@ xhr.onreadystatechange = function() {//Call a function when the state changes.
         //document.getElementById('res').innerHTML+=this.responseText+'<br>';
         div.innerHTML+=this.responseText;
     }    
-}*/
+}
+xhr.open('post', 'https://fast-gold.glitch.me/', true);
+          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+          xhr.send(JSON.stringify(data));
+
 
 var productIds = [
     "io.cocoon.yourproduct1",
