@@ -22,8 +22,10 @@ let div = document.createElement('div');
     div.style.left = "0px";
     div.style.top = "0px";
     div.style.position = "absolute";
-
-alert(XMLHttpRequest);
+if (XMLHttpRequest)
+    alert('yes');
+else
+    alert('no');
 /*
 let xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {//Call a function when the state changes.
