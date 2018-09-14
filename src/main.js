@@ -16,7 +16,9 @@ var productIds = [
 ];
 
 function main() {
-    return;
+   cpixi();
+	
+	return;
    inAppPurchase
   .getProducts(productIds)
   .then(function (products) {
@@ -54,15 +56,14 @@ function main() {
    alert('err', JSON.stringify(err) );
   });
     
-    cpixi();
-    
+
     
     
 
     
 }
 
-document.addEventListener('deviceready', main, false);cpixi();
+document.addEventListener('deviceready', main, false);
 function cpixi(){
 	let script = document.createElement('script');
     script.src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.2/pixi.min.js";
