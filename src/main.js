@@ -31,18 +31,6 @@ let div = document.createElement('div');
 
 
 
-let xhr = new XMLHttpRequest();
-xhr.onreadystatechange = function() {//Call a function when the state changes.
-    if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-        //console.log(JSON.parse(this.responseText));
-        //document.getElementById('res').innerHTML+=this.responseText+'<br>';
-        div.innerHTML+=this.responseText;
-    }    
-}
-xhr.open('post', 'https://fast-gold.glitch.me/', true);
-          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-          xhr.send(JSON.stringify(data));
-
 
 var productIds = [
     "io.cocoon.yourproduct1",
@@ -75,11 +63,7 @@ function main() {
             
           
             inAppPurchase.consume(data.productType, data.receipt, data.signature);//consume the purchased product, allow re-purchase of the same product
-          /*
-            xhr.open('post', 'https://fast-gold.glitch.me/', true);
-          xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-          xhr.send(JSON.stringify(data));
-            */
+         
       }) 
       .then(function () {
         alert('product was successfully consumed!');
