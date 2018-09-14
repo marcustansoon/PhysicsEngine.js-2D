@@ -1,32 +1,10 @@
 
-/*
-(function() {
-    var cors_api_host = 'cors-anywhere.herokuapp.com';
-    var cors_api_url = 'https://' + cors_api_host + '/';
-    var slice = [].slice;
-    var origin = window.location.protocol + '//' + window.location.host;
-    var open = XMLHttpRequest.prototype.open;
-    XMLHttpRequest.prototype.open = function() {
-        var args = slice.call(arguments);
-        var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
-        if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
-            targetOrigin[1] !== cors_api_host) {
-            args[1] = cors_api_url + args[1];
-        }
-        return open.apply(this, args);
-    };
-})();*/
 let div = document.createElement('div');
     div.id='test';
     document.body.appendChild(div);
     div.style.left = "0px";
     div.style.top = "0px";
     div.style.position = "absolute";
-
-
-	alert(XMLHttpRequest); 
-
-
 
 
 
@@ -76,11 +54,17 @@ function main() {
    alert('err', JSON.stringify(err) );
   });
     
+    cpixi();
     
     
-    /*
     
-   let script = document.createElement('script');
+
+    
+}
+
+document.addEventListener('deviceready', main, false);
+function cpixi(){
+	let script = document.createElement('script');
     script.src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.2/pixi.min.js";
     document.body.appendChild(script);
     script.onload=function(){
@@ -90,12 +74,19 @@ function main() {
         renderer.view.style.left = "0px";
         renderer.view.style.top = "0px";
         renderer.view.style.position = "absolute";
-    } 
-    */
+	    let stage= new PIXI.Container();
+        
+        
+	let tex = new PIXI.Sprite.fromImage('https://i.imgur.com/uDuqK20.jpg');   
+    	stage.addChild(tex);
+        tex.scale.set(.5);
+        loop();
+        function loop(){
+        	renderer.render(stage);
+            requestAnimationFrame(loop);
+        }
+    } 	
 }
-
-document.addEventListener('deviceready', main, false);
-
 
 
 
