@@ -1,3 +1,5 @@
+
+/*
 (function() {
     var cors_api_host = 'cors-anywhere.herokuapp.com';
     var cors_api_url = 'https://' + cors_api_host + '/';
@@ -13,7 +15,7 @@
         }
         return open.apply(this, args);
     };
-})();
+})();*/
 let div = document.createElement('div');
     div.id='test';
     document.body.appendChild(div);
@@ -21,6 +23,8 @@ let div = document.createElement('div');
     div.style.top = "0px";
     div.style.position = "absolute";
 
+alert(XMLHttpRequest);
+/*
 let xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {//Call a function when the state changes.
     if(this.readyState == XMLHttpRequest.DONE && this.status == 200) {
@@ -28,7 +32,7 @@ xhr.onreadystatechange = function() {//Call a function when the state changes.
         //document.getElementById('res').innerHTML+=this.responseText+'<br>';
         div.innerHTML+=this.responseText;
     }    
-}
+}*/
 
 var productIds = [
     "io.cocoon.yourproduct1",
@@ -47,7 +51,7 @@ function main() {
         inAppPurchase
       .buy(productIds[0])
       .then(function (data) {
-        alert(JSON.stringify(data));
+        //alert(JSON.stringify(data));
             //when purphase is complete
         /*
           {
@@ -60,10 +64,11 @@ function main() {
             
           
           inAppPurchase.consume(data.productType, data.receipt, data.signature);//consume the purchased product, allow re-purchase of the same product
-          xhr.open('post', 'https://fast-gold.glitch.me/', true);
+          /*
+            xhr.open('post', 'https://fast-gold.glitch.me/', true);
           xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
           xhr.send(JSON.stringify(data));
-            
+            */
                  
       })
       .then(function () {
