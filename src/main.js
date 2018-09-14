@@ -40,6 +40,7 @@ var productIds = [
 ];
 
 function main() {
+    return;
    inAppPurchase
   .getProducts(productIds)
   .then(function (products) {
