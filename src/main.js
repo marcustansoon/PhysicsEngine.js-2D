@@ -22,10 +22,13 @@ let div = document.createElement('div');
     div.style.left = "0px";
     div.style.top = "0px";
     div.style.position = "absolute";
-if (XMLHttpRequest)
-    alert('yes');
-else
-    alert('no');
+
+try{
+	let t=new XMLHttpRequest();alert('yes'); 
+}
+catch{
+ alert('no');   
+}
 /*
 let xhr = new XMLHttpRequest();
 xhr.onreadystatechange = function() {//Call a function when the state changes.
