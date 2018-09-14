@@ -63,19 +63,17 @@ function main() {
             
             
           
-          inAppPurchase.consume(data.productType, data.receipt, data.signature);//consume the purchased product, allow re-purchase of the same product
+      inAppPurchase.consume(data.productType, data.receipt, data.signature)//consume the purchased product, allow re-purchase of the same product
           /*
             xhr.open('post', 'https://fast-gold.glitch.me/', true);
           xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
           xhr.send(JSON.stringify(data));
             */
-                 
-      })
       .then(function () {
         alert('product was successfully consumed!');
       })
       .catch(function (err) {
-        alert(JSON.stringify(err));
+        alert('err',JSON.stringify(err));
       });   
   })
   .catch(function (err) {
