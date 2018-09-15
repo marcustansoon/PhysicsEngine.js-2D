@@ -1,9 +1,9 @@
 
-let renderer = new PIXI.autoDetectRenderer(250,250);
+let renderer = new PIXI.autoDetectRenderer(500,500);
         document.body.appendChild(renderer.view);
-        renderer.view.style.left = "0px";
-        renderer.view.style.top = "0px";
-        renderer.view.style.position = "absolute";
+        //renderer.view.style.left = "0px";
+        //renderer.view.style.top = "0px";
+        //renderer.view.style.position = "absolute";
 	    let stage= new PIXI.Container();
         
         
