@@ -68,12 +68,12 @@ function cpixi(){
     document.body.appendChild(script);
     script.onload=function(){
         alert('loaded');
-    	let renderer = new PIXI.autoDetectRenderer(250,250);
+    	let renderer = new PIXI.autoDetectRenderer(500,500);
         document.body.appendChild(renderer.view);
         renderer.view.style.left = "0px";
         renderer.view.style.top = "0px";
         renderer.view.style.position = "absolute";
-	    let stage= new PIXI.Container();
+	let stage= new PIXI.Container();
         
         
 	let tex = new PIXI.Sprite.fromImage('https://i.imgur.com/uDuqK20.jpg');   
