@@ -2,7 +2,7 @@ alert(PIXI);
 document.addEventListener('deviceready', initDemo, false);
 
 function initDemo(){
-	alert('rdy');
+	alert('rd1y');
 	
 let renderer = new PIXI.autoDetectRenderer(500,500);
         document.body.appendChild(renderer.view);
