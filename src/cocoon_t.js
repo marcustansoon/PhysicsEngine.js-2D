@@ -1,4 +1,4 @@
-
+alert(PIXI);
 let renderer = new PIXI.autoDetectRenderer(500,500);
         document.body.appendChild(renderer.view);
         //renderer.view.style.left = "0px";
