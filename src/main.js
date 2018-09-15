@@ -1,13 +1,4 @@
 
-let div = document.createElement('div');
-    div.id='test';
-    document.body.appendChild(div);
-    div.style.left = "0px";
-    div.style.top = "0px";
-    div.style.position = "absolute";
-
-
-
 
 
 var productIds = [
@@ -16,9 +7,9 @@ var productIds = [
 ];
 
 function main() {
-   cpixi();
+
 	
-	return;
+	
    inAppPurchase
   .getProducts(productIds)
   .then(function (products) {
@@ -63,8 +54,15 @@ function main() {
     
 }
 
-document.addEventListener('deviceready', main, false);
+document.addEventListener('deviceready', cpixi, false);
 function cpixi(){
+	let div = document.createElement('div');
+    div.id='test';
+    document.body.appendChild(div);
+    div.style.left = "0px";
+    div.style.top = "0px";
+    div.style.position = "absolute";
+	
 	let script = document.createElement('script');
     script.src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.8.2/pixi.min.js";
     document.body.appendChild(script);
