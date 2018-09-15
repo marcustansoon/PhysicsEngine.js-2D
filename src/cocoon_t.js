@@ -1,4 +1,8 @@
-alert(PIXI);
+alert(JSON.stringify(PIXI));
+document.addEventListener("deviceready", initDemo);
+
+function initDemo(){
+	alert('rdy');
 let renderer = new PIXI.autoDetectRenderer(500,500);
         document.body.appendChild(renderer.view);
         //renderer.view.style.left = "0px";
@@ -15,3 +19,4 @@ let renderer = new PIXI.autoDetectRenderer(500,500);
         	renderer.render(stage);
             requestAnimationFrame(loop);
         }
+}
