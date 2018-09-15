@@ -1,4 +1,4 @@
-alert(JSON.stringify(PIXI));
+alert(PIXI);
 document.addEventListener('deviceready', initDemo, false);
 
 function initDemo(){
