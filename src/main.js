@@ -54,7 +54,7 @@ function main() {
     
 }
 
-document.addEventListener('deviceready', cpixi, false);
+document.addEventListener('deviceready', main, false);
 function cpixi(){
 	let div = document.createElement('div');
     div.id='test';
