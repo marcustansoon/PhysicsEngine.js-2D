@@ -1,4 +1,5 @@
 //Original Link -> https://github.com/prettymuchbryce/easystarjs
+//https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/LearnPixiJS/EasyStar/easystar-modified-0.4.3.js
 //This is the modified and optimised codes of the original version
 let EasyStar =
 /******/ (function(modules) { // webpackBootstrap
