@@ -1,4 +1,5 @@
 https://www.w3schools.com/code/tryit.asp?filename=FVG427WY84YB
+https://www.w3schools.com/code/tryit.asp?filename=FVGVCNYIMKGD
 For Local system operation of testing HTML file:
 CORS can be an issue when it comes to accessing and loading image from local file system via browser.
 To bypass it, open cmd.exe
