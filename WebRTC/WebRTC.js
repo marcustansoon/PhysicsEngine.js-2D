@@ -45,7 +45,7 @@
           }]
         },
         localStream, settings = {
-          'ff': {
+          'audio': {
             echoCancellation: true,
             noiseSuppression: true,
             autoGainControl: true,
