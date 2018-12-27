@@ -8,9 +8,10 @@
 .background {
 	position:fixed;
   	width:900px;
-    height:510px;
+    height:530px;
     filter:grayscale(50%)blur(3.5px)sepia(20%)saturate(1);
-    
+    left:5px;
+    top:5px;
 }
 .diesel {
 	position:relative;
@@ -24,6 +25,7 @@
     bottom:-220px;
     padding:2px;
     margin:16px;
+left:-595px;
 }
 .burner {
 	position:relative;
@@ -34,9 +36,10 @@
     border-color:#a8a7a6;
     border-width: 6px;
     filter:brightness(120%)contrast(130%)saturate(1)drop-shadow(6px 6px 10px black);
-    bottom:-165px;
+    bottom:75px;
     padding:2px;
     margin:16px;
+left:209px;
 }
 .ind {
 	position:relative;
@@ -47,9 +50,10 @@
     border-color:#a8a7a6;
     border-width: 6px;
     filter:brightness(120%)contrast(110%)saturate(2)drop-shadow(6px 6px 10px black);
-    bottom:-220px;
+    bottom:250px;
     padding:2px;
     margin:16px;
+left:405px;
 }
 .heading{
     position: relative;
@@ -63,8 +67,8 @@
     font-family: Times, Times New Roman, Georgia, serif;
   	text-align:center;
     color:#93f4ff;
-    bottom:-220px;
-    left:70px;
+    bottom:280px;
+    left:95px;
     
     z-index:1;
     text-shadow:
@@ -74,19 +78,19 @@
     1px 1px 0 #000;  
 }
 .star{
-    position: absolute;
+    position: relative;
     padding: 0px;
    
     width: 810px;
     height: 150px;
    filter:brightness(130%)contrast(110%)saturate(2)drop-shadow(6px 6px 10px black);
     color:#6cfcfc;
-    bottom:58px;opacity:1;
-    left:-69px;
+    bottom:408px;opacity:1;
+    left:-65px;
 }
 
 .product{
-	position:absolute;
+	position:relative;
     z-index:1;
     width:600px;
     height:150px;
@@ -95,23 +99,25 @@
 	border-width:6px;
     border-style: groove; 
     opacity:0.8;filter:brightness(110%)contrast(130%)saturate(3);
+left:5px;
+bottom:30px;
 }
 
 .diesel_Des{
-	position: absolute;
+	position: relative;
     border-style: groove;  
     border-width:5px;
     padding: 4px;
   	border-color:rgb(122, 143, 163,0.7);
-    min-width: 130px;
+    width: 130px;
     border-radius: 35px;
     overflow-x: hidden;
     font-size: 22px;
     font-family: Times, Times New Roman, Georgia, serif;
   	text-align:center;
     color:#ffffff;
-    bottom:350px;
-    left:30px;
+    bottom:15px;
+    left:45px;
     background: -webkit-linear-gradient(#7cb9f9, #133e42);
     text-shadow:
     -1px -1px 0 #000,
@@ -120,20 +126,20 @@
     1px 1px 0 #000;  
 }
 .ind_Des{
-	position: absolute;
+	position: relative;
     border-style: groove;  
     border-width:5px;
     padding: 4px;
   	border-color:rgb(122, 143, 163,0.7);
-    min-width: 140px;
+    width: 140px;
     border-radius: 35px;
     overflow-x: hidden;
     font-size: 22px;
     font-family: Times, Times New Roman, Georgia, serif;
   	text-align:center;
     color:#ffffff;
-    bottom:350px;
-    left:410px;
+    bottom:490px;
+    left:420px;
     background: -webkit-linear-gradient(#7cb9f9, #133e42);
     text-shadow:
     -1px -1px 0 #000,
@@ -142,20 +148,20 @@
     1px 1px 0 #000;  
 }
 .burner_Des{
-	position: absolute;
+	position: relative;
     border-style: groove;  
     border-width:5px;
     padding: 4px;
-  	border-color:rgb(122, 143, 163,0.7);
-    min-width: 130px;
+  border-color:rgb(122, 143, 163,0.7);
+    width: 130px;
     border-radius: 35px;
     overflow-x: hidden;
     font-size: 22px;
     font-family: Times, Times New Roman, Georgia, serif;
   	text-align:center;
     color:#ffffff;
-    bottom:180px;
-    left:220px;
+    bottom:80px;
+    left:229px;
     background: -webkit-linear-gradient(#133e42, #7cb9f9);
     text-shadow:
     -1px -1px 0 #000,
@@ -164,20 +170,20 @@
     1px 1px 0 #000;  
 }
 .truck{
-	position: absolute;
+position: relative;
     width:250px;height:150px;
-    bottom:350px;
+    bottom:890px;
     filter:brightness(130%)contrast(110%)saturate(2)drop-shadow(6px 6px 50px black);
-    left:650px;
-    opacity:0.4;
+    left:635px;
+    opacity:0.3;
     border-radius:155px;
 }
 .truck_Des{
-	position: absolute;
+	position: relative;
     width:250px;height:150px;
-    bottom:350px;
+    bottom:990px;
     filter:brightness(130%)contrast(110%)saturate(2)drop-shadow(6px 6px 50px black);
-    left:650px;
+    left:635px;
     color:#b8f97c;
     text-shadow:
     -1px -1px 0 #000,
@@ -188,6 +194,8 @@
     text-align:center;
 }
 </style>
+
+<div>
 <img class='product' src="https://i.imgur.com/yKgxnqy.png">
 <img class="background" src="http://www.cursosonlinegratuitos.net/wp-content/uploads/2013/03/linha_petroleo_e_gas.jpg">
 
@@ -201,12 +209,14 @@
 <div class="heading"><strong>Special Transportation Services are provided for Order of 1000 Litres !!!</strong>
 </div>
 <img class="star"src="https://i.imgur.com/ODUhCJl.png"> 
-<img src="https://i.imgur.com/53Eml4N.png" style="position:absolute;bottom:55px;opacity:1;
-    left:665px;z-index:2;width:110px;filter:brightness(70%)contrast(130%)saturate(5)">
-    <div style="position:absolute;bottom:80px;
-    left:245px;z-index:2;color:yellow;font-size:14px;text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Limited to Kuching areas only</div>
+    <div style="position:relative;bottom:445px;
+    left:230px;z-index:2;color:yellow;font-size:14px;text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Limited to Kuching areas only</div>
     
     <img src="https://image.freepik.com/free-vector/abstract-white-background-vector-illustration_1407-419.jpg" class="truck">
     <div class="truck_Des">First Moving Oil Truck in Sarawak?!!</div>
+
+<img src="https://i.imgur.com/53Eml4N.png" style="position:relative;bottom:1245px;opacity:.9;
+    left:640px;z-index:2;width:110px;filter:brightness(70%)contrast(130%)saturate(5)">
+</div>
 </body>
 </html>
