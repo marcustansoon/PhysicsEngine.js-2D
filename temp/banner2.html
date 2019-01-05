@@ -1,0 +1,265 @@
+<!--
+https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/banner.html
+-->
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Banner5</title>
+  </head>
+
+  <body>
+    <style>
+      body {
+        background-color: #baffff;
+      }
+
+      .background {
+        position: fixed;
+        width: 920px;
+        height: 430px;
+        filter: grayscale(50%)blur(0px)saturate(1.1)brightness(85%)contrast(115%);
+        opacity: 0.82;
+        left: 5px;
+        top: 5px;
+      }
+
+      .diesel {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        border-style: groove;
+        border-radius: 55px;
+        border-color: yellow;
+        border-width: 3px;
+        filter: brightness(120%)contrast(110%)saturate(4)drop-shadow(5px 5px 8px #229ccc);
+        bottom: -170px;
+        padding: 2px;
+        margin: 16px;
+        left: -565px;
+      }
+
+      .burner {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        border-style: groove;
+        border-radius: 55px;
+        border-color: gold;
+        border-width: 3px;
+        filter: brightness(120%)contrast(110%)saturate(4)drop-shadow(5px 5px 8px #229ccc);
+        bottom: 75px;
+        padding: 2px;
+        margin: 16px;
+        left: 219px;
+      }
+
+      .ind {
+        position: relative;
+        width: 100px;
+        height: 100px;
+        border-style: groove;
+        border-radius: 55px;
+        border-color: gold;
+        border-width: 3px;
+        filter: brightness(120%)contrast(110%)saturate(2)drop-shadow(5px 5px 8px #229ccc);
+        bottom: 210px;
+        padding: 2px;
+        margin: 16px;
+        left: 405px;
+      }
+
+      .heading {
+        position: relative;
+        padding: 14px;
+        max-width: 430px;
+        border-radius: 35px;
+        overflow-x: hidden;
+        font-size: 20px;
+        font-family: Times, Times New Roman, Georgia, serif;
+        text-align: center;
+        color: #93f4ff;
+        bottom: 270px;
+        left: 95px;
+        z-index: 1;
+        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+      }
+
+      .star {
+        position: relative;
+        padding: 0px;
+        width: 810px;
+        height: 130px;
+        filter: brightness(130%)contrast(110%)saturate(2)drop-shadow(5px 5px 8px black);
+        color: #6cfcfc;
+        bottom: 382px;
+        opacity: 1;
+        left: -65px;
+      }
+
+      .product {
+        position: relative;
+        z-index: 1;
+        width: 600px;
+        height: 110px;
+        border-radius: 35px;
+        border-color: rgb(95, 105, 114, 0.6);
+        border-width: 6px;
+        border-style: groove;
+        opacity: 0.8;
+        filter: brightness(110%)contrast(135%)saturate(3)drop-shadow(3px 3px 11px #66dcf9);
+        left: 5px;
+        bottom: 15px;
+      }
+
+      .diesel_Des {
+        position: relative;
+        border-style: groove;
+        border-width: 5px;
+        padding: 4px;
+        border-color: gold;
+        width: 130px;
+        border-radius: 35px;
+        overflow-x: hidden;
+        font-size: 22px;
+        font-family: Times, Times New Roman, Georgia, serif;
+        text-align: center;
+        color: black;
+        bottom: 15px;
+        left: 45px;
+        background: -webkit-linear-gradient(white, #3fc8fc);
+       filter: drop-shadow(3px 3px 8px #229ccc);
+      }
+
+      .ind_Des {
+        position: relative;
+        border-style: groove;
+        border-width: 5px;
+        padding: 4px;
+        border-color: gold;
+        width: 140px;
+        border-radius: 35px;
+        overflow-x: hidden;
+        font-size: 22px;
+        font-family: Times, Times New Roman, Georgia, serif;
+        text-align: center;
+        color: black;
+        bottom: 400px;
+        left: 400px;
+        background: -webkit-linear-gradient(white, #3fc8fc);
+        filter: drop-shadow(3px 3px 8px #229ccc);
+        
+      }
+
+      .burner_Des {
+        position: relative;
+        border-style: groove;
+        border-width: 5px;
+        padding: 4px;
+        border-color: gold;
+        width: 130px;
+        border-radius: 35px;
+        overflow-x: hidden;
+        font-size: 22px;
+        font-family: Times, Times New Roman, Georgia, serif;
+        text-align: center;
+        color: black;
+        bottom: 80px;
+        left: 219px;
+        background: -webkit-linear-gradient(white, #3fc8fc);
+        filter: drop-shadow(3px 3px 8px #229ccc);
+      }
+
+      .turck_Des_background {
+        position: relative;
+        width: 260px;
+        height: 85px;
+        bottom: 795px;
+        filter: brightness(140%)contrast(110%)saturate(4)drop-shadow(2px 2px 8px #4bc2ed);
+        left: 625px;
+        opacity: 0.7;
+        border-radius: 55px;
+        border-color: gold;
+        border-width: 5px;
+        border-style: groove;
+      }
+
+      .truck_Des {
+        position: relative;
+        width: 250px;
+        height: 130px;
+        bottom: 885px;
+        filter: brightness(105%)contrast(110%)saturate(2);
+        left: 640px;
+        color: black;
+        font-size: 21px;
+        text-align: center;
+        margin: 0px;
+        font-family: Vendana;
+        letter-spacing: 2.1px;
+       
+      }
+
+      .oil_truck {
+        position: relative;
+        bottom: 925px;
+        left: 545px;
+        border-radius: 35%;
+        border-style: groove;
+        border-width: 4px;
+        width: 250px;
+        height: 230px;
+        border-color: gold;
+        opacity: 0.9;
+        filter: brightness(120%)contrast(110%)saturate(3)drop-shadow(2px 2px 8px #4bc2ed);
+      }
+
+      .oil_truck_promo {
+        position: relative;
+        bottom: 995px;
+        left: 645px;
+        color: #bee8e4;
+        width: 250px;
+        transform: skewY(7deg);
+        font-size: 21px;
+        font-family: Arial;
+        filter: brightness(110%)contrast(130%)saturate(3)drop-shadow(3px 3px 3px black);
+        text-align: center;
+        -webkit-text-stroke: 0.5px black;
+        text-shadow: 3px 3px 0px #000000;
+      }
+
+    </style>
+
+    <div>
+      <img class='product' src="https://i.imgur.com/yKgxnqy.png">
+      <img class="background" src="https://img.wallpapersafari.com/desktop/1600/900/97/78/LA2kNQ.jpg">
+
+      <img class="diesel" src="https://i.imgur.com/KkXR7mZ.jpg">
+      <div class="diesel_Des"><strong>Diesel Oil</strong></div>
+      <img class="burner" src="http://www.tech-faq.com/wp-content/uploads/waste-oil-burner.jpg">
+      <div class="burner_Des"><strong>Burner Oil</strong></div>
+      <img class="ind" src="https://3.imimg.com/data3/FE/IN/MY-5708785/gear-oil-250x250.jpg">
+      <div class="ind_Des"><strong>Industrial Oil</strong></div>
+
+      <div class="heading"><strong>Special Transportation Service is provided for Minimum Order of 1000 Litres !!!</strong>
+      </div>
+      <img class="star" src="https://i.imgur.com/ODUhCJl.png">
+      <div style="position:relative;bottom:420px;
+    left:230px;z-index:2;color:yellow;font-size:14px;text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;">Limited to Kuching areas only</div>
+
+      <img src="https://i1.wp.com/marbleguide.com/wp-content/uploads/Greel_Marble_Chalkerou-Crystallina-Semi-White.jpg" class="turck_Des_background">
+      <div class="truck_Des"><strong>Moving Oil Truck Service is<br> <font style="text-shadow: 2px 2px 0px #ff9b30;font-size:25px;color:#f90303;font-family: 'Times New Roman', Times, serif;">Now Available</font></strong></div>
+
+      <img src="https://i.imgur.com/53Eml4N.png" style="position:relative;bottom:1055px;opacity:.8;
+    left:600px;z-index:2;width:80px;filter:brightness(90%)contrast(130%)saturate(7)drop-shadow(6px 6px 15px red);">
+      <img src="https://i.imgur.com/nOYLNvA.png" class="oil_truck">
+
+      <div class='oil_truck_promo'>For the First Time <br>in Sarawak !!!</div>
+      <div style="position:relative;color:yellow;width:110px;height:80px;left:705px;bottom:980px;font-size:18px;text-shadow: 2px 2px 0px black;background:rgba(22, 56, 68,0.7);padding-left:10px;">Contact Us : <br>082-545 450<br>016-955 5454</div>
+      <img src="https://i.imgur.com/2lgYJtH.png" style="position:relative;height:62px;left:795px;bottom:1510px;filter:brightness(100%)contrast(105%)saturate(1.1)drop-shadow(6px 6px 10px red);transform: skewY(15deg);">
+
+    </div>
+  </body>
+
+</html>
