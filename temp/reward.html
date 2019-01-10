@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<html>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <head>
+    <style>
+      body {
+        background: url("https://i.imgur.com/8LvoHzV.jpg") no-repeat center center fixed;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+      }
+
+      .loginPage {
+        width: 50%;
+        max-width: 300px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: 0;
+        opacity: 1;
+        overflow: hidden;
+        transition: 1.0s ease;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        background-color: white;
+        border: 3px solid grey;
+        padding: 25px;
+      }
+
+      .userInfo {
+        width: 80%;
+        height:70%;
+        position: absolute;
+        margin:0;
+        transform: translate(-50%, -50%);
+        left:50%;
+        top:50%;
+        opacity: 1;
+        overflow: hidden;
+        transition: 1.0s ease;
+        background-color:rgba(255,255,255,0.6);
+        padding: 25px;
+      }
+
+      .table1 {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 80%;
+        max-width: 800px;
+      
+        margin:auto;
+      }
+
+      .table_header {
+        text-align: center;
+      }
+
+      .table_editable {
+        background-color: rgba(255, 248, 219, 0.3);
+      }
+
+      td,
+      th {
+        border: 1px solid black;
+        text-align: left;
+        padding: 6px;
+      }
+
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+      tr:nth-child(odd) {
+        background-color: white;
+      }
+
+    </style>
+  </head>
+
+  <body>
+
+
+    <button onclick="transition(0,2);">Back</button>
+    <div class="loginPage" id="loginPage">
+      Username : <input type="text" id="loginAdmin" size="15">
+      <br><br> Password : <input type="password" id="loginPassword"  size="15">
+      <div style="color:red;font-size:12px;" id="wrongCreditial" hidden>
+        Incorrect password/username. Please re-enter
+      </div>
+      <br>
+      <br>
+      <button id="loginEnter" onclick="loginAdmin()">Enter</button>
+      <br>
+    </div>
+    
+    
+    
+    <div class='userInfo' id='userInfo'>
+      <br><br> Company Name <input type='text' id="compName">
+      <br><br> Login Credentials <input type='text' id="userLoginID">
+      <br><br>
+      <table class="table1" id="table1">
+        <tr>
+          <th class='table_header'>No</th>
+          <th class='table_header'>Purchases</th>
+          <th class='table_header'>Description</th>
+          <th class='table_header'>Points</th>
+          <th class='table_header'>Date</th>
+        </tr>
+        <tr id="newData" style="background-color:rgba(255, 248, 219,0.3);">
+          <td contenteditable="false"></td>
+          <td contenteditable="true"></td>
+          <td contenteditable="true"></td>
+          <td contenteditable="true"></td>
+          <td contenteditable="true"></td>
+        </tr>
+      </table>
+
+      <div id="totalPoints"></div>
+      <br>
+      <button onclick="appendData();updateTotalPoints();">Append Data</button>
+      <button onclick="removeData();updateTotalPoints();">Remove Data</button>
+      <button onclick="onSave();">Save Data</button>
+
+    </div>
+
+
+
+
+  </body>
+  <script>
+    let socket = io('https://charm-dagger.glitch.me/'),
+      arr = null,
+      currentView = 2;
+
+
+
+    let oldCompName = "",
+      oldUserLoginData = "e",
+      _data;
+transition(0,2);
+
+
+    function loginAdmin() {
+      let temp = {
+        'name': document.getElementById('loginAdmin').value,
+        'password': document.getElementById('loginPassword').value
+      };
+      socket.emit('adminLogin', JSON.stringify(temp));
+    }
+
+    socket.on('connect', function() {
+      console.log('connected');
+    });
+    socket.on('loginSuccess', function(e) {
+      console.log('sssss');
+      transition(2, 0);
+      document.getElementById('wrongCreditial').hidden = true;
+      document.getElementById('loginPassword').value = '';
+      
+    });
+    socket.on('loginFail', function(e) {
+      console.log('fail');
+      document.getElementById('loginPassword').value = '';
+      document.getElementById('wrongCreditial').hidden = false;
+    });
+    socket.on('retrieve', function(e) {
+      e = JSON.parse(e);
+      oldCompName = e.compName;
+      arr = e.data;
+      onRetrieve();
+    });
+    socket.on('readData', function(e) {
+      let newName = document.getElementById("userLoginID").value;
+      _data = JSON.parse(e);
+      if (oldUserLoginData !== newName) {
+        delete _data[oldUserLoginData];
+        _data[newName] = {};
+      }
+      _data[newName].data = arr;
+      _data[newName].compName = document.getElementById("compName").value;
+      socket.emit('save', JSON.stringify(_data));
+    });
+    socket.on('saveSuccess', function(e) {
+      if (e === JSON.stringify(_data)) {
+        console.log('succs');
+      }
+    });
+
+    function onRetrieve() {
+      let newData = document.getElementById("newData"),
+        temp = document.getElementById('table1'),
+        temp2;
+
+      newData.parentNode.removeChild(newData);
+
+      arr.forEach(function(element, index) {
+        temp2 = index + 1;
+        temp.innerHTML += '<tr id="no' + index + '"> <td>' + temp2 + '</td> <td>' + element.purchases + '</td> <td>' + element.description + '</td> <td>' + element.points + '</td> <td>' + element.date + '</td> </tr>';
+      });
+
+      temp.innerHTML += '<tr id="newData" class="table_editable"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
+
+      document.getElementById("compName").value = oldCompName;
+      document.getElementById("userLoginID").value = oldUserLoginData;
+
+      updateTotalPoints();
+    }
+
+    function onSave() {
+      socket.emit('readData', '');
+    }
+
+    function appendData() {
+      let newData = document.getElementById("newData"),
+        temp = document.getElementById('table1'),
+        temp2 = arr.length + 1;
+
+      newData.parentNode.removeChild(newData);
+
+      temp.innerHTML += '<tr id="no' + arr.length + '"> <td>' + temp2 + '</td> <td>' + newData.childNodes[3].innerHTML + '</td> <td>' + newData.childNodes[5].innerHTML + '</td> <td>' + newData.childNodes[7].innerHTML + '</td> <td>' + newData.childNodes[9].innerHTML + '</td> </tr>';
+
+      arr[arr.length] = {
+        'description': newData.childNodes[5].innerHTML,
+        'purchases': newData.childNodes[3].innerHTML,
+        'points': newData.childNodes[7].innerHTML,
+        'date': newData.childNodes[9].innerHTML
+      };
+
+      temp.innerHTML += '<tr id="newData" class="table_editable"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
+    }
+
+    function removeData() {
+      let temp = arr.length - 1;
+      temp = document.getElementById('no' + temp);
+      temp.parentNode.removeChild(temp);
+      arr.pop();
+    }
+
+    function updateTotalPoints() {
+      let totalPoints = document.getElementById('totalPoints'),
+        sum = 0;
+
+      arr.forEach(function(element) {
+        sum += Number(element.points);
+      });
+
+      totalPoints.innerHTML = "Total Points : " + sum;
+    }
+    document.onkeydown = function() {
+      //transitionUpward(document.getElementById('userInfo'));
+      //document.getElementById('userInfo').style.width='100%';
+      //transitionUpward(document.getElementById('asd'));
+      //transition(0,2)
+    }
+
+
+
+    function transition(to, from) { //back pressed
+
+
+
+      if (to === 2) {
+
+        document.getElementById('userInfo').style.width = '80%';
+        //document.getElementById('userInfo').style.transition="0.5s ease";
+       	document.getElementById('userInfo').style.left = "50%";
+      } else if (to === 0) {
+
+        document.getElementById('loginPage').style.width = '50%';
+        //document.getElementById('loginPage').style.transition="0.5s ease"; 
+        document.getElementById('loginPage').style.left = "50%";
+      }
+
+      if (from === 2) {
+        document.getElementById('userInfo').style.width = '0%';
+        // document.getElementById('userInfo').style.transition="0s ease";
+        document.getElementById('userInfo').style.left="-20%";
+      } else if (from === 0) {
+        document.getElementById('loginPage').style.width = '0%';
+        //document.getElementById('loginPage').style.transition="0s ease";
+        document.getElementById('loginPage').style.left = "300%";
+      }
+
+    }
+
+  </script>
+
+</html>
