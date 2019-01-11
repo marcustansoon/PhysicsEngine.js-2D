@@ -5,12 +5,20 @@
 
   <head>
     <style>
+      .bg {
+        width: 100%;
+        height: 100%;
+        left: 0px;
+        top: 0px;
+        position: absolute;
+        padding: 0px;
+        margin: 0px;
+        z-index: -1;
+      }
+
       body {
-        background: url("https://i.imgur.com/8LvoHzV.jpg") no-repeat center center fixed;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
+        width: 100%;
+        overflow: hidden;
       }
 
       .loginPage {
@@ -18,7 +26,7 @@
         max-width: 300px;
         position: absolute;
         top: 50%;
-        left: 50%;
+        left: 200%;
         margin: 0;
         opacity: 1;
         overflow: hidden;
@@ -28,38 +36,54 @@
         background-color: white;
         border: 3px solid grey;
         padding: 25px;
+        overflow-x: hidden;
       }
 
       .userInfo {
-        width: 80%;
-        height:70%;
+        width: 0%;
+        height: 70%;
+        max-height: 85%;
         position: absolute;
-        margin:0;
+        margin: 0;
         transform: translate(-50%, -50%);
-        left:50%;
-        top:50%;
+        left: -20%;
+        top: 50%;
         opacity: 1;
-        overflow: hidden;
+        overflow-x: hidden;
+        overflow-y: auto;
         transition: 1.0s ease;
-        background-color:rgba(255,255,255,0.6);
+        background-color: rgba(255, 255, 255, 0.65);
         padding: 25px;
       }
 
-      .table1 {
+      .mainPage {
+        width: 0%;
+        height: 70%;
+        position: absolute;
+        margin: 0;
+        transform: translate(-50%, -50%);
+        left: -20%;
+        top: 50%;
+        opacity: 1;
+        overflow: hidden;
+        transition: 1.0s ease;
+        background-color: rgba(255, 255, 255, 0.65);
+        padding: 25px;
+      }
+
+      .table1,
+      .tableMainPage {
         font-family: arial, sans-serif;
         border-collapse: collapse;
         width: 80%;
-        max-width: 800px;
-      
-        margin:auto;
+        overflow-y: auto;
+        max-width: 90%;
+        margin: auto;
+        font-size: 12px;
       }
 
       .table_header {
         text-align: center;
-      }
-
-      .table_editable {
-        background-color: rgba(255, 248, 219, 0.3);
       }
 
       td,
@@ -72,76 +96,129 @@
       tr:nth-child(even) {
         background-color: #dddddd;
       }
+
       tr:nth-child(odd) {
         background-color: white;
       }
 
     </style>
   </head>
+  <img src="https://i.imgur.com/8LvoHzV.jpg" class="bg">
 
   <body>
 
-
-    <button onclick="transition(0,2);">Back</button>
+    <button onclick="backButton();">Go Back</button>
     <div class="loginPage" id="loginPage">
       Username : <input type="text" id="loginAdmin" size="15">
-      <br><br> Password : <input type="password" id="loginPassword"  size="15">
+      <br><br> Password : <input type="password" id="loginPassword" size="15">
       <div style="color:red;font-size:12px;" id="wrongCreditial" hidden>
-        Incorrect password/username. Please re-enter
+        Incorrect password/username. Please re-enter the correct information
       </div>
       <br>
       <br>
       <button id="loginEnter" onclick="loginAdmin()">Enter</button>
       <br>
     </div>
-    
-    
-    
+
     <div class='userInfo' id='userInfo'>
+
+
       <br><br> Company Name <input type='text' id="compName">
       <br><br> Login Credentials <input type='text' id="userLoginID">
+
       <br><br>
-      <table class="table1" id="table1">
-        <tr>
-          <th class='table_header'>No</th>
-          <th class='table_header'>Purchases</th>
-          <th class='table_header'>Description</th>
-          <th class='table_header'>Points</th>
-          <th class='table_header'>Date</th>
-        </tr>
-        <tr id="newData" style="background-color:rgba(255, 248, 219,0.3);">
-          <td contenteditable="false"></td>
-          <td contenteditable="true"></td>
-          <td contenteditable="true"></td>
-          <td contenteditable="true"></td>
-          <td contenteditable="true"></td>
-        </tr>
-      </table>
+      <div style="overflow-y:auto;max-height:40%;">
+        <table class="table1" id="table1">
+          <tr>
+            <th class='table_header'>No</th>
+            <th class='table_header'>Purchases</th>
+            <th class='table_header'>Description</th>
+            <th class='table_header'>Points</th>
+            <th class='table_header'>Date</th>
+          </tr>
+          <tr id="newData" style="table_editable">
+            <td contenteditable="false"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+          </tr>
+        </table>
 
-      <div id="totalPoints"></div>
+      </div>
       <br>
-      <button onclick="appendData();updateTotalPoints();">Append Data</button>
-      <button onclick="removeData();updateTotalPoints();">Remove Data</button>
-      <button onclick="onSave();">Save Data</button>
-
+      <div id="totalPoints" style="position:relative;left:10%;"></div>
+      <br>
+      <button onclick="appendData();updateTotalPoints();" style="position:relative;left:10%;">Append Data</button>
+      <button onclick="removeData();updateTotalPoints();" style="position:relative;left:10%;">Remove Data</button>
+      <button onclick="onSave();" style="position:relative;left:10%;">Save Data</button>
+      <button onclick="deleteUser();" style="position:relative;left:10%;">Delete User</button>
     </div>
 
+    <div id="mainPage" class="mainPage">
+      <div style="font-size:22px;padding:10px;left:10%;">
+        User List
+      </div>
+      <div style="overflow-y:auto;max-height:70%;">
+        <table class="tableMainPage" id="tableMainPage">
+          <tr>
+            <th class='table_header'>Company Name</th>
+            <th class='table_header'>Login Creditial</th>
+            <th class='table_header'>Points</th>
 
+          </tr>
+
+          <tr id="newUserData" style="table_editable">
+            <td contenteditable="true"></td>
+            <td contenteditable="true"></td>
+            <td contenteditable="false"></td>
+            <td contenteditable="false"><button style="position:relative;left:50%;transform: translate(-50%);">
+         
+          </button></td>
+          </tr>
+        </table>
+      </div>
+      <br>
+      <button id="addUser" onclick="addNewUser();" style="position:relative;left:10%;">
+Add New User
+</button>
+
+    </div>
 
 
   </body>
   <script>
     let socket = io('https://charm-dagger.glitch.me/'),
-      arr = null,
-      currentView = 2;
+      arr,
+      currentView = 0,
+      userList,
+      isCreatingNewUser = false,
+      newCompName = '',
+      newLoginCredential = '',
+      isDeletingUser;
 
 
 
     let oldCompName = "",
-      oldUserLoginData = "e",
+      oldUserLoginData = "",
       _data;
-transition(0,2);
 
+    transition(0, 1);
+    //transition(1, 2);
+    //transition(1, 0);
+    //mainPageSetup();
+    function backButton() {
+      clearMainPage();
+      clearUserInfoPage();
+      if (currentView === 2) {
+        mainPageSetup();
+        transition(1, 2);
+      } else if (currentView == 1) {
+        clearMainPage();
+        transition(0, 1);
+      }
+
+    }
 
     function loginAdmin() {
       let temp = {
@@ -151,15 +228,55 @@ transition(0,2);
       socket.emit('adminLogin', JSON.stringify(temp));
     }
 
+    function mainPageSetup() { //retrieve mainpage userList
+      socket.emit('readUserList', '');
+      console.log('main');
+    }
+
+    function userInfoSetupPage(name) {
+      socket.emit('retrieve', name);
+      oldUserLoginData = name;
+      console.log('transition to userinfo');
+      transition(2, 1);
+    }
+
+    function clearUserInfoPage() {
+      document.getElementById('table1').innerHTML = '<tr> <th class="table_header">No</th> <th class="table_header">Purchases</th> <th class="table_header">Description</th> <th class="table_header">Points</th> <th class="table_header">Date</th> </tr> <tr id="newData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
+    }
+
+    function clearMainPage() {
+      document.getElementById('tableMainPage').innerHTML = '<tr> <th class="table_header">Company Name</th> <th class="table_header">Login Creditial</th> <th class="table_header">Points</th> </tr> <tr id="newUserData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="false"></td> <td contenteditable="false"><button style="position:relative;left:50%;transform: translate(-50%);"> > </button></td> </tr>';
+    }
+
+    function addNewUser() {
+
+      let newData = document.getElementById("newUserData"),
+        temp = document.getElementById('tableMainPage');
+
+
+      newData.parentNode.removeChild(newData);
+
+
+      temp.innerHTML += '<tr><th>' + newData.childNodes[1].innerHTML + '</th> <th>' + newData.childNodes[3].innerHTML + '</th> <th>' + 0 + '</th><th><button>></button></th></tr>';
+
+      temp.innerHTML += '<tr id="newUserData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="true"></td> <td contenteditable="true"></td> </td>';
+      isCreatingNewUser = true;
+      newCompName = newData.childNodes[1].innerHTML;
+      newLoginCredential = newData.childNodes[3].innerHTML;
+      onSave();
+    }
+
     socket.on('connect', function() {
       console.log('connected');
     });
     socket.on('loginSuccess', function(e) {
-      console.log('sssss');
-      transition(2, 0);
+      console.log('login Success');
+      clearMainPage();
+      mainPageSetup();
+      transition(1, 0);
       document.getElementById('wrongCreditial').hidden = true;
       document.getElementById('loginPassword').value = '';
-      
+
     });
     socket.on('loginFail', function(e) {
       console.log('fail');
@@ -171,8 +288,71 @@ transition(0,2);
       oldCompName = e.compName;
       arr = e.data;
       onRetrieve();
+      console.log('retrieve user info succ');
+      console.log(e);
     });
-    socket.on('readData', function(e) {
+    socket.on('readUserList', function(e) {
+      e = JSON.parse(e);
+      let temp = Object.keys(e);
+
+      onUserListRetrieve(temp, e);
+
+    });
+
+    function onUserListRetrieve(arr, obj) {
+      let newData = document.getElementById("newUserData"),
+        temp = document.getElementById('tableMainPage');
+
+      newData.parentNode.removeChild(newData);
+
+      arr.forEach(function(name, index) {
+
+        temp.innerHTML += '<tr><th>' + obj[name].compName + '</th> <th>' + name + '</th> <th>' + obj[name].tp + '</th><th><button id="userInfoButton' + index + '" onclick="onClickUserInfoButton(\'' + name + '\',' + index + ');">></button></th></tr>';
+      });
+
+      temp.innerHTML += '<tr id="newUserData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="true"></td> <td contenteditable="true"></td> </td>';
+
+    }
+
+    function onClickUserInfoButton(name, buttonNum) {
+      console.log('button pressed for ' + name, buttonNum);
+      clearUserInfoPage();
+      userInfoSetupPage(name);
+
+    }
+
+    function deleteUser() {
+      isDeletingUser = true;
+      newLoginCredential = document.getElementById('userLoginID').value;
+      socket.emit('readData', '');
+    }
+    socket.on('readData', function(e) { //saving process
+      if (isDeletingUser) {
+        _data = JSON.parse(e);
+        console.log(_data[newLoginCredential]);
+        delete _data[newLoginCredential];
+
+        console.log(_data[newLoginCredential]);
+        socket.emit('save', JSON.stringify(_data));
+        isDeletingUser = false;
+        console.log('delete');
+        backButton();
+        return;
+      }
+      if (isCreatingNewUser) {
+        _data = JSON.parse(e);
+        _data[newLoginCredential] = {
+          "data": [],
+          "compName": newCompName,
+          "tp": 0
+        };
+        socket.emit('save', JSON.stringify(_data));
+        isCreatingNewUser = false;
+        clearMainPage();
+        mainPageSetup();
+
+        return;
+      }
       let newName = document.getElementById("userLoginID").value;
       _data = JSON.parse(e);
       if (oldUserLoginData !== newName) {
@@ -180,19 +360,25 @@ transition(0,2);
         _data[newName] = {};
       }
       _data[newName].data = arr;
+      _data[newName].tp = updateTotalPoints();
       _data[newName].compName = document.getElementById("compName").value;
       socket.emit('save', JSON.stringify(_data));
+
     });
     socket.on('saveSuccess', function(e) {
       if (e === JSON.stringify(_data)) {
         console.log('succs');
+      } else {
+        console.log('save error');
       }
+
     });
 
     function onRetrieve() {
       let newData = document.getElementById("newData"),
         temp = document.getElementById('table1'),
         temp2;
+
 
       newData.parentNode.removeChild(newData);
 
@@ -201,7 +387,8 @@ transition(0,2);
         temp.innerHTML += '<tr id="no' + index + '"> <td>' + temp2 + '</td> <td>' + element.purchases + '</td> <td>' + element.description + '</td> <td>' + element.points + '</td> <td>' + element.date + '</td> </tr>';
       });
 
-      temp.innerHTML += '<tr id="newData" class="table_editable"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
+
+      temp.innerHTML += '<tr id="newData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
 
       document.getElementById("compName").value = oldCompName;
       document.getElementById("userLoginID").value = oldUserLoginData;
@@ -229,7 +416,7 @@ transition(0,2);
         'date': newData.childNodes[9].innerHTML
       };
 
-      temp.innerHTML += '<tr id="newData" class="table_editable"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
+      temp.innerHTML += '<tr id="newData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
     }
 
     function removeData() {
@@ -248,6 +435,7 @@ transition(0,2);
       });
 
       totalPoints.innerHTML = "Total Points : " + sum;
+      return sum;
     }
     document.onkeydown = function() {
       //transitionUpward(document.getElementById('userInfo'));
@@ -257,33 +445,44 @@ transition(0,2);
     }
 
 
-
     function transition(to, from) { //back pressed
-
-
-
+      currentView = to;
       if (to === 2) {
 
         document.getElementById('userInfo').style.width = '80%';
-        //document.getElementById('userInfo').style.transition="0.5s ease";
-       	document.getElementById('userInfo').style.left = "50%";
-      } else if (to === 0) {
 
+        document.getElementById('userInfo').style.left = "50%";
+
+      } else if (to === 0) {
         document.getElementById('loginPage').style.width = '50%';
-        //document.getElementById('loginPage').style.transition="0.5s ease"; 
         document.getElementById('loginPage').style.left = "50%";
+
+      } else if (to === 1) {
+
+        document.getElementById('mainPage').style.width = '80%';
+        document.getElementById('mainPage').style.left = "50%";
       }
 
       if (from === 2) {
         document.getElementById('userInfo').style.width = '0%';
         // document.getElementById('userInfo').style.transition="0s ease";
-        document.getElementById('userInfo').style.left="-20%";
+        document.getElementById('userInfo').style.left = "-20%";
+
+
       } else if (from === 0) {
         document.getElementById('loginPage').style.width = '0%';
         //document.getElementById('loginPage').style.transition="0s ease";
-        document.getElementById('loginPage').style.left = "300%";
-      }
 
+        document.getElementById('loginPage').style.left = "200%";
+
+      } else if (from === 1) {
+        document.getElementById('mainPage').style.width = '0%';
+        //document.getElementById('loginPage').style.transition="0s ease";
+        if (to === 0)
+          document.getElementById('mainPage').style.left = "-20%";
+        else
+          document.getElementById('mainPage').style.left = "200%";
+      }
     }
 
   </script>
