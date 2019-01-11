@@ -11,8 +11,9 @@
         border-radius: 35%;
         border-color: rgba(112, 112, 112, 0.7);
         cursor: pointer;
-        padding: 8px;
-        font-size: 15px;
+        padding: 6px;
+        font-size: calc(10px + 0.4vw);
+        margin:5px; 
       }
 
       head,
@@ -128,13 +129,16 @@
         overflow-y: auto;
         max-width: 90%;
         margin: auto;
-        font-size: 12px;
+        font-size: calc(10px + 0.5vw);
       }
 
       .table_header {
+        font-size:calc(10px + 0.8vw);
         text-align: center;
       }
-
+      .userInfoButtonConfig{
+        
+      }
       td,
       th {
         border: 1px solid black;
@@ -186,8 +190,8 @@
       }
 
       .rewardImageDes {
-        font-size: 14px;
-        height: 40px;
+        font-size: calc(7px + 1.5vw);
+        padding: 0.3vw;
         text-align: center;
       }
 
@@ -212,7 +216,6 @@
       }
 
       /* Clearfix (clear floats) */
-
       .row::after {
         content: "";
         clear: both;
@@ -273,18 +276,18 @@
 
       </div>
       <br>
-      <div id="totalPoints" style="position:relative;left:10%;"></div>
+      <b><div id="totalPoints" style="position:relative;left:10%;font-size:calc(15px + 0.4vw);"></div></b>
       <br>
       <div style='text-align: center;'>
-        <button onclick="appendData();updateTotalPoints();" class="orange_white" style="font-size:11px;padding:8px;margin:5px;">Append Data</button>
-        <button onclick="removeData();updateTotalPoints();" class="orange_white" style="font-size:11px;padding:8px;margin:5px;">Remove Data</button><br>
-        <button onclick="onSave();" class="green_black" style="font-size:11px;padding:8px;margin:5px;">Save Data</button>
-        <button onclick="deleteUser();" class="red_white" style="font-size:11px;padding:8px;margin:5px;">Delete User</button>
+        <button onclick="appendData();updateTotalPoints();" class="orange_white userInfoButtonConfig">Append Data</button>
+        <button onclick="removeData();updateTotalPoints();" class="orange_white userInfoButtonConfig">Remove Data</button><br>
+        <button onclick="onSave();" class="green_black userInfoButtonConfig">Save Data</button>
+        <button onclick="deleteUser();" class="red_white userInfoButtonConfig">Delete User</button>
       </div>
     </div>
 
     <div id="mainPage" class="mainPage">
-      <div style="font-size:22px;padding:10px;left:10%;">
+      <div style="font-size:calc(15px + 0.7vw);padding:10px;left:10%;">
         User List
       </div>
       <div style="overflow-y:auto;max-height:70%;">
@@ -316,7 +319,7 @@
 
 
     <div id="rewardPage" class="rewardPage">
-      <div style="font-size:22px;padding:10px;left:10%;color:black;">
+      <div style="font-size:calc(15px + 0.7vw);padding:10px;left:10%;color:black;">
         Edit Reward
       </div>
       <div style="overflow:auto;max-width:100%;max-height:80%;">
@@ -373,19 +376,17 @@
         <div class="column1">
           <img src="https://i.imgur.com/eOtpqQv.jpg" alt="Snow" style="width:100%;" class="rewardImage">
           <div style="font-size:15px;height:25px;"><b>
-      test dadasd asd 
+      
     </b></div>
         </div>
         <div class="column2">
           <img src="https://i.imgur.com/eOtpqQv.jpg.jpg" alt="Forest" style="width:100%;" class="rewardImage">
           <div><b>
-      test dadasd asd 
+      
     </b></div>
         </div>
       </div>
     </div>
-
-
 
   </body>
   
@@ -607,7 +608,7 @@
 
       arr.forEach(function(name, index) {
 
-        temp.innerHTML += '<tr><th>' + obj[name].compName + '</th> <th>' + name + '</th> <th>' + obj[name].tp + '</th><th><button id="userInfoButton' + index + '" onclick="onClickUserInfoButton(\'' + name + '\',' + index + ');">></button></th></tr>';
+        temp.innerHTML += '<tr><th>' + obj[name].compName + '</th> <th>' + name + '</th> <th>' + obj[name].tp + '</th><th><button id="userInfoButton' + index + '" style="left:50%;position:relative;transform:translate(-50%);" onclick="onClickUserInfoButton(\'' + name + '\',' + index + ');">>></button></th></tr>';
       });
 
       temp.innerHTML += '<tr id="newUserData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="true"></td> <td contenteditable="true"></td> </td>';
