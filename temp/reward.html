@@ -90,6 +90,36 @@
         padding: 25px;
       }
 
+      .previewRewardPage {
+        width: 0%;
+        height: 80%;
+        position: absolute;
+        margin: 0;
+        transform: translate(-50%, -50%);
+        left: -20%;
+        top: 50%;
+        opacity: 1;
+        overflow: hidden;
+        transition: 1.0s ease;
+        background-color: rgba(255, 255, 255, 0.65);
+        padding: 25px;
+      }
+
+      .rewardPage {
+        width: 0%;
+        height: 80%;
+        position: absolute;
+        margin: 0;
+        transform: translate(-50%, -50%);
+        left: -20%;
+        top: 50%;
+        opacity: 1;
+        overflow: hidden;
+        transition: 1.0s ease;
+        background-color: rgba(255, 255, 255, 0.65);
+        padding: 25px;
+      }
+
       .table1,
       .tableMainPage {
         font-family: arial, sans-serif;
@@ -146,6 +176,54 @@
         left: 10%;
         top: 5%;
         z-index: 1;
+      }
+
+
+      .rewardImage{
+        border-radius: 15%;
+        border-color: grey;
+        border-width: 5px;
+        border-style: groove;
+      }
+      .rewardImageDes{
+        font-size:14px;height:40px;
+        text-align:center;
+      }
+
+      .column1 {
+        float: right;
+        width: 45%;
+        padding: 5px;
+      }
+
+      .column2 {
+        float: left;
+        width: 45%;
+        padding: 5px;
+      }
+      .columnMid{
+        width: 80%;
+        left:50%;
+        transform:translate(-50%);
+        position:relative;
+        padding: 5px;
+      }
+
+      /* Clearfix (clear floats) */
+
+      .row::after {
+        content: "";
+        clear: both;
+        display: table;
+      }
+
+      /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+
+      @media screen and (max-width: 500px) {
+        .co,
+        .dd {
+          width: 100%;
+        }
       }
 
     </style>
@@ -228,8 +306,94 @@
       </div>
       <br>
       <button id="addUser" onclick="addNewUser();" style="position:relative;left:10%;" class="green_black">Add New User</button>
+      <button id="editReward" onclick="rewardPageSetup();" style="position:relative;left:10%;" class="orange_white">Edit Reward</button>
+      <button id="previewReward" onclick="previewRewardPageSetup();" style="position:relative;left:10%;" class="orange_white">Preview Reward</button>
+    </div>
+
+
+
+
+    <div id="rewardPage" class="rewardPage">
+      <div style="font-size:22px;padding:10px;left:10%;color:black;">
+        Edit Reward
+      </div>
+      <div style="overflow:auto;max-width:100%;max-height:80%;">
+        <table class="tableMainPage" id="tableMainPage">
+          <tr>
+            <th class='table_header'>Image URL</th>
+            <th class='table_header'>Description</th>
+          </tr>
+          <tr>
+            <th class='table_header' contenteditable="true" id="img1"></th>
+            <th class='table_header' contenteditable="true" id="des1"></th>
+          </tr>
+          <tr>
+            <th class='table_header' contenteditable="true" id="img2"></th>
+            <th class='table_header' contenteditable="true" id="des2"></th>
+          </tr>
+          <tr>
+            <th class='table_header' contenteditable="true" id="img3"></th>
+            <th class='table_header' contenteditable="true" id="des3"></th>
+          </tr>
+          <tr>
+            <th class='table_header' contenteditable="true" id="img4"></th>
+            <th class='table_header' contenteditable="true" id="des4"></th>
+          </tr>
+          <tr>
+            <th class='table_header' contenteditable="true" id="img5"></th>
+            <th class='table_header' contenteditable="true" id="des5"></th>
+          </tr>
+          <tr>
+            <th class='table_header' contenteditable="true" id="img6"></th>
+            <th class='table_header' contenteditable="true" id="des6"></th>
+          </tr>
+          <tr>
+            <th class='table_header' contenteditable="true" id="img7"></th>
+            <th class='table_header' contenteditable="true" id="des7"></th>
+          </tr>
+          <tr>
+            <th class='table_header' contenteditable="true" id="img8"></th>
+            <th class='table_header' contenteditable="true" id="des8"></th>
+          </tr>
+        </table>
+      </div>
+      <br>
+      <button class="green_black" style="left:10%;position:relative;" onclick="saveReward()">
+        Save
+        </button>
 
     </div>
+
+
+
+    <div id="previewRewardPage" class="previewRewardPage" style="overflow-y:auto;">
+    
+      <div class="row">
+        <div class="column1">
+          <img src="https://i.imgur.com/eOtpqQv.jpg" alt="Snow" style="width:100%;" class="rewardImage">
+          <div style="font-size:15px;height:25px;"><b>
+      test dadasd asd 
+    </b></div>
+        </div>
+        <div class="column2">
+          <img src="https://i.imgur.com/eOtpqQv.jpg.jpg" alt="Forest" style="width:100%;" class="rewardImage">
+          <div><b>
+      test dadasd asd 
+    </b></div>
+        </div>
+      </div>
+
+
+
+
+
+
+
+
+
+
+    </div>
+
 
 
   </body>
@@ -241,7 +405,8 @@
       isCreatingNewUser = false,
       newCompName = '',
       newLoginCredential = '',
-      isDeletingUser;
+      isDeletingUser,
+      isPreviewingReward = false;
 
 
 
@@ -249,7 +414,8 @@
       oldUserLoginData = "",
       _data;
 
-    transition(0, 1);
+    previewRewardPageSetup();
+
     document.getElementById("loginAdmin").addEventListener("keyup", function(event) {
 
       event.preventDefault();
@@ -269,6 +435,84 @@
       }
     });
 
+    function rewardPageSetup() {
+      transition(3, 1);
+      socket.emit('retrieveReward', '');
+    }
+
+    function previewRewardPageSetup() {
+      transition(4, 1);
+      isPreviewingReward = true;
+      socket.emit('retrieveReward', '');
+    }
+
+    function saveReward() {
+      let temp = [],
+        temp2;
+
+      for (let loop = 1; loop <= 8; loop++) {
+        temp.push(document.getElementById('img' + loop).innerHTML);
+        temp.push(document.getElementById('des' + loop).innerHTML);
+
+      }
+      console.log(temp);
+      socket.emit('saveReward', JSON.stringify(temp));
+    }
+
+    socket.on('retrieveReward', function(e) {
+      console.log(e);
+      //['url','des']
+      e = JSON.parse(e);
+      let temp2 = 0;
+
+
+		if (isPreviewingReward) {
+    	
+      document.getElementById('previewRewardPage').innerHTML = '<div class="row">';
+      
+    
+      for (let x=0;x<=16;x+=4){
+      
+      if (e[x]&&e[x+2]&&e[x]!==""&&e[x+2]!==""){
+      document.getElementById('previewRewardPage').innerHTML += '<div class="column1"> <img src="'+e[x]+'" alt="Snow" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>'+e[x+1]+' </b></div> </div> ';
+      
+
+      document.getElementById('previewRewardPage').innerHTML +='<div class="column2"> <img src="'+e[x+2]+'" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>'+e[x+3]+'</b></div>';
+      }
+      else if (e[x]&&e[x]!=="") {
+      	document.getElementById('previewRewardPage').innerHTML += '<div class="columnMid"> <img src="'+e[x]+'" alt="Snow" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>'+e[x+1]+' </b></div> </div> ';
+      
+      }
+      else if (e[x+2]&&e[x+2]!==""){
+      	document.getElementById('previewRewardPage').innerHTML +='<div class="columnMid"> <img src="'+e[x+2]+'" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>'+e[x+3]+'</b></div>';
+        console.log('ads');
+      }
+      document.getElementById('previewRewardPage').innerHTML += '</div>';
+      
+      }
+
+      
+      
+      
+      
+    	
+      isPreviewingReward = false;
+      return;
+    }
+	
+
+
+
+      for (let temp = 1; temp <= 8; temp++) {
+          document.getElementById('img' + temp).innerHTML = e[temp2];
+          document.getElementById('des' + temp).innerHTML = e[temp2 + 1];     
+        temp2 += 2;
+      }
+      
+
+
+    });
+
     function backButton() {
       clearMainPage();
       clearUserInfoPage();
@@ -278,6 +522,12 @@
       } else if (currentView == 1) {
         clearMainPage();
         transition(0, 1);
+      } else if (currentView == 3) {
+        mainPageSetup();
+        transition(1, 3);
+      } else if (currentView == 4) {
+        mainPageSetup();
+        transition(1, 4);
       }
 
     }
@@ -525,6 +775,14 @@
 
         document.getElementById('mainPage').style.width = '80%';
         document.getElementById('mainPage').style.left = "50%";
+      } else if (to === 3) {
+
+        document.getElementById('rewardPage').style.width = '80%';
+        document.getElementById('rewardPage').style.left = "50%";
+      } else if (to === 4) {
+
+        document.getElementById('previewRewardPage').style.width = '80%';
+        document.getElementById('previewRewardPage').style.left = "50%";
       }
 
       if (from === 2) {
@@ -546,6 +804,16 @@
           document.getElementById('mainPage').style.left = "-20%";
         else
           document.getElementById('mainPage').style.left = "200%";
+      } else if (from === 3) {
+        document.getElementById('rewardPage').style.width = '0%';
+        // document.getElementById('userInfo').style.transition="0s ease";
+        document.getElementById('rewardPage').style.left = "-20%";
+
+      } else if (from === 4) {
+        document.getElementById('previewRewardPage').style.width = '0%';
+        // document.getElementById('userInfo').style.transition="0s ease";
+        document.getElementById('previewRewardPage').style.left = "-20%";
+
       }
     }
 
