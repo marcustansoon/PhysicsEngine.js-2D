@@ -178,16 +178,17 @@
         z-index: 1;
       }
 
-
-      .rewardImage{
+      .rewardImage {
         border-radius: 15%;
         border-color: grey;
         border-width: 5px;
         border-style: groove;
       }
-      .rewardImageDes{
-        font-size:14px;height:40px;
-        text-align:center;
+
+      .rewardImageDes {
+        font-size: 14px;
+        height: 40px;
+        text-align: center;
       }
 
       .column1 {
@@ -201,11 +202,12 @@
         width: 45%;
         padding: 5px;
       }
-      .columnMid{
+
+      .columnMid {
         width: 80%;
-        left:50%;
-        transform:translate(-50%);
-        position:relative;
+        left: 50%;
+        transform: translate(-50%);
+        position: relative;
         padding: 5px;
       }
 
@@ -367,7 +369,6 @@
 
 
     <div id="previewRewardPage" class="previewRewardPage" style="overflow-y:auto;">
-    
       <div class="row">
         <div class="column1">
           <img src="https://i.imgur.com/eOtpqQv.jpg" alt="Snow" style="width:100%;" class="rewardImage">
@@ -382,21 +383,13 @@
     </b></div>
         </div>
       </div>
-
-
-
-
-
-
-
-
-
-
     </div>
 
 
 
   </body>
+  
+  
   <script>
     let socket = io('https://charm-dagger.glitch.me/'),
       arr,
@@ -447,8 +440,11 @@
     }
 
     function saveReward() {
+    
       let temp = [],
         temp2;
+        
+        if (!confirm("Confirm to save the new Configuration?")){return;}
 
       for (let loop = 1; loop <= 8; loop++) {
         temp.push(document.getElementById('img' + loop).innerHTML);
@@ -466,54 +462,46 @@
       let temp2 = 0;
 
 
-		if (isPreviewingReward) {
-    	
-      document.getElementById('previewRewardPage').innerHTML = '<div class="row">';
-      
-    
-      for (let x=0;x<=16;x+=4){
-      
-      if (e[x]&&e[x+2]&&e[x]!==""&&e[x+2]!==""){
-      document.getElementById('previewRewardPage').innerHTML += '<div class="column1"> <img src="'+e[x]+'" alt="Snow" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>'+e[x+1]+' </b></div> </div> ';
-      
+      if (isPreviewingReward) {
 
-      document.getElementById('previewRewardPage').innerHTML +='<div class="column2"> <img src="'+e[x+2]+'" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>'+e[x+3]+'</b></div>';
-      }
-      else if (e[x]&&e[x]!=="") {
-      	document.getElementById('previewRewardPage').innerHTML += '<div class="columnMid"> <img src="'+e[x]+'" alt="Snow" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>'+e[x+1]+' </b></div> </div> ';
-      
-      }
-      else if (e[x+2]&&e[x+2]!==""){
-      	document.getElementById('previewRewardPage').innerHTML +='<div class="columnMid"> <img src="'+e[x+2]+'" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>'+e[x+3]+'</b></div>';
-        console.log('ads');
-      }
-      document.getElementById('previewRewardPage').innerHTML += '</div>';
-      
-      }
+        document.getElementById('previewRewardPage').innerHTML = '<div class="row">';
 
-      
-      
-      
-      
-    	
-      isPreviewingReward = false;
-      return;
-    }
-	
 
+        for (let x = 0; x <= 16; x += 4) {
+
+          if (e[x] && e[x + 2] && e[x] !== "" && e[x + 2] !== "") {
+            document.getElementById('previewRewardPage').innerHTML += '<div class="column1"> <img src="' + e[x] + '" alt="Snow" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 1] + ' </b></div> </div> ';
+
+
+            document.getElementById('previewRewardPage').innerHTML += '<div class="column2"> <img src="' + e[x + 2] + '" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 3] + '</b></div>';
+          } else if (e[x] && e[x] !== "") {
+            document.getElementById('previewRewardPage').innerHTML += '<div class="columnMid"> <img src="' + e[x] + '" alt="Snow" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 1] + ' </b></div> </div> ';
+
+          } else if (e[x + 2] && e[x + 2] !== "") {
+            document.getElementById('previewRewardPage').innerHTML += '<div class="columnMid"> <img src="' + e[x + 2] + '" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 3] + '</b></div>';
+            console.log('ads');
+          }
+          document.getElementById('previewRewardPage').innerHTML += '</div>';
+
+        }
+
+        isPreviewingReward = false;
+        return;
+      }
 
 
       for (let temp = 1; temp <= 8; temp++) {
-          document.getElementById('img' + temp).innerHTML = e[temp2];
-          document.getElementById('des' + temp).innerHTML = e[temp2 + 1];     
+        document.getElementById('img' + temp).innerHTML = e[temp2];
+        document.getElementById('des' + temp).innerHTML = e[temp2 + 1];
         temp2 += 2;
       }
-      
 
 
     });
 
     function backButton() {
+    	if (currentView === 1&&!confirm("Confirm to log out?")){return;}
+      
       clearMainPage();
       clearUserInfoPage();
       if (currentView === 2) {
@@ -561,14 +549,14 @@
     }
 
     function addNewUser() {
-
+			
       let newData = document.getElementById("newUserData"),
         temp = document.getElementById('tableMainPage');
 
+			if (!confirm("Confirm to add new user with Company Name '"+ newData.childNodes[1].innerHTML+"' and Login Credential of '"+newData.childNodes[3].innerHTML+"'")){return;}
 
-      newData.parentNode.removeChild(newData);
-
-
+			newData.parentNode.removeChild(newData);
+      
       temp.innerHTML += '<tr><th>' + newData.childNodes[1].innerHTML + '</th> <th>' + newData.childNodes[3].innerHTML + '</th> <th>' + 0 + '</th><th><button>></button></th></tr>';
 
       temp.innerHTML += '<tr id="newUserData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="true"></td> <td contenteditable="true"></td> </td>';
@@ -634,6 +622,8 @@
     }
 
     function deleteUser() {
+    	if (!confirm("Confirm to delete this user?")){return;}
+      
       isDeletingUser = true;
       newLoginCredential = document.getElementById('userLoginID').value;
       socket.emit('readData', '');
@@ -709,6 +699,7 @@
     }
 
     function onSave() {
+    	if (!confirm("Confirm to save the new User Infomation?")){return;}
       socket.emit('readData', '');
     }
 
