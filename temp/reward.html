@@ -5,6 +5,30 @@
 
   <head>
     <style>
+      /* width */
+
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      /* Track */
+
+      ::-webkit-scrollbar-track {
+        background: rgba(229, 229, 229, 0.3);
+      }
+
+      /* Handle */
+
+      ::-webkit-scrollbar-thumb {
+        background: rgba(147, 147, 188, 0.6);
+      }
+
+      /* Handle on hover */
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+      }
+
       button {
         border-style: solid;
         border-width: 2px;
@@ -56,6 +80,8 @@
         border: 3px solid grey;
         padding: 25px;
         overflow-x: hidden;
+        border-radius: 5%;
+        border-style: groove;
       }
 
       .userInfo {
@@ -74,6 +100,10 @@
         background-color: rgba(255, 255, 255, 0.65);
         padding: 12px;
         padding-top: 0px;
+        border-radius: 3%;
+        border-width: 0.6vw;
+        border-color: grey;
+        border-style: groove;
       }
 
       .mainPage {
@@ -89,6 +119,10 @@
         transition: 1.0s ease;
         background-color: rgba(255, 255, 255, 0.65);
         padding: 25px;
+        border-radius: 3%;
+        border-width: 0.6vw;
+        border-color: grey;
+        border-style: groove;
       }
 
       .previewRewardPage {
@@ -104,6 +138,10 @@
         transition: 1.0s ease;
         background-color: rgba(255, 255, 255, 0.65);
         padding: 25px;
+        border-radius: 3%;
+        border-width: 0.6vw;
+        border-color: grey;
+        border-style: groove;
       }
 
       .rewardPage {
@@ -119,6 +157,10 @@
         transition: 1.0s ease;
         background-color: rgba(255, 255, 255, 0.65);
         padding: 25px;
+        border-radius: 3%;
+        border-width: 0.6vw;
+        border-color: grey;
+        border-style: groove;
       }
 
       .table1,
@@ -513,7 +555,7 @@
 
       if (isPreviewingReward) {
 
-        document.getElementById('previewRewardPage').innerHTML = '<div class="row">';
+        document.getElementById('previewRewardPageEditable').innerHTML = '<div class="row">';
 
 
         for (let x = 0; x <= 16; x += 4) {
