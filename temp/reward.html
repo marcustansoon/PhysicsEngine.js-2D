@@ -229,7 +229,7 @@
 
          .green_black {
             background-color: #48e218;
-            color: back;
+            color: black;
          }
 
          .red_white {
@@ -415,13 +415,12 @@
          </div>
          <br>
          <b><div id="totalPoints" style="position:relative;left:10%;font-size:calc(15px + 0.4vw);"></div></b>
-         <br>
-         
-            <button onclick="appendData();updateTotalPoints();" class="orange_white">Append Data</button>
-            <button onclick="removeData();updateTotalPoints();" class="orange_white">Remove Data</button>
+         <br>     
+            <button onclick="appendData();updateTotalPoints();" class="orange_white" style="position:relative;left:10%;">Append Data</button>
+            <button onclick="removeData();updateTotalPoints();" class="orange_white" style="position:relative;left:10%;">Remove Data</button>
             
-            <button onclick="onSave();" class="green_black">Save Data</button>
-            <button onclick="deleteUser();" class="red_white">Delete User</button>
+            <button onclick="onSave();" class="green_black" style="position:relative;left:10%;">Save Data</button>
+            <button onclick="deleteUser();" class="red_white" style="position:relative;left:10%;">Delete User</button>
          </div>
       
 
@@ -965,12 +964,12 @@
          document.getElementById('backButton').hidden = false;
          if (to === 2) {
 
-            document.getElementById('userInfo').style.width = '80%';
+            document.getElementById('userInfo').style.width = '90%';
 
             document.getElementById('userInfo').style.left = "50%";
 
          } else if (to === 0) {
-            document.getElementById('loginPage').style.width = '50%';
+            document.getElementById('loginPage').style.width = '90%';
 
             document.getElementById('loginPage').style.left = "50%";
             document.getElementById('logo').style.width = '150px';
@@ -983,11 +982,11 @@
             document.getElementById('mainPage').style.left = "50%";
          } else if (to === 3) {
 
-            document.getElementById('rewardPage').style.width = '80%';
+            document.getElementById('rewardPage').style.width = '90%';
             document.getElementById('rewardPage').style.left = "50%";
          } else if (to === 4) {
 
-            document.getElementById('previewRewardPage').style.width = '80%';
+            document.getElementById('previewRewardPage').style.width = '90%';
             document.getElementById('previewRewardPage').style.left = "50%";
          } else if (to === 5) {
             document.getElementById('resetPasswordPage').style.width = '80%';
