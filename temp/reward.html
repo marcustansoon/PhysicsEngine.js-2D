@@ -76,11 +76,11 @@
             max-width: 320px;
             position: absolute;
             top: 50%;
-            left: 200%;
+            left: 50%;
             margin: 0;
             opacity: 1;
             overflow: hidden;
-            transition: 1.5s ease;
+            transition: 1.0s ease;
             -ms-transform: translate(-50%, -50%);
             transform: translate(-50%, -50%);
             background-color: rgb(249, 251, 255, 0.7);
@@ -332,7 +332,7 @@
             box-shadow: 5px 3px 15px black;
             z-index: 1;
             opacity: 0.85;
-            transition: 1.5s ease;
+            transition: 1s ease;
          }
 
       </style>
@@ -967,20 +967,26 @@
 
 
       document.getElementById("logo").addEventListener("transitionend", function() {
-         if (document.getElementById("logo").shouldBeHidden)
+         if (document.getElementById("logo").shouldBeHidden) {
             document.getElementById("logo").hidden = true;
+            document.getElementById("loginPage").hidden = true;
+         }
 
       });
-      function logoHandler(){
-      
-            document.getElementById('loginPage').style.width = '50%';
-            document.getElementById('loginPage').style.left = "50%";
-            document.getElementById('logo').style.width = '150px';
-            document.getElementById('logo').style.left = "50%";
-            document.getElementById('backButton').hidden = true;
-            document.getElementById("logo").shouldBeHidden=false;
+
+      function logoHandler() {
+
+         document.getElementById('loginPage').style.width = '50%';
+
+         document.getElementById('loginPage').style.left = "50%";
+         document.getElementById('logo').style.width = '150px';
+         document.getElementById('logo').style.left = "50%";
+         document.getElementById('backButton').hidden = true;
+         document.getElementById("logo").shouldBeHidden = false;
+
+
       }
-     
+
       function transition(to, from) { //back pressed
          currentView = to;
          document.getElementById('backButton').hidden = false;
@@ -991,8 +997,10 @@
             document.getElementById('userInfo').style.left = "50%";
 
          } else if (to === 0) {
-         	document.getElementById("logo").hidden = false;
-            setTimeout(logoHandler,50);
+            document.getElementById("logo").hidden = false;
+            document.getElementById("loginPage").hidden = false;
+
+            setTimeout(logoHandler, 50);
          } else if (to === 1) {
 
             document.getElementById('mainPage').style.width = '80%';
@@ -1019,10 +1027,11 @@
 
          } else if (from === 0) {
             document.getElementById('loginPage').style.width = '0%';
+
             document.getElementById('logo').style.width = '0%';
 
 
-            document.getElementById('loginPage').style.left = "200%";
+            document.getElementById('loginPage').style.left = "50%";
             document.getElementById('logo').style.left = "50%";
             document.getElementById("logo").shouldBeHidden = true;
 
