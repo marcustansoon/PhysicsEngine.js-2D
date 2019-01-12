@@ -76,7 +76,7 @@
         transition: 1.0s ease;
         -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
-        background-color: rgb(249, 251, 255,0.7);
+        background-color: rgb(249, 251, 255, 0.7);
         border: 3px solid grey;
         padding: 25px;
         overflow-x: hidden;
@@ -277,15 +277,35 @@
       .notification {
         border-radius: 40%;
         border-style: groove;
-        border-color: black;
+        border-color: rgb(140, 140, 140);
         color: white;
-        background-color: black;
+        background-color: rgb(140, 140, 140);
         position: absolute;
         text-align: center;
         left: 42%;
         top: 50%;
         padding: 10px;
-        font-size: calc(10px + 0.5vw);
+        font-size: calc(12px + 0.5vw);
+      }
+
+      .resetPasswordPage {
+        width: 0%;
+        max-width: 300px;
+        position: absolute;
+        top: 50%;
+        left: -20%;
+        margin: 0;
+        opacity: 1;
+        overflow: hidden;
+        transition: 0.7s ease;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+        background-color: rgb(249, 251, 255, 0.7);
+        border: 3px solid grey;
+        padding: 25px;
+        overflow-x: hidden;
+        border-radius: 5%;
+        border-style: groove;
       }
 
     </style>
@@ -344,7 +364,7 @@
     </div>
 
     <div id="mainPage" class="mainPage">
-      <div style="font-size:calc(15px + 0.7vw);padding:10px;left:15%;position:relative;"><b>
+      <div style="font-size:calc(15px + 0.7vw);padding:10px;text-align:center;position:relative;font-family:verdana;"><b>
         User List</b>
       </div>
       <div style="overflow-y:auto;max-height:70%;">
@@ -370,13 +390,14 @@
       <button id="addUser" onclick="addNewUser();" style="position:relative;left:10%;" class="green_black">Add New User</button>
       <button id="editReward" onclick="rewardPageSetup();" style="position:relative;left:10%;" class="orange_white">Edit Reward</button>
       <button id="previewReward" onclick="previewRewardPageSetup();" style="position:relative;left:10%;" class="orange_white">Preview Reward</button>
+      <button id="resetPassword" onclick="resetPasswordPage();" style="position:relative;left:10%;" class="red_white">Reset Password</button>
     </div>
 
 
 
 
     <div id="rewardPage" class="rewardPage">
-      <div style="font-size:calc(15px + 0.7vw);padding:10px;left:15%;color:black;position:relative;"><b>
+      <div style="font-size:calc(15px + 0.7vw);padding:10px;text-align:center;color:black;position:relative;font-family:verdana;"><b>
         Edit Reward</b>
       </div>
       <div style="overflow:auto;max-width:100%;max-height:80%;">
@@ -429,7 +450,7 @@
 
 
     <div id="previewRewardPage" class="previewRewardPage" style="overflow-y:auto;">
-      <div style="font-size:calc(15px + 0.7vw);padding:10px;left:15%;color:black;position:relative;"><b>
+      <div style="font-size:calc(15px + 0.7vw);padding:10px;color:black;position:relative;font-family:verdana;text-align:center;"><b>
         Redeemable Rewards</b>
       </div>
       <div id="previewRewardPageEditable">
@@ -451,8 +472,28 @@
     </div>
 
 
-    <div class="notification" id="notification" hidden>Saved !!!</div>
 
+
+
+    <div class="resetPasswordPage" id="resetPasswordPage">
+      <div style="font-size:calc(14px + 0.7vw);padding:10px;color:black;position:relative;font-family:verdana;text-align:center;"><b>
+        Reset Password</b>
+      </div>
+
+      Old Username:<input type="text" id="oldUsername" style="left:5%;position:relative;"><br><br> Old Password:<input type="password" id="oldPassword" style="left:6%;position:relative;"><br><br><br> New Username:<input type="text" id="newUsername" style="left:4%;position:relative;"><br><br>      New Password:<input type="password" id="newPassword" style="left:5%;position:relative;"><br>
+
+      <div style="text-align:center;">
+
+        <br>
+        <button class="red_white" onclick="resetPassword()" style="text-align:center;">
+          Reset
+        </button>
+      </div>
+    </div>
+
+
+    <b><div class="notification" id="notification" hidden>Saved !!!</div>
+</b>
 
   </body>
 
@@ -475,6 +516,39 @@
       _data;
 
     transition(0, 1);
+
+
+    function resetPasswordPage() {
+      transition(5, 1);
+    }
+
+    function resetPassword() {
+      let temp = {
+
+        'oldName': document.getElementById('oldUsername').value,
+        'newName': document.getElementById('newUsername').value,
+        'newPassword': document.getElementById('newPassword').value,
+        'oldPassword': document.getElementById('oldPassword').value
+      };
+
+      socket.emit('adminReset', JSON.stringify(temp));
+      document.getElementById('oldPassword').value = "";
+      document.getElementById('newPassword').value = "";
+      document.getElementById('newUsername').value = "";
+      document.getElementById('oldUsername').value = "";
+    }
+    socket.on('resetSuccess', function(e) {
+      transition(0, 5);
+      showNotification(t, 'Reset<br>Successfully', '#59f979');
+    });
+
+    socket.on('resetFail', function(e) {
+      showNotification(t, 'Reset Failed', 'red');
+    });
+
+
+
+
     document.getElementById("loginAdmin").addEventListener("keyup", function(event) {
 
       event.preventDefault();
@@ -512,18 +586,23 @@
       elem.innerHTML = text;
       elem.style.color = color;
       elem.hidden = false;
-      let x = setInterval(function() {
+      if (elem.loop) {
+        clearInterval(elem.loop);
+        elem.loop = null;
+      }
+      elem.loop = setInterval(function() {
         console.log('asd');
-        elem.style.opacity -= 0.03;
-        elem.style.top = ((50 - count / 2)) + "%";
+        elem.style.opacity -= 0.02;
+        elem.style.top = ((50 - count / 3)) + "%";
         count++;
         if (count > 45) {
-          clearInterval(x);
-          x = null;
+          clearInterval(elem.loop);
+          elem.loop = null;
           console.log('cc');
           elem.style.opacity = 1;
           elem.style.top = 50 + "%";
           elem.hidden = true;
+          elem.isRunning = false;
         }
       }, 30);
     }
@@ -609,6 +688,9 @@
       } else if (currentView == 4) {
         mainPageSetup();
         transition(1, 4);
+      } else if (currentView == 5) {
+        mainPageSetup();
+        transition(1, 5);
       }
 
     }
@@ -877,6 +959,10 @@
 
         document.getElementById('previewRewardPage').style.width = '80%';
         document.getElementById('previewRewardPage').style.left = "50%";
+      } else if (to === 5) {
+
+        document.getElementById('resetPasswordPage').style.width = '80%';
+        document.getElementById('resetPasswordPage').style.left = "50%";
       }
 
       if (from === 2) {
@@ -908,7 +994,13 @@
         // document.getElementById('userInfo').style.transition="0s ease";
         document.getElementById('previewRewardPage').style.left = "-20%";
 
+      } else if (from === 5) {
+        document.getElementById('resetPasswordPage').style.width = '0%';
+        // document.getElementById('userInfo').style.transition="0s ease";
+        document.getElementById('resetPasswordPage').style.left = "-20%";
+
       }
+
     }
 
   </script>
