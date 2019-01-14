@@ -431,8 +431,6 @@
       <button onclick="deleteUser();" class="red_white" style="position:relative;left:10%;">Delete User</button>
     </div>
 
-
-
     <div id="mainPage" class="mainPage">
       <div style="font-size:calc(15px + 0.7vw);padding:10px;text-align:center;position:relative;font-family:verdana;"><b>
         User List</b>
@@ -551,12 +549,11 @@
 
 
     <b><div class="notification" id="notification" hidden>Saved !!!</div></b>
-
   </body>
   <script>
     let socket = io('https://charm-dagger.glitch.me/'),
       arr,
-      currentView = 0,
+      currentView = 1,
       userList,
       isCreatingNewUser = false,
       newCompName = '',
@@ -569,8 +566,6 @@
       _data,
       previousPrevRewardData;
 
-    transition(0, 1); //display login page at startup
-
     function showNotification(elem, text, color) {
       let count = 0;
       elem.style.opacity = 1.2;
@@ -582,14 +577,14 @@
         elem.loop = null;
       }
       elem.loop = setInterval(function() {
-        console.log('asd');
+        console.log('noti');
         elem.style.opacity -= 0.015;
         elem.style.top = ((50 - count / 2.5)) + "%";
         count++;
         if (count > 65) {
           clearInterval(elem.loop);
           elem.loop = null;
-          console.log('cc');
+          console.log('noti cleared');
           elem.style.opacity = 1;
           elem.style.top = 50 + "%";
           elem.hidden = true;
@@ -622,6 +617,47 @@
       }
     }
 
+    function heartBeat() { //emit heartbeat every period
+      socket.emit('heartBeat');
+    }
+    socket.on('heartBeat', function() { //increment heartbeat
+      heartBeatCount++;
+    });
+
+    function checkHeartBeat() { //check if heartbeat no. below threshold
+      if (heartBeatCount < 3) { //if so, disconnect and refresh page
+        console.log('disconnected/refresh page due to poor network');
+        showNotification(t, 'Connection Failed', '#ff3700');
+        setTimeout(function() {
+          document.body.innerHTML += '<meta http-equiv="refresh" content="2">';
+          socket.disconnect();
+        }, 2000);
+
+      } else {
+        heartBeatCount = 0;
+        console.log('good network connection');
+      }
+
+    }
+
+    let heartBeatCount = 0,
+      checkerInterval = 0;
+    requestAnimationFrame(checker);
+
+    function checker() { //auto disconnect due to poor network
+      checkerInterval++;
+      setTimeout(function() {
+        requestAnimationFrame(checker)
+      }, 2000);
+      requestAnimationFrame(heartBeat);
+      if (checkerInterval >= 5) {
+        checkerInterval = 0;
+        requestAnimationFrame(checkHeartBeat);
+      }
+    }
+
+    document.onkeydown = function() {}
+
 
     function resetPasswordPage() { //move to resetPasswrod page
       transition(5, 1);
@@ -647,7 +683,7 @@
     });
 
     socket.on('resetFail', function(e) { //on reset fail(wrong credential), display notice
-      showNotification(t, 'Reset Failed', 'red');
+      showNotification(t, 'Reset Failed', '#ff3700');
     });
 
     //auto login when enter key is pressed (login page)
@@ -791,7 +827,13 @@
 
     socket.on('connect', function() {
       console.log('connected');
+      transition(0, currentView); //display login page at startup
+
     });
+    socket.on('disconnect'),
+      function() {
+        console.log('disconnect');
+      };
     socket.on('loginSuccess', function(e) {
       console.log('login Success');
       clearMainPage();
@@ -973,7 +1015,7 @@
       totalPoints.innerHTML = "Total Points : " + sum;
       return sum;
     }
-    document.onkeydown = function() {}
+
 
 
     function transition(to, from) { //back pressed
