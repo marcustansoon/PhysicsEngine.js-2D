@@ -91,7 +91,7 @@
         margin: 0;
         opacity: 1;
         overflow: hidden;
-        transition: 2.0s ease;
+        transition: 1.5s ease;
         transform: translate(-50%, -50%);
         background-color: rgba(249, 251, 255, 0.7);
         border: 3px solid grey;
@@ -116,7 +116,7 @@
         opacity: 1;
         overflow-x: hidden;
         overflow-y: auto;
-        transition: 2.0s ease;
+        transition: 1.5s ease;
         background-color: rgba(255, 255, 255, 0.65);
         padding: 12px;
         padding-top: 0px;
@@ -139,7 +139,7 @@
         top: 50%;
         opacity: 1;
         overflow: hidden;
-        transition: 2.0s ease;
+        transition: 1.5s ease;
         background-color: rgba(255, 255, 255, 0.65);
         padding: 25px;
         border-radius: 3%;
@@ -161,7 +161,7 @@
         top: 50%;
         opacity: 1;
         overflow: hidden;
-        transition: 2.0s ease;
+        transition: 1.5s ease;
         background-color: rgba(255, 255, 255, 0.65);
         padding: 25px;
         border-radius: 3%;
@@ -183,7 +183,7 @@
         top: 50%;
         opacity: 1;
         overflow: hidden;
-        transition: 2.0s ease;
+        transition: 1.5s ease;
         background-color: rgba(255, 255, 255, 0.65);
         padding: 25px;
         border-radius: 3%;
@@ -371,7 +371,7 @@
         box-shadow: 5px 3px 15px black;
         z-index: 1;
         opacity: 0.85;
-        transition: 2.2s ease;
+        transition: 2.0s ease;
       }
 
     </style>
@@ -598,12 +598,12 @@
         return; //confirmation to log out on main page
       }
       clearMainPage();
-      clearUserInfoPage();
+      //clearUserInfoPage();
       if (currentView === 2) {
         mainPageSetup();
         transition(1, 2);
       } else if (currentView == 1) {
-        clearMainPage();
+        //clearMainPage();
         transition(0, 1);
       } else if (currentView == 3) {
         mainPageSetup();
@@ -650,7 +650,7 @@
         requestAnimationFrame(checker)
       }, 2000);
       requestAnimationFrame(heartBeat);
-      if (checkerInterval >= 5) {
+      if (checkerInterval >= 10) {
         checkerInterval = 0;
         requestAnimationFrame(checkHeartBeat);
       }
