@@ -1,2211 +1,1097 @@
 <!DOCTYPE html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 <html>
-  <meta name="viewport" content="width=device-width,height=device-height, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Delius" />
+   <meta name="viewport" content="width=device-width,height=device-height, initial-scale=1">
+   <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Delius" />
 
-  <head>
-    <style>
-      * {
-        font-family: Delius;
-      }
+   <head>
+      <style>
+         * {
+            font-family: Delius;
+         }
 
-      /* make image undraggable */
+         /* make image undraggable */
 
-      img {
-        user-drag: none;
-        user-select: none;
-        -moz-user-select: none;
-        -webkit-user-drag: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
-      }
+         img {
+            user-drag: none;
+            user-select: none;
+            -moz-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+         }
 
-      /* configuration for the scrollbar layout */
+         /* configuration for the scrollbar layout */
 
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
+         ::-webkit-scrollbar {
+            width: 8px;
+         }
 
-      ::-webkit-scrollbar-track {
-        background: rgba(229, 229, 229, 0.3);
-      }
+         ::-webkit-scrollbar-track {
+            background: rgba(229, 229, 229, 0.3);
+         }
 
-      ::-webkit-scrollbar-thumb {
-        background: rgba(147, 147, 188, 0.6);
-      }
+         black ::-webkit-scrollbar-thumb {
+            background: rgba(147, 147, 188, 0.6);
+         }
 
-      ::-webkit-scrollbar-thumb:hover {
-        background: #555;
-      }
+         ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+         }
 
-      /*configuration for buttons*/
+         /*configuration for buttons*/
 
-      button {
-        border-style: solid;
-        border-width: 2px;
-        border-radius: 25%;
-        border-color: rgba(112, 112, 112, 0.7);
-        cursor: pointer;
-        padding: 6px;
-        font-size: calc(11px + 0.4vw);
-        margin: 3px;
-      }
+         button {
+            border-style: solid;
+            border-width: 2px;
+            border-radius: 25%;
+            border-color: rgba(112, 112, 112, 0.7);
+            cursor: pointer;
+            padding: 6px;
+            font-size: calc(11px + 0.4vw);
+            margin: 3px;
+         }
 
-      /* remove padding,margin, set fill view */
+         /* remove padding,margin, set fill view */
 
-      head,
-      html,
-      body {
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        overflow-x: hidden;
-        overflow-y: hidden;
-        padding: 0px;
-        margin: 0;
-      }
+         head,
+         html,
+         body {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            overflow-x: hidden;
+            overflow-y: hidden;
+            padding: 0px;
+            margin: 0;
+         }
 
-      /* background image*/
+         /* background image*/
 
-      .bg {
-        width: 100%;
-        height: 100%;
-        left: 0px;
-        top: 0px;
-        position: absolute;
-        padding: 0px;
-        margin: 0px;
-        z-index: -1;
-        overflow: hidden;
-      }
+         .bg {
+            width: 100%;
+            height: 100%;
+            left: 0px;
+            top: 0px;
+            position: absolute;
+            padding: 0px;
+            margin: 0px;
+            z-index: -1;
+            overflow: hidden;
+         }
 
-      /*login page layout, no1 transition*/
+         /*login page layout, no1 transition*/
 
-      .loginPage {
-        width: 55%;
-        max-width: 320px;
-        position: absolute;
-        top: 50%;
-        left: 200%;
-        margin: 0;
-        opacity: 1;
-        overflow: visible;
-        transition: 1.5s ease;
-        transform: translate(-50%, -50%);
-        background-color: rgba(255, 255, 255, 0.7);
-        border: 3px solid grey;
-        padding: 25px;
-        border-radius: 5%;
-        border-style: groove;
-        box-shadow: 2px 2px 15px black;
-      }
+         .loginPage {
+            width: 55%;
+            max-width: 320px;
+            position: absolute;
+            top: 50%;
+            left: 200%;
+            margin: 0;
+            opacity: 1;
+            overflow: visible;
+            transition: 1.5s ease;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 3px solid grey;
+            padding: 25px;
+            border-radius: 5%;
+            border-style: groove;
+            box-shadow: 2px 2px 15px black;
+         }
 
-      /*user info page layout ,no.2 transition*/
+         /*user info page layout ,no.2 transition*/
 
-      .userInfo {
-        width: 90%;
-        height: 80%;
-        max-height: 90%;
-        position: absolute;
-        margin: 0;
-        transform: translate(-50%, -50%);
-        left: -200%;
-        top: 50%;
-        opacity: 1;
-        overflow-x: hidden;
-        overflow-y: auto;
-        transition: 1.5s ease;
-        background-color: rgba(255, 255, 255, 0.5);
-        padding: 12px;
-        padding-top: 0px;
-        border-radius: 3%;
-        border-width: 0.6vw;
-        border-color: grey;
-        border-style: groove;
-        box-shadow: 2px 2px 15px black;
-      }
+         .userInfo {
+            width: 90%;
+            height: 80%;
+            max-height: 90%;
+            position: absolute;
+            margin: 0;
+            transform: translate(-50%, -50%);
+            left: -200%;
+            top: 50%;
+            opacity: 1;
+            overflow-x: hidden;
+            overflow-y: auto;
+            transition: 1.5s ease;
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 12px;
+            padding-top: 0px;
+            border-radius: 3%;
+            border-width: 0.6vw;
+            border-color: grey;
+            border-style: groove;
+            box-shadow: 2px 2px 15px black;
+         }
 
-      /*main page page layout ,no.1 transition*/
+         /*main page page layout ,no.1 transition*/
 
-      .mainPage {
-        width: 80%;
-        height: 80%;
-        position: absolute;
-        margin: 0;
-        transform: translate(-50%, -50%);
-        left: -200%;
-        top: 50%;
-        opacity: 1;
-        overflow: hidden;
-        transition: 1.5s ease;
-        background-color: rgba(255, 255, 255, 0.5);
-        padding: 25px;
-        border-radius: 3%;
-        border-width: 0.6vw;
-        border-color: grey;
-        border-style: groove;
-        box-shadow: 2px 2px 15px black;
-      }
+         .mainPage {
+            width: 80%;
+            height: 80%;
+            position: absolute;
+            margin: 0;
+            transform: translate(-50%, -50%);
+            left: -200%;
+            top: 50%;
+            opacity: 1;
+            overflow: hidden;
+            transition: 1.5s ease;
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 25px;
+            border-radius: 3%;
+            border-width: 0.6vw;
+            border-color: grey;
+            border-style: groove;
+            box-shadow: 2px 2px 15px black;
+         }
 
-      /*reward page layout ,no.3 transition*/
+         /*reward page layout ,no.3 transition*/
 
-      .previewRewardPage {
-        width: 90%;
-        height: 80%;
-        position: absolute;
-        margin: 0;
-        transform: translate(-50%, -50%);
-        left: -200%;
-        top: 50%;
-        opacity: 1;
-        overflow: hidden;
-        transition: 1.5s ease;
-        background-color: rgba(255, 255, 255, 0.5);
-        padding: 25px;
-        border-radius: 3%;
-        border-width: 0.6vw;
-        border-color: grey;
-        border-style: groove;
-        box-shadow: 2px 2px 15px black;
-      }
+         .previewRewardPage {
+            width: 90%;
+            height: 80%;
+            position: absolute;
+            margin: 0;
+            transform: translate(-50%, -50%);
+            left: -200%;
+            top: 50%;
+            opacity: 1;
+            overflow: hidden;
+            transition: 1.5s ease;
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 25px;
+            border-radius: 3%;
+            border-width: 0.6vw;
+            border-color: grey;
+            border-style: groove;
+            box-shadow: 2px 2px 15px black;
+         }
 
-      /*edit reward page layout ,no.4 transition*/
+         /*edit reward page layout ,no.4 transition*/
 
-      .rewardPage {
-        width: 90%;
-        height: 80%;
-        position: absolute;
-        margin: 0;
-        transform: translate(-50%, -50%);
-        left: -200%;
-        top: 50%;
-        opacity: 1;
-        overflow: hidden;
-        transition: 1.5s ease;
-        background-color: rgba(255, 255, 255, 0.5);
-        padding: 25px;
-        border-radius: 3%;
-        border-width: 0.6vw;
-        border-color: grey;
-        border-style: groove;
-        box-shadow: 2px 2px 15px black;
-      }
+         .rewardPage {
+            width: 90%;
+            height: 80%;
+            position: absolute;
+            margin: 0;
+            transform: translate(-50%, -50%);
+            left: -200%;
+            top: 50%;
+            opacity: 1;
+            overflow: hidden;
+            transition: 1.5s ease;
+            background-color: rgba(255, 255, 255, 0.5);
+            padding: 25px;
+            border-radius: 3%;
+            border-width: 0.6vw;
+            border-color: grey;
+            border-style: groove;
+            box-shadow: 2px 2px 15px black;
+         }
 
-      .editRewardPageCustom {
-        font-size: calc(6px + 0.4vw);
-      }
+         .editRewardPageCustom {
+            font-size: calc(6px + 0.4vw);
+         }
 
-      /*table config for main page and user info page*/
+         /*table config for main page and user info page*/
 
-      .tableUserInfo,
-      .tableMainPage {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        width: 80%;
-        overflow-y: auto;
-        max-width: 90%;
-        margin: auto;
-        font-size: calc(10px + 0.5vw);
-      }
+         .tableUserInfo,
+         .tableMainPage {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 80%;
+            overflow-y: auto;
+            max-width: 90%;
+            margin: auto;
+            font-size: calc(10px + 0.5vw);
+         }
 
-      /* table header layout*/
+         /* table header layout*/
 
-      .table_header {
-        font-size: calc(10px + 0.8vw);
-        text-align: center;
-        background-color: grey;
-      }
+         .table_header {
+            font-size: calc(10px + 0.8vw);
+            text-align: center;
+            background-color: grey;
+         }
 
-      td,
-      th {
-        border: 1px solid black;
-        text-align: left;
-        padding: 6px;
-      }
+         td,
+         th {
+            border: 1px solid black;
+            text-align: left;
+            padding: 6px;
+         }
 
-      tr:nth-child(even) {
-        background-color: #dddddd;
-      }
+         tr:nth-child(even) {
+            background-color: #dddddd;
+         }
 
-      tr:nth-child(odd) {
-        background-color: white;
-      }
+         tr:nth-child(odd) {
+            background-color: white;
+         }
 
-      /* for button custom layout background*/
+         /* for button custom layout background*/
 
-      .green_black {
-        background-color: #48e218;
-        color: black;
-      }
+         .green_black {
+            background-color: #48e218;
+            color: black;
+         }
 
-      .red_white {
-        background-color: red;
-        color: white;
-        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-      }
+         .red_white {
+            background-color: red;
+            color: white;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+         }
 
-      .orange_white {
-        background-color: #ef7c28;
-        color: white;
-        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-      }
+         .orange_white {
+            background-color: #ef7c28;
+            color: white;
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+         }
 
-      /*back button configuration */
+         /*back button configuration */
 
-      .backButton {
-        background-image: url("https://i.imgur.com/SS1EJdq.png");
-        background-size: cover;
-        border-width: 0px;
-        background-color: rgba(0, 0, 0, 0);
-        width: 45px;
-        height: 45px;
-        position: absolute;
-        left: 10%;
-        top: 5%;
-        z-index: 1;
-      }
+         .backButton {
+            background-image: url("https://i.imgur.com/SS1EJdq.png");
+            background-size: cover;
+            border-width: 0px;
+            background-color: rgba(0, 0, 0, 0);
+            width: 45px;
+            height: 45px;
+            position: absolute;
+            left: 10%;
+            top: 5%;
+            z-index: 1;
+         }
 
-      /*configuration for reward image */
+         /*configuration for reward image */
 
-      .rewardImage {
-        border-radius: 15%;
-        border-color: grey;
-        border-width: 5px;
-        border-style: groove;
-      }
+         .rewardImage {
+            border-radius: 15%;
+            border-color: grey;
+            border-width: 5px;
+            border-style: groove;
+         }
 
-      /*description configuration for reward image */
+         /*description configuration for reward image */
 
-      .rewardImageDes {
-        font-size: calc(7px + 1.5vw);
-        padding: 0.3vw;
-        text-align: center;
-      }
+         .rewardImageDes {
+            font-size: calc(7px + 1.5vw);
+            padding: 0.3vw;
+            text-align: center;
+         }
 
-      /*for image prev setup*/
+         /*for image prev setup*/
 
-      .column1 {
-        float: right;
-        width: 45%;
-        padding: 5px;
-      }
+         .column1 {
+            float: right;
+            width: 45%;
+            padding: 5px;
+         }
 
-      .column2 {
-        float: left;
-        width: 45%;
-        padding: 5px;
-      }
+         .column2 {
+            float: left;
+            width: 45%;
+            padding: 5px;
+         }
 
-      .columnMid {
-        width: 80%;
-        left: 50%;
-        transform: translate(-50%);
-        position: relative;
-        padding: 5px;
-      }
+         .columnMid {
+            width: 80%;
+            left: 50%;
+            transform: translate(-50%);
+            position: relative;
+            padding: 5px;
+         }
 
-      /* Clearfix (clear floats) */
+         /* Clearfix (clear floats) */
 
-      .row::after {
-        content: "";
-        clear: both;
-        display: table;
-      }
+         .row::after {
+            content: "";
+            clear: both;
+            display: table;
+         }
 
-      /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
+         /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
 
-      @media screen and (max-width: 500px) {
-        .co,
-        .dd {
-          width: 100%;
-        }
-      }
+         @media screen and (max-width: 500px) {
+            .co,
+            .dd {
+               width: 100%;
+            }
+         }
 
-      /*popup notifaction box layout design*/
+         /*popup notifaction box layout design*/
 
-      .notification {
-        border-radius: 40%;
-        border-style: solid;
-        border-color: #565656;
-        color: white;
-        background-color: #7c7c7c;
-        position: absolute;
-        text-align: center;
-        left: 42%;
-        top: 50%;
-        padding: 10px;
-        font-size: calc(12px + 0.5vw);
-        text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-      }
+         .notification {
+            border-radius: 40%;
+            border-style: solid;
+            border-color: #565656;
+            color: white;
+            background-color: #7c7c7c;
+            position: absolute;
+            text-align: center;
+            left: 42%;
+            top: 50%;
+            padding: 10px;
+            font-size: calc(12px + 0.5vw);
+            text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+         }
 
-      .resetPasswordPage {
-        width: 80%;
-        max-width: 300px;
-        position: absolute;
-        top: 50%;
-        left: -200%;
-        margin: 0;
-        opacity: 1;
-        overflow: hidden;
-        transition: 2s ease;
-        -ms-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-        background-color: rgba(255, 255, 255, 0.7);
-        border: 3px solid grey;
-        padding: 25px;
-        overflow-x: hidden;
-        border-radius: 5%;
-        border-style: groove;
-        box-shadow: 2px 2px 15px black;
-      }
+         .resetPasswordPage {
+            width: 80%;
+            max-width: 300px;
+            position: absolute;
+            top: 50%;
+            left: -200%;
+            margin: 0;
+            opacity: 1;
+            overflow: hidden;
+            transition: 2s ease;
+            -ms-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.7);
+            border: 3px solid grey;
+            padding: 25px;
+            overflow-x: hidden;
+            border-radius: 5%;
+            border-style: groove;
+            box-shadow: 2px 2px 15px black;
+         }
 
-      /*company logo display on login page*/
+         /*company logo display on login page*/
 
-      .logo {
-        position: absolute;
-        width: 45%;
-        left: 200%;
-        transform: translate(-50%);
-        top: -50%;
-        border-style: groove;
-        border-radius: 25%;
-        box-shadow: 5px 3px 15px black;
-        z-index: 3;
-        opacity: 0.85;
-        transition: 2.0s ease;
-      }
+         .logo {
+            position: absolute;
+            width: 50%;
+            left: 200%;
+            transform: translate(-50%);
+            top: -50%;
+            border-style: groove;
+            border-radius: 25%;
+            box-shadow: 5px 3px 15px black;
+            z-index: 3;
+            opacity: 0.85;
+            transition: 2.0s ease;
+         }
 
-    </style>
-  </head>
-  <img src="https://i.imgur.com/kejGM7k.jpg" class="bg" style="filter:brightness(60%);">
+      </style>
+   </head>
+   <img src="https://i.imgur.com/kejGM7k.jpg" class="bg" style="filter:brightness(60%);">
 
-  <body>
-    <button id="backButton" onclick="backButton();" class="backButton" hidden></button>
+   <body>
+      <button id="backButton" onclick="backButton();" class="backButton" hidden></button>
 
 
 
-    <div class="loginPage" id="loginPage"> <img src="https://i.imgur.com/ufIvWrG.png" class="logo" id="logo">
-      <div style="text-align:center;padding-top:2vw;">
-        Username <input type="text" id="loginAdmin" size="15">
-        <br><br> Password <input type="password" id="loginPassword" size="15"></div>
-      <br>
-      <div style="color:red;font-size:12px;text-align:center;" id="wrongCreditial" hidden>
-        Incorrect password/username. <br>Please re-enter the correct information
+      <div class="loginPage" id="loginPage"> <img src="https://i.imgur.com/ufIvWrG.png" class="logo" id="logo">
+         <div style="text-align:center;padding-top:2vw;">
+            Username <input type="text" id="loginAdmin" size="15">
+            <br><br> Password <input type="password" id="loginPassword" size="15"></div>
+         <br>
+         <div style="color:red;font-size:12px;text-align:center;" id="wrongCreditial" hidden>
+            Incorrect password/username. <br>Please re-enter the correct information
+         </div>
+         <br>
+         <button id="loginEnter" onclick="loginAdmin()" style="left:50%;position:relative;transform:translate(-50%);margin:0;" class="green_black">Enter</button>
+         <br>
       </div>
-      <br>
-      <button id="loginEnter" onclick="loginAdmin()" style="left:50%;position:relative;transform:translate(-50%);margin:0;" class="green_black">Enter</button>
-      <br>
-    </div>
 
 
-    <div class='userInfo' id='userInfo'>
-      <div style="padding-left:20%;">
-        <br><br> Company Name &nbsp; <input type='text' id="compName">
-        <br><br> Login Credentials <input type='text' id="userLoginID">
+      <div class='userInfo' id='userInfo'>
+         <div style="padding-left:20%;">
+            <br><br> Company Name &nbsp; <input type='text' id="compName">
+            <br><br> Login Credentials <input type='text' id="userLoginID">
+         </div>
+         <br><br>
+         <div style="overflow-y:auto;max-height:40%;">
+            <table class="tableUserInfo" id="tableUserInfo">
+               <tr>
+                  <th class='table_header'>No</th>
+                  <th class='table_header'>Purchases</th>
+                  <th class='table_header'>Description</th>
+                  <th class='table_header'>Points</th>
+                  <th class='table_header'>Date</th>
+               </tr>
+               <tr id="newData" style="table_editable">
+                  <td contenteditable="false"></td>
+                  <td contenteditable="true"></td>
+                  <td contenteditable="true"></td>
+                  <td contenteditable="true"></td>
+                  <td contenteditable="true"></td>
+               </tr>
+            </table>
+         </div>
+         <br>
+         <b><div id="totalPoints" style="position:relative;left:10%;font-size:calc(15px + 0.4vw);"></div></b>
+         <br>
+         <button onclick="appendData();updateTotalPoints();" class="orange_white" style="position:relative;left:10%;">Append Data</button>
+         <button onclick="removeData();updateTotalPoints();" class="orange_white" style="position:relative;left:10%;">Remove Data</button>
+
+         <button onclick="onSave();" class="green_black" style="position:relative;left:10%;">Save Data</button>
+         <button onclick="deleteUser();" class="red_white" style="position:relative;left:10%;">Delete User</button>
       </div>
-      <br><br>
-      <div style="overflow-y:auto;max-height:40%;">
-        <table class="tableUserInfo" id="tableUserInfo">
-          <tr>
-            <th class='table_header'>No</th>
-            <th class='table_header'>Purchases</th>
-            <th class='table_header'>Description</th>
-            <th class='table_header'>Points</th>
-            <th class='table_header'>Date</th>
-          </tr>
-          <tr id="newData" style="table_editable">
-            <td contenteditable="false"></td>
-            <td contenteditable="true"></td>
-            <td contenteditable="true"></td>
-            <td contenteditable="true"></td>
-            <td contenteditable="true"></td>
-          </tr>
-        </table>
-      </div>
-      <br>
-      <b><div id="totalPoints" style="position:relative;left:10%;font-size:calc(15px + 0.4vw);"></div></b>
-      <br>
-      <button onclick="appendData();updateTotalPoints();" class="orange_white" style="position:relative;left:10%;">Append Data</button>
-      <button onclick="removeData();updateTotalPoints();" class="orange_white" style="position:relative;left:10%;">Remove Data</button>
 
-      <button onclick="onSave();" class="green_black" style="position:relative;left:10%;">Save Data</button>
-      <button onclick="deleteUser();" class="red_white" style="position:relative;left:10%;">Delete User</button>
-    </div>
-
-    <div id="mainPage" class="mainPage">
-      <div style="font-size:calc(15px + 0.7vw);padding:10px;text-align:center;position:relative;font-family:verdana;color:#8290ff;text-shadow: -1px -1px 0 blue, 1px -1px 0 blue, -1px 1px 0 blue, 1px 1px 0 blue;"><b>
+      <div id="mainPage" class="mainPage">
+         <div style="font-size:calc(15px + 0.7vw);padding:10px;text-align:center;position:relative;font-family:verdana;color:#00def7;text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;"><b>
         User List</b>
-      </div>
-      <div style="overflow-y:auto;max-height:70%;">
-        <table class="tableMainPage" id="tableMainPage">
-          <tr>
-            <th class='table_header'>Company Name</th>
-            <th class='table_header'>Login Credential</th>
-            <th class='table_header'>Points</th>
-          </tr>
-          <tr id="newUserData" style="table_editable">
-            <td contenteditable="true"></td>
-            <td contenteditable="true"></td>
-            <td contenteditable="false"></td>
-            <td contenteditable="false"><button style="position:relative;left:50%;transform: translate(-50%);">
+         </div>
+         <div style="overflow-y:auto;max-height:70%;">
+            <table class="tableMainPage" id="tableMainPage">
+               <tr>
+                  <th class='table_header'>Company Name</th>
+                  <th class='table_header'>Login Credential</th>
+                  <th class='table_header'>Points</th>
+               </tr>
+               <tr id="newUserData" style="table_editable">
+                  <td contenteditable="true"></td>
+                  <td contenteditable="true"></td>
+                  <td contenteditable="false"></td>
+                  <td contenteditable="false"><button style="position:relative;left:50%;transform: translate(-50%);">
           </button></td>
-          </tr>
-        </table>
+               </tr>
+            </table>
+         </div>
+         <br>
+         <button id="addUser" onclick="addNewUser();" style="position:relative;left:10%;" class="green_black">Add New User</button>
+         <button id="editReward" onclick="rewardPageSetup();" style="position:relative;left:10%;" class="orange_white">Edit Reward</button>
+         <button id="previewReward" onclick="previewRewardPageSetup();" style="position:relative;left:10%;" class="orange_white">Preview Reward</button>
+         <button id="resetPassword" onclick="resetPasswordPage();" style="position:relative;left:10%;" class="red_white">Reset Password</button>
       </div>
-      <br>
-      <button id="addUser" onclick="addNewUser();" style="position:relative;left:10%;" class="green_black">Add New User</button>
-      <button id="editReward" onclick="rewardPageSetup();" style="position:relative;left:10%;" class="orange_white">Edit Reward</button>
-      <button id="previewReward" onclick="previewRewardPageSetup();" style="position:relative;left:10%;" class="orange_white">Preview Reward</button>
-      <button id="resetPassword" onclick="resetPasswordPage();" style="position:relative;left:10%;" class="red_white">Reset Password</button>
-    </div>
 
 
-    <div id="rewardPage" class="rewardPage">
-      <div style="font-size:calc(15px + 0.7vw);padding:10px;text-align:center;color:#8290ff;position:relative;font-family:verdana;text-shadow: -1px -1px 0 blue, 1px -1px 0 blue, -1px 1px 0 blue, 1px 1px 0 blue;"><b>
+      <div id="rewardPage" class="rewardPage">
+         <div style="font-size:calc(15px + 0.7vw);padding:10px;text-align:center;color:#00def7;position:relative;font-family:verdana;text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;"><b>
         Edit Reward</b>
-      </div>
-      <div style="overflow:auto;max-width:100%;max-height:80%;">
-        <table class="tableMainPage" id="tableMainPage">
-          <tr>
-            <th class='table_header'>Image URL</th>
-            <th class='table_header'>Description</th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img1" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des1" class="editRewardPageCustom"></th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img2" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des2" class="editRewardPageCustom"></th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img3" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des3" class="editRewardPageCustom"></th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img4" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des4" class="editRewardPageCustom"></th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img5" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des5" class="editRewardPageCustom"></th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img6" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des6" class="editRewardPageCustom"></th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img7" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des7" class="editRewardPageCustom"></th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img8" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des8" class="editRewardPageCustom"></th>
-          </tr>
-        </table>
-      </div>
-      <br>
-      <button class="green_black" style="left:10%;position:relative;" onclick="saveReward()">
+         </div>
+         <div style="overflow:auto;max-width:100%;max-height:80%;">
+            <table class="tableMainPage" id="tableMainPage">
+               <tr>
+                  <th class='table_header'>Image URL</th>
+                  <th class='table_header'>Description</th>
+               </tr>
+               <tr>
+                  <th contenteditable="true" id="img1" class="editRewardPageCustom"></th>
+                  <th contenteditable="true" id="des1" class="editRewardPageCustom"></th>
+               </tr>
+               <tr>
+                  <th contenteditable="true" id="img2" class="editRewardPageCustom"></th>
+                  <th contenteditable="true" id="des2" class="editRewardPageCustom"></th>
+               </tr>
+               <tr>
+                  <th contenteditable="true" id="img3" class="editRewardPageCustom"></th>
+                  <th contenteditable="true" id="des3" class="editRewardPageCustom"></th>
+               </tr>
+               <tr>
+                  <th contenteditable="true" id="img4" class="editRewardPageCustom"></th>
+                  <th contenteditable="true" id="des4" class="editRewardPageCustom"></th>
+               </tr>
+               <tr>
+                  <th contenteditable="true" id="img5" class="editRewardPageCustom"></th>
+                  <th contenteditable="true" id="des5" class="editRewardPageCustom"></th>
+               </tr>
+               <tr>
+                  <th contenteditable="true" id="img6" class="editRewardPageCustom"></th>
+                  <th contenteditable="true" id="des6" class="editRewardPageCustom"></th>
+               </tr>
+               <tr>
+                  <th contenteditable="true" id="img7" class="editRewardPageCustom"></th>
+                  <th contenteditable="true" id="des7" class="editRewardPageCustom"></th>
+               </tr>
+               <tr>
+                  <th contenteditable="true" id="img8" class="editRewardPageCustom"></th>
+                  <th contenteditable="true" id="des8" class="editRewardPageCustom"></th>
+               </tr>
+            </table>
+         </div>
+         <br>
+         <button class="green_black" style="left:10%;position:relative;" onclick="saveReward()">
         Save
         </button>
-    </div>
+      </div>
 
 
-    <div id="previewRewardPage" class="previewRewardPage" style="overflow-y:auto;">
-      <div style="font-size:calc(15px + 0.7vw);padding:10px;color:#8290ff;position:relative;font-family:verdana;text-align:center;text-shadow: -1px -1px 0 blue, 1px -1px 0 blue, -1px 1px 0 blue, 1px 1px 0 blue;"><b>
+      <div id="previewRewardPage" class="previewRewardPage" style="overflow-y:auto;">
+         <div style="font-size:calc(15px + 0.7vw);padding:10px;color:#00def7;position:relative;font-family:verdana;text-align:center;text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;"><b>
         Redeemable Rewards</b>
-      </div>
-      <div id="previewRewardPageEditable">
-        <div class="row">
-          <div class="column1">
-            <img src="" alt="Snow" style="width:100%;" class="rewardImage">
-            <div style="font-size:15px;height:25px;"><b> </b>
+         </div>
+         <div id="previewRewardPageEditable">
+            <div class="row">
+               <div class="column1">
+                  <img src="" alt="Snow" style="width:100%;" class="rewardImage">
+                  <div style="font-size:15px;height:25px;"><b> </b>
+                  </div>
+               </div>
+               <div class="column2">
+                  <img src="" alt="Forest" style="width:100%;" class="rewardImage">
+                  <div><b></b>
+                  </div>
+               </div>
             </div>
-          </div>
-          <div class="column2">
-            <img src="" alt="Forest" style="width:100%;" class="rewardImage">
-            <div><b></b>
-            </div>
-          </div>
-        </div>
+         </div>
       </div>
-    </div>
 
 
-    <div class="resetPasswordPage" id="resetPasswordPage">
-      <div style="font-size:calc(14px + 0.7vw);padding:10px;color:#8290ff;position:relative;font-family:verdana;text-align:center;text-shadow: -1px -1px 0 blue, 1px -1px 0 blue, -1px 1px 0 blue, 1px 1px 0 blue;"><b>
+      <div class="resetPasswordPage" id="resetPasswordPage">
+         <div style="font-size:calc(14px + 0.7vw);padding:10px;color:#00def7;position:relative;font-family:verdana;text-align:center;text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;"><b>
         Reset Password</b>
-      </div>
-      <div style="text-align:center;padding-top:2vw;">
-        Old Username <input type="text" id="oldUsername" style="left:5%;position:relative;"><br><br> Old Password <input type="password" id="oldPassword" style="left:6%;position:relative;"><br><br><br> New Username <input type="text" id="newUsername"
-          style="left:4%;position:relative;"><br><br> New Password <input type="password" id="newPassword" style="left:5%;position:relative;"><br>
-      </div>
-      <div style="text-align:center;">
-        <br>
-        <button class="red_white" onclick="resetPassword()" style="text-align:center;">
+         </div>
+         <div style="text-align:center;padding-top:2vw;">
+            Old Username <input type="text" id="oldUsername" style="left:5%;position:relative;"><br><br> Old Password <input type="password" id="oldPassword" style="left:6%;position:relative;"><br><br><br> New Username <input type="text" id="newUsername"
+               style="left:4%;position:relative;"><br><br> New Password <input type="password" id="newPassword" style="left:5%;position:relative;"><br>
+         </div>
+         <div style="text-align:center;">
+            <br>
+            <button class="red_white" onclick="resetPassword()" style="text-align:center;">
           Reset
         </button>
+         </div>
       </div>
-    </div>
 
 
-    <b><div class="notification" id="notification" hidden>Saved !!!</div></b>
-  </body>
-  <script>
-    let socket = io('https://charm-dagger.glitch.me/'),
-      arr,
-      currentView = 1,
-      userList,
-      isCreatingNewUser = false,
-      newCompName = '',
-      newLoginCredential = '',
-      isDeletingUser,
-      isPreviewingReward = false,
-      t = document.getElementById('notification'),
-      oldCompName = "",
-      oldUserLoginData = "",
-      _data,
-      previousPrevRewardData;
+      <b><div class="notification" id="notification" hidden>Saved !!!</div></b>
+   </body>
+   <script>
+      let socket = io('https://charm-dagger.glitch.me/'),
+         arr,
+         currentView = 1,
+         userList,
+         isCreatingNewUser = false,
+         newCompName = '',
+         newLoginCredential = '',
+         isDeletingUser,
+         isPreviewingReward = false,
+         t = document.getElementById('notification'),
+         oldCompName = "",
+         oldUserLoginData = "",
+         _data,
+         previousPrevRewardData;
 
-    function showNotification(elem, text, color) {
-      let count = 0;
-      elem.style.opacity = 1.2;
-      elem.innerHTML = text;
-      elem.style.color = color;
-      elem.hidden = false;
-      if (elem.loop) {
-        clearInterval(elem.loop);
-        elem.loop = null;
-      }
-      elem.loop = setInterval(function() {
-        console.log('noti');
-        elem.style.opacity -= 0.015;
-        elem.style.top = ((50 - count / 2.5)) + "%";
-        count++;
-        if (count > 65) {
-          clearInterval(elem.loop);
-          elem.loop = null;
-          console.log('noti cleared');
-          elem.style.opacity = 1;
-          elem.style.top = 50 + "%";
-          elem.hidden = true;
-          elem.isRunning = false;
-        }
-      }, 30);
-    }
-
-    function backButton() { //triggered when back button is pressed, handle transition
-      if (currentView === 1 && !confirm("Confirm to log out?")) {
-        return; //confirmation to log out on main page
-      }
-      clearMainPage();
-      //clearUserInfoPage();
-      if (currentView === 2) {
-        mainPageSetup();
-        transition(1, 2);
-      } else if (currentView == 1) {
-        //clearMainPage();
-        transition(0, 1);
-      } else if (currentView == 3) {
-        mainPageSetup();
-        transition(1, 3);
-      } else if (currentView == 4) {
-        mainPageSetup();
-        transition(1, 4);
-      } else if (currentView == 5) {
-        mainPageSetup();
-        transition(1, 5);
-      }
-    }
-
-    function heartBeat() { //emit heartbeat every period
-      socket.emit('heartBeat');
-    }
-    socket.on('heartBeat', function() { //increment heartbeat
-      heartBeatCount++;
-    });
-
-    function checkHeartBeat() { //check if heartbeat no. below threshold
-      if (heartBeatCount < 3) { //if so, disconnect and refresh page
-        console.log('disconnected/refresh page due to poor network');
-        showNotification(t, 'Connection Failed', '#ff3700');
-        setTimeout(function() {
-          document.body.innerHTML += '<meta http-equiv="refresh" content="2">';
-          socket.disconnect();
-        }, 2000);
-
-      } else {
-        heartBeatCount = 0;
-        console.log('good network connection');
+      function showNotification(elem, text, color) {
+         let count = 0;
+         elem.style.opacity = 1.2;
+         elem.innerHTML = text;
+         elem.style.color = color;
+         elem.hidden = false;
+         if (elem.loop) {
+            clearInterval(elem.loop);
+            elem.loop = null;
+         }
+         elem.loop = setInterval(function() {
+            console.log('noti');
+            elem.style.opacity -= 0.015;
+            elem.style.top = ((50 - count / 2.5)) + "%";
+            count++;
+            if (count > 65) {
+               clearInterval(elem.loop);
+               elem.loop = null;
+               console.log('noti cleared');
+               elem.style.opacity = 1;
+               elem.style.top = 50 + "%";
+               elem.hidden = true;
+               elem.isRunning = false;
+            }
+         }, 30);
       }
 
-    }
-
-    let heartBeatCount = 0,
-      checkerInterval = 0;
-    requestAnimationFrame(checker);
-
-    function checker() { //auto disconnect due to poor network
-      checkerInterval++;
-      setTimeout(function() {
-        requestAnimationFrame(checker)
-      }, 2000);
-      requestAnimationFrame(heartBeat);
-      if (checkerInterval >= 10) {
-        checkerInterval = 0;
-        requestAnimationFrame(checkHeartBeat);
-      }
-    }
-
-    document.onkeydown = function() {}
-
-
-    function resetPasswordPage() { //move to resetPasswrod page
-      transition(5, 1);
-    }
-
-    function resetPassword() { //on reset button click, send reset infomation to server
-      let temp = {
-        'oldName': document.getElementById('oldUsername').value,
-        'newName': document.getElementById('newUsername').value,
-        'newPassword': document.getElementById('newPassword').value,
-        'oldPassword': document.getElementById('oldPassword').value
-      };
-
-      socket.emit('adminReset', JSON.stringify(temp)); //send old and new credential info to server
-      document.getElementById('oldPassword').value = ""; //clear user typed info
-      document.getElementById('newPassword').value = "";
-      document.getElementById('newUsername').value = "";
-      document.getElementById('oldUsername').value = "";
-    }
-    socket.on('resetSuccess', function(e) { //on correct old credential, move to login page
-      transition(0, 5);
-      showNotification(t, 'Reset<br>Successfully', '#59f979');
-    });
-
-    socket.on('resetFail', function(e) { //on reset fail(wrong credential), display notice
-      showNotification(t, 'Reset Failed', '#ff3700');
-    });
-
-    //auto login when enter key is pressed (login page)
-    document.getElementById("loginAdmin").addEventListener("keyup", function(event) {
-
-      event.preventDefault();
-      // Number 13 is the "Enter" key on the keyboard
-      if (event.keyCode === 13) {
-        // Trigger the button element with a click
-        document.getElementById("loginEnter").click();
-      }
-    });
-    document.getElementById("loginPassword").addEventListener("keyup", function(event) {
-
-      event.preventDefault();
-      // Number 13 is the "Enter" key on the keyboard
-      if (event.keyCode === 13) {
-        // Trigger the button element with a click
-        document.getElementById("loginEnter").click();
-      }
-    });
-
-    function loginAdmin() { //on login button pressed, send info to server for verification
-      let temp = {
-        'name': document.getElementById('loginAdmin').value,
-        'password': document.getElementById('loginPassword').value
-      };
-      socket.emit('adminLogin', JSON.stringify(temp));
-    }
-
-
-    function rewardPageSetup() { //move to editreward page
-      transition(3, 1);
-      socket.emit('retrieveReward', '');
-    }
-
-    function previewRewardPageSetup() { //move to prev reward page
-      transition(4, 1);
-      isPreviewingReward = true;
-      socket.emit('retrieveReward', '');
-    }
-
-    function saveReward() { //triggerd on save reward config button clicked
-      let temp = [],
-        temp2;
-
-      if (!confirm("Confirm to save the new Reward Configuration?")) { //confirmation prompt
-        return;
+      function backButton() { //triggered when back button is pressed, handle transition
+         if (currentView === 1 && !confirm("Confirm to log out?")) {
+            return; //confirmation to log out on main page
+         }
+         clearMainPage();
+         //clearUserInfoPage();
+         if (currentView === 2) {
+            mainPageSetup();
+            transition(1, 2);
+         } else if (currentView == 1) {
+            //clearMainPage();
+            transition(0, 1);
+         } else if (currentView == 3) {
+            mainPageSetup();
+            transition(1, 3);
+         } else if (currentView == 4) {
+            mainPageSetup();
+            transition(1, 4);
+         } else if (currentView == 5) {
+            mainPageSetup();
+            transition(1, 5);
+         }
       }
 
-      for (let loop = 1; loop <= 8; loop++) { //store keyed-in infomation on the Edit reward page
-        temp.push(document.getElementById('img' + loop).innerHTML);
-        temp.push(document.getElementById('des' + loop).innerHTML);
+      function heartBeat() { //emit heartbeat every period
+         socket.emit('heartBeat');
       }
-      socket.emit('saveReward', JSON.stringify(temp)); //send the stored info the server for saving purpose
-      showNotification(t, 'Saved', '#59f979');
-    }
-
-    socket.on('retrieveReward', function(e) { //retrieve reward info stroed on server and display it on Prev Reward Page / Edit Reward Page
-      //['url','des']
-
-      let retrievedData = e;
-      e = JSON.parse(e);
-      let temp2 = 0;
-      if (isPreviewingReward) { //if its on Prev Reward Page, then display the reward image
-        if (retrievedData === previousPrevRewardData) { //check if prev Displayed reward data is similar to the retrived one, if so, dont have to overwrite the data (perfomance optimisation purpose)
-          isPreviewingReward = false;
-          return;
-        }
-        previousPrevRewardData = retrievedData;
-        document.getElementById('previewRewardPageEditable').innerHTML = '<div class="row">';
-        for (let x = 0; x <= 16; x += 4) {
-
-          if (e[x] && e[x + 2] && e[x] !== "" && e[x + 2] !== "") {
-            document.getElementById('previewRewardPageEditable').innerHTML += '<div class="column1"> <img src="' + e[x] + '" alt="Snow" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 1] + ' </b></div> </div> ';
-
-
-            document.getElementById('previewRewardPageEditable').innerHTML += '<div class="column2"> <img src="' + e[x + 2] + '" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 3] + '</b></div>';
-          } else if (e[x] && e[x] !== "") {
-            document.getElementById('previewRewardPageEditable').innerHTML += '<div class="columnMid"> <img src="' + e[x] + '" alt="Snow" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 1] + ' </b></div> </div> ';
-
-          } else if (e[x + 2] && e[x + 2] !== "") {
-            document.getElementById('previewRewardPageEditable').innerHTML += '<div class="columnMid"> <img src="' + e[x + 2] + '" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 3] + '</b></div>';
-            console.log('ads');
-          }
-          document.getElementById('previewRewardPage').innerHTML += '</div>';
-
-        }
-
-        isPreviewingReward = false;
-        return;
-      } else {
-        //if on Edit Reward Page, output the reward image URL and des onto the table
-        for (let temp = 1; temp <= 8; temp++) {
-          document.getElementById('img' + temp).innerHTML = e[temp2];
-          document.getElementById('des' + temp).innerHTML = e[temp2 + 1];
-          temp2 += 2;
-        }
-      }
-    });
-
-    function mainPageSetup() { //retrieve mainpage userList
-      socket.emit('readUserList', '');
-      console.log('main');
-    }
-
-    function userInfoSetupPage(name) {
-      socket.emit('retrieve', name);
-      oldUserLoginData = name;
-      console.log('transition to userinfo');
-      transition(2, 1);
-    }
-
-    function clearUserInfoPage() {
-      document.getElementById('tableUserInfo').innerHTML = '<tr> <th class="table_header">No</th> <th class="table_header">Purchases</th> <th class="table_header">Description</th> <th class="table_header">Points</th> <th class="table_header">Date</th> </tr> <tr id="newData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
-    }
-
-    function clearMainPage() {
-      document.getElementById('tableMainPage').innerHTML = '<tr> <th class="table_header">Company Name</th> <th class="table_header">Login Credential</th> <th class="table_header">Points</th> </tr> <tr id="newUserData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="false"></td> <td contenteditable="false"><button style="position:relative;left:50%;transform: translate(-50%);"> > </button></td> </tr>';
-    }
-
-    function addNewUser() {
-
-      let newData = document.getElementById("newUserData"),
-        temp = document.getElementById('tableMainPage');
-
-      if (!confirm("Confirm to add new user with Company Name '" + newData.childNodes[1].innerHTML + "' and Login Credential of '" + newData.childNodes[3].innerHTML + "'")) {
-        return;
-      }
-
-      newData.parentNode.removeChild(newData);
-
-      temp.innerHTML += '<tr><th>' + newData.childNodes[1].innerHTML + '</th> <th>' + newData.childNodes[3].innerHTML + '</th> <th>' + 0 + '</th><th><button>></button></th></tr>';
-
-      temp.innerHTML += '<tr id="newUserData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="true"></td> <td contenteditable="true"></td> </td>';
-      isCreatingNewUser = true;
-      newCompName = newData.childNodes[1].innerHTML;
-      newLoginCredential = newData.childNodes[3].innerHTML;
-      socket.emit('readData', '');
-    }
-
-    socket.on('connect', function() {
-      console.log('connected');
-      transition(0, currentView); //display login page at startup
-
-    });
-    socket.on('disconnect'),
-      function() {
-        console.log('disconnect');
-      };
-    socket.on('loginSuccess', function(e) {
-      console.log('login Success');
-      clearMainPage();
-      mainPageSetup();
-      transition(1, 0);
-      document.getElementById('wrongCreditial').hidden = true;
-      document.getElementById('loginPassword').value = '';
-
-    });
-    socket.on('loginFail', function(e) {
-      console.log('fail');
-      document.getElementById('loginPassword').value = '';
-      document.getElementById('wrongCreditial').hidden = false;
-    });
-    //retrieve a particular user info from server
-    socket.on('retrieve', function(e) {
-      e = JSON.parse(e);
-      oldCompName = e.compName;
-      arr = e.data;
-      onRetrieve();
-      console.log('retrieve user info succ');
-
-    });
-    //retrieve ALL users data from the server
-    socket.on('readUserList', function(e) {
-      e = JSON.parse(e);
-      let temp = Object.keys(e);
-      onUserListRetrieve(temp, e);
-
-    });
-
-    function onUserListRetrieve(arr, obj) {
-      let newData = document.getElementById("newUserData"),
-        temp = document.getElementById('tableMainPage');
-
-      newData.parentNode.removeChild(newData);
-
-      arr.forEach(function(name, index) {
-
-        temp.innerHTML += '<tr><th>' + obj[name].compName + '</th> <th>' + name + '</th> <th>' + obj[name].tp + '</th><th><button id="userInfoButton' + index + '" style="left:50%;position:relative;transform:translate(-50%);" onclick="onClickUserInfoButton(\'' + name + '\',' + index + ');">>></button></th></tr>';
+      socket.on('heartBeat', function() { //increment heartbeat
+         heartBeatCount++;
       });
 
-      temp.innerHTML += '<tr id="newUserData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="true"></td> <td contenteditable="true"></td> </td>';
+      function checkHeartBeat() { //check if heartbeat no. below threshold
+         if (heartBeatCount < 3) { //if so, disconnect and refresh page
+            console.log('disconnected/refresh page due to poor network');
+            showNotification(t, 'Connection Failed', '#ff3700');
+            setTimeout(function() {
+               document.body.innerHTML += '<meta http-equiv="refresh" content="2">';
+               socket.disconnect();
+            }, 2000);
 
-    }
+         } else {
+            heartBeatCount = 0;
+            console.log('good network connection');
+         }
 
-    function onClickUserInfoButton(name, buttonNum) {
-      console.log('button pressed for ' + name, buttonNum);
-      clearUserInfoPage();
-      userInfoSetupPage(name);
-
-    }
-
-    function deleteUser() {
-      if (!confirm("Confirm to delete this user?")) {
-        return;
-      }
-      isDeletingUser = true;
-      newLoginCredential = document.getElementById('userLoginID').value;
-      socket.emit('readData', '');
-    }
-    socket.on('readData', function(e) { //get stored data rom server, edit, and rewrite to the server
-      if (isDeletingUser) { //if is deleting a user, then delete the user data and rewrite to server
-        _data = JSON.parse(e);
-        console.log(_data[newLoginCredential]);
-        delete _data[newLoginCredential];
-
-        console.log(_data[newLoginCredential]);
-        socket.emit('save', JSON.stringify(_data));
-
-        console.log('deleted');
-        backButton();
-        return;
-      } else if (isCreatingNewUser) { //if is creating new user, then add new user info and rewrite to server
-        _data = JSON.parse(e);
-        _data[newLoginCredential] = {
-          "data": [],
-          "compName": newCompName,
-          "tp": 0
-        };
-        socket.emit('save', JSON.stringify(_data));
-
-        clearMainPage();
-        mainPageSetup();
-        return;
-      }
-      //save user data and rewrite to server(on User Info Page)
-      let newName = document.getElementById("userLoginID").value;
-      _data = JSON.parse(e);
-      if (oldUserLoginData !== newName) {
-        delete _data[oldUserLoginData];
-        _data[newName] = {};
-      }
-      _data[newName].data = arr;
-      _data[newName].tp = updateTotalPoints();
-      _data[newName].compName = document.getElementById("compName").value;
-      socket.emit('save', JSON.stringify(_data));
-
-    });
-    socket.on('saveSuccess', function(e) {
-      if (e === JSON.stringify(_data)) { //on rewritten to the server, get the data again from the server for comparison (check for saving error)
-        console.log('succs');
-        if (isCreatingNewUser) {
-          isCreatingNewUser = false;
-          showNotification(t, 'Created<br>Successfully', '#59f979');
-        } else if (isDeletingUser) {
-          isDeletingUser = false;
-          showNotification(t, 'Deleted<br>Successfully', '#59f979');
-        } else {
-          showNotification(t, 'Saved<br>Successfully', '#59f979');
-        }
-      } else {
-        console.log('save error');
-        showNotification(t, 'Saving Failed', '#ff2111');
       }
 
-    });
+      let heartBeatCount = 0,
+         checkerInterval = 0;
+      requestAnimationFrame(checker);
 
-    function onRetrieve() { //display the retrieved particular user info onto the User Info page
-      let newData = document.getElementById("newData"),
-        temp = document.getElementById('tableUserInfo'),
-        temp2;
-      newData.parentNode.removeChild(newData);
+      function checker() { //auto disconnect due to poor network
+         checkerInterval++;
+         setTimeout(function() {
+            requestAnimationFrame(checker)
+         }, 2000);
+         requestAnimationFrame(heartBeat);
+         if (checkerInterval >= 10) {
+            checkerInterval = 0;
+            requestAnimationFrame(checkHeartBeat);
+         }
+      }
 
-      arr.forEach(function(element, index) {
-        temp2 = index + 1;
-        temp.innerHTML += '<tr id="no' + index + '"> <td>' + temp2 + '</td> <td>' + element.purchases + '</td> <td>' + element.description + '</td> <td>' + element.points + '</td> <td>' + element.date + '</td> </tr>';
+      document.onkeydown = function() {}
+
+
+      function resetPasswordPage() { //move to resetPasswrod page
+         transition(5, 1);
+      }
+
+      function resetPassword() { //on reset button click, send reset infomation to server
+         let temp = {
+            'oldName': document.getElementById('oldUsername').value,
+            'newName': document.getElementById('newUsername').value,
+            'newPassword': document.getElementById('newPassword').value,
+            'oldPassword': document.getElementById('oldPassword').value
+         };
+
+         socket.emit('adminReset', JSON.stringify(temp)); //send old and new credential info to server
+         document.getElementById('oldPassword').value = ""; //clear user typed info
+         document.getElementById('newPassword').value = "";
+         document.getElementById('newUsername').value = "";
+         document.getElementById('oldUsername').value = "";
+      }
+      socket.on('resetSuccess', function(e) { //on correct old credential, move to login page
+         transition(0, 5);
+         showNotification(t, 'Reset<br>Successfully', '#59f979');
       });
 
-      temp.innerHTML += '<tr id="newData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
-
-      document.getElementById("compName").value = oldCompName;
-      document.getElementById("userLoginID").value = oldUserLoginData;
-
-      updateTotalPoints();
-    }
-
-    function onSave() { //on save User Info button pressed
-      if (!confirm("Confirm to save the new User Infomation?")) {
-        return;
-      }
-      socket.emit('readData', '');
-    }
-
-    function appendData() { //
-      let newData = document.getElementById("newData"),
-        temp = document.getElementById('tableUserInfo'),
-        temp2 = arr.length + 1;
-
-      newData.parentNode.removeChild(newData);
-
-      temp.innerHTML += '<tr id="no' + arr.length + '"> <td>' + temp2 + '</td> <td>' + newData.childNodes[3].innerHTML + '</td> <td>' + newData.childNodes[5].innerHTML + '</td> <td>' + newData.childNodes[7].innerHTML + '</td> <td>' + newData.childNodes[9].innerHTML + '</td> </tr>';
-
-      arr[arr.length] = {
-        'description': newData.childNodes[5].innerHTML,
-        'purchases': newData.childNodes[3].innerHTML,
-        'points': newData.childNodes[7].innerHTML,
-        'date': newData.childNodes[9].innerHTML
-      };
-
-      temp.innerHTML += '<tr id="newData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
-    }
-
-    function removeData() {
-      let temp = arr.length - 1;
-      temp = document.getElementById('no' + temp);
-      temp.parentNode.removeChild(temp);
-      arr.pop();
-    }
-
-    function updateTotalPoints() {
-      let totalPoints = document.getElementById('totalPoints'),
-        sum = 0;
-
-      arr.forEach(function(element) {
-        sum += Number(element.points);
+      socket.on('resetFail', function(e) { //on reset fail(wrong credential), display notice
+         showNotification(t, 'Reset Failed', '#ff3700');
       });
 
-      totalPoints.innerHTML = "Total Points : " + sum;
-      return sum;
-    }
+      //auto login when enter key is pressed (login page)
+      document.getElementById("loginAdmin").addEventListener("keyup", function(event) {
 
+         event.preventDefault();
+         // Number 13 is the "Enter" key on the keyboard
+         if (event.keyCode === 13) {
+            // Trigger the button element with a click
+            document.getElementById("loginEnter").click();
+         }
+      });
+      document.getElementById("loginPassword").addEventListener("keyup", function(event) {
 
+         event.preventDefault();
+         // Number 13 is the "Enter" key on the keyboard
+         if (event.keyCode === 13) {
+            // Trigger the button element with a click
+            document.getElementById("loginEnter").click();
+         }
+      });
 
-    function transition(to, from) { //back pressed
-      currentView = to;
-      document.getElementById('backButton').hidden = false;
-      if (to === 2) {
-
-        //document.getElementById('userInfo').style.width = '90%';
-
-        document.getElementById('userInfo').style.left = "50%";
-
-      } else if (to === 0) {
-        // document.getElementById('loginPage').style.width = '55%';
-
-        document.getElementById('loginPage').style.left = "50%";
-        //document.getElementById('logo').style.width = '150px';
-        document.getElementById('logo').style.left = "50%";
-        document.getElementById('backButton').hidden = true;
-
-      } else if (to === 1) {
-
-        //document.getElementById('mainPage').style.width = '80%';
-        document.getElementById('mainPage').style.left = "50%";
-      } else if (to === 3) {
-
-        //document.getElementById('rewardPage').style.width = '90%';
-        document.getElementById('rewardPage').style.left = "50%";
-      } else if (to === 4) {
-
-        // document.getElementById('previewRewardPage').style.width = '90%';
-        document.getElementById('previewRewardPage').style.left = "50%";
-      } else if (to === 5) {
-        //document.getElementById('resetPasswordPage').style.width = '80%';
-        document.getElementById('resetPasswordPage').style.left = "50%";
+      function loginAdmin() { //on login button pressed, send info to server for verification
+         let temp = {
+            'name': document.getElementById('loginAdmin').value,
+            'password': document.getElementById('loginPassword').value
+         };
+         socket.emit('adminLogin', JSON.stringify(temp));
       }
 
-      if (from === 2) {
-        // document.getElementById('userInfo').style.width = '0%';
-        // document.getElementById('userInfo').style.transition="0s ease";
-        document.getElementById('userInfo').style.left = "-200%";
 
-
-      } else if (from === 0) {
-        //document.getElementById('loginPage').style.width = '0%';
-        //document.getElementById('logo').style.width = '0%';
-
-
-        document.getElementById('loginPage').style.left = "200%";
-        document.getElementById('logo').style.left = "200%";
-
-      } else if (from === 1) {
-        //document.getElementById('mainPage').style.width = '0%';
-        //document.getElementById('loginPage').style.transition="0s ease";
-        if (to === 0)
-          document.getElementById('mainPage').style.left = "-200%";
-        else
-          document.getElementById('mainPage').style.left = "200%";
-      } else if (from === 3) {
-        //document.getElementById('rewardPage').style.width = '0%';
-        // document.getElementById('userInfo').style.transition="0s ease";
-        document.getElementById('rewardPage').style.left = "-200%";
-
-      } else if (from === 4) {
-        //document.getElementById('previewRewardPage').style.width = '0%';
-        // document.getElementById('userInfo').style.transition="0s ease";
-        document.getElementById('previewRewardPage').style.left = "-200%";
-
-      } else if (from === 5) {
-        //document.getElementById('resetPasswordPage').style.width = '0%';
-        // document.getElementById('userInfo').style.transition="0s ease";
-        document.getElementById('resetPasswordPage').style.left = "-200%";
+      function rewardPageSetup() { //move to editreward page
+         transition(3, 1);
+         socket.emit('retrieveReward', '');
       }
-    }
 
-  </script>
+      function previewRewardPageSetup() { //move to prev reward page
+         transition(4, 1);
+         isPreviewingReward = true;
+         socket.emit('retrieveReward', '');
+      }
+
+      function saveReward() { //triggerd on save reward config button clicked
+         let temp = [],
+            temp2;
+
+         if (!confirm("Confirm to save the new Reward Configuration?")) { //confirmation prompt
+            return;
+         }
+
+         for (let loop = 1; loop <= 8; loop++) { //store keyed-in infomation on the Edit reward page
+            temp.push(document.getElementById('img' + loop).innerHTML);
+            temp.push(document.getElementById('des' + loop).innerHTML);
+         }
+         socket.emit('saveReward', JSON.stringify(temp)); //send the stored info the server for saving purpose
+         showNotification(t, 'Saved', '#59f979');
+      }
+
+      socket.on('retrieveReward', function(e) { //retrieve reward info stroed on server and display it on Prev Reward Page / Edit Reward Page
+         //['url','des']
+
+         let retrievedData = e;
+         e = JSON.parse(e);
+         let temp2 = 0;
+         if (isPreviewingReward) { //if its on Prev Reward Page, then display the reward image
+            if (retrievedData === previousPrevRewardData) { //check if prev Displayed reward data is similar to the retrived one, if so, dont have to overwrite the data (perfomance optimisation purpose)
+               isPreviewingReward = false;
+               return;
+            }
+            previousPrevRewardData = retrievedData;
+            document.getElementById('previewRewardPageEditable').innerHTML = '<div class="row">';
+            for (let x = 0; x <= 16; x += 4) {
+
+               if (e[x] && e[x + 2] && e[x] !== "" && e[x + 2] !== "") {
+                  document.getElementById('previewRewardPageEditable').innerHTML += '<div class="column1"> <img src="' + e[x] + '" alt="Snow" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 1] + ' </b></div> </div> ';
+
+
+                  document.getElementById('previewRewardPageEditable').innerHTML += '<div class="column2"> <img src="' + e[x + 2] + '" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 3] + '</b></div>';
+               } else if (e[x] && e[x] !== "") {
+                  document.getElementById('previewRewardPageEditable').innerHTML += '<div class="columnMid"> <img src="' + e[x] + '" alt="Snow" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 1] + ' </b></div> </div> ';
+
+               } else if (e[x + 2] && e[x + 2] !== "") {
+                  document.getElementById('previewRewardPageEditable').innerHTML += '<div class="columnMid"> <img src="' + e[x + 2] + '" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 3] + '</b></div>';
+                  console.log('ads');
+               }
+               document.getElementById('previewRewardPage').innerHTML += '</div>';
+
+            }
+
+            isPreviewingReward = false;
+            return;
+         } else {
+            //if on Edit Reward Page, output the reward image URL and des onto the table
+            for (let temp = 1; temp <= 8; temp++) {
+               document.getElementById('img' + temp).innerHTML = e[temp2];
+               document.getElementById('des' + temp).innerHTML = e[temp2 + 1];
+               temp2 += 2;
+            }
+         }
+      });
+
+      function mainPageSetup() { //retrieve mainpage userList
+         socket.emit('readUserList', '');
+         console.log('main');
+      }
+
+      function userInfoSetupPage(name) {
+         socket.emit('retrieve', name);
+         oldUserLoginData = name;
+         console.log('transition to userinfo');
+         transition(2, 1);
+      }
+
+      function clearUserInfoPage() {
+         document.getElementById('tableUserInfo').innerHTML = '<tr> <th class="table_header">No</th> <th class="table_header">Purchases</th> <th class="table_header">Description</th> <th class="table_header">Points</th> <th class="table_header">Date</th> </tr> <tr id="newData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
+      }
+
+      function clearMainPage() {
+         document.getElementById('tableMainPage').innerHTML = '<tr> <th class="table_header">Company Name</th> <th class="table_header">Login Credential</th> <th class="table_header">Points</th> </tr> <tr id="newUserData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="false"></td> <td contenteditable="false"><button style="position:relative;left:50%;transform: translate(-50%);"> > </button></td> </tr>';
+      }
+
+      function addNewUser() {
+
+         let newData = document.getElementById("newUserData"),
+            temp = document.getElementById('tableMainPage');
+
+         if (!confirm("Confirm to add new user with Company Name '" + newData.childNodes[1].innerHTML + "' and Login Credential of '" + newData.childNodes[3].innerHTML + "'")) {
+            return;
+         }
+
+         newData.parentNode.removeChild(newData);
+
+         temp.innerHTML += '<tr><th>' + newData.childNodes[1].innerHTML + '</th> <th>' + newData.childNodes[3].innerHTML + '</th> <th>' + 0 + '</th><th><button>></button></th></tr>';
+
+         temp.innerHTML += '<tr id="newUserData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="true"></td> <td contenteditable="true"></td> </td>';
+         isCreatingNewUser = true;
+         newCompName = newData.childNodes[1].innerHTML;
+         newLoginCredential = newData.childNodes[3].innerHTML;
+         socket.emit('readData', '');
+      }
+
+      socket.on('connect', function() {
+         console.log('connected');
+         transition(0, currentView); //display login page at startup
+
+      });
+      socket.on('disconnect'),
+         function() {
+            console.log('disconnect');
+         };
+      socket.on('loginSuccess', function(e) {
+         console.log('login Success');
+         clearMainPage();
+         mainPageSetup();
+         transition(1, 0);
+         document.getElementById('wrongCreditial').hidden = true;
+         document.getElementById('loginPassword').value = '';
+
+      });
+      socket.on('loginFail', function(e) {
+         console.log('fail');
+         document.getElementById('loginPassword').value = '';
+         document.getElementById('wrongCreditial').hidden = false;
+      });
+      //retrieve a particular user info from server
+      socket.on('retrieve', function(e) {
+         e = JSON.parse(e);
+         oldCompName = e.compName;
+         arr = e.data;
+         onRetrieve();
+         console.log('retrieve user info succ');
+
+      });
+      //retrieve ALL users data from the server
+      socket.on('readUserList', function(e) {
+         e = JSON.parse(e);
+         let temp = Object.keys(e);
+         onUserListRetrieve(temp, e);
+
+      });
+
+      function onUserListRetrieve(arr, obj) {
+         let newData = document.getElementById("newUserData"),
+            temp = document.getElementById('tableMainPage');
+
+         newData.parentNode.removeChild(newData);
+
+         arr.forEach(function(name, index) {
+
+            temp.innerHTML += '<tr><th>' + obj[name].compName + '</th> <th>' + name + '</th> <th>' + obj[name].tp + '</th><th><button id="userInfoButton' + index + '" style="left:50%;position:relative;transform:translate(-50%);" onclick="onClickUserInfoButton(\'' + name + '\',' + index + ');">>></button></th></tr>';
+         });
+
+         temp.innerHTML += '<tr id="newUserData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="true"></td> <td contenteditable="true"></td> </td>';
+
+      }
+
+      function onClickUserInfoButton(name, buttonNum) {
+         console.log('button pressed for ' + name, buttonNum);
+         clearUserInfoPage();
+         userInfoSetupPage(name);
+
+      }
+
+      function deleteUser() {
+         if (!confirm("Confirm to delete this user?")) {
+            return;
+         }
+         isDeletingUser = true;
+         newLoginCredential = document.getElementById('userLoginID').value;
+         socket.emit('readData', '');
+      }
+      socket.on('readData', function(e) { //get stored data rom server, edit, and rewrite to the server
+         if (isDeletingUser) { //if is deleting a user, then delete the user data and rewrite to server
+            _data = JSON.parse(e);
+            console.log(_data[newLoginCredential]);
+            delete _data[newLoginCredential];
+
+            console.log(_data[newLoginCredential]);
+            socket.emit('save', JSON.stringify(_data));
+
+            console.log('deleted');
+            backButton();
+            return;
+         } else if (isCreatingNewUser) { //if is creating new user, then add new user info and rewrite to server
+            _data = JSON.parse(e);
+            _data[newLoginCredential] = {
+               "data": [],
+               "compName": newCompName,
+               "tp": 0
+            };
+            socket.emit('save', JSON.stringify(_data));
+
+            clearMainPage();
+            mainPageSetup();
+            return;
+         }
+         //save user data and rewrite to server(on User Info Page)
+         let newName = document.getElementById("userLoginID").value;
+         _data = JSON.parse(e);
+         if (oldUserLoginData !== newName) {
+            delete _data[oldUserLoginData];
+            _data[newName] = {};
+         }
+         _data[newName].data = arr;
+         _data[newName].tp = updateTotalPoints();
+         _data[newName].compName = document.getElementById("compName").value;
+         socket.emit('save', JSON.stringify(_data));
+
+      });
+      socket.on('saveSuccess', function(e) {
+         if (e === JSON.stringify(_data)) { //on rewritten to the server, get the data again from the server for comparison (check for saving error)
+            console.log('succs');
+            if (isCreatingNewUser) {
+               isCreatingNewUser = false;
+               showNotification(t, 'Created<br>Successfully', '#59f979');
+            } else if (isDeletingUser) {
+               isDeletingUser = false;
+               showNotification(t, 'Deleted<br>Successfully', '#59f979');
+            } else {
+               showNotification(t, 'Saved<br>Successfully', '#59f979');
+            }
+         } else {
+            console.log('save error');
+            showNotification(t, 'Saving Failed', '#ff2111');
+         }
+
+      });
+
+      function onRetrieve() { //display the retrieved particular user info onto the User Info page
+         let newData = document.getElementById("newData"),
+            temp = document.getElementById('tableUserInfo'),
+            temp2;
+         newData.parentNode.removeChild(newData);
+
+         arr.forEach(function(element, index) {
+            temp2 = index + 1;
+            temp.innerHTML += '<tr id="no' + index + '"> <td>' + temp2 + '</td> <td>' + element.purchases + '</td> <td>' + element.description + '</td> <td>' + element.points + '</td> <td>' + element.date + '</td> </tr>';
+         });
+
+         temp.innerHTML += '<tr id="newData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
+
+         document.getElementById("compName").value = oldCompName;
+         document.getElementById("userLoginID").value = oldUserLoginData;
+
+         updateTotalPoints();
+      }
+
+      function onSave() { //on save User Info button pressed
+         if (!confirm("Confirm to save the new User Infomation?")) {
+            return;
+         }
+         socket.emit('readData', '');
+      }
+
+      function appendData() { //
+         let newData = document.getElementById("newData"),
+            temp = document.getElementById('tableUserInfo'),
+            temp2 = arr.length + 1;
+
+         newData.parentNode.removeChild(newData);
+
+         temp.innerHTML += '<tr id="no' + arr.length + '"> <td>' + temp2 + '</td> <td>' + newData.childNodes[3].innerHTML + '</td> <td>' + newData.childNodes[5].innerHTML + '</td> <td>' + newData.childNodes[7].innerHTML + '</td> <td>' + newData.childNodes[9].innerHTML + '</td> </tr>';
+
+         arr[arr.length] = {
+            'description': newData.childNodes[5].innerHTML,
+            'purchases': newData.childNodes[3].innerHTML,
+            'points': newData.childNodes[7].innerHTML,
+            'date': newData.childNodes[9].innerHTML
+         };
+
+         temp.innerHTML += '<tr id="newData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
+      }
+
+      function removeData() {
+         let temp = arr.length - 1;
+         temp = document.getElementById('no' + temp);
+         temp.parentNode.removeChild(temp);
+         arr.pop();
+      }
+
+      function updateTotalPoints() {
+         let totalPoints = document.getElementById('totalPoints'),
+            sum = 0;
+
+         arr.forEach(function(element) {
+            sum += Number(element.points);
+         });
+
+         totalPoints.innerHTML = "Total Points : " + sum;
+         return sum;
+      }
+
+
+
+      function transition(to, from) { //back pressed
+         currentView = to;
+         document.getElementById('backButton').hidden = false;
+         if (to === 2) {
+
+            //document.getElementById('userInfo').style.width = '90%';
+
+            document.getElementById('userInfo').style.left = "50%";
+
+         } else if (to === 0) {
+            // document.getElementById('loginPage').style.width = '55%';
+
+            document.getElementById('loginPage').style.left = "50%";
+            //document.getElementById('logo').style.width = '150px';
+            document.getElementById('logo').style.left = "50%";
+            document.getElementById('backButton').hidden = true;
+
+         } else if (to === 1) {
+
+            //document.getElementById('mainPage').style.width = '80%';
+            document.getElementById('mainPage').style.left = "50%";
+         } else if (to === 3) {
+
+            //document.getElementById('rewardPage').style.width = '90%';
+            document.getElementById('rewardPage').style.left = "50%";
+         } else if (to === 4) {
+
+            // document.getElementById('previewRewardPage').style.width = '90%';
+            document.getElementById('previewRewardPage').style.left = "50%";
+         } else if (to === 5) {
+            //document.getElementById('resetPasswordPage').style.width = '80%';
+            document.getElementById('resetPasswordPage').style.left = "50%";
+         }
+
+         if (from === 2) {
+            // document.getElementById('userInfo').style.width = '0%';
+            // document.getElementById('userInfo').style.transition="0s ease";
+            document.getElementById('userInfo').style.left = "-200%";
+
+
+         } else if (from === 0) {
+            //document.getElementById('loginPage').style.width = '0%';
+            //document.getElementById('logo').style.width = '0%';
+
+
+            document.getElementById('loginPage').style.left = "200%";
+            document.getElementById('logo').style.left = "200%";
+
+         } else if (from === 1) {
+            //document.getElementById('mainPage').style.width = '0%';
+            //document.getElementById('loginPage').style.transition="0s ease";
+            if (to === 0)
+               document.getElementById('mainPage').style.left = "-200%";
+            else
+               document.getElementById('mainPage').style.left = "200%";
+         } else if (from === 3) {
+            //document.getElementById('rewardPage').style.width = '0%';
+            // document.getElementById('userInfo').style.transition="0s ease";
+            document.getElementById('rewardPage').style.left = "-200%";
+
+         } else if (from === 4) {
+            //document.getElementById('previewRewardPage').style.width = '0%';
+            // document.getElementById('userInfo').style.transition="0s ease";
+            document.getElementById('previewRewardPage').style.left = "-200%";
+
+         } else if (from === 5) {
+            //document.getElementById('resetPasswordPage').style.width = '0%';
+            // document.getElementById('userInfo').style.transition="0s ease";
+            document.getElementById('resetPasswordPage').style.left = "-200%";
+         }
+      }
+
+   </script>
 
 </html>
-<!--
-
-<!DOCTYPE html>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-<html>
-  <meta name="viewport" content="width=device-width,height=device-height, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Delius" />
-
-  <head>
-    <style>
-      * {
-        font-family: Delius;
-      }
-
-      /* make image undraggable */
-
-      img {
-        user-drag: none;
-        user-select: none;
-        -moz-user-select: none;
-        -webkit-user-drag: none;
-        -webkit-user-select: none;
-        -ms-user-select: none;
-      }
-
-      /* configuration for the scrollbar layout */
-
-      ::-webkit-scrollbar {
-        width: 8px;
-      }
-
-      ::-webkit-scrollbar-track {
-        background: rgba(229, 229, 229, 0.3);
-      }
-
-      ::-webkit-scrollbar-thumb {
-        background: rgba(147, 147, 188, 0.6);
-      }
-
-      ::-webkit-scrollbar-thumb:hover {
-        background: #555;
-      }
-
-      /*configuration for buttons*/
-
-      button {
-        border-style: solid;
-        border-width: 2px;
-        border-radius: 25%;
-        border-color: rgba(112, 112, 112, 0.7);
-        cursor: pointer;
-        padding: 6px;
-        font-size: calc(11px + 0.4vw);
-        margin: 3px;
-      }
-
-      /* remove padding,margin, set fill view */
-
-      head,
-      html,
-      body {
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        overflow-x: hidden;
-        overflow-y: hidden;
-        padding: 0px;
-        margin: 0;
-      }
-
-      /* background image*/
-
-      .bg {
-        width: 100%;
-        height: 100%;
-        left: 0px;
-        top: 0px;
-        position: absolute;
-        padding: 0px;
-        margin: 0px;
-        z-index: -1;
-        overflow: hidden;
-      }
-
-      /*login page layout, no1 transition*/
-
-      .loginPage {
-        width: 0%;
-        max-width: 320px;
-        position: absolute;
-        top: 50%;
-        left: 200%;
-        margin: 0;
-        opacity: 1;
-        overflow: hidden;
-        transition: 1.5s ease;
-        transform: translate(-50%, -50%);
-        background-color: rgba(255, 255, 255, 0.7);
-        border: 3px solid grey;
-        padding: 25px;
-        overflow-x: hidden;
-        border-radius: 5%;
-        border-style: groove;
-        box-shadow: 2px 2px 15px black;
-      }
-
-      /*user info page layout ,no.2 transition*/
-
-      .userInfo {
-        width: 0%;
-        height: 80%;
-        max-height: 90%;
-        position: absolute;
-        margin: 0;
-        transform: translate(-50%, -50%);
-        left: -20%;
-        top: 50%;
-        opacity: 1;
-        overflow-x: hidden;
-        overflow-y: auto;
-        transition: 1.5s ease;
-        background-color: rgba(255, 255, 255, 0.5);
-        padding: 12px;
-        padding-top: 0px;
-        border-radius: 3%;
-        border-width: 0.6vw;
-        border-color: grey;
-        border-style: groove;
-        box-shadow: 2px 2px 15px black;
-      }
-
-      /*main page page layout ,no.1 transition*/
-
-      .mainPage {
-        width: 0%;
-        height: 80%;
-        position: absolute;
-        margin: 0;
-        transform: translate(-50%, -50%);
-        left: -20%;
-        top: 50%;
-        opacity: 1;
-        overflow: hidden;
-        transition: 1.5s ease;
-        background-color: rgba(255, 255, 255, 0.5);
-        padding: 25px;
-        border-radius: 3%;
-        border-width: 0.6vw;
-        border-color: grey;
-        border-style: groove;
-        box-shadow: 2px 2px 15px black;
-      }
-
-      /*reward page layout ,no.3 transition*/
-
-      .previewRewardPage {
-        width: 0%;
-        height: 80%;
-        position: absolute;
-        margin: 0;
-        transform: translate(-50%, -50%);
-        left: -20%;
-        top: 50%;
-        opacity: 1;
-        overflow: hidden;
-        transition: 1.5s ease;
-        background-color: rgba(255, 255, 255, 0.5);
-        padding: 25px;
-        border-radius: 3%;
-        border-width: 0.6vw;
-        border-color: grey;
-        border-style: groove;
-        box-shadow: 2px 2px 15px black;
-      }
-
-      /*edit reward page layout ,no.4 transition*/
-
-      .rewardPage {
-        width: 0%;
-        height: 80%;
-        position: absolute;
-        margin: 0;
-        transform: translate(-50%, -50%);
-        left: -20%;
-        top: 50%;
-        opacity: 1;
-        overflow: hidden;
-        transition: 1.5s ease;
-        background-color: rgba(255, 255, 255, 0.5);
-        padding: 25px;
-        border-radius: 3%;
-        border-width: 0.6vw;
-        border-color: grey;
-        border-style: groove;
-        box-shadow: 2px 2px 15px black;
-      }
-
-      .editRewardPageCustom {
-        font-size: calc(6px + 0.4vw);
-      }
-
-      /*table config for main page and user info page*/
-
-      .tableUserInfo,
-      .tableMainPage {
-        font-family: arial, sans-serif;
-        border-collapse: collapse;
-        width: 80%;
-        overflow-y: auto;
-        max-width: 90%;
-        margin: auto;
-        font-size: calc(10px + 0.5vw);
-      }
-
-      /* table header layout*/
-
-      .table_header {
-        font-size: calc(10px + 0.8vw);
-        text-align: center;
-        background-color: grey;
-      }
-
-      td,
-      th {
-        border: 1px solid black;
-        text-align: left;
-        padding: 6px;
-      }
-
-      tr:nth-child(even) {
-        background-color: #dddddd;
-      }
-
-      tr:nth-child(odd) {
-        background-color: white;
-      }
-
-      /* for button custom layout background*/
-
-      .green_black {
-        background-color: #48e218;
-        color: black;
-      }
-
-      .red_white {
-        background-color: red;
-        color: white;
-        text-shadow:
-   -1px -1px 0 #000,  
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-     1px 1px 0 #000;
-      }
-
-      .orange_white {
-        background-color: #ef7c28;
-        color: white;
-        text-shadow:
-   -1px -1px 0 #000,  
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-     1px 1px 0 #000;
-      }
-
-      /*back button configuration */
-
-      .backButton {
-        background-image: url("https://i.imgur.com/SS1EJdq.png");
-        background-size: cover;
-        border-width: 0px;
-        background-color: rgba(0, 0, 0, 0);
-        width: 45px;
-        height: 45px;
-        position: absolute;
-        left: 10%;
-        top: 5%;
-        z-index: 1;
-      }
-
-      /*configuration for reward image */
-
-      .rewardImage {
-        border-radius: 15%;
-        border-color: grey;
-        border-width: 5px;
-        border-style: groove;
-      }
-
-      /*description configuration for reward image */
-
-      .rewardImageDes {
-        font-size: calc(7px + 1.5vw);
-        padding: 0.3vw;
-        text-align: center;
-      }
-
-      /*for image prev setup*/
-
-      .column1 {
-        float: right;
-        width: 45%;
-        padding: 5px;
-      }
-
-      .column2 {
-        float: left;
-        width: 45%;
-        padding: 5px;
-      }
-
-      .columnMid {
-        width: 80%;
-        left: 50%;
-        transform: translate(-50%);
-        position: relative;
-        padding: 5px;
-      }
-
-      /* Clearfix (clear floats) */
-
-      .row::after {
-        content: "";
-        clear: both;
-        display: table;
-      }
-
-      /* Responsive layout - makes the three columns stack on top of each other instead of next to each other */
-
-      @media screen and (max-width: 500px) {
-        .co,
-        .dd {
-          width: 100%;
-        }
-      }
-
-      /*popup notifaction box layout design*/
-
-      .notification {
-        border-radius: 40%;
-        border-style: solid;
-        border-color: #565656;
-        color: white;
-        background-color: #7c7c7c;
-        position: absolute;
-        text-align: center;
-        left: 42%;
-        top: 50%;
-        padding: 10px;
-        font-size: calc(12px + 0.5vw);
-        text-shadow:
-   -1px -1px 0 #000,  
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-     1px 1px 0 #000;
-      }
-
-      .resetPasswordPage {
-        width: 0%;
-        max-width: 300px;
-        position: absolute;
-        top: 50%;
-        left: -20%;
-        margin: 0;
-        opacity: 1;
-        overflow: hidden;
-        transition: 2s ease;
-        -ms-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
-        background-color: rgba(255, 255, 255, 0.7);
-        border: 3px solid grey;
-        padding: 25px;
-        overflow-x: hidden;
-        border-radius: 5%;
-        border-style: groove;
-        box-shadow: 2px 2px 15px black;
-      }
-
-      /*company logo display on login page*/
-
-      .logo {
-        position: relative;
-        width: 0%;
-        left: 200%;
-        transform: translate(-50%);
-        top: 12%;
-        border-style: groove;
-        border-radius: 25%;
-        box-shadow: 5px 3px 15px black;
-        z-index: 1;
-        opacity: 0.85;
-        transition: 2.0s ease;
-      }
-
-    </style>
-  </head>
-  <img src="https://i.imgur.com/kejGM7k.jpg" class="bg" style="filter:brightness(60%);">
-
-  <body>
-    <button id="backButton" onclick="backButton();" class="backButton" hidden></button>
-
-
-    <img src="https://i.imgur.com/ufIvWrG.png" class="logo" id="logo">
-    <div class="loginPage" id="loginPage">
-      <div style="text-align:center;padding-top:2vw;">
-        Username <input type="text" id="loginAdmin" size="15">
-        <br><br> Password <input type="password" id="loginPassword" size="15"></div>
-      <br>
-      <div style="color:red;font-size:12px;text-align:center;" id="wrongCreditial" hidden>
-        Incorrect password/username. <br>Please re-enter the correct information
-      </div>
-      <br>
-      <button id="loginEnter" onclick="loginAdmin()" style="left:50%;position:relative;transform:translate(-50%);margin:0;" class="green_black">Enter</button>
-      <br>
-    </div>
-
-
-    <div class='userInfo' id='userInfo'>
-      <div style="padding-left:20%;">
-        <br><br> Company Name &nbsp; <input type='text' id="compName">
-        <br><br> Login Credentials <input type='text' id="userLoginID">
-      </div>
-      <br><br>
-      <div style="overflow-y:auto;max-height:40%;">
-        <table class="tableUserInfo" id="tableUserInfo">
-          <tr>
-            <th class='table_header'>No</th>
-            <th class='table_header'>Purchases</th>
-            <th class='table_header'>Description</th>
-            <th class='table_header'>Points</th>
-            <th class='table_header'>Date</th>
-          </tr>
-          <tr id="newData" style="table_editable">
-            <td contenteditable="false"></td>
-            <td contenteditable="true"></td>
-            <td contenteditable="true"></td>
-            <td contenteditable="true"></td>
-            <td contenteditable="true"></td>
-          </tr>
-        </table>
-      </div>
-      <br>
-      <b><div id="totalPoints" style="position:relative;left:10%;font-size:calc(15px + 0.4vw);"></div></b>
-      <br>
-      <button onclick="appendData();updateTotalPoints();" class="orange_white" style="position:relative;left:10%;">Append Data</button>
-      <button onclick="removeData();updateTotalPoints();" class="orange_white" style="position:relative;left:10%;">Remove Data</button>
-
-      <button onclick="onSave();" class="green_black" style="position:relative;left:10%;">Save Data</button>
-      <button onclick="deleteUser();" class="red_white" style="position:relative;left:10%;">Delete User</button>
-    </div>
-
-    <div id="mainPage" class="mainPage">
-      <div style="font-size:calc(15px + 0.7vw);padding:10px;text-align:center;position:relative;font-family:verdana;color:#0036b5;"><b>
-        User List</b>
-      </div>
-      <div style="overflow-y:auto;max-height:70%;">
-        <table class="tableMainPage" id="tableMainPage">
-          <tr>
-            <th class='table_header'>Company Name</th>
-            <th class='table_header'>Login Credential</th>
-            <th class='table_header'>Points</th>
-          </tr>
-          <tr id="newUserData" style="table_editable">
-            <td contenteditable="true"></td>
-            <td contenteditable="true"></td>
-            <td contenteditable="false"></td>
-            <td contenteditable="false"><button style="position:relative;left:50%;transform: translate(-50%);">
-          </button></td>
-          </tr>
-        </table>
-      </div>
-      <br>
-      <button id="addUser" onclick="addNewUser();" style="position:relative;left:10%;" class="green_black">Add New User</button>
-      <button id="editReward" onclick="rewardPageSetup();" style="position:relative;left:10%;" class="orange_white">Edit Reward</button>
-      <button id="previewReward" onclick="previewRewardPageSetup();" style="position:relative;left:10%;" class="orange_white">Preview Reward</button>
-      <button id="resetPassword" onclick="resetPasswordPage();" style="position:relative;left:10%;" class="red_white">Reset Password</button>
-    </div>
-
-
-    <div id="rewardPage" class="rewardPage">
-      <div style="font-size:calc(15px + 0.7vw);padding:10px;text-align:center;color:#0036b5;position:relative;font-family:verdana;"><b>
-        Edit Reward</b>
-      </div>
-      <div style="overflow:auto;max-width:100%;max-height:80%;">
-        <table class="tableMainPage" id="tableMainPage">
-          <tr>
-            <th class='table_header'>Image URL</th>
-            <th class='table_header'>Description</th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img1" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des1" class="editRewardPageCustom"></th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img2" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des2" class="editRewardPageCustom"></th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img3" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des3" class="editRewardPageCustom"></th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img4" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des4" class="editRewardPageCustom"></th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img5" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des5" class="editRewardPageCustom"></th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img6" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des6" class="editRewardPageCustom"></th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img7" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des7" class="editRewardPageCustom"></th>
-          </tr>
-          <tr>
-            <th contenteditable="true" id="img8" class="editRewardPageCustom"></th>
-            <th contenteditable="true" id="des8" class="editRewardPageCustom"></th>
-          </tr>
-        </table>
-      </div>
-      <br>
-      <button class="green_black" style="left:10%;position:relative;" onclick="saveReward()">
-        Save
-        </button>
-    </div>
-
-
-    <div id="previewRewardPage" class="previewRewardPage" style="overflow-y:auto;">
-      <div style="font-size:calc(15px + 0.7vw);padding:10px;color:#0036b5;position:relative;font-family:verdana;text-align:center;"><b>
-        Redeemable Rewards</b>
-      </div>
-      <div id="previewRewardPageEditable">
-        <div class="row">
-          <div class="column1">
-            <img src="" alt="Snow" style="width:100%;" class="rewardImage">
-            <div style="font-size:15px;height:25px;"><b> </b>
-            </div>
-          </div>
-          <div class="column2">
-            <img src="" alt="Forest" style="width:100%;" class="rewardImage">
-            <div><b></b>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="resetPasswordPage" id="resetPasswordPage">
-      <div style="font-size:calc(14px + 0.7vw);padding:10px;color:#0036b5;position:relative;font-family:verdana;text-align:center;"><b>
-        Reset Password</b>
-      </div>
-      <div style="text-align:center;padding-top:2vw;">
-        Old Username <input type="text" id="oldUsername" style="left:5%;position:relative;"><br><br> Old Password <input type="password" id="oldPassword" style="left:6%;position:relative;"><br><br><br> New Username <input type="text" id="newUsername"
-          style="left:4%;position:relative;"><br><br> New Password <input type="password" id="newPassword" style="left:5%;position:relative;"><br>
-      </div>
-      <div style="text-align:center;">
-        <br>
-        <button class="red_white" onclick="resetPassword()" style="text-align:center;">
-          Reset
-        </button>
-      </div>
-    </div>
-
-
-    <b><div class="notification" id="notification" hidden>Saved !!!</div></b>
-  </body>
-  <script>
-    let socket = io('https://charm-dagger.glitch.me/'),
-      arr,
-      currentView = 1,
-      userList,
-      isCreatingNewUser = false,
-      newCompName = '',
-      newLoginCredential = '',
-      isDeletingUser,
-      isPreviewingReward = false,
-      t = document.getElementById('notification'),
-      oldCompName = "",
-      oldUserLoginData = "",
-      _data,
-      previousPrevRewardData;
-
-    function showNotification(elem, text, color) {
-      let count = 0;
-      elem.style.opacity = 1.2;
-      elem.innerHTML = text;
-      elem.style.color = color;
-      elem.hidden = false;
-      if (elem.loop) {
-        clearInterval(elem.loop);
-        elem.loop = null;
-      }
-      elem.loop = setInterval(function() {
-        console.log('noti');
-        elem.style.opacity -= 0.015;
-        elem.style.top = ((50 - count / 2.5)) + "%";
-        count++;
-        if (count > 65) {
-          clearInterval(elem.loop);
-          elem.loop = null;
-          console.log('noti cleared');
-          elem.style.opacity = 1;
-          elem.style.top = 50 + "%";
-          elem.hidden = true;
-          elem.isRunning = false;
-        }
-      }, 30);
-    }
-
-    function backButton() { //triggered when back button is pressed, handle transition
-      if (currentView === 1 && !confirm("Confirm to log out?")) {
-        return; //confirmation to log out on main page
-      }
-      clearMainPage();
-      //clearUserInfoPage();
-      if (currentView === 2) {
-        mainPageSetup();
-        transition(1, 2);
-      } else if (currentView == 1) {
-        //clearMainPage();
-        transition(0, 1);
-      } else if (currentView == 3) {
-        mainPageSetup();
-        transition(1, 3);
-      } else if (currentView == 4) {
-        mainPageSetup();
-        transition(1, 4);
-      } else if (currentView == 5) {
-        mainPageSetup();
-        transition(1, 5);
-      }
-    }
-
-    function heartBeat() { //emit heartbeat every period
-      socket.emit('heartBeat');
-    }
-    socket.on('heartBeat', function() { //increment heartbeat
-      heartBeatCount++;
-    });
-
-    function checkHeartBeat() { //check if heartbeat no. below threshold
-      if (heartBeatCount < 3) { //if so, disconnect and refresh page
-        console.log('disconnected/refresh page due to poor network');
-        showNotification(t, 'Connection Failed', '#ff3700');
-        setTimeout(function() {
-          document.body.innerHTML += '<meta http-equiv="refresh" content="2">';
-          socket.disconnect();
-        }, 2000);
-
-      } else {
-        heartBeatCount = 0;
-        console.log('good network connection');
-      }
-
-    }
-
-    let heartBeatCount = 0,
-      checkerInterval = 0;
-    requestAnimationFrame(checker);
-
-    function checker() { //auto disconnect due to poor network
-      checkerInterval++;
-      setTimeout(function() {
-        requestAnimationFrame(checker)
-      }, 2000);
-      requestAnimationFrame(heartBeat);
-      if (checkerInterval >= 10) {
-        checkerInterval = 0;
-        requestAnimationFrame(checkHeartBeat);
-      }
-    }
-
-    document.onkeydown = function() {}
-
-
-    function resetPasswordPage() { //move to resetPasswrod page
-      transition(5, 1);
-    }
-
-    function resetPassword() { //on reset button click, send reset infomation to server
-      let temp = {
-        'oldName': document.getElementById('oldUsername').value,
-        'newName': document.getElementById('newUsername').value,
-        'newPassword': document.getElementById('newPassword').value,
-        'oldPassword': document.getElementById('oldPassword').value
-      };
-
-      socket.emit('adminReset', JSON.stringify(temp)); //send old and new credential info to server
-      document.getElementById('oldPassword').value = ""; //clear user typed info
-      document.getElementById('newPassword').value = "";
-      document.getElementById('newUsername').value = "";
-      document.getElementById('oldUsername').value = "";
-    }
-    socket.on('resetSuccess', function(e) { //on correct old credential, move to login page
-      transition(0, 5);
-      showNotification(t, 'Reset<br>Successfully', '#59f979');
-    });
-
-    socket.on('resetFail', function(e) { //on reset fail(wrong credential), display notice
-      showNotification(t, 'Reset Failed', '#ff3700');
-    });
-
-    //auto login when enter key is pressed (login page)
-    document.getElementById("loginAdmin").addEventListener("keyup", function(event) {
-
-      event.preventDefault();
-      // Number 13 is the "Enter" key on the keyboard
-      if (event.keyCode === 13) {
-        // Trigger the button element with a click
-        document.getElementById("loginEnter").click();
-      }
-    });
-    document.getElementById("loginPassword").addEventListener("keyup", function(event) {
-
-      event.preventDefault();
-      // Number 13 is the "Enter" key on the keyboard
-      if (event.keyCode === 13) {
-        // Trigger the button element with a click
-        document.getElementById("loginEnter").click();
-      }
-    });
-
-    function loginAdmin() { //on login button pressed, send info to server for verification
-      let temp = {
-        'name': document.getElementById('loginAdmin').value,
-        'password': document.getElementById('loginPassword').value
-      };
-      socket.emit('adminLogin', JSON.stringify(temp));
-    }
-
-
-    function rewardPageSetup() { //move to editreward page
-      transition(3, 1);
-      socket.emit('retrieveReward', '');
-    }
-
-    function previewRewardPageSetup() { //move to prev reward page
-      transition(4, 1);
-      isPreviewingReward = true;
-      socket.emit('retrieveReward', '');
-    }
-
-    function saveReward() { //triggerd on save reward config button clicked
-      let temp = [],
-        temp2;
-
-      if (!confirm("Confirm to save the new Reward Configuration?")) { //confirmation prompt
-        return;
-      }
-
-      for (let loop = 1; loop <= 8; loop++) { //store keyed-in infomation on the Edit reward page
-        temp.push(document.getElementById('img' + loop).innerHTML);
-        temp.push(document.getElementById('des' + loop).innerHTML);
-      }
-      socket.emit('saveReward', JSON.stringify(temp)); //send the stored info the server for saving purpose
-      showNotification(t, 'Saved', '#59f979');
-    }
-
-    socket.on('retrieveReward', function(e) { //retrieve reward info stroed on server and display it on Prev Reward Page / Edit Reward Page
-      //['url','des']
-
-      let retrievedData = e;
-      e = JSON.parse(e);
-      let temp2 = 0;
-      if (isPreviewingReward) { //if its on Prev Reward Page, then display the reward image
-        if (retrievedData === previousPrevRewardData) { //check if prev Displayed reward data is similar to the retrived one, if so, dont have to overwrite the data (perfomance optimisation purpose)
-          isPreviewingReward = false;
-          return;
-        }
-        previousPrevRewardData = retrievedData;
-        document.getElementById('previewRewardPageEditable').innerHTML = '<div class="row">';
-        for (let x = 0; x <= 16; x += 4) {
-
-          if (e[x] && e[x + 2] && e[x] !== "" && e[x + 2] !== "") {
-            document.getElementById('previewRewardPageEditable').innerHTML += '<div class="column1"> <img src="' + e[x] + '" alt="Snow" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 1] + ' </b></div> </div> ';
-
-
-            document.getElementById('previewRewardPageEditable').innerHTML += '<div class="column2"> <img src="' + e[x + 2] + '" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 3] + '</b></div>';
-          } else if (e[x] && e[x] !== "") {
-            document.getElementById('previewRewardPageEditable').innerHTML += '<div class="columnMid"> <img src="' + e[x] + '" alt="Snow" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 1] + ' </b></div> </div> ';
-
-          } else if (e[x + 2] && e[x + 2] !== "") {
-            document.getElementById('previewRewardPageEditable').innerHTML += '<div class="columnMid"> <img src="' + e[x + 2] + '" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 3] + '</b></div>';
-            console.log('ads');
-          }
-          document.getElementById('previewRewardPage').innerHTML += '</div>';
-
-        }
-
-        isPreviewingReward = false;
-        return;
-      } else {
-        //if on Edit Reward Page, output the reward image URL and des onto the table
-        for (let temp = 1; temp <= 8; temp++) {
-          document.getElementById('img' + temp).innerHTML = e[temp2];
-          document.getElementById('des' + temp).innerHTML = e[temp2 + 1];
-          temp2 += 2;
-        }
-      }
-    });
-
-    function mainPageSetup() { //retrieve mainpage userList
-      socket.emit('readUserList', '');
-      console.log('main');
-    }
-
-    function userInfoSetupPage(name) {
-      socket.emit('retrieve', name);
-      oldUserLoginData = name;
-      console.log('transition to userinfo');
-      transition(2, 1);
-    }
-
-    function clearUserInfoPage() {
-      document.getElementById('tableUserInfo').innerHTML = '<tr> <th class="table_header">No</th> <th class="table_header">Purchases</th> <th class="table_header">Description</th> <th class="table_header">Points</th> <th class="table_header">Date</th> </tr> <tr id="newData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
-    }
-
-    function clearMainPage() {
-      document.getElementById('tableMainPage').innerHTML = '<tr> <th class="table_header">Company Name</th> <th class="table_header">Login Credential</th> <th class="table_header">Points</th> </tr> <tr id="newUserData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="false"></td> <td contenteditable="false"><button style="position:relative;left:50%;transform: translate(-50%);"> > </button></td> </tr>';
-    }
-
-    function addNewUser() {
-
-      let newData = document.getElementById("newUserData"),
-        temp = document.getElementById('tableMainPage');
-
-      if (!confirm("Confirm to add new user with Company Name '" + newData.childNodes[1].innerHTML + "' and Login Credential of '" + newData.childNodes[3].innerHTML + "'")) {
-        return;
-      }
-
-      newData.parentNode.removeChild(newData);
-
-      temp.innerHTML += '<tr><th>' + newData.childNodes[1].innerHTML + '</th> <th>' + newData.childNodes[3].innerHTML + '</th> <th>' + 0 + '</th><th><button>></button></th></tr>';
-
-      temp.innerHTML += '<tr id="newUserData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="true"></td> <td contenteditable="true"></td> </td>';
-      isCreatingNewUser = true;
-      newCompName = newData.childNodes[1].innerHTML;
-      newLoginCredential = newData.childNodes[3].innerHTML;
-      socket.emit('readData', '');
-    }
-
-    socket.on('connect', function() {
-      console.log('connected');
-      transition(0, currentView); //display login page at startup
-
-    });
-    socket.on('disconnect'),
-      function() {
-        console.log('disconnect');
-      };
-    socket.on('loginSuccess', function(e) {
-      console.log('login Success');
-      clearMainPage();
-      mainPageSetup();
-      transition(1, 0);
-      document.getElementById('wrongCreditial').hidden = true;
-      document.getElementById('loginPassword').value = '';
-
-    });
-    socket.on('loginFail', function(e) {
-      console.log('fail');
-      document.getElementById('loginPassword').value = '';
-      document.getElementById('wrongCreditial').hidden = false;
-    });
-    //retrieve a particular user info from server
-    socket.on('retrieve', function(e) {
-      e = JSON.parse(e);
-      oldCompName = e.compName;
-      arr = e.data;
-      onRetrieve();
-      console.log('retrieve user info succ');
-
-    });
-    //retrieve ALL users data from the server
-    socket.on('readUserList', function(e) {
-      e = JSON.parse(e);
-      let temp = Object.keys(e);
-      onUserListRetrieve(temp, e);
-
-    });
-
-    function onUserListRetrieve(arr, obj) {
-      let newData = document.getElementById("newUserData"),
-        temp = document.getElementById('tableMainPage');
-
-      newData.parentNode.removeChild(newData);
-
-      arr.forEach(function(name, index) {
-
-        temp.innerHTML += '<tr><th>' + obj[name].compName + '</th> <th>' + name + '</th> <th>' + obj[name].tp + '</th><th><button id="userInfoButton' + index + '" style="left:50%;position:relative;transform:translate(-50%);" onclick="onClickUserInfoButton(\'' + name + '\',' + index + ');">>></button></th></tr>';
-      });
-
-      temp.innerHTML += '<tr id="newUserData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="true"></td> <td contenteditable="true"></td> </td>';
-
-    }
-
-    function onClickUserInfoButton(name, buttonNum) {
-      console.log('button pressed for ' + name, buttonNum);
-      clearUserInfoPage();
-      userInfoSetupPage(name);
-
-    }
-
-    function deleteUser() {
-      if (!confirm("Confirm to delete this user?")) {
-        return;
-      }
-      isDeletingUser = true;
-      newLoginCredential = document.getElementById('userLoginID').value;
-      socket.emit('readData', '');
-    }
-    socket.on('readData', function(e) { //get stored data rom server, edit, and rewrite to the server
-      if (isDeletingUser) { //if is deleting a user, then delete the user data and rewrite to server
-        _data = JSON.parse(e);
-        console.log(_data[newLoginCredential]);
-        delete _data[newLoginCredential];
-
-        console.log(_data[newLoginCredential]);
-        socket.emit('save', JSON.stringify(_data));
-
-        console.log('deleted');
-        backButton();
-        return;
-      } else if (isCreatingNewUser) { //if is creating new user, then add new user info and rewrite to server
-        _data = JSON.parse(e);
-        _data[newLoginCredential] = {
-          "data": [],
-          "compName": newCompName,
-          "tp": 0
-        };
-        socket.emit('save', JSON.stringify(_data));
-
-        clearMainPage();
-        mainPageSetup();
-        return;
-      }
-      //save user data and rewrite to server(on User Info Page)
-      let newName = document.getElementById("userLoginID").value;
-      _data = JSON.parse(e);
-      if (oldUserLoginData !== newName) {
-        delete _data[oldUserLoginData];
-        _data[newName] = {};
-      }
-      _data[newName].data = arr;
-      _data[newName].tp = updateTotalPoints();
-      _data[newName].compName = document.getElementById("compName").value;
-      socket.emit('save', JSON.stringify(_data));
-
-    });
-    socket.on('saveSuccess', function(e) {
-      if (e === JSON.stringify(_data)) { //on rewritten to the server, get the data again from the server for comparison (check for saving error)
-        console.log('succs');
-        if (isCreatingNewUser) {
-          isCreatingNewUser = false;
-          showNotification(t, 'Created<br>Successfully', '#59f979');
-        } else if (isDeletingUser) {
-          isDeletingUser = false;
-          showNotification(t, 'Deleted<br>Successfully', '#59f979');
-        } else {
-          showNotification(t, 'Saved<br>Successfully', '#59f979');
-        }
-      } else {
-        console.log('save error');
-        showNotification(t, 'Saving Failed', '#ff2111');
-      }
-
-    });
-
-    function onRetrieve() { //display the retrieved particular user info onto the User Info page
-      let newData = document.getElementById("newData"),
-        temp = document.getElementById('tableUserInfo'),
-        temp2;
-      newData.parentNode.removeChild(newData);
-
-      arr.forEach(function(element, index) {
-        temp2 = index + 1;
-        temp.innerHTML += '<tr id="no' + index + '"> <td>' + temp2 + '</td> <td>' + element.purchases + '</td> <td>' + element.description + '</td> <td>' + element.points + '</td> <td>' + element.date + '</td> </tr>';
-      });
-
-      temp.innerHTML += '<tr id="newData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
-
-      document.getElementById("compName").value = oldCompName;
-      document.getElementById("userLoginID").value = oldUserLoginData;
-
-      updateTotalPoints();
-    }
-
-    function onSave() { //on save User Info button pressed
-      if (!confirm("Confirm to save the new User Infomation?")) {
-        return;
-      }
-      socket.emit('readData', '');
-    }
-
-    function appendData() { //
-      let newData = document.getElementById("newData"),
-        temp = document.getElementById('tableUserInfo'),
-        temp2 = arr.length + 1;
-
-      newData.parentNode.removeChild(newData);
-
-      temp.innerHTML += '<tr id="no' + arr.length + '"> <td>' + temp2 + '</td> <td>' + newData.childNodes[3].innerHTML + '</td> <td>' + newData.childNodes[5].innerHTML + '</td> <td>' + newData.childNodes[7].innerHTML + '</td> <td>' + newData.childNodes[9].innerHTML + '</td> </tr>';
-
-      arr[arr.length] = {
-        'description': newData.childNodes[5].innerHTML,
-        'purchases': newData.childNodes[3].innerHTML,
-        'points': newData.childNodes[7].innerHTML,
-        'date': newData.childNodes[9].innerHTML
-      };
-
-      temp.innerHTML += '<tr id="newData" style="background-color: rgba(255, 248, 219, 0.3);"> <td contenteditable="false"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> <td contenteditable="true"></td> </tr>';
-    }
-
-    function removeData() {
-      let temp = arr.length - 1;
-      temp = document.getElementById('no' + temp);
-      temp.parentNode.removeChild(temp);
-      arr.pop();
-    }
-
-    function updateTotalPoints() {
-      let totalPoints = document.getElementById('totalPoints'),
-        sum = 0;
-
-      arr.forEach(function(element) {
-        sum += Number(element.points);
-      });
-
-      totalPoints.innerHTML = "Total Points : " + sum;
-      return sum;
-    }
-
-
-
-    function transition(to, from) { //back pressed
-      currentView = to;
-      document.getElementById('backButton').hidden = false;
-      if (to === 2) {
-
-        document.getElementById('userInfo').style.width = '90%';
-
-        document.getElementById('userInfo').style.left = "50%";
-
-      } else if (to === 0) {
-        document.getElementById('loginPage').style.width = '55%';
-
-        document.getElementById('loginPage').style.left = "50%";
-        document.getElementById('logo').style.width = '150px';
-        document.getElementById('logo').style.left = "50%";
-        document.getElementById('backButton').hidden = true;
-
-      } else if (to === 1) {
-
-        document.getElementById('mainPage').style.width = '80%';
-        document.getElementById('mainPage').style.left = "50%";
-      } else if (to === 3) {
-
-        document.getElementById('rewardPage').style.width = '90%';
-        document.getElementById('rewardPage').style.left = "50%";
-      } else if (to === 4) {
-
-        document.getElementById('previewRewardPage').style.width = '90%';
-        document.getElementById('previewRewardPage').style.left = "50%";
-      } else if (to === 5) {
-        document.getElementById('resetPasswordPage').style.width = '80%';
-        document.getElementById('resetPasswordPage').style.left = "50%";
-      }
-
-      if (from === 2) {
-        document.getElementById('userInfo').style.width = '0%';
-        // document.getElementById('userInfo').style.transition="0s ease";
-        document.getElementById('userInfo').style.left = "-20%";
-
-
-      } else if (from === 0) {
-        document.getElementById('loginPage').style.width = '0%';
-        document.getElementById('logo').style.width = '0%';
-
-
-        document.getElementById('loginPage').style.left = "200%";
-        document.getElementById('logo').style.left = "200%";
-
-      } else if (from === 1) {
-        document.getElementById('mainPage').style.width = '0%';
-        //document.getElementById('loginPage').style.transition="0s ease";
-        if (to === 0)
-          document.getElementById('mainPage').style.left = "-20%";
-        else
-          document.getElementById('mainPage').style.left = "200%";
-      } else if (from === 3) {
-        document.getElementById('rewardPage').style.width = '0%';
-        // document.getElementById('userInfo').style.transition="0s ease";
-        document.getElementById('rewardPage').style.left = "-20%";
-
-      } else if (from === 4) {
-        document.getElementById('previewRewardPage').style.width = '0%';
-        // document.getElementById('userInfo').style.transition="0s ease";
-        document.getElementById('previewRewardPage').style.left = "-20%";
-
-      } else if (from === 5) {
-        document.getElementById('resetPasswordPage').style.width = '0%';
-        // document.getElementById('userInfo').style.transition="0s ease";
-        document.getElementById('resetPasswordPage').style.left = "-20%";
-      }
-    }
-
-  </script>
-
-</html>
--->
-
