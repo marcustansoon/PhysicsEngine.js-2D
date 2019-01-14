@@ -93,7 +93,7 @@
         overflow: hidden;
         transition: 1.5s ease;
         transform: translate(-50%, -50%);
-        background-color: rgba(249, 251, 255, 0.7);
+        background-color: rgba(255, 255, 255, 0.7);
         border: 3px solid grey;
         padding: 25px;
         overflow-x: hidden;
@@ -117,7 +117,7 @@
         overflow-x: hidden;
         overflow-y: auto;
         transition: 1.5s ease;
-        background-color: rgba(255, 255, 255, 0.65);
+        background-color: rgba(255, 255, 255, 0.5);
         padding: 12px;
         padding-top: 0px;
         border-radius: 3%;
@@ -140,7 +140,7 @@
         opacity: 1;
         overflow: hidden;
         transition: 1.5s ease;
-        background-color: rgba(255, 255, 255, 0.65);
+        background-color: rgba(255, 255, 255, 0.5);
         padding: 25px;
         border-radius: 3%;
         border-width: 0.6vw;
@@ -162,7 +162,7 @@
         opacity: 1;
         overflow: hidden;
         transition: 1.5s ease;
-        background-color: rgba(255, 255, 255, 0.65);
+        background-color: rgba(255, 255, 255, 0.5);
         padding: 25px;
         border-radius: 3%;
         border-width: 0.6vw;
@@ -184,7 +184,7 @@
         opacity: 1;
         overflow: hidden;
         transition: 1.5s ease;
-        background-color: rgba(255, 255, 255, 0.65);
+        background-color: rgba(255, 255, 255, 0.5);
         padding: 25px;
         border-radius: 3%;
         border-width: 0.6vw;
@@ -243,11 +243,21 @@
       .red_white {
         background-color: red;
         color: white;
+        text-shadow:
+   -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
       }
 
       .orange_white {
         background-color: #ef7c28;
         color: white;
+        text-shadow:
+   -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
       }
 
       /*back button configuration */
@@ -325,16 +335,21 @@
 
       .notification {
         border-radius: 40%;
-        border-style: groove;
-        border-color: rgb(140, 140, 140);
+        border-style: solid;
+        border-color: #565656;
         color: white;
-        background-color: rgb(140, 140, 140);
+        background-color: #7c7c7c;
         position: absolute;
         text-align: center;
         left: 42%;
         top: 50%;
         padding: 10px;
         font-size: calc(12px + 0.5vw);
+        text-shadow:
+   -1px -1px 0 #000,  
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+     1px 1px 0 #000;
       }
 
       .resetPasswordPage {
@@ -349,7 +364,7 @@
         transition: 2s ease;
         -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
-        background-color: rgba(249, 251, 255, 0.7);
+        background-color: rgba(255, 255, 255, 0.7);
         border: 3px solid grey;
         padding: 25px;
         overflow-x: hidden;
@@ -376,7 +391,7 @@
 
     </style>
   </head>
-  <img src="https://i.imgur.com/8LvoHzV.jpg" class="bg">
+  <img src="https://i.imgur.com/kejGM7k.jpg" class="bg">
 
   <body>
     <button id="backButton" onclick="backButton();" class="backButton" hidden></button>
@@ -432,7 +447,7 @@
     </div>
 
     <div id="mainPage" class="mainPage">
-      <div style="font-size:calc(15px + 0.7vw);padding:10px;text-align:center;position:relative;font-family:verdana;"><b>
+      <div style="font-size:calc(15px + 0.7vw);padding:10px;text-align:center;position:relative;font-family:verdana;color:#0036b5;"><b>
         User List</b>
       </div>
       <div style="overflow-y:auto;max-height:70%;">
@@ -460,7 +475,7 @@
 
 
     <div id="rewardPage" class="rewardPage">
-      <div style="font-size:calc(15px + 0.7vw);padding:10px;text-align:center;color:black;position:relative;font-family:verdana;"><b>
+      <div style="font-size:calc(15px + 0.7vw);padding:10px;text-align:center;color:#0036b5;position:relative;font-family:verdana;"><b>
         Edit Reward</b>
       </div>
       <div style="overflow:auto;max-width:100%;max-height:80%;">
@@ -511,7 +526,7 @@
 
 
     <div id="previewRewardPage" class="previewRewardPage" style="overflow-y:auto;">
-      <div style="font-size:calc(15px + 0.7vw);padding:10px;color:black;position:relative;font-family:verdana;text-align:center;"><b>
+      <div style="font-size:calc(15px + 0.7vw);padding:10px;color:#0036b5;position:relative;font-family:verdana;text-align:center;"><b>
         Redeemable Rewards</b>
       </div>
       <div id="previewRewardPageEditable">
@@ -532,7 +547,7 @@
 
 
     <div class="resetPasswordPage" id="resetPasswordPage">
-      <div style="font-size:calc(14px + 0.7vw);padding:10px;color:black;position:relative;font-family:verdana;text-align:center;"><b>
+      <div style="font-size:calc(14px + 0.7vw);padding:10px;color:#0036b5;position:relative;font-family:verdana;text-align:center;"><b>
         Reset Password</b>
       </div>
       <div style="text-align:center;padding-top:2vw;">
