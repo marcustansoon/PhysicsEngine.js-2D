@@ -762,14 +762,12 @@
                if (e[x] && e[x + 2] && e[x] !== "" && e[x + 2] !== "") {
                   document.getElementById('previewRewardPageEditable').innerHTML += '<div class="column1"> <img src="' + e[x] + '" alt="Snow" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 1] + ' </b></div> </div> ';
 
-
-                  document.getElementById('previewRewardPageEditable').innerHTML += '<div class="column2"> <img src="' + e[x + 2] + '" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 3] + '</b></div>';
+                  document.getElementById('previewRewardPageEditable').innerHTML += '<div class="column2"> <img src="' + e[x + 2] + '" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 3] + '</b></div></div> ';
                } else if (e[x] && e[x] !== "") {
                   document.getElementById('previewRewardPageEditable').innerHTML += '<div class="columnMid"> <img src="' + e[x] + '" alt="Snow" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 1] + ' </b></div> </div> ';
 
                } else if (e[x + 2] && e[x + 2] !== "") {
-                  document.getElementById('previewRewardPageEditable').innerHTML += '<div class="columnMid"> <img src="' + e[x + 2] + '" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 3] + '</b></div>';
-                  console.log('ads');
+                  document.getElementById('previewRewardPageEditable').innerHTML += '<div class="columnMid"> <img src="' + e[x + 2] + '" alt="Forest" style="width:100%;" class="rewardImage"> <div class="rewardImageDes"><b>' + e[x + 3] + '</b></div></div>';                
                }
                document.getElementById('previewRewardPage').innerHTML += '</div>';
 
@@ -1063,11 +1061,8 @@
          } else if (from === 0) {
             //document.getElementById('loginPage').style.width = '0%';
             //document.getElementById('logo').style.width = '0%';
-
-
             document.getElementById('loginPage').style.left = "200%";
             document.getElementById('logo').style.left = "200%";
-
          } else if (from === 1) {
             //document.getElementById('mainPage').style.width = '0%';
             //document.getElementById('loginPage').style.transition="0s ease";
@@ -1079,12 +1074,10 @@
             //document.getElementById('rewardPage').style.width = '0%';
             // document.getElementById('userInfo').style.transition="0s ease";
             document.getElementById('rewardPage').style.left = "-200%";
-
          } else if (from === 4) {
             //document.getElementById('previewRewardPage').style.width = '0%';
             // document.getElementById('userInfo').style.transition="0s ease";
             document.getElementById('previewRewardPage').style.left = "-200%";
-
          } else if (from === 5) {
             //document.getElementById('resetPasswordPage').style.width = '0%';
             // document.getElementById('userInfo').style.transition="0s ease";
