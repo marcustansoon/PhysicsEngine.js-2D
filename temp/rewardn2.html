@@ -136,7 +136,7 @@
     }
 
     .featured-reward-inner-des {
-      font-size: calc(18px + 0.5vw);
+      font-size: calc(16px + 0.5vw);
       padding: calc(12px + 0.5vw);
       color: rgba(24, 44, 188, 1);
     }
@@ -313,14 +313,17 @@
 
   </head>
 
+  
+  
+  
+  
+  
+  
   <body>
     <div class="body-content">
 
 
-      
-
-
-
+ 
       <div class="body-content-1">
         
         <div class="featured-reward-des">Featured Rewards</div>
@@ -328,18 +331,18 @@
         <div class="featured-reward-box">
           <div class="featured-reward"><b>
               
-              <img src="https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c05551586.png" class="featured-reward-img">
-              <div class="featured-reward-inner-des">MSI Gaming Laptop</div>
+              <img id="fRewardImg1" src="https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c05551586.png" class="featured-reward-img">
+              <div id="fRewardImg1Des" class="featured-reward-inner-des">MSI Gaming Laptop</div>
               
               
-              <img src="https://d1sttufwfa12ee.cloudfront.net/uploads/deal/thumb/78005.jpg" class="featured-reward-img">
-              <div class="featured-reward-inner-des">Trip To Singapore</div>
+              <img id="fRewardImg2" src="https://d1sttufwfa12ee.cloudfront.net/uploads/deal/thumb/78005.jpg" class="featured-reward-img">
+              <div id="fRewardImg2Des" class="featured-reward-inner-des">Trip To Singapore</div>
           
            </div>
             
             
-            <img class="right-arrow" src="http://shopforclipart.com/images/picture-of-an-arrow/25.jpg" onclick="slideRight();">
-            <img class="left-arrow" src="http://shopforclipart.com/images/picture-of-an-arrow/25.jpg" onclick="slideLeft();">
+            <img class="right-arrow" src="http://shopforclipart.com/images/picture-of-an-arrow/25.jpg" onclick="featuredRewardSlide('right')">
+            <img class="left-arrow" src="http://shopforclipart.com/images/picture-of-an-arrow/25.jpg" onclick="featuredRewardSlide('left')">
             
             </b>
           </div>
@@ -458,15 +461,43 @@
 
 
   </body>
-
-  
-  
-    <script>
-      function slideLeft(){
+ 
+  <script>
+    let featuredRewardsImgURL1=["https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c05551586.png",
+                                "https://d1sttufwfa12ee.cloudfront.net/uploads/deal/thumb/78005.jpg",
+                               "https://drop.ndtv.com/TECH/product_database/images/982016125448AM_635_iphone_7_plus.jpeg"],
         
+        featuredRewardsImgURL2=["https://resource.trip4asia.com/lifestyle/product/249/gallery/550d7089722d4e2b8b6bad6e56e19579.jpg",
+                                "https://cdn.shopclues.com/images1/thumbnails/89711/320/320/139715377-89711129-1530769113.jpg",
+                               "https://www.bhphotovideo.com/images/images2500x2500/canon_1263c005_eos_80d_dslr_camera_1225876.jpg"],
+        
+        featuredRewardsDes1=["MSI Gaming Laptop","Trip To Singapore","iPhone 7 Plus"],
+        featuredRewardsDes2=["RM 20 KFC Voucher","Black Metal Quartz Watch","Canon EOS 80D DSLR Camera"],
+        currrentFeaturedRewardPageView=0;
+    
+      function featuredRewardSlide(direction){
+        
+        if (direction==="left"){
+          currrentFeaturedRewardPageView-=1;
+          if (currrentFeaturedRewardPageView<0){
+            currrentFeaturedRewardPageView=featuredRewardsDes2.length-1;
+          }
+          
+        }
+        else{
+         currrentFeaturedRewardPageView=(currrentFeaturedRewardPageView+1)%featuredRewardsImgURL1.length;  
+        }
+        console.log(currrentFeaturedRewardPageView);
+        document.getElementById("fRewardImg1Des").innerHTML=featuredRewardsDes1[currrentFeaturedRewardPageView];
+        document.getElementById("fRewardImg2Des").innerHTML=featuredRewardsDes2[currrentFeaturedRewardPageView];
+        
+        document.getElementById("fRewardImg1").src=featuredRewardsImgURL1[currrentFeaturedRewardPageView];
+        document.getElementById("fRewardImg2").src=featuredRewardsImgURL2[currrentFeaturedRewardPageView];
       }
-      
-      
+    
+    
+   
   </script>
+    
   
 </html>
