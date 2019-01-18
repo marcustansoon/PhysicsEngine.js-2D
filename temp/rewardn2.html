@@ -1,0 +1,351 @@
+<html>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Paytone+One" />
+  <style>
+     * {
+        font-family: Paytone One;
+       letter-spacing: 1px;
+       
+      }
+    body,
+    html,
+    head {
+      padding: 0;
+      margin: 0;
+    }
+    .head-bg{
+      width:100%;
+      height:300px;
+      position:fixed;
+      left:0%;
+      z-index:0;
+    }
+
+    .head-layer{
+      
+      width:100%;
+      height:300px;
+      position:fixed;
+      left:0%;
+      z-index:0;
+      background-color:rgba(0,0,0,0.0);
+    }
+    .head-content-1{
+      width:100%;
+      position:sticky;
+      background-color:rgba(70,70,60,1);
+      color:white;
+      height:auto;
+      text-align:left;
+      font-family:Arial, sans-serif;
+      top:0%;
+      font-size:calc(13px + 0.5vw);
+      border-color:black;
+      border-width:0px;
+      border-style:solid;
+      border-radius:1%;
+      padding:1%;
+    }    
+    .header-content-1-pic{
+      position:relative;
+      width:4%;
+      max-width:30px;
+      min-width:15px;
+      left:2%;
+      padding:
+      height:auto;
+    }
+    .body-content{
+      position:absolute;
+      background-color:rgba(243,226,15,1);
+      width:100%;
+      height:auto;
+      top:50%;
+      z-index:1;
+      overflow:hidden;
+      
+    }
+    .body-content-0{
+      position:relative;
+      width:100%;
+      height:auto;  
+      top:0%;
+      background-color:white;
+      left:50%;
+      transform:translate(-50%);
+
+    }
+    .product-service-des{
+      text-align:center;
+      padding:calc(8px + 0.5vw);
+      color:black;
+      font-size:calc(18px + 0.5vw);
+    }
+    .body-content-1{
+      position:relative;
+      width:100%;
+      height:auto;  
+      top:0%;
+      background-color:red;
+      left:50%;
+      transform:translate(-50%);
+
+    }
+    .featured-reward-des{
+      text-align:center;
+      padding:calc(8px + 0.5vw);
+      color:white;
+      font-size:calc(18px + 0.5vw);
+
+    }.ranking-des{
+      text-align:center;
+      padding:calc(8px + 0.5vw);
+      color:black;
+      font-size:calc(18px + 0.5vw);
+    }
+    
+    .featured-reward-box{
+      position:relative;
+      border-style:groove;
+      width:100%;
+      height:auto;
+      border-width:3px;
+      border-color:grey;
+      background-color:rgba(253,250,238,1);
+      left:50%;
+      transform:translate(-50%);      
+    }
+    .featured-reward{
+      text-align:center;
+      padding:calc(10px + 0.5vw);
+
+    }
+    .featured-reward-inner-des{
+      font-size:calc(18px + 0.5vw);
+      padding:calc(12px + 0.5vw);
+      color:rgba(24,44,188,1);
+        
+    }
+    .featured-reward-img{     
+      width:90%;
+      height:50%;
+      border-width:7px;
+      border-style:groove;
+      border-color:grey;
+
+    }
+    .body-content-2{
+      position:relative;
+      width:95%;
+      height:auto;  
+      top:0%;
+      background-color:(238,209,97,1);
+      left:50%;
+      transform:translate(-50%);
+
+    }
+    
+    .rank-numbering{
+      position:absolute;
+      margin:calc(15px + 0.5vw);
+      left:10%;
+      font-size:25px;
+      color:rgba(47,140,23,1);
+    }
+    .rank-user-des1{
+      color:rgba(51,69,232,1);
+      position:absolute;
+      left:55%;
+      top:15%;
+      font-size:calc(13px + 0.5vw);
+    }
+    .rank-user-des2{
+      color:rgba(51,69,232,1);
+      position:absolute;
+      left:55%;
+      top:45%;
+      font-size:calc(13px + 0.5vw);
+    }
+    .rank-user-des3{
+      color:rgba(51,69,232,1);
+      position:absolute;
+      left:55%;
+      top:75%;
+      font-size:calc(13px + 0.5vw);
+    }
+    .ranking-user-pic{
+      width:15%;
+      border-radius:50%;
+      left:25%;
+      margin:calc(3px + 0.5vw);
+      border-width:2px;
+      border-style:solid;
+      position:relative;
+    }
+    
+    
+    
+    
+    .body-content-3{
+      position:relative;
+      width:100%;
+      height:auto;  
+      top:0%;
+      background-color:orange;
+      left:50%;
+      transform:translate(-50%);
+
+    }
+    .col1{
+      float:left;
+      width:45%;
+      text-align:center;
+    }
+    .col3{
+      float:left;
+      width:33%;
+      text-align:center;
+    }
+    .col2{
+      float:right;
+      width:45%;
+      text-align:center;
+    }
+    .img{
+      width:100%;
+      margin:1%;
+    }
+.product-service-img{
+      width:100%;
+      max-height:100px;
+      max-width:100px;
+      margin:1%;
+      border-radius:5%;
+  
+    }
+    .product-service-img-des{
+      color:rgba(20,33,117,1);
+      font-size:calc(12px + 0.5vw);
+    }
+  </style>
+  <head>
+ 
+    <img src="https://i.imgur.com/c9Zq5AW.jpg" class="head-bg mySlides">
+      
+
+    <div class="head-layer"></div>
+    <div class="head-content-1">
+    
+      <img src="https://i.imgur.com/t3v1a7d.png" class="header-content-1-pic">
+      <div style="position:absolute;top:50%;transform:translate(0,-50%);left:11%;"><b>SL Petroleum</b></div> 
+    </div>
+    
+      
+  </head>
+  <body>
+    <div class="body-content">
+      
+        
+      <div class="body-content-0">
+        <div class="featured-reward-box">
+        </div>
+        <div class="product-service-des">Products & Services</div>
+        <div class="featured-reward-box">
+        </div>
+        <br>
+        <div class="col3">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/e/ed/GM_Olds%27_Diesel_logo_on_a_Buick.jpg" class="product-service-img">
+          <br>
+          <div class="product-service-img-des">Diesel Oil</div>
+        </div>
+        
+        <div class="col3">
+          <img src="http://www.tech-faq.com/wp-content/uploads/waste-oil-burner.jpg" class="product-service-img">
+          <br>
+          <div class="product-service-img-des">Burner Oil</div>
+        </div>
+         
+        <div class="col3">
+          <img src="http://solarlubricant.in/wp-content/uploads/2018/09/castrol-lubricants-500x368.jpg" class="product-service-img">
+          <br>
+          <div class="product-service-img-des">Industrial Oil</div>
+        </div>
+          <div style="clear:left;"></div>
+        <br>
+      </div>
+      
+      
+      
+    	<div class="body-content-1">
+          <div class="featured-reward-des">Featured Rewards</div>
+          <div class="featured-reward-box">
+            <div class="featured-reward"><b>
+              
+              <img src="https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c05551586.png" class="featured-reward-img">
+              <div class="featured-reward-inner-des">Diesel Oil</div>
+              
+              
+              <img src="https://d1sttufwfa12ee.cloudfront.net/uploads/deal/thumb/78005.jpg" class="featured-reward-img">
+              <div class="featured-reward-inner-des">Trip To Singapore</div>
+             </div>
+            </b>
+          </div>
+        </div>
+      
+      
+      <div class="body-content-2">
+      <div class="ranking-des">Global Ranking Leaderboard</div>
+        <div class="featured-reward-box">
+            <b>
+              <div class="rank-numbering">1.</div>
+              <img src="https://cdn1.iconfinder.com/data/icons/user-avatars-2/300/10-512.png" class="ranking-user-pic">
+              <div class="rank-user-des1">3,200,540 Litre</div><br>
+              
+              <div class="rank-numbering">2.</div>
+              <img src="https://cdn0.iconfinder.com/data/icons/customers-and-service/512/13.png" class="ranking-user-pic">
+              <div class="rank-user-des2">2,115,305 Litre</div><br>
+              
+              <div class="rank-numbering">3.</div>
+              <img src="http://icons-for-free.com/free-icons/png/512/2754582.png" class="ranking-user-pic">
+              <div class="rank-user-des3">1,200,540 Litre</div><br>
+            </b>
+          </div>
+      </div>
+      
+      <br>
+      
+      <div class="body-content-3">
+        <div class="featured-reward-box"> 
+        </div>
+      <div class="ranking-des">Reward Gallery</div>
+        <div class="featured-reward-box"> 
+        </div>
+        <div style="background-color:white;">
+          <div class="col1">
+        <img src="https://cdn0.iconfinder.com/data/icons/customers-and-service/512/13.png" class="img">
+          test
+          </div>
+            <div class="col2">
+        <img src="https://cdn0.iconfinder.com/data/icons/customers-and-service/512/13.png" class="img">
+          test
+          </div>
+        
+        
+        </div>
+      </div>
+      
+     
+      <br><br><br><br><br><br><br><br><br><br><br><br>
+      <br><br><br><br><br><br><br><br><br><br><br>
+      <br><br><br>s<br><br><br><br><br><br><br><br>
+      <br><br><br><br>s
+      
+      
+      
+    </div>
+    
+    
+    
+  </body>
+
+</html>
