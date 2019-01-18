@@ -20,7 +20,7 @@
       height: 300px;
       position: fixed;
       left: 0%;
-      z-index: 0;
+      z-index: -1;
     }
 
     .head-layer {
@@ -275,10 +275,16 @@
     }
 
     
-    .right-arrow,.left-arrow:hover {
+    .right-arrow,.left-arrow, .yellow-arrow:hover {
         cursor: pointer;
     }
-    
+    .yellow-arrow{
+      position:fixed;
+      right:0%;
+      top:50%;
+      width:10%;
+      background-color:rgba(255,255,0,0.6);
+    }
     .right-arrow{
       width:10%;
       position:absolute;
@@ -405,8 +411,21 @@
         <br>
 
     
-  <div>Login</div>
-      
+  <img src="http://simpleicon.com/wp-content/uploads/arrow-17.png" 
+       class="yellow-arrow" onclick="login();">
+  
+      <div id="blackLayer" style="position:fixed;top:0%;width:100%;height:100%;background-color:rgba(0,0,0,0.7);" onclick="cancelLogin();"></div>
+    <div id="login" class="featured-reward-box" style="position:fixed;top:40%;width:auto;height:auto;padding:4%;" >
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Deletion_icon.svg/1024px-Deletion_icon.svg.png" style="right:-0%;position:absolute;top:-0%;width:15%;" onclick="cancelLogin();">
+      <div style="text-align:center;">Login</div>
+      <br>
+      Username:<br><input type="text">
+      <br>
+      Password:<br><input type="text">
+
+  </div>
+  
+  
       
       <!--
         <div class="body-content-3">
@@ -496,6 +515,8 @@
 -->
 
   </body>
+
+
  
   <script>
     let featuredRewardsImgURL1=["https://ssl-product-images.www8-hp.com/digmedialib/prodimg/lowres/c05551586.png",
@@ -531,6 +552,16 @@
       }
     
     
+    document.getElementById("blackLayer").hidden=true;
+    document.getElementById("login").hidden=true;
+    function login(){
+      document.getElementById("blackLayer").hidden=false;
+      document.getElementById("login").hidden=false;
+    }
+    function cancelLogin(){
+      document.getElementById("blackLayer").hidden=true;
+      document.getElementById("login").hidden=true;
+    }
    
   </script>
     
