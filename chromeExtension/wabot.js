@@ -53,10 +53,9 @@ function defineStore(){
   initHandler();
 }
 
-setTimeout(defineStore,2000);
+setTimeout(defineStore,500);
 
 function initHandler(){
-
 
   //Listening for incoming messages
   Store.Msg.models.push = function(message) {
@@ -86,7 +85,7 @@ function initHandler(){
     var file = "";
     var createFromDataClass = _requireById(createFromData_id)["default"];
     var prepareRawMediaClass = _requireById(prepareRawMedia_id).prepRawMedia;
-    window.Store.Chat.find(jid).then((chat) => {
+    Store.Chat.find(jid).then((chat) => {
       chat.markComposing();
       var img_b64 = link;
       var base64 = img_b64.split(',')[1];
