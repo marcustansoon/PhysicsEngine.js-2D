@@ -77,9 +77,9 @@ function initHandler(){
   Store.Msg.models.onPush = function(message) {
 	//console.log(message);
       	
-	console.log("Type of Media :" + message.__x_isMedia);
+	console.log("Type of Media : " + message.__x_isMedia);
 	  if (!message.__x_isMedia)
-	console.log("Text Sent" + message.__x_body);
+	console.log("Text Sent : " + message.__x_body);
 	  
 	console.log("From " + message.__x_from._serialized + ", Self: " +message.__x_id.fromMe); 
 	console.log("To " + message.__x_to._serialized);  
