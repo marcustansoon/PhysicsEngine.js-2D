@@ -75,10 +75,10 @@ function initHandler(){
   Store.Chat.Send={};
   
   //Send Text message
-  Store.Chat.Send.Text=function(jid,chat){
+  Store.Chat.Send.Text=function(jid,text){
      Store.Chat.find(jid).then(function(chat) {
         chat.markComposing();
-        chat.sendMessage(body);
+        chat.sendMessage(text);
     });
   }
   //send media
