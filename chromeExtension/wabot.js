@@ -70,13 +70,13 @@ function fixBinary (bin) {
 function initHandler(){
 
   //Listening for incoming messages
-  Store.Msg.models.push = function(message) {
+  /*Store.Msg.models.push = function(message) {
       Array.prototype.push.call(this, message);
       this.onPush(message);
   };
   Store.Msg.models.onPush = function(message) {
       //console.log(message);
-  }
+  }*/
   /*
   Modify the Store.Msg.models.push() function and add a call to the onPush function, while keeping Array.prototype.push.call(). 
   This will call the onPush() function each time a new message arrives.
