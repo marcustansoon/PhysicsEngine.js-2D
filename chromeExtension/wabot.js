@@ -53,7 +53,7 @@ function defineStore(){
   initHandler();
 }
 
-setTimeout(defineStore,500);
+setTimeout(defineStore,1500);
 
 
 function fixBinary (bin) {
