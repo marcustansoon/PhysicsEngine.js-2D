@@ -69,14 +69,17 @@ function fixBinary (bin) {
 
 function initHandler(){
 
+  Store.Msg.models.enabledListening=false;//boolean for incoming message detection
+	
   //Listening for incoming messages
   Store.Msg.models.push = function(message) {
+      if (!Store.Msg.models.enabledListening)return;
       Array.prototype.push.call(this, message);
       this.onPush(message);
   };
   Store.Msg.models.onPush = function(message) {
 	//console.log(message);
-      	
+      	if (!Store.Msg.models.enabledListening)return;
 	console.log("Type of Media : " + message.__x_isMedia);
 	  if (!message.__x_isMedia)
 	console.log("Text Sent : " + message.__x_body);
