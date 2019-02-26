@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/sitemap.xml
