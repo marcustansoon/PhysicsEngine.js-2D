@@ -1,0 +1,781 @@
+
+<html>
+
+  <head>
+    <title>Shian Liang Petroleum</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Hammersmith+One" />
+    <link rel="shortcut icon" href="https://i.imgur.com/wuxhGMe.png">
+  </head>
+  <style>
+    body,
+    html,
+    head {
+      margin: 0px;
+      padding: 0px;
+      overflow-x: hidden;
+    } 
+
+    * {
+      font-family: "Hammersmith One";
+      letter-spacing: .5px;
+    }
+
+    .slideOutRight {
+      transition: 0.75s ease-out;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 100%;
+    }
+
+    .slideOutLeft {
+      transition: 0.75s ease-out;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: -100%;
+    }
+
+    .slideInLeft {
+      transition: 0.75s ease-out;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0%;
+    }
+
+    .slideInRight {
+      transition: 0.75s ease-out;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      left: 0%;
+    }
+
+    .instantLeft {
+      left: -100%;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transition: 0s ease-out;
+    }
+
+    .instantRight {
+      left: 100%;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transition: 0s ease-out;
+    }
+
+    .instantMid {
+      left: 0%;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      transition: 0s ease-out;
+    }
+
+    .banner-des1 {
+      color: yellow;
+      position: relative;
+      font-size: calc(17px + 0.7vw);
+      text-align: center;
+      border-style: ;
+      padding: 1%;
+      width: 70%;
+      max-width: 600px;
+      transform: translate(-50%);
+      left: 50%;
+     
+      margin-bottom: 3%;
+    }
+
+    .banner-des2 {
+      color: lightyellow;
+      position: relative;
+      font-size: calc(13px + 0.5vw);
+     
+      text-align: justify;
+      border-style: ;
+      padding: 3%;
+      max-width: 650px;
+      background-color: rgba(0, 0, 0, 0.3);
+      width: 75%;
+      max-width: 750px;
+      transform: translate(-50%);
+      left: 50%;
+    }
+
+    .menu-col{
+     border-bottom-style:;font-size:calc(13px + 0.2vw);position:relative;float:left;transform:translate(0,-0%);padding:5%;padding-left:0%; 
+    }
+    .menu-row{
+      border-style:;position:relative;float:right;transform:translate(0,-150%);padding:6px;margin-right:1%;
+    }
+    .down-arrow{
+      position:absolute;width:20%;max-width:150px;left:50%;transform:translate(-50%);bottom:5%;
+    }
+    
+    .otherPage-icon{
+     width:7%;float:left;position:relative;padding:3%;max-width:40px; 
+    }
+    .menu-col,
+    .down-arrow,
+    .otherPage-icon,
+    .menu-row {
+      cursor: pointer;
+    }
+    
+    
+    @media only screen and (max-width: 500px) {
+      .banner-des1 {
+        font-size: calc(15px + 0.7vw);
+      }
+      .banner-des2 {
+        font-size: calc(11px + 0.7vw);
+        margin-top: 15%;
+      }
+    }
+
+  </style>
+
+  <body style="overflow-x:hidden;" onresize="resizeAuto();">
+
+
+
+    <div style="width:100%;border-color:black;background-color:rgba(255,255,255,1);position:fixed;z-index:5;border-width: thin;color:rgba(0,0,150,1);height:70px;box-shadow: 0px 2px 15px #888888;"
+         id ="header-content" >
+
+      <div>
+        <div style="border-right-style:;border-left-style:;padding:4px;width:25%;left:10%;position:relative;text-align:center;min-width:170px;overflow:auto;max-width:230px;background-color:rgba(252,250,236,0);border-width:thin; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;  user-select: none; left:50%;transform:Translate(-50%);">
+          <img src="https://i.imgur.com/zoCeRfC.png" style="width:60%;position:relative;max-width:130px;">
+          
+
+        </div>
+
+
+
+        <img style="border-style:;position:relative;float:right;transform:translate(0,-105%);width:45px;margin-right:5%;padding:6px;" src="https://i.imgur.com/mGP9pL6.png" id="drop-down-icon" onclick="show_menu_col();">
+        <div id="menu-row" style="-webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;  user-select: none;">
+          <div class="menu-row" style="margin-right:5%;" onclick="showContactUsPage()">
+            Contact Us
+          </div>
+          <div style="border-left-style:groove;position:relative;float:right;transform:translate(0,-150%);padding:6px;margin-right:0%;" >
+            <span style="opacity:0;">.</span>
+          </div>
+          <div class="menu-row" onclick="showProductServicePage()">
+            Product & Services
+          </div>
+          <div style="border-left-style:groove;position:relative;float:right;transform:translate(0,-150%);padding:6px;margin-right:0%;">
+            <span style="opacity:0;">.</span>
+          </div>
+          <div class="menu-row" onclick="showAboutUsPage()">
+            About Us
+          </div>
+           <div style="border-left-style:groove;position:relative;float:right;transform:translate(0,-150%);padding:6px;margin-right:0%;">
+            <span style="opacity:0;">.</span>
+          </div>
+          <div class="menu-row" onclick="showHomePage()">
+            Home
+          </div>
+    
+   
+        </div>
+
+
+
+        <div style="width:100%;height:100%;background-color:white;position:fixed;transition:1s ease;left:100%;border-style:solid;border-color:rgba(0,0,120,1);
+                    -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;  user-select: none;" id="menu-col">
+          
+     
+          <img src="https://image.flaticon.com/icons/svg/53/53579.svg" class="otherPage-icon" onclick="showHomePage()">
+          <div class="menu-col" onclick="showHomePage()">
+            Home
+          </div>
+          <div style="clear:both;border-bottom-style:groove;"></div>
+          
+          <img src="https://image.flaticon.com/icons/svg/53/53579.svg" class="otherPage-icon" onclick="showAboutUsPage()">
+          <div class="menu-col" onclick="showAboutUsPage()">
+            About Us
+          </div>
+          <div style="clear:both;border-bottom-style:groove;"></div>
+          
+          <img src="https://image.flaticon.com/icons/svg/53/53579.svg" class="otherPage-icon" onclick="showProductServicePage()">
+          <div class="menu-col" onclick="showProductServicePage()">
+            Product & Services
+          </div>
+          <div style="clear:both;border-bottom-style:groove;"></div>
+
+          <img src="https://image.flaticon.com/icons/svg/53/53579.svg" class="otherPage-icon" onclick="showContactUsPage()">
+          <div class="menu-col" onclick="showContactUsPage()">
+            Contact Us
+          </div>
+          <div style="clear:both;border-bottom-style:groove;"></div>
+          
+        </div>
+
+      </div>
+    </div>
+
+    <div style="position:relative;">
+
+      <div style="width:100%;height:100%;" id="slideshow-content">
+        <div style="background-image:url(http://acumen.sg/wp-content/uploads/2014/12/Oil-drilling.jpg);background-position:center center;width:100%;height:100%;background-size: cover;" id="img0" class="instantLeft" draggable="false">
+        </div>
+        <div style="background-image:url(http://acumen.sg/wp-content/uploads/2014/12/Oil-drilling.jpg);background-position:center center;width:100%;height:100%;background-size: cover;" id="img1" class="instantMid" draggable="false">
+        </div>
+        <div style="background-image:url(http://acumen.sg/wp-content/uploads/2014/12/Oil-drilling.jpg);background-position:center center;width:100%;height:100%;background-size: cover;" id="img2" class="instantRight" draggable="false">
+        </div>
+
+        <div style="position:absolute;top:33%;width:100%;border-style:;">
+          <div style="-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;">
+            <div class="banner-des1" id="banner-des1">
+              Providing Oil Business Solutions
+            </div>
+            <div class="banner-des2" id="banner-des2">
+              Offers intergrated end to end industrial based oil products and services as well as providing ISO containers for leasing
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+      <img src="https://pipestry.com/wp-content/uploads/2019/01/gif-bounce-arrow.gif" class="down-arrow" draggable="false" id="down-arrow" onclick="scrollToElement('what-we-do-content')">
+    </div>
+
+
+
+    <div style="position:relative;border-top-style:inset;border-color:black;background-color:rgba(252,250,236,0);width:100%;text-align:center;color:rgba(0,0,100,1);background-image:url();background-size:cover;"
+     id="what-we-do-content" >
+
+      <div style="margin-bottom:5%;">
+        
+        <div style="position:absolute;background-image:url(https://i.imgur.com/CTLMlya.png);width:100%;height:35%;background-size:cover;top:0%;background-repeat: no-repeat;"></div>
+
+        <div id="what-we-do-row">
+
+          <div style="border-style:;border-width:thin;overflow:auto;font-size:calc(7px + 0.9vw);padding-left:1%;padding-bottom:2%;padding-top:2%;background-color:rgba(255,255,255,.9);box-shadow: 5px 5px 15px grey;width:90%;position:relative;left:50%;transform:Translate(-50%);max-width:1100px;margin-top:5%;">
+            
+          <div style="font-size:calc(21px + 0.5vw);margin-top:5%;margin-bottom:4%;padding:1%;-webkit-text-stroke: 0px black;border-style:;
+                    background-color:rgba(255,255,255,0);position:Relative;max-width:500px;left:50%;transform:translate(-50%);width:80%;box-shadow: 0px 0px 0px grey;">           
+            A Glimpse Of What We Do
+          </div>
+  
+            
+            <div style="position:relative;margin-bottom:%;float:right;width:50%;margin-top:2%;margin-left:7%;margin-right:3%;">
+              <img src="https://scontent.fbki2-1.fna.fbcdn.net/v/t1.0-9/48386989_342255026554511_8648440189829513216_o.jpg?_nc_cat=100&_nc_ht=scontent.fbki2-1.fna&oh=e389441c5994e7e9e94ad61e9869f555&oe=5CEBC08B" style="width:100%;margin-bottom:0%;" draggable="false">
+            </div>
+            <div style="position:relative;width:90%;margin-top:2%;text-align:justify;clear:;border-style:;left:50%;transform:translate(-50%);">
+              <span style="opacity:0;">.</span>
+              <br>
+              <b>Oil Delivery</b>
+              <br><br>
+              <span style="font-size:calc(7px + 0.6vw);color:black;">We are the fuel oil revolution, strived to pursue new solutions to oil resources. It is our goal to be able to deliver quality oil to our customers at reasonable price. With conveniency in mind, we will deliver oil products to your door step with our fleet of trucks at minimal transportation fee. Over the years, we have work autonomously with variety of local industries of both land and water sector, delivered all sort of oil related products and offered storage services to our customers. </span>
+            </div>
+
+            <div style="clear:both"></div>
+            
+            <div style="position:relative;margin-bottom:%;float:right;width:32%;margin-top:1%;margin-left:%;margin-right:3%;">
+              <img src="https://scontent.fbki2-1.fna.fbcdn.net/v/t1.0-9/49118491_342256346554379_4491810315805130752_o.jpg?_nc_cat=101&_nc_ht=scontent.fbki2-1.fna&oh=f0f1fc7be8c140c39175fb46e71de54b&oe=5CFE0D5A" style="width:100%;margin-bottom:0%;" draggable="false">
+            </div>
+            
+            <div style="position:relative;margin-bottom:%;float:right;width:32%;margin-top:1%;margin-left:%;margin-right:0.5%;">
+              <img src="https://i.imgur.com/Ztm0h7a.jpg" style="width:100%;margin-bottom:0%;" draggable="false">
+            </div>
+            
+            <div style="position:relative;margin-bottom:%;float:right;width:32%;margin-top:1%;margin-left:%;margin-right:0.5%;">
+              <img src="https://i.imgur.com/yHttw3i.jpg" style="width:100%;margin-bottom:0%;" draggable="false">
+            </div>
+            
+            
+            <div style="clear:both"></div>
+            <br><br>
+
+            <div style="position:relative;margin-bottom:%;float:left;width:35%;margin-top:3%;margin-right:1%;margin-left:0%;">
+              <img src="https://www.timeshighereducation.com/sites/default/files/styles/the_breaking_news_image_style/public/quality_under_the_magnifying_glass.jpg?itok=VxpVpZEl" style="width:100%;margin-bottom:%;border-radius:20%;" draggable="false">
+            </div>
+            <div style="position:relative;width:90%;margin-top:2%;text-align:justify;clear:;border-style:;left:50%;transform:translate(-50%);">
+              <span style="opacity:0;">.</span>
+              <br>
+              <b>Quality Assurance</b>
+              <br><br>
+              <span style="font-size:calc(7px + 0.6vw);color:black;">We believe quality of a product can determine the revenue period and profitability of a sale. Hence, we will always leverage our services to sustainably deliver quality oil to our customers. It is our responsibility to perform quality inspection check on the oil before and after delivery to validate quality throughout the entire supply chain. To protect customer right, volume check on the oil delivered is also performed before initiating the pumping process</span>
+            </div>
+            
+            <div style="clear:both"></div>
+            <br><br>
+
+           <div style="position:relative;margin-bottom:%;float:right;width:48%;margin-top:1%;margin-left:%;margin-right:3%;">
+              <img src="https://scontent.fbki2-1.fna.fbcdn.net/v/t1.0-9/48385292_342256233221057_378415987763970048_o.jpg?_nc_cat=102&_nc_ht=scontent.fbki2-1.fna&oh=39b00a43017204157afb5fadc9a2614f&oe=5CED5EB8" style="width:100%;margin-bottom:0%;" draggable="false">
+            </div>
+            
+            <div style="position:relative;margin-bottom:%;float:right;width:48%;margin-top:1%;margin-left:%;margin-right:0.5%;">
+              <img src="https://scontent.fbki2-1.fna.fbcdn.net/v/t1.0-9/49273047_348729859240361_6255312832296910848_o.jpg?_nc_cat=109&_nc_ht=scontent.fbki2-1.fna&oh=4d43548c453a2eda72ed7ce61382f003&oe=5CF4AD0A" style="width:100%;margin-bottom:0%;" draggable="false">
+            </div>
+            
+            <div style="clear:both"></div>
+
+          </div>
+        </div>
+
+
+
+
+        <div id="what-we-do-col">
+
+          <div style="border-style:solid;border-width:thin;font-size:calc(9px + 1vw);padding-left:1%;background-color:rgba(255,255,255,.85);box-shadow: 0px 0px 5px grey;width:95%;position:relative;left:50%;transform:Translate(-50%);margin-bottom:5%;margin-top:2%;">
+
+            <div style="font-size:calc(21px + 0.8vw);margin-top:5%;margin-bottom:4%;padding:2%;border-style:;
+                    background-color:rgba(255,255,255,0);position:Relative;max-width:500px;left:50%;transform:translate(-50%);width:80%;">
+              A Glimpse Of What We Do
+            </div>
+            
+            
+            <div style="position:relative;margin-bottom:2%;">
+              <img src="https://scontent.fbki2-1.fna.fbcdn.net/v/t1.0-9/48386989_342255026554511_8648440189829513216_o.jpg?_nc_cat=100&_nc_ht=scontent.fbki2-1.fna&oh=e389441c5994e7e9e94ad61e9869f555&oe=5CEBC08B" style="width:95%;margin-bottom:2%;" draggable="false">
+              <div style="margin:5%;">
+                <b>Oil Delivery</b>
+                <div style="margin:5%;margin-top:3%;text-align:justify;color:black;">We are the fuel oil revolution, strived to pursue new solutions to oil resources. It is our goal to be able to deliver quality oil to our customers at reasonable price. With conveniency in mind, we will deliver oil products to your door step with our fleet of trucks at minimal transportation fee. Over the years, we have work autonomously with variety of local industries of both land and water sector, delivered all sort of oil related products and offered storage services to our customers.</div>
+              </div>
+              <br>
+            </div>
+               
+            
+            <div style="position:relative;margin-bottom:2%;">
+              <img src="https://i.imgur.com/yHttw3i.png" style="width:48%;margin-bottom:2%;" draggable="false">
+              <img src="https://i.imgur.com/Ztm0h7a.png" style="width:48%;margin-bottom:2%;" draggable="false">
+              <img src="https://scontent.fbki2-1.fna.fbcdn.net/v/t1.0-9/49118491_342256346554379_4491810315805130752_o.jpg?_nc_cat=101&_nc_ht=scontent.fbki2-1.fna&oh=f0f1fc7be8c140c39175fb46e71de54b&oe=5CFE0D5A" style="width:95%;margin-bottom:2%;" draggable="false">
+            </div>
+
+            
+            
+            <div style="position:relative;margin-bottom:2%;">
+              <img src="https://www.timeshighereducation.com/sites/default/files/styles/the_breaking_news_image_style/public/quality_under_the_magnifying_glass.jpg?itok=VxpVpZEl" style="width:40%;margin-bottom:2%;border-radius:20%;" draggable="false">
+              <div style="margin:3%;">
+                <b>Quality Assurance</b>
+                <div style="margin:5%;margin-top:3%;text-align:justify;color:black;">We believe quality of a product can determine the revenue period and profitability of a sale. Hence, we will always leverage our services to sustainably deliver quality oil to our customers. It is our responsibility to perform quality inspection check on the oil before and after delivery to validate quality throughout the entire supply chain. To protect customer right, volume check on the oil delivered is also performed before initiating the pumping process</div>
+              </div>
+            </div>
+
+            
+            <div style="position:relative;margin-bottom:2%;">
+              <img src="https://scontent.fbki2-1.fna.fbcdn.net/v/t1.0-9/49273047_348729859240361_6255312832296910848_o.jpg?_nc_cat=109&_nc_ht=scontent.fbki2-1.fna&oh=4d43548c453a2eda72ed7ce61382f003&oe=5CF4AD0A" style="width:48%;margin-bottom:2%;" draggable="false">
+              <img src="https://scontent.fbki2-1.fna.fbcdn.net/v/t1.0-9/48385292_342256233221057_378415987763970048_o.jpg?_nc_cat=102&_nc_ht=scontent.fbki2-1.fna&oh=39b00a43017204157afb5fadc9a2614f&oe=5CED5EB8" style="width:48%;margin-bottom:2%;" draggable="false"> 
+            </div>
+
+
+          </div>
+        </div>
+
+        
+      </div>
+    </div>
+
+
+
+
+    <div style="position:relative;border-style:inset;border-color:white;background-color:rgba(252,250,236,0);width:100%;text-align:center;color:rgba(0,0,100,1);background-image:url(http://www.planwallpaper.com/static/images/Alien_Ink_2560X1600_Abstract_Background_1.jpg);background-position: ;">
+      <div style="font-size:calc(21px + 0.5vw);margin-top:5%;margin-bottom:4%;padding:1%;-webkit-text-stroke: 0px black;border-style:;
+                    background-color:rgba(255,255,255,1);position:Relative;max-width:500px;left:50%;transform:translate(-50%);width:80%;box-shadow: 5px 5px 15px grey;">
+        Features & Highlights
+      </div>
+      <div style="border-style:;border-width:thin;overflow:auto;font-size:calc(5px + 1.1vw);padding-left:1%;padding-bottom:2%;padding-top:2%;background-color:rgba(255,255,255,1);box-shadow: 5px 5px 15px grey;width:90%;position:relative;left:50%;transform:Translate(-50%);max-width:1400px;margin-bottom:5%;"
+        id="feature-highlight-content-row">
+
+        <div style="position:relative;margin-bottom:2%;float:left;width:20%;margin-top:2%;padding-left:5%;">
+          <img src="http://www.rhbinvest.com/page/site/public/english/online-trading-loyalty/img/hottie-display.png" style="width:100%;margin-bottom:5%;" draggable="false">
+        </div>
+        <div style="position:relative;margin-bottom:2%;width:80%;margin-top:2%;text-align:justify;left:50%;transform:translate(-50%);clear:;">
+          <span style="opacity:0;">Reward Loyalty Program</span>
+          <br>
+          <b>Reward Loyalty Program</b>
+          <br><br>
+          <span style="font-size:calc(5px + 0.8vw);color:black;">We are strived to develop new innovative ideals by interacting with our customers through customers loyalty programme. For every purchase you made, you can earn points which can be used to redeem valuable rewards. Everyone can join! No registration is required</span>
+        </div>
+
+        <div style="clear:both"></div>
+
+
+        <div style="position:relative;margin-bottom:2%;float:left;width:20%;margin-top:2%;padding-left:5%;">
+          <img src="https://rotella.shell.com/en_us/promos/earn-reward-miles/_jcr_content/pagePromo/image.img.384.jpeg/1469642638754/truck-driver-going-inside-a-truck.jpeg?imformat=chrome&imwidth=384" style="width:100%;margin-bottom:5%;" draggable="false">
+        </div>
+        <div style="position:relative;margin-bottom:2%;width:80%;margin-top:2%;text-align:justify;left:50%;transform:translate(-50%);clear:;">
+          <span style="opacity:0;">Moving Oil Truck Services</span>
+          <br>
+          <b>Moving Oil Truck Service</b>
+          <br><br>
+          <span style="font-size:calc(5px + 0.8vw);color:black;">Announcing "The first and only Moving Oil Station in Kuching" !!! Just contact us and we will deliver Diesel to your desired location and pump fuel directly into your heavy machinery vehicles. Easy Peasy ! </span>
+        </div>
+
+        <div style="clear:both"></div>
+
+        <div style="position:relative;margin-bottom:2%;float:left;width:20%;margin-top:2%;padding-left:5%;">
+          <img src="https://ya-webdesign.com/images/bonus-clip-art-6.png" style="width:100%;margin-bottom:5%;" draggable="false">
+        </div>
+        <div style="position:relative;margin-bottom:2%;width:80%;margin-top:2%;text-align:justify;left:50%;transform:translate(-50%);clear:;">
+          <span style="opacity:0;">Moving Oil Truck Services</span>
+          <br>
+          <b>Referral Program</b>
+          <br><br>
+          <span style="font-size:calc(5px + 0.8vw);color:black;">We believe Word of Mouth is one of the biggest aspire of revenue growth. We really appreciate those who advocates our services to public and thus, have provided a referral tracking system. It allows referrer to monitor referees' monthly purchases list and obtain a portion of the sales as cashback </span>
+        </div>
+
+      </div>
+
+
+      <div style="border-style:solid;border-width:thin;font-size:calc(11px + 1vw);padding-left:1%;background-color:rgba(255,255,255,1);box-shadow: 0px 0px 5px grey;width:95%;position:relative;left:50%;transform:Translate(-50%);margin-bottom:5%;" id="feature-highlight-content-col">
+
+        <div style="position:relative;margin-bottom:2%;">
+          <img src="http://www.rhbinvest.com/page/site/public/english/online-trading-loyalty/img/hottie-display.png" style="width:50%;margin-top:3%;" draggable="false">
+          <div style="margin:5%;">
+            <span style="opacity:0;">Reward Loyalty Program</span>
+            <br>
+            <div style="text-align:Center;"><b>Reward Loyalty Program</b></div>
+            <br><br>
+            <div style="font-size:calc(10px + 0.7vw);width:100%;text-align:justify;margin-top:-5%;color:black;">We are strived to develop new innovative ideals by interacting with our customers through customers loyalty programme. For every purchase you made, you can earn points which can be used to redeem valuable rewards. Everyone can join! No registration
+              is required</div>
+          </div>
+        </div>
+
+        <div style="position:relative;margin-bottom:2%;">
+          <img src="https://rotella.shell.com/en_us/promos/earn-reward-miles/_jcr_content/pagePromo/image.img.384.jpeg/1469642638754/truck-driver-going-inside-a-truck.jpeg?imformat=chrome&imwidth=384" style="width:50%;margin-top:3%;" draggable="false">
+          <div style="margin:5%;">
+            <span style="opacity:0;">Moving Oil Truck Service</span>
+            <br>
+            <div style="text-align:Center;"><b>Moving Oil Truck Service</b></div>
+            <br><br>
+            <div style="font-size:calc(10px + 0.7vw);width:100%;text-align:justify;margin-top:-5%;color:black;">Announcing "The first and only Moving Oil Station in Kuching" !!! Just contact us and we will deliver Diesel to your desired location and pump fuel directly into your heavy machinery vehicles. Easy Peasy ! </div>
+          </div>
+        </div>
+
+        <div style="position:relative;margin-bottom:2%;">
+          <img src="https://ya-webdesign.com/images/bonus-clip-art-6.png" style="width:50%;margin-top:3%;" draggable="false">
+          <div style="margin:5%;">
+            <span style="opacity:0;">Reward Loyalty Program</span>
+            <br>
+            <div style="text-align:Center;"><b>Reward Loyalty Program</b></div>
+            <br><br>
+            <div style="font-size:calc(10px + 0.7vw);width:100%;text-align:justify;margin-top:-5%;color:black;">We believe Word of Mouth is one of the biggest aspire of revenue growth. We really appreciate those who advocates our services to public and thus, have provided a referral tracking system. It allows referrer to monitor referees' monthly purchases
+              list and obtain a portion of the sales as cashback </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div style="margin:1%;float:right;font-size:calc(5px + 0.5vw);">
+      Copyright © 2019 Shian Liang Petroleum Sdn Bhd Malaysia. All Rights Reserved.
+    </div>
+
+
+
+
+  </body>
+
+  <script>
+    let isMenuColShowing = true;
+
+
+
+
+    resizeAuto(); //init resize
+    function resizeAuto() {
+      if (window.innerWidth > 500) {
+        document.getElementById("what-we-do-row").hidden = false;
+        document.getElementById("what-we-do-col").hidden = true;
+  
+        
+        // document.getElementById("product-service-content").style.height = "auto";
+        document.getElementById("feature-highlight-content-row").hidden = false;
+        document.getElementById("feature-highlight-content-col").hidden = true;
+        
+        
+        //document.getElementById("product-service-innerContent").className = "product-service-innerContent2";
+        //document.getElementById("test").style.left = "100%";
+        //document.getElementById("menu-row").hidden = false;
+
+      } else {
+        document.getElementById("what-we-do-row").hidden = true;
+        document.getElementById("what-we-do-col").hidden = false;
+        //document.getElementById("product-service-content").style.height = "";
+  
+        
+        document.getElementById("feature-highlight-content-row").hidden = true;
+        document.getElementById("feature-highlight-content-col").hidden = false;
+        
+        //document.getElementById("test").style.left = "0%";
+        //document.getElementById("product-service-innerContent").className = "product-service-innerContent1";
+        //document.getElementById("menu-row").hidden = true;
+      }
+
+
+      if (window.innerWidth > 1150) {
+        document.getElementById("menu-row").hidden = false;
+        document.getElementById("drop-down-icon").hidden = true;
+        //document.getElementById("menu-col").style.left = "100%";
+        isMenuColShowing = false;
+        show_menu_col();
+
+      } else {
+        document.getElementById("menu-row").hidden = true;
+        document.getElementById("drop-down-icon").hidden = false;
+
+        //document.getElementById("menu-col").style.left = "0%";
+      }
+      
+      if (window.innerWidth<650){
+        document.getElementById("header-content").style.height="60px";
+      }else{
+       document.getElementById("header-content").style.height="75px"; 
+      }
+    }
+
+
+
+
+    function scrollToElement(id) {
+
+      let currentPos = window.scrollY,
+        endPos = document.getElementById(id).offsetTop - 50,
+        increment = 0,
+        MIN_PIXELS_PER_STEP = (endPos - currentPos) / 1000,
+        MAX_INCREMENT = 25;
+
+      
+      
+      let isGoingDown=false;
+      if (currentPos<endPos)isGoingDown=true;
+
+      
+      repeat();
+      
+      function repeat() {
+        increment += MIN_PIXELS_PER_STEP;
+        if (increment > MAX_INCREMENT) increment = MAX_INCREMENT;
+  
+        currentPos += increment;
+        currentPos >>= 0;
+        window.scrollTo(0, currentPos);
+        
+
+        if (!isGoingDown&&currentPos < endPos){
+            window.scrollTo(0, endPos);
+        } else if (isGoingDown&&currentPos > endPos) {
+          window.scrollTo(0, endPos);
+        } else if (currentPos !== endPos){
+          requestAnimationFrame(repeat);
+        }
+      }
+
+    }
+
+
+    function showHomePage(){
+      window.location.replace("https://shian-liang-petroleum.glitch.me/home.html");
+    }
+    function showProductServicePage(){
+      window.location.replace("https://shian-liang-petroleum.glitch.me/product-service.html");
+    }
+    function showAboutUsPage(){
+      window.location.replace("https://shian-liang-petroleum.glitch.me/about-us.html");
+    }
+    function showContactUsPage(){
+      window.location.replace("https://shian-liang-petroleum.glitch.me/contact-us.html");
+    }
+
+
+    function show_menu_col() {
+      if (!isMenuColShowing) {
+        document.getElementById("menu-col").style.left = "100%";
+        isMenuColShowing = true;
+      } else {
+        isMenuColShowing = false;
+        document.getElementById("menu-col").style.left = "0%";
+      }
+
+    }
+
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+
+  <script>
+    let socket = io("https://luxuriant-cardinal.glitch.me/");
+
+
+
+    let bannerInitBoolean = false;
+    socket.on("bannerListInit", function(e) {
+      console.log("bannerInit");
+      bannerInitBoolean = true;
+      slideImgs = [];
+      slideImgsHDes = [];
+      slideImgsStyle = [];
+      slideImgsDes = [];
+
+      e.forEach(function(element) {
+        slideImgs.push(element[0]);
+        slideImgsHDes.push(element[1]);
+        slideImgsStyle.push(element[2]);
+        slideImgsStyle.push(element[3]);
+        slideImgsDes.push(element[4]);
+        slideImgsStyle.push(element[5]);
+        slideImgsStyle.push(element[6]);
+      });
+      swipe('left');
+
+    });
+
+
+    let mousedown = false,
+      initX = 0,
+      swipeLeft = false,
+      slideTabs = [0, 1, 2],
+      isSlidingEnd = true,
+      slideImgs = [],
+      slideImgsDes = [],
+      slideImgsHDes = [],
+      slideImgsStyle = [],
+      currentSlideIndex = 1;
+
+
+    let autoSwipe = setInterval(autoSwipeFunc, 5000),
+      isAutoSwipe = true;
+
+    document.getElementById('slideshow-content').onmousedown = function(event) {
+      mousedown = true;
+
+      if (!event.clientX) event.clientX = event.touches[0].clientX;
+      initX = event.clientX; // Get the horizontal coordinate
+
+    }
+    document.getElementById('slideshow-content').ontouchstart = document.getElementById('slideshow-content').onmousedown;
+
+    document.getElementById('slideshow-content').onmouseup = function() {
+      mousedown = false;
+
+      if (swipeLeft) {
+        swipe('left');
+        return;
+      }
+      swipe('right');
+
+    }
+    document.getElementById('slideshow-content').ontouchend = document.getElementById('slideshow-content').onmouseup;
+
+    document.getElementById('slideshow-content').onmousemove = function(event) {
+      if (mousedown) {
+        if (!event.clientX) event.clientX = event.touches[0].clientX;
+        if (!event.clientY) event.clientY = event.touches[0].clientY;
+        if (initX > event.clientX) {
+          swipeLeft = true;
+        } else {
+          swipeLeft = false;
+        }
+        clearInterval(autoSwipe);
+        isAutoSwipe = false;
+      }
+
+    }
+    document.getElementById('slideshow-content').ontouchmove = document.getElementById('slideshow-content').onmousemove;
+
+    function swipe(string) {
+
+      if (!isSlidingEnd || !bannerInitBoolean) return;
+      isSlidingEnd = false;
+      let prev, next;
+
+      if (string === "left") {
+        let temp = slideTabs[0];
+        slideTabs[0] = slideTabs[1];
+        slideTabs[1] = slideTabs[2];
+        slideTabs[2] = temp;
+
+        document.getElementById("img" + slideTabs[0]).className = "slideOutLeft";
+        document.getElementById("img" + slideTabs[1]).className = "slideInRight";
+        document.getElementById("img" + slideTabs[2]).className = "instantRight";
+
+        prev = currentSlideIndex;
+        currentSlideIndex--;
+        if (currentSlideIndex < 0) {
+          currentSlideIndex = slideImgs.length - 1;
+        }
+        next = currentSlideIndex;
+        next--;
+        if (next < 0) {
+          next = slideImgs.length - 1;
+        }
+
+        document.getElementById("img" + slideTabs[0]).style.backgroundImage = "url(" + slideImgs[prev] + ")";
+        document.getElementById("img" + slideTabs[1]).style.backgroundImage = "url(" + slideImgs[currentSlideIndex] + ")";
+        document.getElementById("img" + slideTabs[2]).style.backgroundImage = "url(" + slideImgs[next] + ")";
+
+      } else { //right
+        let temp = slideTabs[2];
+        slideTabs[2] = slideTabs[1];
+        slideTabs[1] = slideTabs[0];
+        slideTabs[0] = temp;
+
+        document.getElementById("img" + slideTabs[2]).className = "slideOutRight";
+        document.getElementById("img" + slideTabs[1]).className = "slideInLeft";
+        document.getElementById("img" + slideTabs[0]).className = "instantLeft";
+
+
+        prev = currentSlideIndex;
+        currentSlideIndex = (currentSlideIndex + 1) % slideImgs.length;
+        next = (currentSlideIndex + 1) % slideImgs.length;
+
+        document.getElementById("img" + slideTabs[2]).style.backgroundImage = "url(" + slideImgs[prev] + ")";
+        document.getElementById("img" + slideTabs[1]).style.backgroundImage = "url(" + slideImgs[currentSlideIndex] + ")";
+        document.getElementById("img" + slideTabs[0]).style.backgroundImage = "url(" + slideImgs[next] + ")";
+      }
+
+      setTimeout(function() {
+        isSlidingEnd = true;
+        if (!isAutoSwipe) {
+          isAutoSwipe = true;
+          autoSwipe = setInterval(autoSwipeFunc, 5000);
+        }
+      }, 1000);
+
+
+
+
+      document.getElementById("banner-des2").innerHTML = slideImgsDes[currentSlideIndex];
+      document.getElementById("banner-des1").innerHTML = slideImgsHDes[currentSlideIndex];
+
+      document.getElementById("banner-des1").style.color = slideImgsStyle[currentSlideIndex * 4];
+      document.getElementById("banner-des2").style.color = slideImgsStyle[currentSlideIndex * 4 + 2];
+
+      document.getElementById("banner-des1").style.backgroundColor = slideImgsStyle[currentSlideIndex * 4 + 1];
+      document.getElementById("banner-des2").style.backgroundColor = slideImgsStyle[currentSlideIndex * 4 + 3];
+
+      document.getElementById("banner-des1").style.opacity = slideImgsStyle[currentSlideIndex * 4 + 1];
+      document.getElementById("banner-des2").style.opacity = slideImgsStyle[currentSlideIndex * 4 + 3];
+
+
+
+    }
+
+
+
+    function autoSwipeFunc() {
+      swipe('right');
+    }
+
+    
+    
+    
+  </script>
+
+
+
+
+
+
+</html>
