@@ -1,0 +1,927 @@
+<html>
+
+  <head>
+    <meta name="viewport" content="width=device-width,height=device-height, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Hammersmith+One" />
+    <link rel="shortcut icon" href="https://i.imgur.com/wuxhGMe.png">
+    <title>Shian Liang Referral</title>
+    <style>
+      * {
+        font-family: "Hammersmith One";
+        letter-spacing: 0px;
+      }
+
+      head,
+      body,
+      html {
+        padding: 0px;
+        margin: 0px;
+        overflow: hidden;
+      }
+
+      .bg {
+        width: 100%;
+        position: absolute;
+        height: 100%;
+      }
+
+      .layer {
+        width: 100%;
+        position: absolute;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.35);
+      }
+
+      .global-ranking-content2 {
+        border-style: inset;
+        width: 90%;
+        left: 50%;
+        position: relative;
+        transform: translate(-50%);
+        padding: calc(5px + 1vw);
+        background-color: rgba(0, 0, 0, 0.8);
+        overflow: auto;
+        color: white;
+        max-height: 80vh;
+        font-size: calc(9px + 1vw);
+      }
+
+      .login-img {
+        width: 28%;
+        max-width: 140px;
+      }
+      .eye-img{
+       background-color:;width:22px;position:absolute; 
+      }
+
+      .logout-img,
+      .eye-img,
+      .login-img,
+      .facebook-img,
+      .shortHide,
+      .longHide:hover {
+        cursor: pointer;
+      }
+
+      .facebook-img {
+        position: absolute;
+        width: 12%;
+        max-width: 80px;
+        right: 5%;
+        bottom: 5%;
+      }
+
+      .user-login-heading {
+        font-size: calc(11px + 1.4vw);
+        background-image: url(http://hanatemplate.com/images/brown-watercolor-background-3.png);
+        background-size: ;
+        background-position: center center;
+        text-align: center;
+        background-color: rgba(160, 82, 45, 1);
+        padding: calc(2px + 0.5vw);
+        border-top: 3px solid rgba(214, 175, 36, 1);
+        border-bottom: 3px solid rgba(214, 175, 36, 1);
+      }
+
+      .comp-logo {
+        left: 50%;
+        top: 15%;
+        position: absolute;
+        transform: translate(-50%, -50%);
+        border-style: ;
+        width: 50%;
+        background-color: rgba(255, 255, 255, 0);
+        background-image: url();
+        background-size: ;
+        background-position: center center;
+        border-radius: 40%;
+        padding-right: 8px;
+        padding-left: 5px;
+      }
+
+      .logout-img {
+        width: 20%;
+        max-width: 80px;
+        padding: calc(2px + 0.3vw);
+      }
+
+      @media only screen and (min-width: 400px) {
+        .user-login-heading {
+          font-size: 19px;
+        }
+        .global-ranking-content2 {
+          font-size: 15px;
+        }
+        .comp-logo {
+          width: 200px;
+        }
+      }
+
+      .body-content-1 {
+        transition: 1s ease;
+        opacity: 1;
+      }
+
+      .body-content-2 {
+        transition: 1s ease;
+        opacity: 1;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 1);
+        color: black;
+        font-size: calc(7px + 0.4vw);
+      }
+
+      .table-style {
+        position: relative;
+        max-height: 50vh;
+        overflow: auto;
+      }
+
+      td,
+      th {
+        border: 1px solid black;
+        text-align: center;
+        padding: 5px;
+      }
+
+      tr:nth-child(even) {
+        background-color: rgba(160, 82, 45, 0.2);
+      }
+
+      .incorrectCredentialBox {
+        font-size: calc(7px + 0.5vh);
+        padding: 4px;
+        border-style: solid;
+        border-color: #fc8a8a;
+        width: 70%;
+        position: relative;
+        left: 50%;
+        transform: translate(-50%);
+        background-color: #ffd3d3;
+        color: red;
+      }
+
+    </style>
+
+  </head>
+
+  <body>
+
+    <img class="bg" src="http://www.keenanrecycling.co.uk/wp-content/uploads/2016/01/waste-cooking-oil-collectionsmall.jpg">
+
+    <div class="layer"></div>
+
+
+
+
+    <div class="body-content-1" id="body-content-1" hidden>
+      <img src="https://i.imgur.com/v2EjTvW.png" class="comp-logo">
+      <div class="" style="width:80%;left:50%;top:50%;position:absolute;transform:translate(-50%,-50%);max-width:400px;">
+        <div class="user-login-heading" style="border-radius:15%;border-style:groove;">
+          Referral Login
+        </div>
+        <div class="global-ranking-content2" style="text-align:center;">
+          <img src="https://www.clarifybd.com/wp-content/uploads/2016/03/client-icon-blue.png" style="width:15%;margin:5px;padding:3px;background-color:;border-radius:0%;">
+          <br> Username <input type="text" style="border-style:groove;" id="loginUsername">
+          <br><br> Password <input type="password" style="border-style:groove;" id="loginPassword">
+          <img src="https://i.imgur.com/nOPS8r0.png" class ="eye-img" onclick="togglePasswordDisplay()">
+          
+          <br><br>
+
+          <img src="https://www.freeiconspng.com/uploads/login-button-png-5.png" class="login-img" onclick="login();" hidden>
+          <div id="incorrectCredentialBox" hidden class="incorrectCredentialBox">Incorrect username / password</div>
+          <br>
+          <button style="background-color:#b2ddff;color:black;border-color:lightgrey;margin:1%;" onclick="login()" id="loginButton">Login</button>
+          
+          <img src="https://png.pngtree.com/element_our/sm/20180301/sm_5a9794da1b10e.png" onclick="facebookRedirect();" class="facebook-img">
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="body-content-2" hidden id="body-content-2">
+      <div style="width:100%;left:50%;top:50%;position:absolute;transform:translate(-50%,-50%);max-width:700px;">
+        <div class="user-login-heading" style="border-radius:15%;border-style:groove;">
+          Referral Order List
+        </div>
+        <div class="global-ranking-content2" style="text-align:center;">
+          <img id="userLogo" src="http://www.stickpng.com/assets/images/585e4bcdcb11b227491c3396.png" style="width:10%;margin:3px;padding:3px;background-color:white;border-radius:50%;" draggable="false">
+          <div style="border-style:;margin:3px;" id="welcomeText">Welcome </div>
+
+          <div style="position:relative;">
+            <div style="border-style:;margin:3px;color:#0aff5b;position:relative;" id="month-label">Commission Records (January)</div>
+            <div style="color:white;position:absolute;right:0%;width:;top:0%;margin-top:-5px;"><button onclick="nextMonth('right');" style="border-radius:40%;background-color: lightgrey;border-color:grey;">>></button></div>
+            <div style="color:white;position:absolute;left:0%;width:;top:0%;margin-top:-5px;"><button onclick="nextMonth('left');" style="border-radius:40%;background-color: lightgrey;border-color:grey;"><<</button></div>
+
+          </div>
+
+          <div class="table-style">
+            <table id="table-content">
+              <tr>
+                <th>Company</th>
+                <th>Order</th>
+                <th>Commission Rate<br>(RM/Litre)</th>
+                <th>Date</th>
+                <th>Payment<br>Status</th>
+                <th>Commission<br>(RM)</th>
+                <th>Commission Status</th>
+              </tr>
+              <!--       
+              <tr>
+              <td>ABC Company</td>
+              <td>2500L Diesel</td> 
+              <td>0.01</td>
+              <td>13/12/2018</td>
+              <td><div style="width:25px;left:50%;position:relative;transform:translate(-50%);"><img src="https://i.imgur.com/OawlAPc.png" style="width:100%;"></div></td>
+              <td>0</td>
+              <td><div style="width:45px;left:50%;position:relative;transform:translate(-50%);"></div></td>
+            </tr>
+           <tr>
+              <td>Test Company</td>
+              <td>3000L Diesel</td>
+               <td>0.02</td>
+              <td>10/1/2019</td>
+               <td><div style="width:25px;left:50%;position:relative;transform:translate(-50%);"><img src="https://i.imgur.com/fvlWwwg.png" style="width:100%;"></div></td>
+               <td>60</td>
+               <td><div style="width:45px;left:50%;position:relative;transform:translate(-50%);"><img src="https://i1.wp.com/twdfansite.com/wp-content/uploads/2015/12/claimed-word-01-b039621549a910b60495d7c419a8b387.png" style="width:100%;"></div></td>
+            </tr>
+             <tr>
+              <td>ZXC Company</td>
+              <td>1000L Diesel</td>
+               <td>0.015</td>
+              <td>23/1/2019</td>
+              <td><div style="width:25px;left:50%;position:relative;transform:translate(-50%);"><img src="https://i.imgur.com/Kvwe8So.png" style="width:100%;"></div></td>
+               <td>0</td>
+               <td><div style="width:45px;left:50%;position:relative;transform:translate(-50%);"></div></td>
+            </tr>
+             <tr>
+              <td>ZXC Company</td>
+              <td>1000L Diesel</td>
+               <td>0.015</td>
+              <td>23/1/2019</td>
+              <td><div style="width:25px;left:50%;position:relative;transform:translate(-50%);"><img src="https://i.imgur.com/Kvwe8So.png" style="width:100%;"></div></td>
+               <td>0</td>
+               <td><div style="width:45px;left:50%;position:relative;transform:translate(-50%);"></div></td>
+            </tr>
+             <tr>
+              <td>ZXC Company</td>
+              <td>1000L Diesel</td>
+               <td>0.015</td>
+              <td>23/1/2019</td>
+              <td><div style="width:25px;left:50%;position:relative;transform:translate(-50%);"><img src="https://i.imgur.com/fvlWwwg.png" style="width:100%;"></div></td>
+               <td>60</td>
+               <td><div style="width:45px;left:50%;position:relative;transform:translate(-50%);"><img src="https://i1.wp.com/twdfansite.com/wp-content/uploads/2015/12/claimed-word-01-b039621549a910b60495d7c419a8b387.png" style="width:100%;"></div></td>
+            </tr>
+             <tr>
+              <td>ZXC Company</td>
+              <td>1000L Diesel</td>
+               <td>0.015</td>
+              <td>23/1/2019</td>
+              <td><div style="width:25px;left:50%;position:relative;transform:translate(-50%);"><img src="https://i.imgur.com/Kvwe8So.png" style="width:100%;"></div></td>
+               <td>0</td>
+               <td><div style="width:45px;left:50%;position:relative;transform:translate(-50%);"></div></td>
+            </tr>
+             <tr>
+              <td>ZXC Company</td>
+              <td>1000L Diesel</td>
+               <td>0.015</td>
+              <td>23/1/2019</td>
+              <td><div style="width:25px;left:50%;position:relative;transform:translate(-50%);"><img src="https://i.imgur.com/Kvwe8So.png" style="width:100%;"></div></td>
+               <td>0</td>
+               <td><div style="width:45px;left:50%;position:relative;transform:translate(-50%);"></div></td>
+            </tr>
+              <tr>
+              <td>ZXC Company</td>
+              <td>1000L Diesel</td>
+               <td>0.015</td>
+              <td>23/1/2019</td>
+              <td><div style="width:25px;left:50%;position:relative;transform:translate(-50%);"><img src="https://i.imgur.com/Kvwe8So.png" style="width:100%;"></div></td>
+               <td>0</td>
+                <td><div style="width:45px;left:50%;position:relative;transform:translate(-50%);"></div></td>
+            </tr>
+-->
+
+            </table>
+          </div>
+
+          <div style="text-align:Right;margin:10px;color:#0ae6ff;" id="total">Unclaimed Commission : RM 0</div>
+          <span style="color:orange;"></span>
+
+          <div style="margin-top:5px;margin-bottom:5px;background-color:black;border-radius:25%;padding:3px;border-style:inset;border-color:lightgrey;width:50%;left:50%;position:relative;transform:translate(-50%);font-size:calc(8px + 0.6vw);">
+            <img src="https://i.imgur.com/fvlWwwg.png" style="width:9%;"> Payment Completed<br>
+            <img src="https://i.imgur.com/OawlAPc.png" style="width:9%;"> Payment Pending<br>
+            <img src="https://i.imgur.com/Kvwe8So.png" style="width:9%;"> Payment Cancelled<br>
+          </div>
+
+          <img hidden class="logout-img" onclick="logout();" src="http://2.bp.blogspot.com/-zpPxbk-19Qk/UHRY0yastLI/AAAAAAAAAT0/nR14IukPKSY/s1600/logout-button-blue-hi.png">
+          <button style="background-color:#00ff00 ;color:black;border-color:lightgrey;margin:1%;border-radius:;" onclick="logout()">Logout</button>
+          <button style="background-color:red;color:white;border-color:lightgrey;margin:1%;" onclick="resetPassword()">Reset Password</button>
+          <img src="https://png.pngtree.com/element_our/sm/20180301/sm_5a9794da1b10e.png" onclick="facebookRedirect();" class="facebook-img" style="width:9%;position:relative;left:5%;">
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="body-content-1" id="body-content-3" hidden >
+      <div class="" style="width:80%;left:50%;top:50%;position:absolute;transform:translate(-50%,-50%);max-width:400px;">
+        <div class="user-login-heading" style="border-radius:15%;border-style:groove;">
+          Reset Credentials
+        </div>
+        <div class="global-ranking-content2" style="text-align:center;">
+          <img src="http://www.stickpng.com/assets/images/585e4bcdcb11b227491c3396.png" style="width:10%;margin:5px;padding:3px;background-color:white;border-radius:50%;">
+          <div id="resetPasswordContent" >
+            <br>Username<br><input type="text" style="border-style:groove;" id="usernameR"><br><span style="font-size:calc(9px + 0.2vw);color:#7c93ff;" onclick="showResetUsernameContent()"><u>Reset Username</u></span>
+            <br><br>Old Password&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="password" style="border-style:groove;" id="oldPasswordR">
+            <br><br>New Password&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="password" style="border-style:groove;" id="newPasswordR">
+            <br><br>Confirm Password &nbsp;<input type="password" style="border-style:groove;" id="newPasswordRC">
+            <br><br>
+            <div id="incorrectCredentialBox2" hidden class="incorrectCredentialBox">Incorrect username or password</div>
+            <br>
+            <button style="background-color:red ;color:white;border-color:lightgrey;margin:1%;border-radius:;" onclick="confirmReset();" id="resetPasswordButton">Reset</button>
+            <button style="background-color:white;color:black;border-color:lightgrey;margin:1%;" onclick="cancelReset();">Cancel</button>
+          </div>
+          
+          
+          
+          <div id="resetUsernameContent" hidden>
+          <br>Old Username<br><input id="resetOldUsername"  type="text" style="margin:3px;border-color:lightgrey;">
+          <br><br> New Username&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="resetNewUsername" type="text" style="margin:3px;border-color:lightgrey;">
+          <br><br> Confirm New Username&nbsp;<input id="resetNewUsername2" type="text" style="margin:3px;border-color:lightgrey;">
+          <br><br> Password&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input id="resetPasswordU" type="password" style="margin:3px;border-color:lightgrey;"><br>
+          <br>
+          <div id="incorrectCredentialBoxU" hidden class="incorrectCredentialBox">Incorrect username / password</div>
+          <br>
+          <div style="text-align:center;">
+            <button class="button" onclick="confirmResetUsername()" id="confirmResetButtonU" style="color:white;background-color:red;border-color:grey;">Reset</button>
+            <button class="button" onclick="cancelResetUsername()" id="cancelResetButtonU">Cancel</button>
+          </div> 
+        </div>
+          
+          
+
+          
+          
+        </div>
+      </div>
+    </div>
+
+
+
+    <div style="position:fixed;width:100%;height:100%;background-color:rgba(0,0,0,0.3);left:0;top:0;z-index:5;" hidden id="bufferBg">
+      <img src="https://www.iabc.com/wp-content/uploads/images/loading.gif" style="width:25px;left:50%;position:relative;top:50%;transform:translate(-50%,-50%);user-drag: none; user-select: none;">
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+
+    <script>
+      
+      
+      function togglePasswordDisplay(){
+        if (document.getElementById("loginPassword").type==="text")
+          document.getElementById("loginPassword").type="password";
+        else
+          document.getElementById("loginPassword").type="text";
+      }
+      
+      
+      //login();
+      let socket, isLogin=false;
+      socket = io('https://walnut-laugh.glitch.me/');
+
+      setTimeout(logout,1000);//init
+
+
+
+
+      document.getElementById("loginUsername").onkeyup = function(event) {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.keyCode === 13) {
+          // Trigger the button element with a click
+          login();
+          this.blur();
+        }
+      };
+      document.getElementById("loginPassword").addEventListener("keyup", document.getElementById("loginUsername").onkeyup);
+
+
+
+
+
+      document.getElementById("usernameR").onkeyup = function(event) {
+        // Cancel the default action, if needed
+        event.preventDefault();
+        // Number 13 is the "Enter" key on the keyboard
+        if (event.keyCode === 13) {
+          // Trigger the button element with a click
+          confirmReset();this.blur();
+        }
+      };
+      document.getElementById("oldPasswordR").addEventListener("keyup", document.getElementById("usernameR").onkeyup);
+      document.getElementById("newPasswordR").addEventListener("keyup", document.getElementById("usernameR").onkeyup);
+      document.getElementById("newPasswordRC").addEventListener("keyup", document.getElementById("usernameR").onkeyup);
+
+
+
+      
+      document.getElementById("resetOldUsername").onkeyup=function(event) {
+      // Cancel the default action, if needed
+      event.preventDefault();
+      // Number 13 is the "Enter" key on the keyboard
+      if (event.keyCode === 13) {
+        // Trigger the button element with a click
+        confirmResetUsername();this.blur();
+      }
+  	}
+    document.getElementById("resetNewUsername").onkeyup=document.getElementById("resetOldUsername").onkeyup;
+    document.getElementById("resetNewUsername2").onkeyup=document.getElementById("resetOldUsername").onkeyup;
+    document.getElementById("resetPasswordU").onkeyup=document.getElementById("resetOldUsername").onkeyup;
+      
+      
+      
+
+
+      function facebookRedirect() {
+        window.open("https://www.facebook.com/SLPetroleum/", '_blank');
+      }
+
+      let locName = location.hostname;
+      if (locName === "marcustansoon.000webhostapp.com") {
+        setTimeout(function() {
+          let list = document.querySelectorAll("div");
+          console.log(list[list.length - 1].innerHTML);
+          list[list.length - 1].hidden = true;
+          list[list.length - 1].innerHTML = "";
+          list = null;
+
+        }, 1000);
+      }
+
+      socket.on("userFullName", function(e) {
+        console.log("user full name " + e);
+        document.getElementById("welcomeText").innerHTML = "Welcome, " + e;
+      });
+      socket.on("logo",function(e){
+          if (e!=="")
+          document.getElementById("userLogo").src=e;
+        else{
+          document.getElementById("userLogo").src="https://www.transparenttextures.com/patterns/asfalt-light.png";
+        }
+      });
+
+
+      function attemptToReconnect(){
+        socket.connect();
+      }
+      function login() {
+
+        let temp = {
+          "username": document.getElementById("loginUsername").value,
+          "password": document.getElementById("loginPassword").value
+        }
+        
+        document.getElementById("loginButton").disabled = true;
+        document.getElementById("incorrectCredentialBox").hidden = true;
+        document.getElementById("bufferBg").hidden = false;
+        if (!isInputDataValid(temp.username)||!isInputDataValid(temp.password)) {
+          document.getElementById("incorrectCredentialBox").hidden = false;
+          document.getElementById("loginButton").disabled = false;
+          document.getElementById("bufferBg").hidden = true;
+        } else if (!socket.connected) {
+          alert("Network Error");
+          document.getElementById("loginButton").disabled = false;
+          document.getElementById("bufferBg").hidden = true;
+          setTimeout(function() {
+            if (!socket.connected) attemptToReconnect();
+            console.log("attempt to reconn");
+          }, 2000);
+        } else{
+          socket.emit('loginCredential', temp);
+        }
+
+        document.getElementById("loginPassword").value = "";
+      }
+
+      socket.on("loginStatus", function(e) {
+        document.getElementById("loginButton").disabled = false;
+        document.getElementById("bufferBg").hidden = true;
+        if (e === "success") {
+          loginSuccess();isLogin=true;
+          callAutoLogoutInterval();//start
+          document.getElementById("loginPassword").value = "";
+          document.getElementById("loginUsername").value = "";
+          document.getElementById("incorrectCredentialBox").hidden = true;
+        } else {
+          console.log('err');
+          document.getElementById("incorrectCredentialBox").hidden = false;
+        }
+      });
+
+      function loginSuccess() {//transition to main page
+        document.getElementById("body-content-1").style.opacity = 0;
+        document.getElementById("body-content-2").style.opacity = 0;
+        document.getElementById("body-content-2").hidden = false;
+        setTimeout(function() {
+          document.getElementById("body-content-2").style.opacity = 1;
+          document.getElementById("body-content-1").hidden = true;
+        }, 800);
+      }
+
+      
+      function logout() {
+        document.getElementById("body-content-3").style.opacity = 0;
+        document.getElementById("body-content-2").style.opacity = 0;
+        document.getElementById("body-content-1").style.opacity = 0;
+        document.getElementById("body-content-1").hidden = false;
+        setTimeout(function() {
+          document.getElementById("body-content-1").style.opacity = 1;
+          document.getElementById("body-content-2").hidden = true;
+          document.getElementById("body-content-3").hidden = true;
+        }, 800)
+
+        resetOrderContentList();
+        isLogin=false;
+
+      }
+
+      function resetOrderContentList() {//reset to default state on logout
+        months = [];
+        monthsString = [];
+        commissionTotals = [];
+        currentMonth = 0;
+        firstMonthToBeShown = "";
+        document.getElementById("month-label").innerHTML = "";
+        document.getElementById("table-content").innerHTML = "";
+        document.getElementById("total").innerHTML = "";
+
+        document.getElementById("newPasswordR").value = "";
+        document.getElementById("oldPasswordR").value = "";
+        document.getElementById("newPasswordRC").value = "";
+        document.getElementById("usernameR").value = "";
+
+        document.getElementById("incorrectCredentialBox2").hidden = true;
+        document.getElementById("incorrectCredentialBox").hidden = true;
+        from=null;
+        to=null;
+        
+        document.getElementById("incorrectCredentialBoxU").hidden = true;
+        document.getElementById("resetPasswordU").value = "";
+        document.getElementById("resetOldUsername").value = "";
+        document.getElementById("resetNewUsername2").value = "";
+        document.getElementById("resetNewUsername").value = "";
+      }
+
+      function resetPassword() {//transition to reset page
+        document.getElementById("body-content-2").style.opacity = 0;
+        document.getElementById("body-content-3").style.opacity = 0;
+        document.getElementById("body-content-3").hidden = false;
+        setTimeout(function() {
+          document.getElementById("body-content-3").style.opacity = 1;
+          document.getElementById("body-content-2").hidden = true;
+        }, 800)
+      }
+
+
+      function isInputDataValid(string) {
+        let invalidChar = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
+            'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+          ],
+          isInvalid;
+
+
+        if (string.length === 0) {
+          return false;
+        }
+        for (let index = 0; index < string.length; index++) {
+          isInvalid = true;
+          for (let loop = 0; loop < invalidChar.length; loop++) {
+            if (string[index] === invalidChar[loop]) {
+              isInvalid = false;
+              break;
+            }
+
+          }
+          if (isInvalid) {
+            return false;
+          }
+
+        };
+        return true;
+      }
+
+      function confirmReset() {
+        document.getElementById("bufferBg").hidden = false;
+        document.getElementById("incorrectCredentialBox2").hidden = true;
+        document.getElementById("resetPasswordButton").disabled = true;
+
+        if(!from || !to ){alert("err :data not found");logout();}
+        if (document.getElementById("newPasswordR").value.length < 5 || !isInputDataValid(document.getElementById("usernameR").value) || !isInputDataValid(document.getElementById("oldPasswordR").value) || !isInputDataValid(document.getElementById("newPasswordR").value)) {
+          document.getElementById("incorrectCredentialBox2").hidden = false;
+          document.getElementById("incorrectCredentialBox2").innerHTML = "Input must NOT contains special characters and Password must be at least five characters long";
+          document.getElementById("resetPasswordButton").disabled = false;
+          document.getElementById("bufferBg").hidden = true;
+        } else if (document.getElementById("newPasswordR").value !== document.getElementById("newPasswordRC").value) {
+          document.getElementById("incorrectCredentialBox2").hidden = false;
+          document.getElementById("incorrectCredentialBox2").innerHTML = "New and Confirmation password do not match, please re-enter";
+          document.getElementById("resetPasswordButton").disabled = false;
+          document.getElementById("bufferBg").hidden = true;
+        } else if (!socket.connected) {
+            alert("network err");
+            //location.reload();
+            //logout();
+            document.getElementById("bufferBg").hidden = true;
+            document.getElementById("resetPasswordButton").disabled = false;
+            setTimeout(function() {
+              if (!socket.connected) attemptToReconnect();
+              console.log("attempt to reconn")
+            }, 2000);
+          }else{
+            socket.emit("resetPassword", {
+              "from": from,
+              "to": to,
+              "username": document.getElementById("usernameR").value,
+              "oldPassword": document.getElementById("oldPasswordR").value,
+              "newPassword": document.getElementById("newPasswordR").value,
+            });
+          }
+        
+        document.getElementById("newPasswordR").value = "";
+        document.getElementById("oldPasswordR").value = "";
+        document.getElementById("newPasswordRC").value = "";
+      }
+
+      function cancelReset() {
+        document.getElementById("body-content-3").style.opacity = 0;
+        document.getElementById("body-content-2").style.opacity = 0;
+        document.getElementById("body-content-2").hidden = false;
+        setTimeout(function() {
+          document.getElementById("body-content-2").style.opacity = 1;
+          document.getElementById("body-content-3").hidden = true;
+        }, 800);
+        document.getElementById("newPasswordR").value = "";
+        document.getElementById("oldPasswordR").value = "";
+        document.getElementById("newPasswordRC").value = "";
+        document.getElementById("usernameR").value = "";
+        document.getElementById("incorrectCredentialBox2").hidden = true;
+        document.getElementById("resetPasswordButton").disabled = false;
+        
+        document.getElementById("incorrectCredentialBoxU").hidden = true;
+        document.getElementById("resetPasswordU").value = "";
+        document.getElementById("resetOldUsername").value = "";
+        document.getElementById("resetNewUsername2").value = "";
+        document.getElementById("resetNewUsername").value = "";
+      }
+
+
+      
+      
+      
+      
+      function showResetUsernameContent(){
+        document.getElementById("resetPasswordContent").hidden=true;
+        document.getElementById("resetUsernameContent").hidden=false; 
+      }
+      function cancelResetUsername(){
+        document.getElementById("resetUsernameContent").hidden=true;
+        document.getElementById("resetPasswordContent").hidden=false;
+        cancelReset();
+      }
+      function confirmResetUsername(){
+        let obj={
+          "oldUsername":document.getElementById("resetOldUsername").value,
+          "newUsername":document.getElementById("resetNewUsername").value,
+          "password":document.getElementById("resetPasswordU").value,
+          "from":from,
+          "to":to
+        }
+        
+        if(!from || !to ){alert("err :data not found");logout();}
+        
+        document.getElementById("bufferBg").hidden=false;
+        document.getElementById("resetPasswordU").value="";
+        document.getElementById("incorrectCredentialBoxU").hidden=true;
+        
+        if (obj.newUsername !== document.getElementById("resetNewUsername2").value){
+          document.getElementById("incorrectCredentialBoxU").hidden=false;
+          document.getElementById("incorrectCredentialBoxU").innerHTML="New and Confirmation username do not match, please re-enter";
+          document.getElementById("bufferBg").hidden=true;
+        }
+        else if (!isInputDataValid(obj.oldUsername)||!isInputDataValid(obj.newUsername)||!isInputDataValid(obj.password)||obj.newUsername.length<5){
+          document.getElementById("incorrectCredentialBoxU").hidden=false;
+          document.getElementById("incorrectCredentialBoxU").innerHTML="Username must NOT contains special characters and must be at least five characters long";
+          document.getElementById("bufferBg").hidden=true;
+        }else if (!socket.connected){
+          alert("network err");
+          setTimeout(function(){if (!socket.connected)attemptToReconnect();console.log("attempting to recon");},2000);
+          document.getElementById("bufferBg").hidden=true;
+        }else{
+          socket.emit("resetUsername",obj);
+        }    
+      }
+      socket.on("resetUsernameStatus",function(e){
+        console.log(e);                     
+        document.getElementById("bufferBg").hidden=true;                           
+        if (e==="success"){
+          cancelResetUsername();
+          logout();
+        }else if (e==="wrong credentials"){
+          document.getElementById("incorrectCredentialBoxU").hidden=false;
+          document.getElementById("incorrectCredentialBoxU").innerHTML="Incorrect username / password";
+        }else{
+          document.getElementById("incorrectCredentialBoxU").hidden=false;
+          document.getElementById("incorrectCredentialBoxU").innerHTML="The username already exists, please use a different username";
+        }
+
+      });
+      
+      
+      
+
+
+      let months = [ /*"January","February","March","April"*/ ],
+        currentMonth = 0,
+        monthsString = [],
+        commissionTotals = [];
+
+
+
+      socket.on("monthlyOrderInfo", function(e) {
+
+        let tempString = "<tr> <th>Company</th> <th>Order</th> <th>Commission Rate<br>(RM/Litre)</th> <th>Date</th> <th>Payment<br>Status</th> <th>Commission<br>(RM)</th> <th>Commission Status</th> </tr>";
+
+        let total=0,isPaymentCompleted=false,amount=0;
+        e.data.forEach(function(row, rowIndex) {
+          //if (rowIndex !== e.data.length - 1) {
+            tempString += "<tr>";
+            isPaymentCompleted=false;//init
+            row.forEach(function(element, index) {
+              if (index===5){ amount=parseInt(element); }
+              if (index === 4) {
+                if (element === "Cancelled") {
+                  tempString += '<td><div style="width:25px;left:50%;position:relative;transform:translate(-50%);"><img src="https://i.imgur.com/Kvwe8So.png" style="width:100%;"></div></td>';
+                } else if (element === "Completed") {
+                  isPaymentCompleted=true;
+                  tempString += '<td><div style="width:25px;left:50%;position:relative;transform:translate(-50%);"><img src="https://i.imgur.com/fvlWwwg.png" style="width:100%;"></div></td>';
+                } else {
+                  tempString += '<td><div style="width:25px;left:50%;position:relative;transform:translate(-50%);"><img src="https://i.imgur.com/OawlAPc.png" style="width:100%;"></div></td>';
+                }
+                
+              } else if (index === 6) {
+                if (element === "✔") {
+                  tempString += '<td><div style="width:45px;left:50%;position:relative;transform:translate(-50%);"><img src="https://i1.wp.com/twdfansite.com/wp-content/uploads/2015/12/claimed-word-01-b039621549a910b60495d7c419a8b387.png" style="width:100%;"></div></td>';
+                  
+                } else {
+                  if (isPaymentCompleted){total+=amount;}
+                  tempString += '<td><div style="width:45px;left:50%;position:relative;transform:translate(-50%);"></div></td>';
+                }
+              } else
+                tempString += "<td>" + element + "</td>";
+            });
+            tempString += "</tr>";
+          //} else {
+            //commissionTotals[e.index] = row[1];
+          if (rowIndex === e.data.length - 1)
+            commissionTotals[e.index] = total//row[1];
+          //}
+
+        });
+
+        months[e.index] = e.title;
+        monthsString[e.index] = tempString;
+        tempString = "";
+        console.log(e);
+        console.log("current init " + months.length);
+        if (0 === e.index) {
+
+          document.getElementById("month-label").innerHTML = "Commission Records (" + months[0] + ")";
+          document.getElementById("table-content").innerHTML = monthsString[0];
+          document.getElementById("total").innerHTML = "Unclaimed Commission : " + commissionTotals[0];
+        }
+      });
+
+      function nextMonth(string) {
+        if (string === "left") {
+          currentMonth--;
+          if (currentMonth < 0) {
+            currentMonth = months.length - 1;
+          }
+        } else {
+          currentMonth = (currentMonth + 1) % months.length;
+        }
+        document.getElementById("month-label").innerHTML = "Commission Records (" + months[currentMonth] + ")";
+        document.getElementById("table-content").innerHTML = monthsString[currentMonth];
+        document.getElementById("total").innerHTML = "Unclaimed Commission : " + commissionTotals[currentMonth];
+      }
+
+
+
+      socket.on('disconnect', function() {
+        setTimeout(function() {
+            if (!socket.connected) attemptToReconnect();
+            console.log("attempt to reconn")
+          }, 2000);
+      });
+      socket.on('connect', function() {
+        console.log('connected');
+      });
+      let from, to;
+      socket.on("resetIndex", function(obj) {
+
+        let firstCharCode = obj.range.charCodeAt(0),
+          nextCharCode = obj.range.charCodeAt(0) + 1,
+          startIndex = -1,
+          endIndex = -1;
+
+        for (let loop = 0; loop < 10; loop++) {
+          if (!isNaN(obj.range[loop]) && startIndex === -1) {
+            startIndex = loop;
+          }
+          if (startIndex !== -1 && endIndex === -1 && isNaN(obj.range[loop])) {
+            endIndex = loop;
+            break;
+          }
+        }
+
+        let oriPos = obj.range.substr(startIndex, endIndex - startIndex),
+          updatedPos = parseInt(obj.range.substr(startIndex, endIndex - startIndex)) + obj.indexes;
+
+        from = obj.range[0] + updatedPos;
+        to = String.fromCharCode(nextCharCode) + updatedPos;
+
+      });
+
+
+      socket.on("resetPasswordStatus", function(e) {
+        console.log(e);
+        document.getElementById("bufferBg").hidden = true;
+        if (e === "success") {
+          logout();
+        } else {
+          document.getElementById("incorrectCredentialBox2").hidden = false;
+          document.getElementById("incorrectCredentialBox2").innerHTML = "Incorrect password/username";
+        }
+        document.getElementById("resetPasswordButton").disabled = false;
+      });
+
+   
+      
+      
+      
+      //auto logout after 5min of inactivity
+      let activeMinute=0;
+      resetActiveMinute();//init
+      function resetActiveMinute (){
+        let d = new Date();
+        d = d.getMinutes();
+        d=parseInt(d);
+        
+        activeMinute=d;
+      }
+
+      
+      function autoLogoutInterval(){ 
+            let d = new Date();
+            d = d.getMinutes();
+            d=parseInt(d);
+              
+            d=d-activeMinute;
+            if (d<0){
+              d+=60;
+            }
+          //console.log(d);
+          
+            if(d>5){ 
+              console.log('auto logout');
+              logout();//alert('auto lg');
+              
+            } else{
+                setTimeout(callAutoLogoutInterval,10000);
+            }
+        
+      }
+      function callAutoLogoutInterval(){
+        if(isLogin)
+        requestAnimationFrame(autoLogoutInterval);
+      }
+      
+      
+      document.body.onclick=function(){ resetActiveMinute(); }
+      document.body.ontouchstart=document.body.onclick;
+    </script>
+
+
+  </body>
+
+</html>
