@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+<head>
+<title>End User Water Result</title>
+<style> table, td, th { border: 1px solid black;text-align: center; } table { border-collapse: collapse; width: 100%; } th { padding-top: 6px; padding-bottom: 6px; text-align: left; background-color: #4CAF50; color: white; text-align: center; } tr:nth-child(even){background-color: #f2f2f2;}
+.button1 { 
+box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); 
+background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 5px 16px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 1px 2px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+</style>
+</head>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+<table id="table">
+  <tr>
+  <th>No</th>
+  <th>Device IDs</th>
+  <th>Date Modified</th>
+  <th></th>
+  </tr>
+  <tr>
+  <td>1</td>
+  <td>de</td>
+  <td>asd</td>
+  <td><button onclick="openGraph();">>></button></td>
+  </tr>
+</table>
+<canvas id="turbidityChart"></canvas>
+<canvas id="ECChart"></canvas>
+<body style="padding:3%;">
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script>
+ console.log(location.href);
+ 
+ 
+	let socket = io("https://drone-end-user.glitch.me/"),//connect to server
+    partitionKey="partitionKey"//location.href.replace("https://www.w3schools.com/html/tryit.asp?filename=tryhtml_intro?partitionKey=","");//get partitionkey by url
+    
+    //partitionKey="partitionKey";
+    function setEndUserPhone(){
+      socket.emit("setEndUserPhone");
+    }
+    socket.on("sensorData",function(data){
+      	//xlabels.push(data.EC);
+   		//ylabels.push(data.date);
+        //chart.update();
+    });
+ 
+ 
+let ctx_turbidityChart = document.getElementById('turbidityChart').getContext('2d'),
+ctx_ECChart= document.getElementById('ECChart').getContext('2d'),
+xlabels_turbidity=[],xlabels_EC=[],
+ylabels=[],
+table = document.getElementById('table');
+
+let turbidityChart = new Chart(ctx_turbidityChart, {
+    // The type of chart we want to create
+    type: 'line',
+    // The data for our dataset
+    data: {
+        labels:ylabels,
+        datasets: [{
+            label: 'Turbidity (NTU over time)',
+            backgroundColor: 'rgba(255, 255, 255,0)',
+            borderColor: 'rgba(26,206,197,1)',
+            data: xlabels_turbidity
+            
+        }]
+    },
+    // Configuration options go here
+    options: {}
+}),
+ECChart = new Chart(ctx_ECChart, {
+    // The type of chart we want to create
+    type: 'line',
+    // The data for our dataset
+    data: {
+        labels:ylabels,
+        datasets: [{
+            label: 'Electrical Conductivity (us/cm over time)',
+            backgroundColor: 'rgba(255, 255, 255,0)',
+            borderColor: 'rgba(38, 98, 193,1)',
+            data: xlabels_EC
+            
+        }]
+    },
+    // Configuration options go here
+    options: {}
+});
+	socket.on("connect",function(){
+ 		socket.emit("getRecords",{partitionKey:partitionKey,measurementType:"water"});
+    });
+   	socket.on("getRecords",function(data){
+    	console.log(JSON.stringify(data));
+        string="";
+        string="<tr> <th>No</th> <th>Device IDs</th> <th>Date Modified</th><th></th> </tr>";
+        for (let loop=0;loop<data.length;loop++){
+        	let temp=loop+1;
+            string+="<tr><td>"+temp+"</td>";
+            string+="<td>"+data[loop].deviceID+"</td>";
+            let d=new Date(data[loop].date);//create Date obj from the old records
+            string+="<td>"+d.getDate()+"/"+d.getMonth()+"/"+d.getFullYear()+" "+addZero(d.getHours())+":"+addZero(d.getMinutes())+"</td><td>";
+            string+="<button class='button1' onclick='openGraph("+JSON.stringify(data[loop].data)+");'>>></button></td></tr>";
+            table.innerHTML=string;
+        }
+
+   });
+   
+   function addZero(i) { if (i < 10) { i = "0" + i; } return i; }
+   function openGraph(data){
+      console.log(data);
+      
+      xlabels_EC.length=0;
+      xlabels_turbidity.length=0;
+      ylabels.length=0;
+      for (let loop=0;loop<data.length;loop++){
+          xlabels_EC.push(data[loop].EC);
+          xlabels_turbidity.push(data[loop].turbidity);
+          ylabels.push(data[loop].date);
+      }
+      turbidityChart.update();
+      ECChart.update();
+   }
+   
+
+</script>
+
+</body>
+</html>
