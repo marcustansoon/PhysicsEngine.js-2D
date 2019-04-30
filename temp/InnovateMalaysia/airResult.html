@@ -121,7 +121,7 @@
 
 
          let socket = io("https://drone-end-user.glitch.me/"), //connect to server
-            partitionKey = "partitionKey" //location.href.replace("https://www.w3schools.com/html/tryit.asp?filename=tryhtml_intro?partitionKey=","");//get partitionkey by url
+            partitionKey = location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/airResult.html?partitionKey=","");//get partitionkey by url
 
          function setEndUserPhone() {
             socket.emit("setEndUserPhone");
@@ -160,7 +160,7 @@
 
          socket.on("connect", function() {return;
             socket.emit("getRecords", {
-               partitionKey: 'partitionKey',
+               partitionKey: partitionKey,
                measurementType: "air"
             });
          });
@@ -187,17 +187,17 @@
             return i;
          }
         let isSwitchingScene=false;
-		function backButton(){
-        	if(isSwitchingScene)return;
-        	isSwitchingScene=true;
-        	document.getElementById("chart").style.left="105%";
+	function backButton(){
+            if(isSwitchingScene)return;
+            isSwitchingScene=true;
+            document.getElementById("chart").style.left="105%";
             document.getElementById("table").style.left="0%";
             setTimeout(function(){
             	isSwitchingScene=false;
             },1500);
         }
          function openGraph(data) {
-         	if(isSwitchingScene)return;
+            if(isSwitchingScene)return;
             isSwitchingScene=true;
             console.log(data);
             graphData = data;
