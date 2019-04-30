@@ -118,7 +118,7 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
       <script>
          console.log(location.href);
-
+	backButton();
 
          let socket = io("https://drone-end-user.glitch.me/"), //connect to server
             partitionKey = location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/airResult.html?partitionKey=","");//get partitionkey by url
