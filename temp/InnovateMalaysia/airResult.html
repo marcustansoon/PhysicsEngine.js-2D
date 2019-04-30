@@ -191,7 +191,11 @@
             if(isSwitchingScene)return;
             isSwitchingScene=true;
             document.getElementById("chart").style.left="105%";
-            document.getElementById("table").style.left="0%";
+		document.getElementById("table").hidden=false;
+		document.getElementById("table").style.left="-105%";
+            setTimeout(function(){
+                document.getElementById("table").style.left="3%";
+            },10);
             setTimeout(function(){
             	isSwitchingScene=false;
             },1500);
@@ -208,7 +212,11 @@
                ylabels.push(data[loop].date);
             }
             temperatureChart.update();
-            document.getElementById("chart").style.left="0%";
+		 document.getElementById("chart").hidden=false;
+		 document.getElementById("chart").style.left="105%";
+            setTimeout(function(){
+                document.getElementById("chart").style.left="3%";
+            },10);
             document.getElementById("table").style.left="-100%";
             setTimeout(function(){
             	isSwitchingScene=false;
