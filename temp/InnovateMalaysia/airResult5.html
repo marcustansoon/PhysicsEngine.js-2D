@@ -191,9 +191,10 @@
 	function backButton(){
             if(isSwitchingScene)return;
             isSwitchingScene=true;
+	    document.getElementById("table").hidden=false;
             document.getElementById("chart").style.left="105%";
             document.getElementById("table").style.left="0%";
-	    document.getElementById("table").hidden=false;
+	    
             setTimeout(function(){
             	isSwitchingScene=false;
 		    document.getElementById("chart").hidden=true;
