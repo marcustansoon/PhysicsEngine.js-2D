@@ -158,7 +158,7 @@
             options: {}
          });
 
-         socket.on("connect", function() {return;
+         socket.on("connect", function() {//return;
             socket.emit("getRecords", {
                partitionKey: partitionKey,
                measurementType: "air"
