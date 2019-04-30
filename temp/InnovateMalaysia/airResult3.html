@@ -50,7 +50,7 @@
          *{
             font-family: Barlow;
             overflow-x:hidden;
-            position:relative;
+           
             margin:2%;
          }
          .table {
@@ -193,8 +193,10 @@
             isSwitchingScene=true;
             document.getElementById("chart").style.left="105%";
             document.getElementById("table").style.left="0%";
+	    document.getElementById("table").hidden=false;
             setTimeout(function(){
             	isSwitchingScene=false;
+		    document.getElementById("chart").hidden=true;
             },1500);
         }
          function openGraph(data) {
@@ -210,9 +212,11 @@
             }
             temperatureChart.update();
             document.getElementById("chart").style.left="0%";
+	    document.getElementById("chart").hidden=false;    
             document.getElementById("table").style.left="-100%";
             setTimeout(function(){
             	isSwitchingScene=false;
+		document.getElementById("table").hidden=true;    
             },1500);
             //ECChart.update();
 
