@@ -13,12 +13,10 @@
             border: 1px solid black;
             text-align: center;
          }
-
          table {
             border-collapse: collapse;
             width: 100%;
          }
-
          th{
             padding-top: 6px;
             padding-bottom: 6px;
@@ -27,11 +25,9 @@
             color: white;
             text-align: center;
          }
-
          tr:nth-child(even) {
             background-color: #f2f2f2;
          }
-
          .button1{
             box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
             background-color:  rgba(39,132,182,1);
@@ -72,13 +68,11 @@
               background-color: #F5F5F5;
               border-radius: 10px;
           }
-
           .scrollStyle::-webkit-scrollbar
           {
               width: 10px;
               background-color: #F5F5F5;
           }
-
           .scrollStyle::-webkit-scrollbar-thumb
           {
               border-radius: 10px;
@@ -119,10 +113,8 @@
       <script>
          console.log(location.href);
 	
-
          let socket = io("https://drone-end-user.glitch.me/"), //connect to server
             partitionKey = location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/airResult.html?partitionKey=","");//get partitionkey by url
-
          function setEndUserPhone() {
             socket.emit("setEndUserPhone");
          }
@@ -131,15 +123,12 @@
             //ylabels.push(data.date);
             //chart.update();
          });
-
-
          let ctx_temperatureChart = document.getElementById('temperatureChart').getContext('2d'),
             xlabels_temperature = [],
             ylabels = [],
             table = document.getElementById('table'),
             graphData, isBinded = false,
             iframe;
-
          let temperatureChart = new Chart(ctx_temperatureChart, {
             // The type of chart we want to create
             type: 'line',
@@ -151,13 +140,11 @@
                   backgroundColor: 'rgba(255, 255, 255,0)',
                   borderColor: 'rgba(26,206,197,1)',
                   data: xlabels_temperature
-
                }]
             },
             // Configuration options go here
             options: {}
          });
-
          socket.on("connect", function() {//return;
             socket.emit("getRecords", {
                partitionKey: partitionKey,
@@ -178,9 +165,7 @@
 		    string += "<button class='button1' onclick='openGraph(" + JSON.stringify(temp) + ");'>>></button></td></tr>";
                table.innerHTML = string;
             }
-
          });
-
          function addZero(i) {
             if (i < 10) {
                i = "0" + i;
@@ -210,9 +195,9 @@
             graphData = data;
             xlabels_temperature.length = 0;
             ylabels.length = 0;
-            for (let loop = 0; loop < data.length; loop++) {
-               xlabels_temperature.push(data[loop].temperature);
-               ylabels.push(data[loop].date);
+            for (let loop = 0; loop < data.data.length; loop++) {console.log(data.data[loop].temperature);
+               xlabels_temperature.push(data.data[loop].temperature);
+               ylabels.push(data.data[loop].date);
             }
             temperatureChart.update();
 		 document.getElementById("chart").hidden=false;
@@ -226,8 +211,6 @@
 		    document.getElementById("table").hidden=true;
             },1500);
             //ECChart.update();
-
-
             if (iframe) {
                iframe.src = "https://jsfiddle.net/wb08v1dt/42/show";
                return;
@@ -246,14 +229,11 @@
                socket.emit("mapBindings", {
                   loadTime: loadTime
                }); //send load Time to server for map-end user binding purposes
-
                setTimeout(function() {
                   if (!isBinded) location.reload(true);
                }, 2000);
             }
-
          }
-
          socket.on("mapBindings", function(data) { //when binding is successful
             //data-{socketID}
             console.log(data);
@@ -265,7 +245,6 @@
             });
             //{socketID:data.socketID,title:"graphData",data:{ lat:1.5304313999999999, lng:110.3606818, data: [{NH3:15,CO:1,NO2:2,CH4:3,lat:1.5304413999999999,lng:110.3603818},{NH3:15,CO:1,NO2:2,CH4:2,lat:1.5307613999999999,lng:110.3623618}] }}
          });
-
       </script>
 
    </body>
