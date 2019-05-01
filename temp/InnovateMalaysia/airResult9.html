@@ -114,7 +114,7 @@
          console.log(location.href);
 	
          let socket = io("https://drone-end-user.glitch.me/"), //connect to server
-            partitionKey = location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/airResult8.html?partitionKey=","");//get partitionkey by url
+            partitionKey = location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/airResult9.html?partitionKey=","");//get partitionkey by url
          function setEndUserPhone() {
             socket.emit("setEndUserPhone");
          }
@@ -195,9 +195,9 @@
             graphData = data;
             xlabels_temperature.length = 0;
             ylabels.length = 0;
-            for (let loop = 0; loop < data.length; loop++) {console.log(data[loop].temperature);
-               xlabels_temperature.push(data[loop].temperature);
-               ylabels.push(data[loop].date);
+            for (let loop = 0; loop < data.data.length; loop++) {console.log(data.data[loop].temperature);
+               xlabels_temperature.push(data.data[loop].temperature);
+               ylabels.push(data.data[loop].date);
             }
             temperatureChart.update();
 		 document.getElementById("chart").hidden=false;
