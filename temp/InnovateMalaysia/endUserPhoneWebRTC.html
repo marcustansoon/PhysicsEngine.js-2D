@@ -24,7 +24,7 @@
     localStream;
     
    
-   let loop= setInterval(function(){startWebRTC(true);},3000);
+   //let loop= setInterval(function(){startWebRTC(true);},3000);
     
 	let socket = io('https://regular-koi.glitch.me');
     socket.on('connect',function(){
@@ -82,7 +82,7 @@
         console.log('got remote stream');
         remoteVideo.srcObject=event.stream;
         socket.emit('success','Connected');
-	    clearInterval(loop);
+	    //clearInterval(loop);
 	}
     function gotDescription(description){
     	console.log('got description');
