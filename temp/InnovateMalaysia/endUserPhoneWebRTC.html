@@ -23,7 +23,7 @@
     peerConnection,
     localStream;
     
-    setTimeout(function(){startButton.click()},3000);
+    let loop=setInterval(function(){startButton.click()},3000);
     
     
 	let socket = io('https://regular-koi.glitch.me');
@@ -82,6 +82,7 @@
         console.log('got remote stream');
         remoteVideo.srcObject=event.stream;
         socket.emit('success','Connected');
+	    clearInterval(loop);
 	}
     function gotDescription(description){
     	console.log('got description');
