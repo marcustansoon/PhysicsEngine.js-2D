@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script src="https://cdn.WebRTC-Experiment.com/getScreenId.js"></script>
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+<head>
+</head>
+<body>
+<video id="localVideo" autoplay muted style="min-width:window.innerWidth;min-height:window.innerHeight;" controls hidden></video>
+<br>
+<video id="remoteVideo" autoplay muted style="min-width:window.innerWidth;min-height:window.innerHeight;" controls ></video>
+<br>
+<button id='startButton'>Start</button>
+<div id='status'>Not connected</div>
+<script>
+  
+
+	let localVideo = document.getElementById('localVideo'),
+    remoteVideo = document.getElementById('remoteVideo'),
+    startButton = document.getElementById('startButton'),
+    status = document.getElementById('status'),
+    peerConnectionConfig = {'iceServers': [{'url': 'stun:stun.services.mozilla.com'}, {'url': 'stun:stun.l.google.com:19302'}]},
+    peerConnection,
+    localStream;
+    
+    setTimeout(function(){startButton.click()},3000);
+    
+    
+	let socket = io('https://regular-koi.glitch.me');
+    socket.on('connect',function(){
+    	console.log('connect');//on connected to server
+    });    
+    socket.on('ice',function(data){if (!peerConnection)startWebRTC();
+        console.log('receive ice');
+        let msg=JSON.parse(data);console.log(msg);
+        peerConnection.addIceCandidate(new RTCIceCandidate(msg));
+    });
+   	socket.on('description',function(data){if (!peerConnection)startWebRTC();
+        console.log('receive description');
+        let msg=JSON.parse(data);
+      	peerConnection.setRemoteDescription(new RTCSessionDescription(msg), function() {
+            if(msg.type == 'offer') {
+                peerConnection.createAnswer(gotDescription, function(){console.log('createAnswer error');});
+            }
+        });
+    });  
+    socket.on('success',function(data){
+    	console.log(data);
+        status.innerHTML=data;
+		
+    });
+        if(navigator.getUserMedia) {
+            navigator.getUserMedia({video:true}, getUserMediaSuccess, getUserMediaError);
+        } else {
+            alert('Your browser does not support getUserMedia API');
+        }
+	function getUserMediaSuccess(stream) {
+      localVideo.srcObject=stream;
+      localStream=stream;
+      
+    }
+    function getUserMediaError(error) {
+        console.log(error);
+    }
+    
+    function startWebRTC(isHost){console.log('create WebRTC');
+    	peerConnection = new RTCPeerConnection(peerConnectionConfig);
+        peerConnection.onicecandidate = gotIceCandidate;
+        peerConnection.onaddstream = gotRemoteStream;
+        peerConnection.addStream(localStream);
+        if(isHost) {
+            peerConnection.createOffer(gotDescription, createOfferError);
+        }
+    }
+	function gotIceCandidate(event){
+    	console.log('send ICE');
+    	if(event.candidate != null) {
+        	socket.emit('ice',JSON.stringify(event.candidate));
+    	}
+    }
+    function gotRemoteStream(event) {
+        console.log('got remote stream');
+        remoteVideo.srcObject=event.stream;
+        socket.emit('success','Connected');
+	}
+    function gotDescription(description){
+    	console.log('got description');
+        peerConnection.setLocalDescription(description, function () {
+            socket.emit('description',JSON.stringify(description));
+        }, function() {
+        	console.log('set description error');
+        });
+    }
+    function createOfferError(error){
+    	console.log('Offer Error '+error);
+    }
+    
+    startButton.onclick=function(){startWebRTC(true);};
+</script>
+</body>
+</html>
