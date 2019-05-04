@@ -1,0 +1,281 @@
+<style>
+  /* Always set the map height explicitly to define the size of the div
+ * element that contains the map. */
+
+  #map {
+    height: 100%;
+  }
+
+  /* Optional: Makes the sample page fill the window. */
+
+  html,
+  body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+</style>
+<div id="map"></div>
+<!-- Replace the value of the key parameter with your own API key. -->
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkUOdZ5y7hMm0yrcCQoCvLwzdM6M8s5qk">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+
+
+<script>
+//&callback=initMap()
+ window.onload=function(){
+     socket.emit("mapBindings",{loadTime:Date.now()});//for map-end user binding purposes
+}
+ let socket = io("https://drone-end-user.glitch.me/");
+ socket.on("mapBindings",function(data){
+    	console.log(data);
+ });
+ socket.on("graphData",function(data){
+    	console.log(data);
+      //data-> { lat, lng , data: [{NH3,CO,NO2,CH4,lat,lng,temperature,humidity}] }
+      initMap(data);
+ });
+ /*
+ setTimeout(function(){
+ initMap({ lat:1.5304313999999999, lng:110.3606818, data: [{NH3:15,CO:1,NO2:2,CH4:3,lat:1.5304413999999999,lng:110.3603818},{NH3:15,CO:1,NO2:2,CH4:2,lat:1.5307613999999999,lng:110.3613618}] });
+},2000)*/
+  // This example creates circles on the map, representing populations in North
+  // America.
+
+  // First, create an object containing LatLng and population for each city.
+  var citymap = {
+    chicago: {
+      center: {
+        lat: 21.5304548999999998,
+        lng: 110.3226488000000
+      },
+      population: 125
+    },
+    newyork: {
+      center: {
+        lat: 21.5306549999999998,
+        lng: 110.3256488000000
+      },
+      population: 80
+    },
+    losangeles: {
+      center: {
+        lat: 21.5306579999999998,
+        lng: 110.3236688000000
+      },
+      population: 80
+    },
+    vancouver: {
+      center: {
+        lat: 49.25,
+        lng: -123.1
+      },
+      population: 603502
+    }
+  };
+
+
+  //console.log(window.location);
+  function initMap(data) {
+    // Create the map.
+    console.log(data);
+    var map = new google.maps.Map(document.getElementById('map'), {
+      zoom: 17,
+      center: {
+        lat:data.lat,// 1.5304548999999998,
+        lng:data.lng//110.32264880000001
+      },
+      mapTypeId: 'satellite'
+    });
+/*
+    // Construct the circle for each value in citymap.
+    // Note: We scale the area of the circle based on the population.
+    for (var city in citymap) {
+      // Add the circle for this city to the map.
+      var cityCircle = new google.maps.Circle({
+        strokeColor: 'rgba(255, 255, 255,0)',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#ff9665',
+        fillOpacity: 0.35,
+        map: map,
+        center: citymap[city].center,
+        radius: Math.sqrt(citymap[city].population) * 5
+      });
+    }*/
+    
+    let marker;
+		for (let loop=0;loop<data.data.length;loop++){
+      marker = new google.maps.Marker({
+        position: {
+          lat: data.data[loop].lat,
+          lng: data.data[loop].lng
+        },
+        map: map,
+        title: '',
+        icon: {
+          labelOrigin: new google.maps.Point(8, 28),
+          url: "https://i.imgur.com/LIvVewz.png"
+        },
+        label: {
+          text: "NH3 :"+data.data[loop].NH3,
+          color: "#00",
+          fontWeight: "bold",
+          fontSize: "9px"
+        }
+   	 });
+     marker = new google.maps.Marker({
+        position: {
+          lat: data.data[loop].lat,
+          lng: data.data[loop].lng
+        },
+        map: map,
+        title: '',
+        icon: {
+          labelOrigin: new google.maps.Point(8, 38),
+          url: "https://i.imgur.com/LIvVewz.png"
+        },
+        label: {
+          text: "CO :"+data.data[loop].CO,
+          color: "#00",
+          fontWeight: "bold",
+          fontSize: "9px"
+        }
+   	 });
+     marker = new google.maps.Marker({
+        position: {
+          lat: data.data[loop].lat,
+          lng: data.data[loop].lng
+        },
+        map: map,
+        title: '',
+        icon: {
+          labelOrigin: new google.maps.Point(8, 48),
+          url: "https://i.imgur.com/LIvVewz.png"
+        },
+        label: {
+          text: "NO2 :"+data.data[loop].NO2,
+          color: "#00",
+          fontWeight: "bold",
+          fontSize: "9px"
+        }
+   	 });
+     marker = new google.maps.Marker({
+        position: {
+          lat: data.data[loop].lat,
+          lng: data.data[loop].lng
+        },
+        map: map,
+        title: '',
+        icon: {
+          labelOrigin: new google.maps.Point(8, 58),
+          url: "https://i.imgur.com/LIvVewz.png"
+        },
+        label: {
+          text: "CH4 :"+data.data[loop].CH4,
+          color: "#00",
+          fontWeight: "bold",
+          fontSize: "9px"
+        }
+   	 });
+     let textBoxCoordinates = [{
+        lat: data.data[loop].lat-0.0005,
+        lng: data.data[loop].lng+0.00025
+      },
+      {
+        lat: data.data[loop].lat-0.0005,
+        lng: data.data[loop].lng-0.00025
+      },
+      {
+        lat: data.data[loop].lat+0.0000,
+        lng: data.data[loop].lng-0.00025
+      },
+      {
+        lat: data.data[loop].lat+0.0000,
+        lng: data.data[loop].lng+0.00025
+      }
+    ];
+     let textBox = new google.maps.Polygon({
+      paths: textBoxCoordinates,
+      strokeColor: 'rgba(0,0,0,0)',
+      strokeOpacity: 0.1,
+      strokeWeight: 5,
+      fillColor: 'white',
+      fillOpacity: 0.4
+    });
+    textBox.setMap(map);
+     
+    }
+    /*
+    var marker = new google.maps.Marker({
+      position: {
+        lat: 1.5304548999999998,
+        lng: 110.32264880000001
+      },
+      map: map,
+      title: 'Hello World!',
+      icon: {
+        labelOrigin: new google.maps.Point(8, 28),
+        url: "https://i.imgur.com/LIvVewz.png"
+      },
+      label: {
+        text: "NH3 : 13",
+        color: "#00",
+        fontWeight: "bold",
+        fontSize: "10px"
+      }
+
+    });
+    marker = new google.maps.Marker({
+      position: {
+        lat: 1.5304548999999998,
+        lng: 110.32264880000001
+      },
+      map: map,
+      title: '',
+      icon: {
+        labelOrigin: new google.maps.Point(8, 38),
+        url: "https://i.imgur.com/LIvVewz.png"
+      },
+      label: {
+        text: "NH3 : 13",
+        color: "#00",
+        fontWeight: "bold",
+        fontSize: "10px"
+      }
+
+    });
+*/
+
+return;
+    var textBoxCoordinates = [{
+        lat: 1.5304548999999998,
+        lng: 110.32294880000001
+      },
+      {
+        lat: 1.5304548999999998,
+        lng: 110.32234880000001
+      },
+      {
+        lat: 1.5299548999999998,
+        lng: 110.32234880000001
+      },
+      {
+        lat: 1.5299548999999998,
+        lng: 110.32294880000001
+      }
+    ];
+    var textBox = new google.maps.Polygon({
+      paths: textBoxCoordinates,
+      strokeColor: 'rgba(0,0,0,0)',
+      strokeOpacity: 0.1,
+      strokeWeight: 2,
+      fillColor: 'white',
+      fillOpacity: 0.35
+    });
+    textBox.setMap(map);
+  }
+
+</script>
