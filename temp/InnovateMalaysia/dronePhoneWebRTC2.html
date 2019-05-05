@@ -20,31 +20,39 @@
     peerConnectionConfig = {'iceServers': [{'url': 'stun:stun.services.mozilla.com'}, {'url': 'stun:stun.l.google.com:19302'}]},
     peerConnection,
     localStream;
-	let loop= setInterval(function(){startWebRTC(true);},3000);
+	//let loop= setInterval(function(){startWebRTC(true);},3000);
 	 
 	
+    let peerURL=location.href;
+	console.log(location.href);
+    
 	let socket = io('https://regular-koi.glitch.me');
     socket.on('connect',function(){
     	console.log('connect');//on connected to server
     });    
-    socket.on('ice',function(data){if (!peerConnection)startWebRTC();
+    socket.on('ice',function(data){
+    	data=JSON.parse(data);
+        if(data.peerURL!==peerURL)return;
+    	if (!peerConnection)startWebRTC();
         console.log('receive ice');
-        let msg=JSON.parse(data);console.log(msg);
-        peerConnection.addIceCandidate(new RTCIceCandidate(msg));
+        console.log(data);
+        peerConnection.addIceCandidate(new RTCIceCandidate(data.data));
     });
-   	socket.on('description',function(data){if (!peerConnection)startWebRTC();
+   	socket.on('description',function(data){
+    	data=JSON.parse(data);
+        if(data.peerURL!==peerURL)return;
+    	if (!peerConnection)startWebRTC();
         console.log('receive description');
-        let msg=JSON.parse(data);
-      	peerConnection.setRemoteDescription(new RTCSessionDescription(msg), function() {
-            if(msg.type == 'offer') {
+      	peerConnection.setRemoteDescription(new RTCSessionDescription(data.data), function() {
+            if(data.data.type == 'offer') {
                 peerConnection.createAnswer(gotDescription, function(){console.log('createAnswer error');});
             }
         });
     });  
     socket.on('success',function(data){
+    	if(data.peerURL!==peerURL)return;
     	console.log(data);
-        status.innerHTML=data;
-		
+        status.innerHTML="success";	
     });
     
     var constraints = { audio: false, video: { facingMode: 'environment' } };
@@ -75,20 +83,19 @@
     }
 	function gotIceCandidate(event){
     	console.log('send ICE');
-    	if(event.candidate != null) {
-        	socket.emit('ice',JSON.stringify(event.candidate));
+    	if(event.candidate != null) {	socket.emit('ice',JSON.stringify({data:event.candidate,peerURL:peerURL}));
     	}
     }
     function gotRemoteStream(event) {
         console.log('got remote stream');
         remoteVideo.srcObject=event.stream;
-        socket.emit('success','Connected');
-	    clearInterval(loop);
+        socket.emit('success',{peerURL:peerURL});
+	    //clearInterval(loop);
 	}
     function gotDescription(description){
     	console.log('got description');
         peerConnection.setLocalDescription(description, function () {
-            socket.emit('description',JSON.stringify(description));
+            socket.emit('description',JSON.stringify({data:description,peerURL:peerURL}));
         }, function() {
         	console.log('set description error');
         });
