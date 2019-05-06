@@ -4,12 +4,30 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 <script src="https://cdn.WebRTC-Experiment.com/getScreenId.js"></script>
 <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+<style>
+	*{
+    	padding:0px;
+        margin:0px;
+    }
+    @media only screen and (min-width: 400px) {
+      video { 
+          float:left;
+          width:50%;
+      }
+	}
+    @media only screen and (max-width: 399px) {
+      video { 
+          width:100%;
+          
+      }
+	}
+</style>
 <head>
 </head>
 <body>
-<video id="localVideo" autoplay muted style="min-width:window.innerWidth;"></video>
-<br>
-<video id="remoteVideo" autoplay muted style="width:100%;" ></video>
+<video id="remoteVideo" autoplay muted style="" hidden></video>
+<video id="localVideo" autoplay muted style=""></video>
+<div style="clear:both;"></div>
 <br>
 <button id='startButton'>Start</button>
 <div id='status'>Not connected</div>
@@ -33,7 +51,6 @@
 	    //[ {urls: ["turn:173.194.72.127:19305?transport=udp", "turn:[2404:6800:4008:C01::7F]:19305?transport=udp", "turn:173.194.72.127:443?transport=tcp", "turn:[2404:6800:4008:C01::7F]:443?transport=tcp" ], username:"CKjCuLwFEgahxNRjuTAYzc/s6OMT", credential:"u1SQDR/SQsPQIxXNWQT7czc/G4c=" }, {urls:["stun:stun.l.google.com:19302"]} ]};
     peerConnection,
     localStream;
-    
    
        let peerURL=location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/endUserPhoneWebRTC.html?peerURL=", "");
 	console.log(location.href);
@@ -65,7 +82,7 @@
     	if(data.peerURL!==peerURL)return;
     	console.log(data);
         status.innerHTML="success";	
-	remoteVideo.hidden=false;
+		remoteVideo.hidden=false;
     });
         if(navigator.getUserMedia) {
             navigator.getUserMedia({video:true}, getUserMediaSuccess, getUserMediaError);
@@ -85,6 +102,12 @@
     	peerConnection = new RTCPeerConnection(peerConnectionConfig);
         peerConnection.onicecandidate = gotIceCandidate;
         peerConnection.onaddstream = gotRemoteStream;
+        peerConnection.oniceconnectionstatechange = function() {
+          if(peerConnection.iceConnectionState == 'disconnected') {
+          	console.log('Disconnected');
+            remoteVideo.hidden=true;
+          } 
+        }
         peerConnection.addStream(localStream);
         if(isHost) {
             peerConnection.createOffer(gotDescription, createOfferError);
