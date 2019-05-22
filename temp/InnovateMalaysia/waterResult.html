@@ -106,7 +106,7 @@
       <td><button class="button1">>></button></td>
     </tr>
   </table>
-  <div class="chart" id="chart">
+  <div class="chart" id="chart" hidden>
     <img src="https://freeiconshop.com/wp-content/uploads/edd/cross-flat.png" style="width:8%;position:absolute;right:0%;max-width:30px;" onclick="backButton();">
     <canvas id="turbidityChart"></canvas>
     <canvas id="ECChart"></canvas>
@@ -203,21 +203,20 @@
         if (isSwitchingScene) return;
         isSwitchingScene = true;
         document.getElementById("chart").style.left = "105%";
-        document.getElementById("table").style.left = "0%";
-        setTimeout(function() {
-          isSwitchingScene = false;
-        }, 1500);
+        document.getElementById("table").hidden=false;
+        document.getElementById("table").style.left = "-105%";
+        setTimeout(function(){
+          document.getElementById("table").style.left="2%";
+        },50);
+        setTimeout(function(){
+          isSwitchingScene=false;
+		      document.getElementById("chart").hidden=true;
+        },1500);
       }
 
       function openGraph(data) {
         if (isSwitchingScene) return;
         isSwitchingScene = true;
-        document.getElementById("chart").style.left = "0%"; //show chart diagram and hide table
-        document.getElementById("table").style.left = "-100%";
-        setTimeout(function() {
-          isSwitchingScene = false;
-        }, 1500);
-
         console.log(data);
         xlabels_EC.length = 0;
         xlabels_turbidity.length = 0;
@@ -229,6 +228,16 @@
         }
         turbidityChart.update();
         ECChart.update();
+        document.getElementById("chart").hidden=false;
+		    document.getElementById("chart").style.left="105%";
+        setTimeout(function(){
+            document.getElementById("chart").style.left="2%";
+        },50);
+        document.getElementById("table").style.left="-100%";
+        setTimeout(function(){
+            isSwitchingScene=false;
+		        document.getElementById("table").hidden=true;
+         },1500);
       }
 
     </script>
