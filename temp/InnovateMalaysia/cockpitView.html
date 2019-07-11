@@ -143,10 +143,10 @@ table, td, th {
         	connectSuccess=true;
         }
     });
+     let arr=["CO","NO2","CO2","NH3","CH4","turbidity","temperature","humidity","EC","longitude","latitude","altitude"];
     socket.on("sensorData",function(data){
     	if(typeof data==="string")data=JSON.parse(data);
     	console.log(data);
-        let arr=["CO","NO2","CO2","NH3","CH4","turbidity","temperature","humidity","EC","longitude","latitude","altitude"];
         for(let index=0;index<arr.length;index++){
           if (data[arr[index]])
           	document.getElementById(arr[index]).innerHTML=data[arr[index]];
