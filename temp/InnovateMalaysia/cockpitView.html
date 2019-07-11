@@ -61,12 +61,12 @@ table, td, th {
   <tr>
     <th>EC</th>
     <th style="opacity:0;">..................</th>
-    <td id="EC">ppm</td>
+    <td id="EC">us/cm</td>
   </tr>
   <tr>
     <th>Turbidity</th>
     <th style="opacity:0;">..................</th>
-    <td id="turbidity">ppm</td>
+    <td id="turbidity">NTU</td>
   </tr>
 </table>
 <button class="button" style="background-color:rgba(191,194,198,0.9);" id="toggle" onclick="toggleSensor()">ACTIVATE</button>
@@ -80,7 +80,7 @@ table, td, th {
 </table>
 </div>
 <div style="width:55%;left:0%;top:0%;position:absolute;font-size: 2.8vw;">
-<iframe src="https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/endUserPhoneWebRTC.html?partitionKey=1556740930134" width="100%" onload="this.style.height=document.body.clientHeight/.85 +'px';"></iframe>
+<iframe id="iframe" width="100%" onload="this.style.height=document.body.clientHeight/.85 +'px';" allow="geolocation; microphone; camera"></iframe>
 <table>
   <tr>
     <th>LONG:</th>
@@ -106,13 +106,13 @@ table, td, th {
 	let socket = io('https://drone-end-user.glitch.me/'),
     toggle=0,
     measuredParameter="air",
-    temp=location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/cockpitView.html?partitionKey=", ""),
+  	WebRTCKey,  temp=location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/cockpitView.html?partitionKey=", ""),
     connectSuccess=false;
     
     temp=temp.split("&deviceID=");
     
-    let deviceID='36955',//temp[1],
-    partitionKey='27201';//temp[0];
+    let deviceID=temp[1],
+    partitionKey=temp[0];
     
     console.log(deviceID +" "+partitionKey);
     
@@ -135,6 +135,8 @@ table, td, th {
         }
     }
     function toggleMeasuredParameter(){
+    	if(toggle)return;
+        
     	if(measuredParameter==="water"){
         	measuredParameter="air";
         	document.getElementById("measuredParameter").innerHTML="Air";
@@ -150,13 +152,19 @@ table, td, th {
     }
     
     socket.on("connect",function(){
-    	socket.emit("connectToDevice",{ deviceID:deviceID,passcode:"", partitionKey:partitionKey});
+    	setTimeout(function(){
+    	socket.emit("connectToDevice",{ deviceID:deviceID,passcode:"", partitionKey:partitionKey})
+        },1000);
     });
     socket.on("connectToDeviceStatus",function(data){
     	console.log(data);
+        WebRTCKey=data.WebRTCKey;
         if(data.status==="success"){
         	connectSuccess=true;
             console.log("succ cone");
+            setTimeout(function(){
+            	document.getElementById("iframe").src="https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/dronePhoneWebRTC.html?peerURL="+WebRTCKey;
+            },1000);
         }
     });
      let arr=["CO","NO2","CO2","NH3","CH4","turbidity","temperature","humidity","EC","lng","lat","alt"];
@@ -164,15 +172,20 @@ table, td, th {
     	if(typeof data==="string")data=JSON.parse(data);
     	console.log(data);
         for(let index=0;index<arr.length;index++){
-          if (data[arr[index]])
+          if (data[arr[index]]){
           	document.getElementById(arr[index]).innerHTML=data[arr[index]];
+            
             if(index<=4)document.getElementById(arr[index]).innerHTML+=" ppm";
             else if (index===6)document.getElementById(arr[index]).innerHTML+=" *C";
         	else if (index===7)document.getElementById(arr[index]).innerHTML+=" %";
+            else if (index===5)document.getElementById(arr[index]).innerHTML+=" NTU";
+            else if (index===8)document.getElementById(arr[index]).innerHTML+=" us/cm";
+          }
         }
     });
     socket.on("forceDisconnect",function(data){
-    	console.log("forceDisconnect");
+    	alert("Opps... Something went wrong");
+        window.location.replace("http://www.error.com");
     });
     
     
