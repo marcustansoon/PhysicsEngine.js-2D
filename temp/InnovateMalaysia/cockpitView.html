@@ -102,6 +102,7 @@ table, td, th {
     let deviceID=temp[1],
     partitionKey=temp[0];
     
+    console.log(deviceID +" "+partitionKey);
     
     function toggleSensor(){//activate/deactivate
     	if(!connectSuccess)return;
@@ -139,8 +140,9 @@ table, td, th {
     });
     socket.on("connectToDeviceStatus",function(data){
     	console.log(data);
-        if(data==="success"){
+        if(data.status==="success"){
         	connectSuccess=true;
+            console.log("succ cone");
         }
     });
      let arr=["CO","NO2","CO2","NH3","CH4","turbidity","temperature","humidity","EC","longitude","latitude","altitude"];
