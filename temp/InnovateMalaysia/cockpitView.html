@@ -61,9 +61,9 @@ table, td, th {
 <table>
   <tr>
     <th style="opacity:0;">.......</th>
-    <th id="TEMPERATURE">29 *C</th>
+    <th id="temperature">29 *C</th>
     <th style="opacity:0;">.......</th>
-    <th id="HUMIDITY">32 %</th>
+    <th id="humidity">32 %</th>
   </tr>
 </table>
 </div>
@@ -72,17 +72,17 @@ table, td, th {
 <table>
   <tr>
     <th>LONG:</th>
-    <td id="LONG">110.3572223</td>
+    <td id="lng">110.3572223</td>
   	<th style="opacity:0;">.</th>
     <th>LAT:</th>
-    <td id="LAT">110.3572223</td>
+    <td id="lat">110.3572223</td>
   </tr>
 </table>
 <table>
   <tr>
   	<th style="opacity:0;">....................</th>
     <th>ALT:</th>
-    <td id="ALT">110.3572223</td>
+    <td id="alt">110.3572223</td>
   </tr>
 </table>
 </div>
@@ -99,8 +99,8 @@ table, td, th {
     
     temp=temp.split("&deviceID=");
     
-    let deviceID=temp[1],
-    partitionKey=temp[0];
+    let deviceID='36955',//temp[1],
+    partitionKey='27201';//temp[0];
     
     console.log(deviceID +" "+partitionKey);
     
@@ -116,7 +116,7 @@ table, td, th {
             document.getElementById("toggle").style.backgroundColor="rgba(245,141,145,0.9)";
         }else{
         	socket.emit("deactivateSensorData",{
-        		measurementType:measurementType.value
+        		measurementType:measuredParameter
         	});
             document.getElementById("toggle").innerHTML="ACTIVATE";
             document.getElementById("toggle").style.backgroundColor="rgba(191,194,198,0.9)";
@@ -145,14 +145,16 @@ table, td, th {
             console.log("succ cone");
         }
     });
-     let arr=["CO","NO2","CO2","NH3","CH4","turbidity","temperature","humidity","EC","longitude","latitude","altitude"];
+     let arr=["CO","NO2","CO2","NH3","CH4","turbidity","temperature","humidity","EC","lng","lat","alt"];
     socket.on("sensorData",function(data){
     	if(typeof data==="string")data=JSON.parse(data);
     	console.log(data);
         for(let index=0;index<arr.length;index++){
           if (data[arr[index]])
           	document.getElementById(arr[index]).innerHTML=data[arr[index]];
-        
+            if(index<=4)document.getElementById(arr[index]).innerHTML+=" ppm";
+            else if (index===6)document.getElementById(arr[index]).innerHTML+=" *C";
+        	else if (index===7)document.getElementById(arr[index]).innerHTML+=" %";
         }
     });
     socket.on("forceDisconnect",function(data){
