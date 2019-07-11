@@ -122,7 +122,7 @@
         console.log('got remote stream');
         remoteVideo.srcObject=event.stream;
         socket.emit('success',{peerURL:peerURL});
-	    //clearInterval(loop);
+	    clearInterval(loop);
 	}
     function gotDescription(description){
     	console.log('got description');
