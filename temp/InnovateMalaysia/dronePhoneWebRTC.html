@@ -30,7 +30,7 @@
 			},
     peerConnection,
     localStream;
-	//let loop= setInterval(function(){startWebRTC(true);},3000);
+	let loop= setInterval(function(){startWebRTC(true);},3000);
 	 
 	
     let peerURL=location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/dronePhoneWebRTC.html?peerURL=", "");
@@ -100,7 +100,7 @@
         console.log('got remote stream');
         remoteVideo.srcObject=event.stream;
         socket.emit('success',{peerURL:peerURL});
-	    //clearInterval(loop);
+	 clearInterval(loop);
 	}
     function gotDescription(description){
     	console.log('got description');
