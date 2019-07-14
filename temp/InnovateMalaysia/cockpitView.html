@@ -185,7 +185,7 @@ table, td, th {
     });
     socket.on("forceDisconnect",function(data){
     	alert("Opps... Something went wrong");
-	if(data.oldUser)//check if old user is connected
+	if(data && data.oldUser)//check if old user is connected
 		window.location.replace("https://www.forcedDisconnect.com");
 	else
         	window.location.replace("https://www.error1.com");
