@@ -78,7 +78,7 @@ table, td, th {
 </table>
 </div>
 <div style="width:55%;left:0%;top:0%;position:absolute;font-size: 2.8vw;">
-<iframe id="iframe" width="100%" onload="this.style.height=document.body.clientHeight/.85 +'px';" allow="geolocation; microphone; camera"></iframe>
+<iframe id="iframe" width="100%" onload="this.style.height=document.body.clientHeight/.9 +'px';" allow="geolocation; microphone; camera"></iframe>
 <table>
   <tr>
     <th>LONG:</th>
@@ -184,8 +184,8 @@ table, td, th {
         }
     });
     socket.on("disconnect",function(data){
-    	alert("Opps... Something went wrong");
-        window.location.replace("https://www.error3.com");
+    	//alert("Opps... Something went wrong");
+        //window.location.replace("https://www.error3.com");
     });
     socket.on("forceDisconnect",function(data){
     	alert("Opps... Something went wrong");
