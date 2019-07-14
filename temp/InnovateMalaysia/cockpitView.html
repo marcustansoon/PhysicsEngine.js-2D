@@ -164,7 +164,7 @@ table, td, th {
             	document.getElementById("iframe").src="https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/endUserPhoneWebRTC.html?peerURL="+WebRTCKey;
             },1000);
         }else{
-        	window.location.replace("https://www.error2.com");
+        	window.location.replace("https://www.forcedDisconnect.com");
         }
     });
      let arr=["CO","NO2","CO2","NH3","CH4","turbidity","temperature","humidity","EC","lng","lat","alt"];
@@ -185,7 +185,10 @@ table, td, th {
     });
     socket.on("forceDisconnect",function(data){
     	alert("Opps... Something went wrong");
-        window.location.replace("https://www.forcedDisconnect.com");
+	if(data.oldUser)//check if old user is connected
+		window.location.replace("https://www.forcedDisconnect.com");
+	else
+        	window.location.replace("https://www.error1.com");
     });
     
     
