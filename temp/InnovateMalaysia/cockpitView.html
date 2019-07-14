@@ -183,6 +183,10 @@ table, td, th {
           }
         }
     });
+    socket.on("disconnect",function(data){
+    	alert("Opps... Something went wrong");
+        window.location.replace("https://www.error2.com");
+    });
     socket.on("forceDisconnect",function(data){
     	alert("Opps... Something went wrong");
 	if(data && data.oldUser)//check if old user is connected
