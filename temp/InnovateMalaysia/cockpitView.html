@@ -165,6 +165,7 @@ table, td, th {
             },1000);
         }else{
         	window.location.replace("https://www.forcedDisconnect.com");
+		alert("Opps...Invalid device ID");	
         }
     });
      let arr=["CO","NO2","CO2","NH3","CH4","turbidity","temperature","humidity","EC","lng","lat","alt"];
@@ -184,15 +185,18 @@ table, td, th {
         }
     });
     socket.on("disconnect",function(data){
-    	alert("Opps... Something went wrong");
+    	alert("Opps...Your connection was interrupted");
         window.location.replace("https://www.error3.com");
     });
     socket.on("forceDisconnect",function(data){
-    	alert("Opps... Something went wrong");
-	if(data && data.oldUser)//check if old user is connected
+	if(data && data.oldUser){//check if new user is connected, if so, disconnect old user (this client)
 		window.location.replace("https://www.forcedDisconnect.com");
-	else
+		alert("Opps...Your device is connected by someone");	
+	}
+	else{
         	window.location.replace("https://www.error1.com");
+		alert("Opps...Your device connection was interrupted");	
+	}
     });
     
     
