@@ -107,7 +107,7 @@
       <script>
          console.log(location.href);
 	 setTimeout(function(){document.getElementById('table').innerHTML+='<tr> <td><br><br><br><br></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr>';},50);
-	 setTimeout(function(){document.getElementById('table').innerHTML+='<tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr>';},50);
+	 setTimeout(function(){document.getElementById('table').innerHTML='<tr> <th>No</th> <th>Device IDs</th> <th>Date Modified</th> <th></th> </tr><tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr>';},50);
 	      
 	 let isHome=true;
 	 history.pushState(null, null, window.location.href);
