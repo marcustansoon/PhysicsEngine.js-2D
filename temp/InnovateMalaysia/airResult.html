@@ -115,10 +115,10 @@
 	 setTimeout(function(){document.getElementById('table').hidden=false;},500);
 	      
 	 let isHome=true;
-	 history.pushState(null, null, document.title);
+	 history.pushState(null, null, window.location.href);
 	 window.addEventListener('popstate', function () {
     	 	if(isHome) window.location.replace("http://www.return.com");
-		else history.pushState(null, null, document.title);
+		else history.pushState(null, null, window.location.href);
 	 });
 	      
          let socket = io("https://drone-end-user.glitch.me/"), //connect to server
