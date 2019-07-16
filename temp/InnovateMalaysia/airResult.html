@@ -95,12 +95,6 @@
          <th>Date Modified</th>
          <th></th>
       </tr>
-      <tr>
-         <td></td>
-         <td></td>
-         <td></td>
-         <td><button class="button1">>></button></td>
-      </tr>
    </table>
 
    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
@@ -112,7 +106,7 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
       <script>
          console.log(location.href);
-	 setTimeout(function(){document.getElementById('table').hidden=false;},500);
+	 setTimeout(function(){document.getElementById('table').innerHTML+='<tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr>';},250);
 	      
 	 let isHome=true;
 	 history.pushState(null, null, window.location.href);
@@ -154,10 +148,12 @@
             options: {}
          });
          socket.on("connect", function() {//return;
+		setTimeout(function(){
             socket.emit("getRecords", {
                partitionKey: partitionKey,
                measurementType: "air"
             });
+		},250);
          });
          socket.on("getRecords", function(data) {
             console.log(JSON.stringify(data));
