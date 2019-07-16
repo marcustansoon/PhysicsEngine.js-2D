@@ -56,11 +56,12 @@
       }
 
       .table {
-        left: 0%;
+        left: 3%;
         position: absolute;
-        width: 95%;
+        width: 90%;
         -webkit-transition: 1.5s ease-in-out;
         transition: 1.5s ease-in-out;
+        
       }
 
       .chart {
@@ -206,7 +207,7 @@
         document.getElementById("table").hidden=false;
         document.getElementById("table").style.left = "-105%";
         setTimeout(function(){
-          document.getElementById("table").style.left="2%";
+          document.getElementById("table").style.left="3%";
         },50);
         setTimeout(function(){
           isSwitchingScene=false;
