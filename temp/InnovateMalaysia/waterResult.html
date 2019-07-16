@@ -93,7 +93,7 @@
   <img src="https://i.imgur.com/kI9I6hO.jpg" style="width:100%;user-drag: none; user-select: none; -moz-user-select: none; -webkit-user-drag: none; -webkit-user-select: none; -ms-user-select: none;position:relative;">
   <br><br>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
-  <table id="table" class="table">
+  <table id="table" class="table" hidden>
     <tr>
       <th>No</th>
       <th>Device IDs</th>
@@ -118,7 +118,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
     <script>
       console.log(location.href);
-
+      setTimeout(function(){document.getElementById('table').hidden=false;},1000);
 
       let socket = io("https://drone-end-user.glitch.me/"), //connect to server
         partitionKey = location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/waterResult.html?partitionKey=","");//get partitionkey by url
