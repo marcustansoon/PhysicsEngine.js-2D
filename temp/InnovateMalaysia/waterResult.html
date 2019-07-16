@@ -112,8 +112,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
     <script>
       console.log(location.href);
-      setTimeout(function(){document.getElementById('table').innerHTML+='<tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr>'},250);
-
+      setTimeout(function(){document.getElementById('table').innerHTML+='<tr> <td><br><br><br><br></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr>';},50);
+      setTimeout(function(){document.getElementById('table').innerHTML='<tr> <th>No</th> <th>Device IDs</th> <th>Date Modified</th> <th></th> </tr><tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr>';},100);
+	   
 	let isHome=true;
 	 history.pushState(null, null, window.location.href);
 	 window.addEventListener('popstate', function () {
