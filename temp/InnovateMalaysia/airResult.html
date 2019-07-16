@@ -113,6 +113,14 @@
       <script>
          console.log(location.href);
 	 setTimeout(function(){document.getElementById('table').hidden=false;},500);
+	      
+	 let isHome=true;
+	 history.pushState(null, null, document.title);
+	 window.addEventListener('popstate', function () {
+    	 	if(isHome) window.location.replace("http://www.return.com");
+		else history.pushState(null, null, document.title);
+	 });
+	      
          let socket = io("https://drone-end-user.glitch.me/"), //connect to server
             partitionKey = location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/airResult.html?partitionKey=","");//get partitionkey by url
          function setEndUserPhone() {
@@ -176,7 +184,7 @@
 	      backButton();//init
 	function backButton(){
             if(isSwitchingScene)return;
-            isSwitchingScene=true;
+            isSwitchingScene=true;isHome=true;
             document.getElementById("chart").style.left="105%";
 		document.getElementById("table").hidden=false;
 		document.getElementById("table").style.left="-105%";
@@ -190,7 +198,7 @@
         }
          function openGraph(data) {
             if(isSwitchingScene)return;
-            isSwitchingScene=true;
+            isSwitchingScene=true;isHome=false;
             console.log(data);
             graphData = data;
             xlabels_temperature.length = 0;
