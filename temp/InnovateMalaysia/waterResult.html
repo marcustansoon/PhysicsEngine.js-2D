@@ -100,6 +100,12 @@
       <th>Date Modified</th>
       <th></th>
     </tr>
+	<tr> 
+	<td></td> 
+	<td></td> 
+	<td></td> 
+	<td><button class="button1">>></button></td> 
+	</tr>
   </table>
   <div class="chart" id="chart" hidden>
     <img src="https://freeiconshop.com/wp-content/uploads/edd/cross-flat.png" style="width:8%;position:absolute;right:0%;max-width:30px;" onclick="backButton();">
@@ -112,10 +118,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
     <script>
       console.log(location.href);
-	window.addEventListener('load', function() {
-      setTimeout(function(){document.getElementById('table').innerHTML+='<tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr><tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr><tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr><tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr>';},50);
-      setTimeout(function(){document.getElementById('table').innerHTML='<tr> <th>No</th> <th>Device IDs</th> <th>Date Modified</th> <th></th> </tr><tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr>';},100);
-	    });
+	//window.addEventListener('load', function() {
+      //setTimeout(function(){document.getElementById('table').innerHTML+='<tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr><tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr><tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr><tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr>';},50);
+      //setTimeout(function(){document.getElementById('table').innerHTML='<tr> <th>No</th> <th>Device IDs</th> <th>Date Modified</th> <th></th> </tr><tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr>';},100);
+	   // });
 		    
 	let isHome=true;
 	 history.pushState(null, null, window.location.href);
@@ -208,7 +214,7 @@
         return i;
       }
       let isSwitchingScene = false;
-	 backButton();//init
+	 setTimeout(backButton,250);//init
 	    
       function backButton() {//show table but hide chart diagram
         if (isSwitchingScene) return;
