@@ -174,7 +174,8 @@
                string += "<tr><td>" + temp + "</td>";
                string += "<td>" + data[loop].deviceID + "</td>";
                let d = new Date(data[loop].date); //create Date obj from the old records
-               string += "<td>" + d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear() + " " + addZero(d.getHours()) + ":" + addZero(d.getMinutes()) + "</td><td>";
+		let debugMonth=d.getMonth()+1;
+               string += "<td>" + d.getDate() + "/" + debugMonth + "/" + d.getFullYear() + " " + addZero(d.getHours()) + ":" + addZero(d.getMinutes()) + "</td><td>";
                temp={data:data[loop].data,lat:data[loop].lat,lng:data[loop].lng};
 		    string += "<button class='button1' onclick='openGraph(" + JSON.stringify(temp) + ");'>>></button></td></tr>";
                table.innerHTML = string;
@@ -227,7 +228,7 @@
             },1500);
             //ECChart.update();
             if (iframe) {
-               iframe.src = "https://jsfiddle.net/e79gfszL/1/show";
+               iframe.src = "https://jsfiddle.net/e79gfszL/2/show";
                return;
             } else {
                iframe = document.createElement("iframe");
@@ -235,7 +236,7 @@
                //iframe.style="position:relative;left:50%;transform:translate(-50%);"
                iframe.height = "350";
                iframe.allow = "geolocation";
-               iframe.src = "https://jsfiddle.net/e79gfszL/1/show";//"https://jsfiddle.net/379dgtzo/12/show";//"https://jsfiddle.net/wb08v1dt/42/show";
+               iframe.src = "https://jsfiddle.net/e79gfszL/2/show";//"https://jsfiddle.net/379dgtzo/12/show";//"https://jsfiddle.net/wb08v1dt/42/show";
                iframe.id = "iframe";
                document.getElementById("chart").append(iframe);
             }
