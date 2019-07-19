@@ -76,6 +76,17 @@ table, td, th {
     <th id="humidity">32 %</th>
   </tr>
 </table>
+<table>
+    <th style="font-size: 2.4vw;">Measurement Interval (seconds)</th>
+    <th>
+    	<select id="sensorMeasurementInterval" style="font-weight: 900;">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="15">15</option>
+          <option value="20">20</option>
+	</select>
+    </th> 
+</table>
 </div>
 <div style="width:55%;left:0%;top:0%;position:absolute;font-size: 2.8vw;">
 <iframe id="iframe" width="100%" onload="this.style.height=document.body.clientHeight/.9 +'px';" allow="geolocation; microphone; camera"></iframe>
@@ -92,7 +103,7 @@ table, td, th {
   <tr>
   	<th style="opacity:0;">....................</th>
     <th>ALT:</th>
-    <td id="alt">110.3572223</td>
+    <td id="alt">30.33</td>
   </tr>
 </table>
 </div>
@@ -120,7 +131,8 @@ table, td, th {
     	toggle=(toggle+1)%2;
         if(toggle){
         	socket.emit("activateSensorData",{ 
-            	measurementType:measuredParameter 
+            	measurementType:measuredParameter,
+                sensorMeasurementInterval:document.getElementById('sensorMeasurementInterval').value
             });
             document.getElementById("toggle").innerHTML="DEACTIVATE";
             document.getElementById("toggle").style.backgroundColor="rgba(245,141,145,0.9)";
