@@ -185,7 +185,7 @@ table, td, th {
     	if(typeof data==="string")data=JSON.parse(data);
     	console.log(data);
         for(let index=0;index<arr.length;index++){
-          if (data[arr[index]]){
+          if (data[arr[index]]||data[arr[index]]==0){
           	document.getElementById(arr[index]).innerHTML=data[arr[index]];
             
             if(index<=4)document.getElementById(arr[index]).innerHTML+=" ppm";
