@@ -186,16 +186,29 @@ table, td, th {
     	console.log(data);
         for(let index=0;index<arr.length;index++){
           if (data[arr[index]]||data[arr[index]]==0){
-          	document.getElementById(arr[index]).innerHTML=data[arr[index]];
+          	document.getElementById(arr[index]).innerHTML=addZero(data[arr[index]]);
             
             if(index<=4)document.getElementById(arr[index]).innerHTML+=" ppm";
             else if (index===6)document.getElementById(arr[index]).innerHTML+=" °C";
-        	else if (index===7)document.getElementById(arr[index]).innerHTML+=" %";
+            else if (index===7)document.getElementById(arr[index]).innerHTML+=" %";
             else if (index===5)document.getElementById(arr[index]).innerHTML+=" NTU";
             else if (index===8)document.getElementById(arr[index]).innerHTML+=" us/cm";
           }
         }
     });
+    function addZero(num){//append '0' to text
+    	let digit=(num+'').length;
+        console.log(digit);
+        if(digit<6){
+        	digit=6-digit;
+        }else{
+        	digit=0;
+        }
+        for(let temp=0;temp<digit;temp++){
+        	num=num+"0";
+        }
+        return num;
+    }
     socket.on("disconnect",function(data){
     	alert("Opps...Your connection was interrupted");
         window.location.replace("https://www.error3.com");
