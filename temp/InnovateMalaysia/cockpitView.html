@@ -180,7 +180,8 @@ table, td, th {
 		alert("Opps...Invalid device ID");	
         }
     });
-     let arr=["CO","NO2","CO2","NH3","CH4","turbidity","temperature","humidity","EC","lng","lat","alt"];
+     let arr=["CO","NO2","CO2","NH3","CH4","turbidity","temperature","humidity","EC","lng","lat","alt"],
+	 dangerLevel=[1234,1234,1234,1234,1234,9,"temperature","humidity","EC","lng","lat","alt"];
     socket.on("sensorData",function(data){
     	if(typeof data==="string")data=JSON.parse(data);
     	console.log(data);
@@ -188,6 +189,12 @@ table, td, th {
           if (data[arr[index]]||data[arr[index]]==0){
           	document.getElementById(arr[index]).innerHTML=addZero(data[arr[index]]);
             
+		if(!isNaN(dangerLevel[index])&&parseInt(data[arr[index]])>dangerLevel[index])
+			document.getElementById(arr[index]).style.color='red';//exceed safe level
+		else
+			document.getElementById(arr[index]).style.color='black';  
+		  
+		  
             if(index<=4)document.getElementById(arr[index]).innerHTML+=" ppm";
             else if (index===6)document.getElementById(arr[index]).innerHTML+=" °C";
             else if (index===7)document.getElementById(arr[index]).innerHTML+=" %";
