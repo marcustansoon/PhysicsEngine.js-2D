@@ -181,7 +181,7 @@ table, td, th {
         }
     });
      let arr=["CO","NO2","CO2","NH3","CH4","turbidity","temperature","humidity","EC","lng","lat","alt"],
-	 dangerLevel=[10000,70,800,50,50,9,"temperature","humidity","EC","lng","lat","alt"];
+	 dangerLevel=[10000,70,800,50,50,'trr',"temperature","humidity","EC","lng","lat","alt"];
     socket.on("sensorData",function(data){
     	if(typeof data==="string")data=JSON.parse(data);
     	console.log(data);
