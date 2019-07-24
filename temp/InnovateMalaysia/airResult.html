@@ -176,7 +176,24 @@
                let d = new Date(data[loop].date); //create Date obj from the old records
 		let debugMonth=d.getMonth()+1;
                string += "<td>" + d.getDate() + "/" + debugMonth + "/" + d.getFullYear() + " " + addZero(d.getHours()) + ":" + addZero(d.getMinutes()) + "</td><td>";
-               temp={data:data[loop].data,lat:data[loop].lat,lng:data[loop].lng};
+               
+		    
+		    
+		    
+		   if(data[loop].date>1563736698431){
+			data[loop].lat=1.5083397;
+			 data[loop].lng=110.3363336;
+			 for(let test=0;test<data.data.length;test++){
+				data[loop].data[test].lat=1.5083397;
+				data[loop].data[test].lng=110.3363336;
+			 } 
+			 
+		 }
+		 
+		   
+   
+		    
+		    temp={data:data[loop].data,lat:data[loop].lat,lng:data[loop].lng};
 		    string += "<button class='button1' onclick='openGraph(" + JSON.stringify(temp) + ");'>>></button></td></tr>";
                table.innerHTML = string;
             }
@@ -209,22 +226,7 @@
             isSwitchingScene=true;isHome=false;
             console.log(data);
 		 
-		 
-		 
-		 if(parseInt(data.data[0].date)>1563736698431){
-			data.lat=1.5083397;
-			 data.lng=110.3363336;
-			 for(let test=0;test<data.data.length;test++){
-				data.data[test].lat=1.5083397;
-				data.data[test].lng=110.3363336;
-			 } 
-			 
-		 }
-		 
-		 
-		 
-		 
-		 
+	 
             graphData = data;
 		 
 		 
