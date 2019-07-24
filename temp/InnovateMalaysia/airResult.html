@@ -168,7 +168,7 @@
          socket.on("getRecords", function(data) {
             console.log(JSON.stringify(data));
             string = "";
-            string = "<tr> <th>No</th> <th>Date Modified</th> <th>Device IDs</th><th></th> </tr>";
+            string = "<tr> <th>No</th> <th>Device IDs</th> <th>Date Modified</th><th></th> </tr>";
             for (let loop = 0; loop < data.length; loop++) {
                let temp = loop + 1;
                string += "<tr><td>" + temp + "</td>";
