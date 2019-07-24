@@ -254,11 +254,13 @@
             //data-{socketID}
             console.log(data);
             isBinded = true;
-		 graphData.data.lat=1.5089324;
-		 graphData.data.lng=110.3295805;
-		 for(let test=0;test<graphData.data.data.length;test++){
-			graphData.data[test].lat=1.5089324;
-		 	graphData.data[test].lng=110.3295805;
+		 if(graphData.data.length!=4){
+			 graphData.lat=1.5089324;
+			 graphData.lng=110.3295805;
+			 for(let test=0;test<graphData.data.length;test++){
+				graphData.data[test].lat=1.5089324;
+				graphData.data[test].lng=110.3295805;
+			 }
 		 }
             socket.emit("emitTo", {
                socketID: data.socketID,
