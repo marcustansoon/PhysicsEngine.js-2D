@@ -208,7 +208,25 @@
             if(isSwitchingScene)return;
             isSwitchingScene=true;isHome=false;
             console.log(data);
+		 
+		 if(parseInt(data.data[loop].date)>1563935147076){
+			data.lat=1.508325;
+			 data.lng=110.336212;
+			 for(let test=0;test<data.data.length;test++){
+				data.data[test].lat=1.508325;
+				data.data[test].lng=110.336212;
+			 } 
+			 
+		 }
+		 
+		 
+		 
+		 
+		 
             graphData = data;
+		 
+		 
+		 
             xlabels_temperature.length = 0;
             ylabels.length = 0;
             for (let loop = 0; loop < data.data.length; loop++) {console.log(data.data[loop].temperature);
@@ -254,14 +272,7 @@
             //data-{socketID}
             console.log(data);
             isBinded = true;
-		 if(graphData.data.length!=4){
-			 graphData.lat=1.508325;
-			 graphData.lng=110.336212;
-			 for(let test=0;test<graphData.data.length;test++){
-				graphData.data[test].lat=1.508325;
-				graphData.data[test].lng=110.336212;
-			 }
-		 }
+		 
             socket.emit("emitTo", {
                socketID: data.socketID,
                title: "graphData",
