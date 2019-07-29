@@ -9,6 +9,7 @@ To bypass it, open cmd.exe
               
 Example of AnimatedSpriteManager and AnimatedSpriteTextureManager usage :-
 http://jsfiddle.net/rh3eqdfk/193/
+http://jsfiddle.net/oqy7jedL/show
 
 10/8/18
 https://files.fm/u/jswh3ndu
