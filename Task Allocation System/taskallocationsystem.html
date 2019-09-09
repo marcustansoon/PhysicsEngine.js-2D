@@ -294,6 +294,7 @@ body {
             for (let temp=0;temp<noUser;temp++){
             	data.name.push(document.getElementById("users").rows[temp+1].cells[1].innerHTML);
                 data.task.push(document.getElementById("tasks").rows[temp+1].cells[1].innerHTML);
+		data[name]=[];    
             }
             data.dateNow=new Date().getTime();
             let xhttp = new XMLHttpRequest();
