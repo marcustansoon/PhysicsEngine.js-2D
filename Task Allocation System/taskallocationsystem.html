@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+<style>
+#users, #tasks {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 75%;
+  position:relative;
+  left:50%;
+  transform:translate(-50%);
+  max-width:400px;
+}
+
+#users td,th,#tasks td,th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  background-color:#f5f5f5;
+}
+
+#users tr:hover {background-color: #ddd;}
+
+#users th, #tasks th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  background:linear-gradient(#59cf5e, #50b554, #59cf5e);
+  color: white;
+}
+.button {
+  border: none;
+  color: white;
+  padding: 12px 28px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+main {
+  background: linear-gradient(#9c9c9c, #808080, #9c9c9c);
+  display: grid;
+  grid-template-columns: 1fr;
+  height: 100vh;
+  width: 100%;
+}
+body {
+  font-family: Arial, sans-serif;
+  background: url(http://www.shukatsu-note.com/wp-content/uploads/2014/12/computer-564136_1280.jpg) no-repeat;
+  background-size: cover;
+  height: 100vh;
+}
+.dice {
+  align-items: center;
+  display: grid;
+  grid-gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+  grid-template-rows: auto;
+  justify-items: center;
+  padding: 1rem;
+  perspective: 00px;
+}
+.die-list {
+  height: 4rem;
+  list-style-type: none;
+  position: relative;
+  transform-style: preserve-3d;
+  width: 4rem;
+}
+.even-roll {
+  transition: transform 2.5s ease-out;
+}
+.odd-roll {
+  transition: transform 2.25s ease-out;
+}
+.die-item {
+  background-color: #fefefe;
+  box-shadow: inset -0.35rem 0.35rem 0.75rem rgba(0, 0, 0, 0.3),
+    inset 0.5rem -0.25rem 0.5rem rgba(0, 0, 0, 0.15);
+  display: grid;
+  grid-template-areas: "one two three" "four five six" "seven eight nine";
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  height: 80%;
+  padding: 0.5rem;
+  position: absolute;
+  width: 56%;
+}
+.dot {
+  align-self: center;
+  background-color: #676767;
+  border-radius: 50%;
+  box-shadow: inset -0.15rem 0.15rem 0.25rem rgba(0, 0, 0, 0.5);
+  display: block;
+  height: 1.05rem;
+  justify-self: center;
+  width: 1.05rem;
+}
+.even-roll[data-roll="1"] {
+  transform: rotateX(360deg) rotateY(720deg) rotateZ(360deg);
+}
+.even-roll[data-roll="2"] {
+  transform: rotateX(450deg) rotateY(720deg) rotateZ(360deg);
+}
+.even-roll[data-roll="3"] {
+  transform: rotateX(360deg) rotateY(630deg) rotateZ(360deg);
+}
+.even-roll[data-roll="4"] {
+  transform: rotateX(360deg) rotateY(810deg) rotateZ(360deg);
+}
+.even-roll[data-roll="5"] {
+  transform: rotateX(270deg) rotateY(720deg) rotateZ(360deg);
+}
+.even-roll[data-roll="6"] {
+  transform: rotateX(360deg) rotateY(900deg) rotateZ(360deg);
+}
+.odd-roll[data-roll="1"] {
+  transform: rotateX(-360deg) rotateY(-720deg) rotateZ(-360deg);
+}
+.odd-roll[data-roll="2"] {
+  transform: rotateX(-270deg) rotateY(-720deg) rotateZ(-360deg);
+}
+.odd-roll[data-roll="3"] {
+  transform: rotateX(-360deg) rotateY(-810deg) rotateZ(-360deg);
+}
+.odd-roll[data-roll="4"] {
+  transform: rotateX(-360deg) rotateY(-630deg) rotateZ(-360deg);
+}
+.odd-roll[data-roll="5"] {
+  transform: rotateX(-450deg) rotateY(-720deg) rotateZ(-360deg);
+}
+.odd-roll[data-roll="6"] {
+  transform: rotateX(-360deg) rotateY(-900deg) rotateZ(-360deg);
+}
+
+[data-side="1"] {
+  transform: rotate3d(0, 0, 0, 90deg) translateZ(2.12rem);
+}
+[data-side="2"] {
+  transform: rotate3d(-1, 0, 0, 90deg) translateZ(2.12rem);
+}
+[data-side="3"] {
+  transform: rotate3d(0, 1, 0, 90deg) translateZ(2.12rem);
+}
+[data-side="4"] {
+  transform: rotate3d(0, -1, 0, 90deg) translateZ(2.12rem);
+}
+[data-side="5"] {
+  transform: rotate3d(1, 0, 0, 90deg) translateZ(2.12rem);
+}
+[data-side="6"] {
+  transform: rotate3d(1, 0, 0, 180deg) translateZ(2.12rem);
+}
+[data-side="1"] .dot:nth-of-type(1) {
+  grid-area: five;
+}
+[data-side="2"] .dot:nth-of-type(1) {
+  grid-area: one;
+}
+[data-side="2"] .dot:nth-of-type(2) {
+  grid-area: nine;
+}
+[data-side="3"] .dot:nth-of-type(1) {
+  grid-area: one;
+}
+[data-side="3"] .dot:nth-of-type(2) {
+  grid-area: five;
+}
+[data-side="3"] .dot:nth-of-type(3) {
+  grid-area: nine;
+}
+[data-side="4"] .dot:nth-of-type(1) {
+  grid-area: one;
+}
+[data-side="4"] .dot:nth-of-type(2) {
+  grid-area: three;
+}
+[data-side="4"] .dot:nth-of-type(3) {
+  grid-area: seven;
+}
+[data-side="4"] .dot:nth-of-type(4) {
+  grid-area: nine;
+}
+[data-side="5"] .dot:nth-of-type(1) {
+  grid-area: one;
+}
+[data-side="5"] .dot:nth-of-type(2) {
+  grid-area: three;
+}
+[data-side="5"] .dot:nth-of-type(3) {
+  grid-area: five;
+}
+[data-side="5"] .dot:nth-of-type(4) {
+  grid-area: seven;
+}
+[data-side="5"] .dot:nth-of-type(5) {
+  grid-area: nine;
+}
+[data-side="6"] .dot:nth-of-type(1) {
+  grid-area: one;
+}
+[data-side="6"] .dot:nth-of-type(2) {
+  grid-area: three;
+}
+[data-side="6"] .dot:nth-of-type(3) {
+  grid-area: four;
+}
+[data-side="6"] .dot:nth-of-type(4) {
+  grid-area: six;
+}
+[data-side="6"] .dot:nth-of-type(5) {
+  grid-area: seven;
+}
+[data-side="6"] .dot:nth-of-type(6) {
+  grid-area: nine;
+}
+
+</style>
+<head>
+<title >Tasks Allocation</title>
+</head>
+<body>
+<h2 style="text-align:center;background-color:white;padding:8px;">Tasks Allocation</h2>
+
+<table id="users" >
+  <tr>
+  	<th style="text-align:center;">No</th>
+    <th style="text-align:center;">Name</th>
+  </tr>
+  <tr>
+  	<td style="text-align:center;">1</td>
+    <td contenteditable="true">Alfredo Futterkiste</td>
+  </tr>
+ <tr>
+ 	<td style="text-align:center;">2</td>
+    <td contenteditable="true">Faud Elmenual</td>
+  </tr>
+</table>
+<br><br>
+<table id="tasks">
+  <tr>
+  	<th style="text-align:center;">No</th>
+    <th style="text-align:center;">Task</th>
+  </tr>
+  <tr>
+  	<td style="text-align:center;">1</td>
+    <td contenteditable="true">Introduction</td>
+  </tr>
+ <tr>
+ 	<td style="text-align:center;">2</td>
+    <td contenteditable="true">Conclusion</td>
+  </tr>
+</table>
+
+<br>
+
+<div style="text-align:center;">
+<button class="button" style="background:linear-gradient(#59cf5e, #50b554, #59cf5e);" onclick="addUser();">Add</button>
+<button class="button" style="background:linear-gradient(#ff1e00, #cf1e06, #ff1e00);" onclick="removeUser();">Remove</button>
+<div>
+<br>
+<div style="text-align:center;">
+<button class="button" style="background:linear-gradient(#ffa200, #f59c02, #ffa200);" onclick="submit();">Submit</button>
+<div>
+
+<br><br>
+
+<h3><textarea class="js-copytextarea" id="copyArea" hidden rows="5" cols="33">aqeewqw</textarea></h3>
+
+
+</body>
+<script>
+	let noUser=2;
+	function addUser(){
+    	noUser++;
+    	document.getElementById("users").innerHTML+="<tr> <td style='text-align:center;'>"+noUser+"</td><td  contenteditable='true'>Centro  Moctezuma</td></tr>";
+        document.getElementById("tasks").innerHTML+="<tr> <td style='text-align:center;'>"+noUser+"</td><td  contenteditable='true'>Summary</td></tr>";
+    }
+    function removeUser(){
+    	if(noUser==2)return;
+        document.getElementById("users").deleteRow(noUser);
+        document.getElementById("tasks").deleteRow(noUser);
+        noUser--;
+    }
+    function submit(){
+    	var confirmation = confirm("Confirm to submit ?");
+          if (confirmation == true) {
+           	let data={name:[],task:[]};
+            for (let temp=0;temp<noUser;temp++){
+            	data.name.push(document.getElementById("users").rows[temp+1].cells[1].innerHTML);
+                data.task.push(document.getElementById("tasks").rows[temp+1].cells[1].innerHTML);
+            }
+            data.dateNow=new Date().getTime();
+            let xhttp = new XMLHttpRequest();
+  			xhttp.open("POST", "https://task-distribution.glitch.me", true);
+    		xhttp.setRequestHeader("Content-Type", "application/json");
+            xhttp.send(JSON.stringify({data}));
+            copyUrl(data.dateNow);
+          } else {
+            
+          }
+    }
+    
+    
+    
+    
+    
+    
+  (function() {
+    var cors_api_host = 'cors-anywhere.herokuapp.com';
+    var cors_api_url = 'https://' + cors_api_host + '/';
+    var slice = [].slice;
+    var origin = window.location.protocol + '//' + window.location.host;
+    var open = XMLHttpRequest.prototype.open;
+    XMLHttpRequest.prototype.open = function() {
+        var args = slice.call(arguments);
+        var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
+        if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
+            targetOrigin[1] !== cors_api_host) {
+            args[1] = cors_api_url + args[1];
+        }
+        return open.apply(this, args);
+    };
+})();  
+    
+  
+    
+    
+    
+    
+
+function copyUrl(dateNow){
+  var copyTextarea = document.getElementById('copyArea');
+  copyTextarea.value="https://task-distribution.glitch.me/taskallocation/"+dateNow;
+  copyTextarea.hidden=false;
+  copyTextarea.focus();
+  copyTextarea.select(); 
+  try {
+    var successful = document.execCommand('copy');
+    var msg = successful ? 'successful' : 'unsuccessful';
+    console.log('Copying text command was ' + msg);
+  } catch (err) {
+    console.log('Oops, unable to copy');
+    
+  }
+}
+    
+</script>
+
+
+
+
+
+</html>
