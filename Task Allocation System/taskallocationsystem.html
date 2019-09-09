@@ -13,15 +13,12 @@
   transform:translate(-50%);
   max-width:600px;
 }
-
 #users td,th,#tasks td,th {
   border: 1px solid #ddd;
   padding: 8px;
   background-color:#f5f5f5;
 }
-
 #users tr:hover {background-color: #ddd;}
-
 #users th, #tasks th {
   padding-top: 12px;
   padding-bottom: 12px;
@@ -41,7 +38,6 @@
   margin: 4px 2px;
   cursor: pointer;
 }
-
 main {
   background: linear-gradient(#9c9c9c, #808080, #9c9c9c);
   display: grid;
@@ -137,7 +133,6 @@ body {
 .odd-roll[data-roll="6"] {
   transform: rotateX(-360deg) rotateY(-900deg) rotateZ(-360deg);
 }
-
 [data-side="1"] {
   transform: rotate3d(0, 0, 0, 90deg) translateZ(2.12rem);
 }
@@ -219,7 +214,6 @@ body {
 [data-side="6"] .dot:nth-of-type(6) {
   grid-area: nine;
 }
-
 </style>
 <head>
 <title >Tasks Allocation</title>
@@ -290,18 +284,25 @@ body {
     function submit(){
     	var confirmation = confirm("Confirm to submit ?");
           if (confirmation == true) {
-           	let data={name:[],task:[]};
+           	let data={users:[],tasks:[],addData:true};
             for (let temp=0;temp<noUser;temp++){
-            	data.name.push(document.getElementById("users").rows[temp+1].cells[1].innerHTML);
-                data.task.push(document.getElementById("tasks").rows[temp+1].cells[1].innerHTML);
-		data[name]=[];    
+            	data.users.push({name:document.getElementById("users").rows[temp+1].cells[1].innerHTML,
+                data:[]});
+                data.tasks.push(document.getElementById("tasks").rows[temp+1].cells[1].innerHTML);
             }
             data.dateNow=new Date().getTime();
             let xhttp = new XMLHttpRequest();
   			xhttp.open("POST", "https://task-distribution.glitch.me", true);
     		xhttp.setRequestHeader("Content-Type", "application/json");
             xhttp.send(JSON.stringify({data}));
-            copyUrl(data.dateNow);
+            xhttp.onload = xhttp.onerror = function() {
+             if(xhttp.responseText==="success")
+             	copyUrl(data.dateNow);
+              else{
+              
+              }
+            };
+
           } else {
             
           }
@@ -334,7 +335,6 @@ body {
     
     
     
-
 function copyUrl(dateNow){
   var copyTextarea = document.getElementById('copyArea');
   copyTextarea.value="https://task-distribution.glitch.me/taskallocation/"+dateNow;
