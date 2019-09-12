@@ -1,362 +1,337 @@
 <!DOCTYPE html>
-<html>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Rosario" />
-<style>
-*{
-    font-size: calc(13px + 0.2vw);
-}
-#users, #tasks {
-
-  border-collapse: collapse;
-  width: 70%;
-  position:relative;
-  left:50%;
-  transform:translate(-50%);
-  max-width:600px;
-}
-#users td,th,#tasks td,th {
-  border: 1px solid #ddd;
-  padding: 8px;
-  background-color:#f5f5f5;
-}
-#users tr:hover {background-color: #ddd;}
-#users th, #tasks th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #4CAF50;
-  background:linear-gradient(#59cf5e, #50b554, #59cf5e);
-  color: white;
-}
-.button {
-  border: none;
-  color: white;
-  padding: 12px 28px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: calc(14px + 0.3vw);
-  margin: 4px 2px;
-  cursor: pointer;
-}
-main {
-  background: linear-gradient(#9c9c9c, #808080, #9c9c9c);
-  display: grid;
-  grid-template-columns: 1fr;
-  height: 100vh;
-  width: 100%;
-}
-body {
-  font-family: Arial, sans-serif;
-  background: url(http://www.shukatsu-note.com/wp-content/uploads/2014/12/computer-564136_1280.jpg) no-repeat;
-  background-size: cover;
-  height: 100vh;
-}
-.dice {
-  align-items: center;
-  display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
-  grid-template-rows: auto;
-  justify-items: center;
-  padding: 1rem;
-  perspective: 00px;
-}
-.die-list {
-  height: 4rem;
-  list-style-type: none;
-  position: relative;
-  transform-style: preserve-3d;
-  width: 4rem;
-}
-.even-roll {
-  transition: transform 2.5s ease-out;
-}
-.odd-roll {
-  transition: transform 2.25s ease-out;
-}
-.die-item {
-  background-color: #fefefe;
-  box-shadow: inset -0.35rem 0.35rem 0.75rem rgba(0, 0, 0, 0.3),
-    inset 0.5rem -0.25rem 0.5rem rgba(0, 0, 0, 0.15);
-  display: grid;
-  grid-template-areas: "one two three" "four five six" "seven eight nine";
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  height: 80%;
-  padding: 0.5rem;
-  position: absolute;
-  width: 56%;
-}
-.dot {
-  align-self: center;
-  background-color: #676767;
-  border-radius: 50%;
-  box-shadow: inset -0.15rem 0.15rem 0.25rem rgba(0, 0, 0, 0.5);
-  display: block;
-  height: 1.05rem;
-  justify-self: center;
-  width: 1.05rem;
-}
-.even-roll[data-roll="1"] {
-  transform: rotateX(360deg) rotateY(720deg) rotateZ(360deg);
-}
-.even-roll[data-roll="2"] {
-  transform: rotateX(450deg) rotateY(720deg) rotateZ(360deg);
-}
-.even-roll[data-roll="3"] {
-  transform: rotateX(360deg) rotateY(630deg) rotateZ(360deg);
-}
-.even-roll[data-roll="4"] {
-  transform: rotateX(360deg) rotateY(810deg) rotateZ(360deg);
-}
-.even-roll[data-roll="5"] {
-  transform: rotateX(270deg) rotateY(720deg) rotateZ(360deg);
-}
-.even-roll[data-roll="6"] {
-  transform: rotateX(360deg) rotateY(900deg) rotateZ(360deg);
-}
-.odd-roll[data-roll="1"] {
-  transform: rotateX(-360deg) rotateY(-720deg) rotateZ(-360deg);
-}
-.odd-roll[data-roll="2"] {
-  transform: rotateX(-270deg) rotateY(-720deg) rotateZ(-360deg);
-}
-.odd-roll[data-roll="3"] {
-  transform: rotateX(-360deg) rotateY(-810deg) rotateZ(-360deg);
-}
-.odd-roll[data-roll="4"] {
-  transform: rotateX(-360deg) rotateY(-630deg) rotateZ(-360deg);
-}
-.odd-roll[data-roll="5"] {
-  transform: rotateX(-450deg) rotateY(-720deg) rotateZ(-360deg);
-}
-.odd-roll[data-roll="6"] {
-  transform: rotateX(-360deg) rotateY(-900deg) rotateZ(-360deg);
-}
-[data-side="1"] {
-  transform: rotate3d(0, 0, 0, 90deg) translateZ(2.12rem);
-}
-[data-side="2"] {
-  transform: rotate3d(-1, 0, 0, 90deg) translateZ(2.12rem);
-}
-[data-side="3"] {
-  transform: rotate3d(0, 1, 0, 90deg) translateZ(2.12rem);
-}
-[data-side="4"] {
-  transform: rotate3d(0, -1, 0, 90deg) translateZ(2.12rem);
-}
-[data-side="5"] {
-  transform: rotate3d(1, 0, 0, 90deg) translateZ(2.12rem);
-}
-[data-side="6"] {
-  transform: rotate3d(1, 0, 0, 180deg) translateZ(2.12rem);
-}
-[data-side="1"] .dot:nth-of-type(1) {
-  grid-area: five;
-}
-[data-side="2"] .dot:nth-of-type(1) {
-  grid-area: one;
-}
-[data-side="2"] .dot:nth-of-type(2) {
-  grid-area: nine;
-}
-[data-side="3"] .dot:nth-of-type(1) {
-  grid-area: one;
-}
-[data-side="3"] .dot:nth-of-type(2) {
-  grid-area: five;
-}
-[data-side="3"] .dot:nth-of-type(3) {
-  grid-area: nine;
-}
-[data-side="4"] .dot:nth-of-type(1) {
-  grid-area: one;
-}
-[data-side="4"] .dot:nth-of-type(2) {
-  grid-area: three;
-}
-[data-side="4"] .dot:nth-of-type(3) {
-  grid-area: seven;
-}
-[data-side="4"] .dot:nth-of-type(4) {
-  grid-area: nine;
-}
-[data-side="5"] .dot:nth-of-type(1) {
-  grid-area: one;
-}
-[data-side="5"] .dot:nth-of-type(2) {
-  grid-area: three;
-}
-[data-side="5"] .dot:nth-of-type(3) {
-  grid-area: five;
-}
-[data-side="5"] .dot:nth-of-type(4) {
-  grid-area: seven;
-}
-[data-side="5"] .dot:nth-of-type(5) {
-  grid-area: nine;
-}
-[data-side="6"] .dot:nth-of-type(1) {
-  grid-area: one;
-}
-[data-side="6"] .dot:nth-of-type(2) {
-  grid-area: three;
-}
-[data-side="6"] .dot:nth-of-type(3) {
-  grid-area: four;
-}
-[data-side="6"] .dot:nth-of-type(4) {
-  grid-area: six;
-}
-[data-side="6"] .dot:nth-of-type(5) {
-  grid-area: seven;
-}
-[data-side="6"] .dot:nth-of-type(6) {
-  grid-area: nine;
-}
-</style>
-<head>
-<title >Tasks Allocation</title>
-</head>
-<body>
-<h2 style="text-align:center;background-color:white;padding:8px;calc(14px + 0.5vw)">Tasks Allocation</h2>
-
-<table id="users" >
-  <tr>
-  	<th style="text-align:center;">No</th>
-    <th style="text-align:center;">Name</th>
-  </tr>
-  <tr>
-  	<td style="text-align:center;">1</td>
-    <td contenteditable="true">Alfredo Futterkiste</td>
-  </tr>
- <tr>
- 	<td style="text-align:center;">2</td>
-    <td contenteditable="true">Faud Elmenual</td>
-  </tr>
-</table>
-<br><br>
-<table id="tasks">
-  <tr>
-  	<th style="text-align:center;">No</th>
-    <th style="text-align:center;">Task</th>
-  </tr>
-  <tr>
-  	<td style="text-align:center;">1</td>
-    <td contenteditable="true">Introduction</td>
-  </tr>
- <tr>
- 	<td style="text-align:center;">2</td>
-    <td contenteditable="true">Conclusion</td>
-  </tr>
-</table>
-
-<br>
-
-<div style="text-align:center;">
-<button class="button" style="background:linear-gradient(#59cf5e, #50b554, #59cf5e);" onclick="addUser();">Add</button>
-<button class="button" style="background:linear-gradient(#ff1e00, #cf1e06, #ff1e00);" onclick="removeUser();">Remove</button>
-</div>
-<br>
-<div style="text-align:center;">
-<button class="button" style="background:linear-gradient(#ffa200, #f59c02, #ffa200);" onclick="submit();">Submit</button>
-</div>
-
-<br><br>
-
-<h3><textarea class="js-copytextarea" id="copyArea" hidden rows="5" cols="33" style="position:relative;left:50%;transform:translate(-50%);">aqeewqw</textarea></h3>
-
-
-</body>
-<script>
-	let noUser=2;
-	function addUser(){
-    	noUser++;
-    	document.getElementById("users").innerHTML+="<tr> <td style='text-align:center;'>"+noUser+"</td><td  contenteditable='true'>Centro  Moctezuma</td></tr>";
-        document.getElementById("tasks").innerHTML+="<tr> <td style='text-align:center;'>"+noUser+"</td><td  contenteditable='true'>Summary</td></tr>";
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<html>
+  <style>
+    * {font-family: "Rosario";
+      font-size: calc(13px + 0.2vw);
     }
-    function removeUser(){
-    	if(noUser==2)return;
-        document.getElementById("users").deleteRow(noUser);
-        document.getElementById("tasks").deleteRow(noUser);
-        noUser--;
+    body {
+      background-image:
+linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.8)),url(http://www.shukatsu-note.com/wp-content/uploads/2014/12/computer-564136_1280.jpg);
+      background-size: cover;
+      height: 100vh;
+      overflow:hidden;
     }
-    function submit(){
-    	var confirmation = confirm("Confirm to submit ?");
-          if (confirmation == true) {
-           	let data={users:[],tasks:[],addData:true};
-            for (let temp=0;temp<noUser;temp++){
-            	data.users.push({name:document.getElementById("users").rows[temp+1].cells[1].innerHTML,
-                data:[]});
-                data.tasks.push(document.getElementById("tasks").rows[temp+1].cells[1].innerHTML);
-            }
-            data.dateNow=new Date().getTime();
-            let xhttp = new XMLHttpRequest();
-  			xhttp.open("POST", "https://task-distribution.glitch.me", true);
-    		xhttp.setRequestHeader("Content-Type", "application/json");
-            xhttp.send(JSON.stringify({data}));
-            xhttp.onload = xhttp.onerror = function() {
-             if(xhttp.responseText==="success")
-             	copyUrl(data.dateNow);
-              else{
-              
-              }
-            };
+    /* The container */
+    .container {
+      display: block; 
+      position: relative;
+      margin-bottom: 12px;
+      cursor: pointer;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      left: 40%;
+    }
+    /* Hide the browser's default radio button */
+    .container input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
 
-          } else {
+    /* Create a custom radio button */
+    .checkmark {
+      position: absolute;
+      left: -25%;
+      height: 20px;
+      width: 20px;
+      background-color: #cfcfcf;
+      border-radius: 50%;
+    }
+
+    /* On mouse-over, add a grey background color */
+    .container:hover input~.checkmark {
+      background-color: rgba(255, 208, 134,0.6);
+    }
+
+    /* When the radio button is checked, add a blue background */
+    .container input:checked~.checkmark {
+      background-color: #f7c040;
+    }
+
+    /* Create the indicator (the dot/circle - hidden when not checked) */
+    .checkmark:after {
+      content: "";
+      position: absolute;
+      display: none;
+    }
+
+    /* Show the indicator (dot/circle) when checked */
+    .container input:checked~.checkmark:after {
+      display: block;
+    }
+
+    /* Style the indicator (dot/circle) */
+    .container .checkmark:after {
+      top: 6px;
+      left: 6px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: white;
+    }
+
+    .button {
+      border: none;
+      color: white;
+      padding: 12px 28px;
+      text-align: center;
+      border-radius:15%;
+      text-decoration: none;
+      display: inline-block;
+      font-size: calc(14px + 0.2vw);
+      margin: 25px;
+      cursor: pointer;
+    }
+
+    .button:disabled {
+      opacity: 0.4;
+      filter: alpha(opacity=40);
+    }
+
+    #allocationTable{ 
+      width: 65%;
+      position: relative;
+      left: 50%;
+      transform: translate(-50%);
+      max-width: 600px;
+    }
+    #allocationTable td,th {
+      border: 0px solid #ddd;
+      padding: 8px;
+      background-color: #f5f5f5;
+      overflow: hidden;
+    }
+
+    #allocationTable tr:hover {
+      background-color: #ddd;
+    }
+    #allocationTable th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: left;
+      background: /*linear-gradient(#ffb866, #fa8b0a, #ffb866)*/;
+      color: black;
+    }
+    
+  </style>
+
+	<body><div style="position:relative;top:40%;transform:translate(0,-50%);">
+
+  <div id="nameContent" style="background-color:white;width:55%;position:relative;left:50%;transform:translate(-50%);padding:1%;max-width:240px;border-radius:15%;background: linear-gradient(#f5f5f5, #dbd9d9, #f5f5f5);border: 2px solid #ddd;padding:8px;"></div>
+  <br>
+  
+  <div style="background-color:rgba(255,255,255,0.85);width:30%;position:relative;left:50%;transform:translate(-50%);padding:1%;text-align:center;border-radius:15%;max-width:230px;">
+  Dice Roll Count
+  <select id="rollCount" name="rollCount" onchange="setDiceRollCount();">
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="7">7</option>
+  </select>
+  </div>
+
+  <div style="text-align:center;">
+    <button class="button" style="background:linear-gradient(#ffa200, #f59c02, #ffa200);" onclick="roll();" id="rollButton" disabled>Roll</button>
+  </div>
+
+    <table id="allocationTable" style="background-color:white;">
+    </table>
+    </div>
+    <script>
+
+		let obj,rollCount=2,selectedUserIndex=-1,
+		uniqueURL = window.location.href.replace("https://etzopetdwpnamvd7r85bew-on.drv.tw/TechSmith/Javascript%20Source%20File/Task%20Allocation%20Tool/?dataURL=", "");
+		
+        
+        function setDiceRollCount(){
+        	rollCount=parseInt(document.getElementById("rollCount").value);
+        	console.log(rollCount);
+        }
+        
+      function generateTaskTable() {
+			let string='<tr><th style="text-align:center;">Task / Probability</th>',
+            table=document.getElementById("allocationTable");
             
-          }
+            obj.users.forEach(function(user,index){
+            	string+='<th style="text-align:center;">'+user.name+'</th>';	
+                console.log(user.name);
+            });
+            string+='</tr>';	
+            table.innerHTML=string;
+            
+            for(let row=0;row<obj.tasks.length;row++){
+            	let newRow = table.insertRow(row+1);
+            	for(let col=0;col<obj.users.length+1;col++){
+                	if (col===0){
+                    	newRow.insertCell(col).innerHTML=obj.tasks[row];
+                    }else{                    	
+                		newRow.insertCell(col).innerHTML=obj.users[col-1].data[row]||'0';
+                    }
+                }
+            }
+            document.querySelectorAll("th")[0].style="background-color:yellow;";
+            assignTasks();
+      }
+	
+    function shuffle(a) {
+      for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+	}
+    function assignTasks(){
+    	let colours=["background-color:rgba(0, 235, 4,0.4);","background-color:rgba(244, 120, 255,0.4);","background-color:rgba(255, 200, 0,0.4);","background-color:rgba(0, 255, 242,0.4);","background-color:rgba(209, 84, 144,0.4);","background-color:rgba(209, 138, 84,0.4);","background-color:rgba(82, 3, 255,0.4);","background-color:rgba(184, 0, 141,0.4);"],
+        allocatedNames=new Set();
+        
+    	shuffle(colours);
+        
+    	obj.tasks.forEach(function(task,index){
+        	let highestRoll=-1,indexWithHighestRoll=0;
+        	for(let userIndex=0;userIndex<obj.users.length;userIndex++){
+            	obj.users[userIndex].data[index]=obj.users[userIndex].data[index]||0;
+            	if(!allocatedNames.has(obj.users[userIndex].name) && obj.users[userIndex].data[index]>highestRoll){
+                	highestRoll=obj.users[userIndex].data[index];
+                    indexWithHighestRoll=userIndex;
+                    console.log(userIndex);
+                } 
+            }
+            document.querySelectorAll("th")[indexWithHighestRoll+1].style=colours[colours.length-1];
+            document.querySelectorAll("td")[(obj.users.length+1)*index].style=colours[colours.length-1];
+            document.querySelectorAll("td")[(obj.users.length+1)*index+indexWithHighestRoll+1].style=colours[colours.length-1];
+            colours.pop();
+            allocatedNames.add(obj.users[indexWithHighestRoll].name);
+        });
     }
-    
-    
-    
-    
-    
-    
-  (function() {
-    var cors_api_host = 'cors-anywhere.herokuapp.com';
-    var cors_api_url = 'https://' + cors_api_host + '/';
-    var slice = [].slice;
-    var origin = window.location.protocol + '//' + window.location.host;
-    var open = XMLHttpRequest.prototype.open;
-    XMLHttpRequest.prototype.open = function() {
-        var args = slice.call(arguments);
-        var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
-        if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
+ 
+      function onNameSelect(index) {
+          console.log(index);
+          document.getElementById("rollButton").disabled = false;
+          selectedUserIndex=index;
+      }
+      (function() {
+        var cors_api_host = 'cors-anywhere.herokuapp.com';
+        var cors_api_url = 'https://' + cors_api_host + '/';
+        var slice = [].slice;
+        var origin = window.location.protocol + '//' + window.location.host;
+        var open = XMLHttpRequest.prototype.open;
+        XMLHttpRequest.prototype.open = function() {
+          var args = slice.call(arguments);
+          var targetOrigin = /^https?:\/\/([^\/]+)/i.exec(args[1]);
+          if (targetOrigin && targetOrigin[0].toLowerCase() !== origin &&
             targetOrigin[1] !== cors_api_host) {
             args[1] = cors_api_url + args[1];
+          }
+          return open.apply(this, args);
+        };
+      })();
+
+
+      function retrieveData() {
+        let xhttp = new XMLHttpRequest();
+        xhttp.open("post", "https://task-distribution.glitch.me", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        let t = JSON.stringify({
+          data: {
+            retrieveData: uniqueURL
+          }
+        });
+        console.log(t);
+        xhttp.send(t);
+        xhttp.onload = xhttp.onerror = function() {
+          JSON.parse(xhttp.responseText);
+          obj=JSON.parse(xhttp.responseText);
+      
+          console.log(obj);
+          for (let temp = 0; temp < obj.users.length; temp++) {
+            let disabledAttribute = "",
+              disabledStyle = '';
+            if (obj.users[temp].data.length) {
+              disabledAttribute = "disabled";
+              disabledStyle = 'style="opacity: 0.4; filter: alpha(opacity=40);"'
+            }
+
+            document.getElementById("nameContent").innerHTML += "<label class=\"container\"" + disabledStyle + ">" + obj.users[temp].name + "<input type=\"radio\" name=\"name\" onchange=\"onNameSelect(" + temp + ");\"" + disabledAttribute + "><span class=\"checkmark\"></span></label>";
+          }
+          generateTaskTable();
+
         }
-        return open.apply(this, args);
-    };
-})();  
-    
+      }
+      setTimeout(retrieveData, 1000);
+
+      function roll() {
+      	if(selectedUserIndex<0||obj.users[selectedUserIndex].data.every(function(value){return value>0}))return;
+        
+        document.getElementById("rollButton").disabled = true;
+        document.querySelectorAll("label")[selectedUserIndex].style='opacity: 0.4; filter: alpha(opacity=40);';
+        document.querySelectorAll("input")[selectedUserIndex].disabled=true;
+        
+        let total=[],countdown=rollCount;
+        let repeat=setInterval(function(){
+          for(let temp=0;temp<obj.tasks.length;temp++){	
+          	let temp2=Math.floor(Math.random() * 100);
+            
+            if(!total[temp])total.push(0);
+            temp2>total[total.length-1]?temp2+=(Math.random()*10)>>0:temp2-=(Math.random()*8)>>0;//add variance effect
+            if(temp2<0)temp2=(Math.random()*8)>>0;
+            if(temp2>100)temp2=90+(Math.random()*8)>>0;
+          	total[temp]+=temp2;
+            
+            document.querySelectorAll("td")[(selectedUserIndex+1)+temp*(obj.users.length+1)].innerHTML="<span style='color:rgba("+Math.floor(Math.random() * 255)+","+Math.floor(Math.random() * 255)+","+Math.floor(Math.random() * 255)+",1);'>"+temp2+"</span>";
+          }
+          countdown--;
+          if(!countdown){
+          	clearInterval(repeat);
+            setTimeout(function(){	
+            	let arr=[];
+            	for(let index=0;index<total.length;index++){
+                  total[index]=(total[index]/rollCount)<<0;
+                  arr.push(total[index]);
+                  //document.querySelectorAll("td")[(selectedUserIndex+1)+index*(obj.users.length+1)].innerHTML=total[index];
+                  obj.users[selectedUserIndex].data[index]=total[index];
+                  console.log(obj.users[selectedUserIndex]);
+              }
+              generateTaskTable();
+              sendData(arr);
+            },500);
+          }
+		},500);
+        
+       
+
+      }
+   	function sendData(arr){//console.log(arr);
+    	let xhttp = new XMLHttpRequest();
+        xhttp.open("post", "https://task-distribution.glitch.me", true);
+        xhttp.setRequestHeader("Content-Type", "application/json");
+        let t = JSON.stringify({
+          data: {
+            updateData: true,
+            date: uniqueURL,
+            name: obj.users[selectedUserIndex].name,
+            content: arr,
+            index: selectedUserIndex
+          }
+        });
+        console.log(t);
+        xhttp.send(t);
+        xhttp.onload = xhttp.onerror = function() {
+          console.log(JSON.parse(xhttp.responseText));
+          let obj = JSON.parse(xhttp.responseText);
+        };
+    }
+    console.log(window.location.href);
+
+    </script>
+
+  </body>
   
-    
-    
-    
-    
-function copyUrl(dateNow){
-  var copyTextarea = document.getElementById('copyArea');
-  copyTextarea.value="https://etzopetdwpnamvd7r85bew-on.drv.tw/TechSmith/Javascript%20Source%20File/Task%20Allocation%20Tool/?dataURL="+dateNow;
-  copyTextarea.hidden=false;
-  copyTextarea.focus();
-  copyTextarea.select(); 
-  try {
-    var successful = document.execCommand('copy');
-    var msg = successful ? 'successful' : 'unsuccessful';
-    console.log('Copying text command was ' + msg);
-  } catch (err) {
-    console.log('Oops, unable to copy');
-    
-  }
-}
-    
-</script>
-
-
-
-
+<a href="https://etzopetdwpnamvd7r85bew-on.drv.tw/TechSmith/Javascript%20Source%20File/Task%20Allocation%20Tool/taskallocationsystem.html"  style="position:absolute;right:2%;color:white;bottom:2%;text-decoration:none;font-size:calc(10px + 0.15vw);"><img src="https://cdn3.iconfinder.com/data/icons/ringtone-music-instruments/512/blue-round-settings-gear-engine-details-512.png" style="width:10%;position:absolute;left:-15%;bottom:1%;max-width:32px;">
+Generated from Task.Allocation.Tool@2019</a>
 
 </html>
