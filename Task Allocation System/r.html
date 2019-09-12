@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Rosario" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <html>
   <style>
     * {font-family: "Rosario";
@@ -139,26 +140,13 @@ linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.8)),url(htt
   </div>
 
     <table id="allocationTable" style="background-color:white;">
-      <tr>
-        <th style="text-align:center;">Task / Probability</th>
-        <th style="text-align:center;">Alfredo Futterkist</th>
-        <th style="text-align:center;">frassd Futterkist</th>
-      </tr>
-      <tr>
-        <td style="text-align:center;">Intro</td>
-        <td>24</td>
-      </tr>
-      <tr>
-        <td style="text-align:center;">Conclu</td>
-        <td>23</td>
-        <td>1
-        </td>
-      </tr>
     </table>
     </div>
     <script>
 
-		let obj,rollCount=2,selectedUserIndex=-1;
+		let obj,rollCount=2,selectedUserIndex=-1,
+		uniqueURL = window.location.href.replace("https://etzopetdwpnamvd7r85bew-on.drv.tw/TechSmith/Javascript%20Source%20File/Task%20Allocation%20Tool/?dataURL=", "");
+		
         
         function setDiceRollCount(){
         	rollCount=parseInt(document.getElementById("rollCount").value);
@@ -250,7 +238,7 @@ linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.8)),url(htt
         xhttp.setRequestHeader("Content-Type", "application/json");
         let t = JSON.stringify({
           data: {
-            retrieveData: 1568034676354
+            retrieveData: uniqueURL
           }
         });
         console.log(t);
@@ -274,7 +262,7 @@ linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.8)),url(htt
 
         }
       }
-      setTimeout(retrieveData, 500);
+      setTimeout(retrieveData, 1000);
 
       function roll() {
       	if(selectedUserIndex<0||obj.users[selectedUserIndex].data.every(function(value){return value>0}))return;
@@ -324,7 +312,7 @@ linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.8)),url(htt
         let t = JSON.stringify({
           data: {
             updateData: true,
-            date: 1568034676354,
+            date: uniqueURL,
             name: obj.users[selectedUserIndex].name,
             content: arr,
             index: selectedUserIndex
@@ -337,9 +325,11 @@ linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.8)),url(htt
           let obj = JSON.parse(xhttp.responseText);
         };
     }
+    console.log(window.location.href);
 
     </script>
 
   </body>
-
+<a href="https://etzopetdwpnamvd7r85bew-on.drv.tw/TechSmith/Javascript%20Source%20File/Task%20Allocation%20Tool/taskallocationsystem.html"  style="position:absolute;right:2%;color:white;bottom:2%;text-decoration:none;font-size:calc(10px + 0.15vw);"><img src="https://cdn3.iconfinder.com/data/icons/ringtone-music-instruments/512/blue-round-settings-gear-engine-details-512.png" style="width:10%;position:absolute;left:-15%;bottom:1%;max-width:32px;">
+Generated from Task.Allocation.Tool@2019</a>
 </html>
