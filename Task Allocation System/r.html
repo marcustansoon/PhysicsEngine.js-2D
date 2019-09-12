@@ -1,13 +1,20 @@
 <!DOCTYPE html>
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Rosario" />
 <html>
   <style>
-    * {
-      font-size: calc(13px + 0.3vw);
+    * {font-family: "Rosario";
+      font-size: calc(13px + 0.2vw);
     }
-
+    body {
+      background-image:
+linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.8)),url(http://www.shukatsu-note.com/wp-content/uploads/2014/12/computer-564136_1280.jpg);
+      background-size: cover;
+      height: 100vh;
+      overflow:hidden;
+    }
     /* The container */
     .container {
-      display: block;
+      display: block; 
       position: relative;
       margin-bottom: 12px;
       cursor: pointer;
@@ -15,9 +22,8 @@
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
-      left: 45%;
+      left: 40%;
     }
-
     /* Hide the browser's default radio button */
     .container input {
       position: absolute;
@@ -28,22 +34,21 @@
     /* Create a custom radio button */
     .checkmark {
       position: absolute;
-      top: 0;
-      left: -15%;
-      height: 25px;
-      width: 25px;
-      background-color: #eee;
+      left: -25%;
+      height: 20px;
+      width: 20px;
+      background-color: #cfcfcf;
       border-radius: 50%;
     }
 
     /* On mouse-over, add a grey background color */
     .container:hover input~.checkmark {
-      background-color: #cce;
+      background-color: rgba(255, 208, 134,0.6);
     }
 
     /* When the radio button is checked, add a blue background */
     .container input:checked~.checkmark {
-      background-color: #2196F3;
+      background-color: #f7c040;
     }
 
     /* Create the indicator (the dot/circle - hidden when not checked) */
@@ -60,8 +65,8 @@
 
     /* Style the indicator (dot/circle) */
     .container .checkmark:after {
-      top: 9px;
-      left: 9px;
+      top: 6px;
+      left: 6px;
       width: 8px;
       height: 8px;
       border-radius: 50%;
@@ -73,10 +78,11 @@
       color: white;
       padding: 12px 28px;
       text-align: center;
+      border-radius:15%;
       text-decoration: none;
       display: inline-block;
-      font-size: calc(14px + 0.3vw);
-      margin: 4px 2px;
+      font-size: calc(14px + 0.2vw);
+      margin: 25px;
       cursor: pointer;
     }
 
@@ -85,281 +91,56 @@
       filter: alpha(opacity=40);
     }
 
-    #users,
-    #tasks {
-      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-      width: 70%;
+    #allocationTable{ 
+      width: 65%;
       position: relative;
       left: 50%;
       transform: translate(-50%);
       max-width: 600px;
     }
-
-    #users td,
-    th,
-    #tasks td,
-    th {
-      border: 1px solid #ddd;
+    #allocationTable td,th {
+      border: 0px solid #ddd;
       padding: 8px;
       background-color: #f5f5f5;
       overflow: hidden;
     }
 
-    #users tr:hover {
+    #allocationTable tr:hover {
       background-color: #ddd;
     }
-
-    #users th,
-    #tasks th {
+    #allocationTable th {
       padding-top: 12px;
       padding-bottom: 12px;
       text-align: left;
-      background-color: #4CAF50;
-      background: linear-gradient(#59cf5e, #50b554, #59cf5e);
-      color: white;
+      background: /*linear-gradient(#ffb866, #fa8b0a, #ffb866)*/;
+      color: black;
     }
-
-
-
-    main {
-      background: linear-gradient(#9c9c9c, #808080, #9c9c9c);
-
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background: url(http://www.shukatsu-note.com/wp-content/uploads/2014/12/computer-564136_1280.jpg) no-repeat;
-      background-size: cover;
-      height: 100vh;
-    }
-
-    .dice {
-      align-items: center;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(0rem, 0.5fr));
-      grid-template-rows: auto;
-      justify-items: center;
-      padding: 0rem;
-      perspective: 00px;
-    }
-
-    .die-list {
-      height: 4rem;
-      list-style-type: none;
-      position: relative;
-      transform-style: preserve-3d;
-      width: 4rem;
-    }
-
-    .even-roll {
-      transition: transform 2.5s ease-out;
-    }
-
-    .odd-roll {
-      transition: transform 2.25s ease-out;
-    }
-
-    .die-item {
-      background-color: #fefefe;
-      box-shadow: inset -0.35rem 0.35rem 0.75rem rgba(0, 0, 0, 0.3),
-        inset 0.5rem -0.25rem 0.5rem rgba(0, 0, 0, 0.15);
-      display: grid;
-      grid-template-areas: "one two three""four five six""seven eight nine";
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: repeat(3, 1fr);
-      height: 40%;
-      padding: 0rem;
-      position: absolute;
-      width: 28%;
-    }
-
-    .dot {
-      align-self: center;
-      background-color: #676767;
-      border-radius: 50%;
-      box-shadow: inset -0.15rem 0.15rem 0.25rem rgba(0, 0, 0, 0.5);
-      display: block;
-      height: .40rem;
-      justify-self: center;
-      width: 0.40rem;
-    }
-
-    .even-roll[data-roll="1"] {
-      transform: rotateX(360deg) rotateY(720deg) rotateZ(360deg);
-    }
-
-    .even-roll[data-roll="2"] {
-      transform: rotateX(450deg) rotateY(720deg) rotateZ(360deg);
-    }
-
-    .even-roll[data-roll="3"] {
-      transform: rotateX(360deg) rotateY(630deg) rotateZ(360deg);
-    }
-
-    .even-roll[data-roll="4"] {
-      transform: rotateX(360deg) rotateY(810deg) rotateZ(360deg);
-    }
-
-    .even-roll[data-roll="5"] {
-      transform: rotateX(270deg) rotateY(720deg) rotateZ(360deg);
-    }
-
-    .even-roll[data-roll="6"] {
-      transform: rotateX(360deg) rotateY(900deg) rotateZ(360deg);
-    }
-
-    .odd-roll[data-roll="1"] {
-      transform: rotateX(-360deg) rotateY(-720deg) rotateZ(-360deg);
-    }
-
-    .odd-roll[data-roll="2"] {
-      transform: rotateX(-270deg) rotateY(-720deg) rotateZ(-360deg);
-    }
-
-    .odd-roll[data-roll="3"] {
-      transform: rotateX(-360deg) rotateY(-810deg) rotateZ(-360deg);
-    }
-
-    .odd-roll[data-roll="4"] {
-      transform: rotateX(-360deg) rotateY(-630deg) rotateZ(-360deg);
-    }
-
-    .odd-roll[data-roll="5"] {
-      transform: rotateX(-450deg) rotateY(-720deg) rotateZ(-360deg);
-    }
-
-    .odd-roll[data-roll="6"] {
-      transform: rotateX(-360deg) rotateY(-900deg) rotateZ(-360deg);
-    }
-
-    [data-side="1"] {
-      transform: rotate3d(0, 0, 0, 90deg) translateZ(0.81rem);
-    }
-
-    [data-side="2"] {
-      transform: rotate3d(-1, 0, 0, 90deg) translateZ(0.81rem);
-    }
-
-    [data-side="3"] {
-      transform: rotate3d(0, 1, 0, 90deg) translateZ(0.81rem);
-    }
-
-    [data-side="4"] {
-      transform: rotate3d(0, -1, 0, 90deg) translateZ(0.81rem);
-    }
-
-    [data-side="5"] {
-      transform: rotate3d(1, 0, 0, 90deg) translateZ(0.81rem);
-    }
-
-    [data-side="6"] {
-      transform: rotate3d(1, 0, 0, 180deg) translateZ(0.81rem);
-    }
-
-    [data-side="1"] .dot:nth-of-type(1) {
-      grid-area: five;
-    }
-
-    [data-side="2"] .dot:nth-of-type(1) {
-      grid-area: one;
-    }
-
-    [data-side="2"] .dot:nth-of-type(2) {
-      grid-area: nine;
-    }
-
-    [data-side="3"] .dot:nth-of-type(1) {
-      grid-area: one;
-    }
-
-    [data-side="3"] .dot:nth-of-type(2) {
-      grid-area: five;
-    }
-
-    [data-side="3"] .dot:nth-of-type(3) {
-      grid-area: nine;
-    }
-
-    [data-side="4"] .dot:nth-of-type(1) {
-      grid-area: one;
-    }
-
-    [data-side="4"] .dot:nth-of-type(2) {
-      grid-area: three;
-    }
-
-    [data-side="4"] .dot:nth-of-type(3) {
-      grid-area: seven;
-    }
-
-    [data-side="4"] .dot:nth-of-type(4) {
-      grid-area: nine;
-    }
-
-    [data-side="5"] .dot:nth-of-type(1) {
-      grid-area: one;
-    }
-
-    [data-side="5"] .dot:nth-of-type(2) {
-      grid-area: three;
-    }
-
-    [data-side="5"] .dot:nth-of-type(3) {
-      grid-area: five;
-    }
-
-    [data-side="5"] .dot:nth-of-type(4) {
-      grid-area: seven;
-    }
-
-    [data-side="5"] .dot:nth-of-type(5) {
-      grid-area: nine;
-    }
-
-    [data-side="6"] .dot:nth-of-type(1) {
-      grid-area: one;
-    }
-
-    [data-side="6"] .dot:nth-of-type(2) {
-      grid-area: three;
-    }
-
-    [data-side="6"] .dot:nth-of-type(3) {
-      grid-area: four;
-    }
-
-    [data-side="6"] .dot:nth-of-type(4) {
-      grid-area: six;
-    }
-
-    [data-side="6"] .dot:nth-of-type(5) {
-      grid-area: seven;
-    }
-
-    [data-side="6"] .dot:nth-of-type(6) {
-      grid-area: five;
-    }
-
-    [data-side="6"] .dot:nth-of-type(6) {
-      grid-area: nine;
-    }
-
+    
   </style>
 
-  <div id="nameContent">
+	<body><div style="position:relative;top:40%;transform:translate(0,-50%);">
+
+  <div id="nameContent" style="background-color:white;width:55%;position:relative;left:50%;transform:translate(-50%);padding:1%;max-width:240px;border-radius:15%;background: linear-gradient(#f5f5f5, #dbd9d9, #f5f5f5);border: 2px solid #ddd;padding:8px;"></div>
+  <br>
+  
+  <div style="background-color:rgba(255,255,255,0.85);width:30%;position:relative;left:50%;transform:translate(-50%);padding:1%;text-align:center;border-radius:15%;max-width:230px;">
+  Dice Roll Count
+  <select id="rollCount" name="rollCount" onchange="setDiceRollCount();">
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="7">7</option>
+  </select>
   </div>
+
   <div style="text-align:center;">
     <button class="button" style="background:linear-gradient(#ffa200, #f59c02, #ffa200);" onclick="roll();" id="rollButton" disabled>Roll</button>
   </div>
 
-
-  <body>
-
-    <h2>Using the XMLHttpRequest Object</h2>
-
-    <table id="users" style="background-color:white;">
+    <table id="allocationTable" style="background-color:white;">
       <tr>
-        <th style="text-align:center;">Task / Name</th>
+        <th style="text-align:center;">Task / Probability</th>
         <th style="text-align:center;">Alfredo Futterkist</th>
         <th style="text-align:center;">frassd Futterkist</th>
       </tr>
@@ -370,153 +151,80 @@
       <tr>
         <td style="text-align:center;">Conclu</td>
         <td>23</td>
-        <td>
-          <main>
-            <div class="dice">
-              <ol class="die-list even-roll" data-roll="1" id="die-1" style="margin-bottom:-20px;">
-                <li class="die-item" data-side="1">
-                  <span class="dot"></span>
-                </li>
-                <li class="die-item" data-side="2">
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                </li>
-                <li class="die-item" data-side="3">
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                </li>
-                <li class="die-item" data-side="4">
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                </li>
-                <li class="die-item" data-side="5">
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                </li>
-                <li class="die-item" data-side="6">
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                </li>
-              </ol>
-              <ol class="die-list odd-roll" data-roll="1" id="die-2" style="margin-bottom:-20px;">
-                <li class="die-item" data-side="1">
-                  <span class="dot"></span>
-                </li>
-                <li class="die-item" data-side="2">
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                </li>
-                <li class="die-item" data-side="3">
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                </li>
-                <li class="die-item" data-side="4">
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                </li>
-                <li class="die-item" data-side="5">
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                </li>
-                <li class="die-item" data-side="6">
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                  <span class="dot"></span>
-                </li>
-              </ol>
-            </div>
-          </main>
+        <td>1
         </td>
       </tr>
     </table>
+    </div>
     <script>
-      function rollDice() {
-        const dice = [...document.querySelectorAll(".die-list")];
-        dice.forEach(die => {
-          toggleClasses(die);
-          die.dataset.roll = getRandomNumber(1, 6);
-          console.log(die.dataset.roll);
-        });
-      }
 
-      function toggleClasses(die) {
-        die.classList.toggle("even-roll");
-        die.classList.toggle("odd-roll");
-      }
-
-      function getRandomNumber(min, max) {
-        min = Math.ceil(min);
-        max = Math.floor(max);
-
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-      }
-
-
-
-
-
-
-      function generateTaskTable() {
-        let string = "",
-          MyTable = document.getElementById("users"),
-          count = 0;
-        MyTable.innerHTML = "";
-        string += '<tr><th style="text-align:center;">Task / Name</th>';
-        retrievedData.users.forEach(function(element, index) {
-          string += '<th style="text-align:center;">' + element.name + '</th>';
-          count++;
-        });
-        string += "</tr>";
-        MyTable.innerHTML += string;
-
-        // insert new row. 
-
-        for (let row = 0; row < count; row++) {
-          let NewRow = MyTable.insertRow();
-
-          for (let col = 0; col < count + 1; col++) {
-            let newCell = NewRow.insertCell(col);
-            if (!col)
-              newCell.innerHTML = retrievedData.tasks[row];
-            else if (checkedNameIndex == col - 1) {
-              newCell.innerHTML = '<main> <div class="dice"> <ol class="die-list even-roll" data-roll="1" id="die-1" style="margin-bottom:-30px;"> <li class="die-item" data-side="1"> <span class="dot"></span> </li> <li class="die-item" data-side="2"> <span class="dot"></span> <span class="dot"></span> </li> <li class="die-item" data-side="3"> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> </li> <li class="die-item" data-side="4"> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> </li> <li class="die-item" data-side="5"> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> </li> <li class="die-item" data-side="6"> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> </li> </ol> <ol style="margin-bottom:-30px;" class="die-list odd-roll" data-roll="1" id="die-2"> <li class="die-item" data-side="1"> <span class="dot"></span> </li> <li class="die-item" data-side="2"> <span class="dot"></span> <span class="dot"></span> </li> <li class="die-item" data-side="3"> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> </li> <li class="die-item" data-side="4"> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> </li> <li class="die-item" data-side="5"> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> </li> <li class="die-item" data-side="6"> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> </li> </ol> </div><ol style="margin-bottom:-20px;" class="die-list even-roll" data-roll="1" id="die-1"> <li class="die-item" data-side="1"> <span class="dot"></span> </li> <li class="die-item" data-side="2"> <span class="dot"></span> <span class="dot"></span> </li> <li class="die-item" data-side="3"> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> </li> <li class="die-item" data-side="4"> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> </li> <li class="die-item" data-side="5"> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> </li> <li class="die-item" data-side="6"> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> <span class="dot"></span> </li> </ol> </main>';
-            } else if (retrievedData.users[row].data[row]) {
-              newCell.innerHTML = retrievedData.users[row].data[row];
-            }
-          }
-
+		let obj,rollCount=2,selectedUserIndex=-1;
+        
+        function setDiceRollCount(){
+        	rollCount=parseInt(document.getElementById("rollCount").value);
+        	console.log(rollCount);
         }
-
+        
+      function generateTaskTable() {
+			let string='<tr><th style="text-align:center;">Task / Probability</th>',
+            table=document.getElementById("allocationTable");
+            
+            obj.users.forEach(function(user,index){
+            	string+='<th style="text-align:center;">'+user.name+'</th>';	
+                console.log(user.name);
+            });
+            string+='</tr>';	
+            table.innerHTML=string;
+            
+            for(let row=0;row<obj.tasks.length;row++){
+            	let newRow = table.insertRow(row+1);
+            	for(let col=0;col<obj.users.length+1;col++){
+                	if (col===0){
+                    	newRow.insertCell(col).innerHTML=obj.tasks[row];
+                    }else{                    	
+                		newRow.insertCell(col).innerHTML=obj.users[col-1].data[row]||'0';
+                    }
+                }
+            }
+            document.querySelectorAll("th")[0].style="background-color:yellow;";
+            assignTasks();
       }
-
-
-
-
-
-      let checkedNameIndex = 99,
-        retrievedData;
-
+	
+    function shuffle(a) {
+      for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+	}
+    function assignTasks(){
+    	let colours=["background-color:rgba(0, 235, 4,0.4);","background-color:rgba(244, 120, 255,0.4);","background-color:rgba(255, 200, 0,0.4);","background-color:rgba(0, 255, 242,0.4);","background-color:rgba(209, 84, 144,0.4);","background-color:rgba(209, 138, 84,0.4);","background-color:rgba(82, 3, 255,0.4);","background-color:rgba(184, 0, 141,0.4);"],
+        allocatedNames=new Set();
+        
+    	shuffle(colours);
+        
+    	obj.tasks.forEach(function(task,index){
+        	let highestRoll=-1,indexWithHighestRoll=0;
+        	for(let userIndex=0;userIndex<obj.users.length;userIndex++){
+            	obj.users[userIndex].data[index]=obj.users[userIndex].data[index]||0;
+            	if(!allocatedNames.has(obj.users[userIndex].name) && obj.users[userIndex].data[index]>highestRoll){
+                	highestRoll=obj.users[userIndex].data[index];
+                    indexWithHighestRoll=userIndex;
+                    console.log(userIndex);
+                } 
+            }
+            document.querySelectorAll("th")[indexWithHighestRoll+1].style=colours[colours.length-1];
+            document.querySelectorAll("td")[(obj.users.length+1)*index].style=colours[colours.length-1];
+            document.querySelectorAll("td")[(obj.users.length+1)*index+indexWithHighestRoll+1].style=colours[colours.length-1];
+            colours.pop();
+            allocatedNames.add(obj.users[indexWithHighestRoll].name);
+        });
+    }
+ 
       function onNameSelect(index) {
-        console.log(index);
-        document.getElementById("rollButton").disabled = false;
-        checkedNameIndex = index;
+          console.log(index);
+          document.getElementById("rollButton").disabled = false;
+          selectedUserIndex=index;
       }
       (function() {
         var cors_api_host = 'cors-anywhere.herokuapp.com';
@@ -548,15 +256,14 @@
         console.log(t);
         xhttp.send(t);
         xhttp.onload = xhttp.onerror = function() {
-          console.log(JSON.parse(xhttp.responseText));
-
-          let obj = JSON.parse(xhttp.responseText);
-          retrievedData = obj;
+          JSON.parse(xhttp.responseText);
+          obj=JSON.parse(xhttp.responseText);
+      
+          console.log(obj);
           for (let temp = 0; temp < obj.users.length; temp++) {
             let disabledAttribute = "",
               disabledStyle = '';
             if (obj.users[temp].data.length) {
-              console.log('a');
               disabledAttribute = "disabled";
               disabledStyle = 'style="opacity: 0.4; filter: alpha(opacity=40);"'
             }
@@ -570,31 +277,66 @@
       setTimeout(retrieveData, 500);
 
       function roll() {
-        generateTaskTable();
-        setTimeout(function() {
-          rollDice();
-        }, 500);
+      	if(selectedUserIndex<0||obj.users[selectedUserIndex].data.every(function(value){return value>0}))return;
+        
         document.getElementById("rollButton").disabled = true;
-        let xhttp = new XMLHttpRequest();
+        document.querySelectorAll("label")[selectedUserIndex].style='opacity: 0.4; filter: alpha(opacity=40);';
+        document.querySelectorAll("input")[selectedUserIndex].disabled=true;
+        
+        let total=[],countdown=rollCount;
+        let repeat=setInterval(function(){
+          for(let temp=0;temp<obj.tasks.length;temp++){	
+          	let temp2=Math.floor(Math.random() * 100);
+            
+            if(!total[temp])total.push(0);
+            temp2>total[total.length-1]?temp2+=(Math.random()*10)>>0:temp2-=(Math.random()*8)>>0;//add variance effect
+            if(temp2<0)temp2=(Math.random()*8)>>0;
+            if(temp2>100)temp2=90+(Math.random()*8)>>0;
+          	total[temp]+=temp2;
+            
+            document.querySelectorAll("td")[(selectedUserIndex+1)+temp*(obj.users.length+1)].innerHTML="<span style='color:rgba("+Math.floor(Math.random() * 255)+","+Math.floor(Math.random() * 255)+","+Math.floor(Math.random() * 255)+",1);'>"+temp2+"</span>";
+          }
+          countdown--;
+          if(!countdown){
+          	clearInterval(repeat);
+            setTimeout(function(){	
+            	let arr=[];
+            	for(let index=0;index<total.length;index++){
+                  total[index]=(total[index]/rollCount)<<0;
+                  arr.push(total[index]);
+                  //document.querySelectorAll("td")[(selectedUserIndex+1)+index*(obj.users.length+1)].innerHTML=total[index];
+                  obj.users[selectedUserIndex].data[index]=total[index];
+                  console.log(obj.users[selectedUserIndex]);
+              }
+              generateTaskTable();
+              sendData(arr);
+            },500);
+          }
+		},500);
+        
+       
+
+      }
+   	function sendData(arr){//console.log(arr);
+    	let xhttp = new XMLHttpRequest();
         xhttp.open("post", "https://task-distribution.glitch.me", true);
         xhttp.setRequestHeader("Content-Type", "application/json");
         let t = JSON.stringify({
           data: {
             updateData: true,
             date: 1568034676354,
-            name: retrievedData.users[checkedNameIndex].name,
-            content: [1, 2, 3, 4],
-            index: checkedNameIndex
+            name: obj.users[selectedUserIndex].name,
+            content: arr,
+            index: selectedUserIndex
           }
         });
         console.log(t);
-        //xhttp.send(t);
+        xhttp.send(t);
         xhttp.onload = xhttp.onerror = function() {
           console.log(JSON.parse(xhttp.responseText));
           let obj = JSON.parse(xhttp.responseText);
         };
-
-      }
+    }
 
     </script>
 
