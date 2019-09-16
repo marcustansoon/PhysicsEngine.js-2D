@@ -4,14 +4,14 @@
 <html>
   <style>
     * {font-family: "Rosario";
-      font-size: calc(13px + 0.2vw);
+      font-size: calc(12px + 0.13vw);
     }
     body {
       background-image:
-linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.8)),url(http://www.shukatsu-note.com/wp-content/uploads/2014/12/computer-564136_1280.jpg);
+linear-gradient(to bottom, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0.8)),url(https://steamuserimages-a.akamaihd.net/ugc/907918203137649233/67A6E59365BDE693FEEC71FFA7C14370F301D5BE/);
       background-size: cover;
       height: 100vh;
-      overflow:hidden;
+      overflow:hidden; 
     }
     /* The container */
     .container {
@@ -100,31 +100,58 @@ linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.8)),url(htt
       max-width: 600px;
     }
     #allocationTable td,th {
-      border: 0px solid #ddd;
+      border: 0px groove black;
       padding: 8px;
       background-color: #f5f5f5;
       overflow: hidden;
+      text-align:center;
+      
     }
 
     #allocationTable tr:hover {
-      background-color: #ddd;
+      background-color: rgba(0,0,0,0.05);
     }
     #allocationTable th {
-      padding-top: 12px;
-      padding-bottom: 12px;
-      text-align: left;
+      padding-top: 8px;
+      padding-bottom: 8px;
       background: /*linear-gradient(#ffb866, #fa8b0a, #ffb866)*/;
       color: black;
     }
     
-  </style>
+    #customScrollStyle::-webkit-scrollbar-track
+    {
+        -webkit-box-shadow: inset 0 0 2px rgba(0,0,0,0.3);
+        background-color: #F5F5F5;
+    }
 
+    #customScrollStyle::-webkit-scrollbar
+    {
+        width: 4px;
+        height:4px;
+        background-color: #F5F5F5;
+    }
+
+    #customScrollStyle::-webkit-scrollbar-thumb
+    {
+        background-color: #000000;
+    }
+	@media screen and (max-width:500px) {
+    #allocationTable {
+        width: 100%;
+        left:0%;
+        transform:translate(0%);
+        
+      }
+ 
+    }
+  </style>
+<title>Task Allocation System</title>
 	<body><div style="position:relative;top:40%;transform:translate(0,-50%);">
 
-  <div id="nameContent" style="background-color:white;width:55%;position:relative;left:50%;transform:translate(-50%);padding:1%;max-width:240px;border-radius:15%;background: linear-gradient(#f5f5f5, #dbd9d9, #f5f5f5);border: 2px solid #ddd;padding:8px;"></div>
+  <div id="nameContent" style="background-color:white;width:55%;position:relative;left:50%;transform:translate(-50%);padding:1%;max-width:240px;border-radius:15%;background: linear-gradient(#dbdbdb, #e3e3e3, #dbdbdb);border: 2px solid #ddd;padding:8px;border: 3px groove grey;"></div>
   <br>
   
-  <div style="background-color:rgba(255,255,255,0.85);width:30%;position:relative;left:50%;transform:translate(-50%);padding:1%;text-align:center;border-radius:15%;max-width:230px;">
+  <div style="background-color:rgba(255,255,255,0.85);width:30%;position:relative;left:50%;transform:translate(-50%);padding:1%;text-align:center;border-radius:15%;max-width:230px;border: 3px groove grey;">
   Dice Roll Count
   <select id="rollCount" name="rollCount" onchange="setDiceRollCount();">
       <option value="2">2</option>
@@ -138,9 +165,10 @@ linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.8)),url(htt
   <div style="text-align:center;">
     <button class="button" style="background:linear-gradient(#ffa200, #f59c02, #ffa200);" onclick="roll();" id="rollButton" disabled>Roll</button>
   </div>
-
-    <table id="allocationTable" style="background-color:white;">
+	<div id="customScrollStyle" style="overflow:auto;">
+    <table id="allocationTable" style="background-color:#e0e0e0;">
     </table>
+    </div>
     </div>
     <script>
 
@@ -174,7 +202,7 @@ linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.8)),url(htt
                     }
                 }
             }
-            document.querySelectorAll("th")[0].style="background-color:yellow;";
+            document.querySelectorAll("th")[0].style="background-color:rgba(255, 255, 0,0.8);";
             assignTasks();
       }
 	
@@ -186,7 +214,7 @@ linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.8)),url(htt
       return a;
 	}
     function assignTasks(){
-    	let colours=["background-color:rgba(0, 235, 4,0.4);","background-color:rgba(244, 120, 255,0.4);","background-color:rgba(255, 200, 0,0.4);","background-color:rgba(0, 255, 242,0.4);","background-color:rgba(209, 84, 144,0.4);","background-color:rgba(209, 138, 84,0.4);","background-color:rgba(82, 3, 255,0.4);","background-color:rgba(184, 0, 141,0.4);"],
+    	let colours=["background:linear-gradient(rgba(0, 235, 4,0.4), rgba(0, 235, 4,0.25),rgba(0, 235, 4,0.4));","background:linear-gradient(rgba(244, 120, 255,0.4), rgba(244, 120, 255,0.2),rgba(244, 120, 255,0.4));","background:linear-gradient(rgba(255, 200, 0,0.4), rgba(255, 200, 0,0.25),rgba(255, 200, 0,0.4));","background:linear-gradient(rgba(0, 255, 242,0.4), rgba(0, 255, 242,0.25),rgba(0, 255, 242,0.4));","background:linear-gradient(rgba(209, 84, 144,0.4), rgba(209, 84, 144,0.25),rgba(209, 84, 144,0.4));","background:linear-gradient(rgba(209, 138, 84,0.4), rgba(209, 138, 84,0.25),rgba(209, 138, 84,0.4));","background:linear-gradient(rgba(82, 3, 255,0.4), rgba(82, 3, 255,0.25),rgba(82, 3, 255,0.4));","background:linear-gradient(rgba(184, 0, 141,0.4), rgba(184, 0, 141,0.25),rgba(184, 0, 141,0.4));","background:linear-gradient(rgba(119, 96, 209,0.4), rgba(119, 96, 209,0.25),rgba(119, 96, 209,0.4));","background:linear-gradient(rgba(148, 212, 151,0.4), rgba(148, 212, 151,0.25),rgba(148, 212, 151,0.4));","background:linear-gradient(rgba(7, 173, 15,0.4), rgba(7, 173, 15,0.25),rgba(7, 173, 15,0.4));","background:linear-gradient(rgba(135, 193, 255,0.4), rgba(135, 193, 255,0.25),rgba(135, 193, 255,0.4));","background:linear-gradient(rgba(109, 131, 156,0.4), rgba(109, 131, 156,0.25),rgba(109, 131, 156,0.4));","background:linear-gradient(rgba(230, 219, 99,0.4), rgba(230, 219, 99,0.25),rgba(230, 219, 99,0.4));"],
         allocatedNames=new Set();
         
     	shuffle(colours);
@@ -283,6 +311,7 @@ linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.8)),url(htt
           	total[temp]+=temp2;
             
             document.querySelectorAll("td")[(selectedUserIndex+1)+temp*(obj.users.length+1)].innerHTML="<span style='color:rgba("+Math.floor(Math.random() * 255)+","+Math.floor(Math.random() * 255)+","+Math.floor(Math.random() * 255)+",1);'>"+temp2+"</span>";
+             
           }
           countdown--;
           if(!countdown){
@@ -331,5 +360,5 @@ linear-gradient(to bottom, rgba(255, 255, 255, 0.3), rgba(0, 0, 0, 0.8)),url(htt
 
   </body>
 <a href="https://etzopetdwpnamvd7r85bew-on.drv.tw/TechSmith/Javascript%20Source%20File/Task%20Allocation%20Tool/taskallocationsystem.html"  style="position:absolute;right:2%;color:white;bottom:2%;text-decoration:none;font-size:calc(10px + 0.15vw);"><img src="https://cdn3.iconfinder.com/data/icons/ringtone-music-instruments/512/blue-round-settings-gear-engine-details-512.png" style="width:10%;position:absolute;left:-15%;bottom:1%;max-width:32px;">
-Generated from Task.Allocation.Tool@2019</a>
+Generated from T.A.S @ 2019</a>
 </html>
