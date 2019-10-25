@@ -26,7 +26,7 @@
 <script>
 //&callback=initMap()
  window.onload=function(){
-     socket.emit("mapBindings",{loadTime:Date.now()});//for map-end user binding purposes
+     socket.emit("mapBindings",{loadTime:top.location.search.replace("?data=","")});//for map-end user binding purposes
 }
  let socket = io("https://drone-end-user.glitch.me/");
  socket.on("mapBindings",function(data){
