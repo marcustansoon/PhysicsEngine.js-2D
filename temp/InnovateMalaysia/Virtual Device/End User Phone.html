@@ -1,0 +1,60 @@
+<head>
+  <title>End User Phone (Held together with Drone Remote Controller)</title>
+</head>
+
+<h3 style="text-align:center;">
+End User Phone (Held together with Drone Remote Controller)
+</h3>
+
+checkDevice(deviceID,passcode,partitionKey)
+<br>
+connectToDevice(deviceID,passcode,partitionKey)
+<br>
+activateSensorData(measurementType) //'air' or 'water'
+<br>
+deactivateSensorData()
+<br>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script type="text/javascript">
+	let socket = io('https://drone-end-user.glitch.me/'),
+    partitionKey,
+    WebRTCKey,
+    measurementType;
+    
+    
+    function checkDevice(deviceID,passcode,partitionKey){
+    	socket.emit('checkDevice',{passcode:passcode+'',deviceID:deviceID+'',partitionKey:partitionKey});
+   	}
+    
+    socket.on('checkDeviceStatus',function(data){
+    	console.log(data);
+    });
+    
+    function connectToDevice(deviceID,passcode,_partitionKey){
+    	socket.emit('connectToDevice',{passcode:passcode+'',deviceID:deviceID+'',partitionKey:_partitionKey});
+        partitionKey=_partitionKey+'';
+   	}
+    
+    socket.on('connectToDeviceStatus',function(data){
+    	console.log(data);
+        WebRTCKey=data.WebRTCKey;
+    });
+
+	function activateSensorData(_measurementType){
+    	socket.emit('activateSensorData',{measurementType:_measurementType});
+        measurementType=_measurementType;
+    }
+    
+    socket.on('sensorData',function(data){
+    	console.log(data);
+    });
+
+    function deactivateSensorData(){
+    	socket.emit('deactivateSensorData',{measurementType:measurementType});
+    }
+    
+    
+    
+    
+</script>
