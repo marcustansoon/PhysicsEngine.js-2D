@@ -1,0 +1,100 @@
+<head>
+  <title>Drone Phone (OTG to Microcontroller)</title>
+</head>
+
+<h3 style="text-align:center;">
+  Drone Phone (OTG to Microcontroller)
+</h3>
+
+registerDeviceID(passcode,deviceID)
+<br>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+<script type="text/javascript">
+  let socket = io('https://drone-end-user.glitch.me/'),
+    partitionKey,
+    WebRTCKey,
+    measurementType,
+    deviceID,
+    repeat,
+    lat = [1.532197, 1.532105, 1.531751, 1.531413, 1.530938, 1.53072, 1.531321, 1.531487],
+    lng = [110.3568138, 110.3571208, 110.3574778, 110.3571078, 110.3568878, 110.3576018, 110.3580528, 110.3586988],
+    count = 0;
+
+
+  function registerDeviceID(passcode, _deviceID) {
+    socket.emit('registerDeviceID', {
+      passcode: passcode + '',
+      deviceID: _deviceID + ''
+    });
+    deviceID = _deviceID;
+  }
+
+  socket.on('registerDeviceIDStatus', function(data) {
+    console.log(data);
+  });
+
+  socket.on('setPartitionKey', function(data) {
+    console.log(data);
+    partitionKey = data.partitionKey+'';
+    WebRTCKey = data.WebRTCKey;
+  });
+
+  socket.on('activateSensorData', function(data) {
+    console.log(data);
+    measurementType = data.measurementType;
+
+    //one time package send
+    socket.emit('initiateSensorData', {
+      deviceID: deviceID,
+      partitionKey: partitionKey,
+      measurementType: measurementType,
+      date: Date.now(),
+      data: [],
+      lat: lat[count],
+      lng: lng[count],
+      alt: 0
+
+    });
+    count++;
+  });
+
+  socket.on('initiateSensorData', function(data) {
+    //loop
+    function addZero(i) {
+      if (i < 10) {
+        i = "0" + i;
+      }
+      return i;
+    }
+    repeat = setInterval(function() {
+      let d = new Date();
+      d = addZero(d.getHours()) + ":" + addZero(d.getMinutes()) + ":" + addZero(d.getSeconds()); //convert date to string
+      socket.emit('sensorData', {
+        data: {
+          lng: lat[count],
+          lat: lng[count],
+          alt: 0,
+          date: d,
+          turbidity: 12,
+          EC: 23
+        }
+      });
+      count++;
+      if (count === lat.length) {
+        socket.emit('endSensorData');
+        count = 0; //reset
+        clearInterval(repeat);
+        console.log('endSensorData');
+      }
+    }, 5000);
+  });
+
+  socket.on('deactivateSensorData', function(data) {
+    console.log(data);
+    clearInterval(repeat);
+    socket.emit('endSensorData');
+    console.log('deactivateSensorData');
+  });
+
+</script>
