@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css?family=Barlow" rel="stylesheet">
+<html>
+
+  <head>
+    <title>End-User Water Result</title>
+    <style>
+      table,
+      td,
+      th {
+        border: 1px solid black;
+        text-align: center;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      th {
+        padding-top: 6px;
+        padding-bottom: 6px;
+        text-align: left;
+        background-color: rgba(84, 110, 174, 1);
+        color: white;
+        text-align: center;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f2f2f2;
+      }
+
+      .button1 {
+        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        background-color: rgba(49, 154, 210, 1);
+        /* Green */
+        border: none;
+        color: white;
+        padding: 5px 16px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        margin: 1px 2px;
+        cursor: pointer;
+        -webkit-transition-duration: 0.4s;
+        /* Safari */
+        transition-duration: 0.4s;
+      }
+
+      * {
+        font-family: Barlow;
+        overflow-x: hidden;
+        margin: 2%;
+      }
+
+      .table {
+        left: 3%;
+        position: absolute;
+        width: 90%;
+        -webkit-transition: 1.5s ease-in-out;
+        transition: 1.5s ease-in-out;
+        
+      }
+
+      .chart {
+        left: 105%;
+        width: 90%;
+        position: absolute;
+        -webkit-transition: 1.5s ease-in-out;
+        transition: 1.5s ease-in-out;
+      }
+
+      .scrollStyle::-webkit-scrollbar-track {
+        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+        background-color: #F5F5F5;
+        border-radius: 10px;
+      }
+
+      .scrollStyle::-webkit-scrollbar {
+        width: 10px;
+        background-color: #F5F5F5;
+      }
+
+      .scrollStyle::-webkit-scrollbar-thumb {
+        border-radius: 10px;
+        background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.44, rgb(122, 153, 217)), color-stop(0.72, rgb(73, 125, 189)), color-stop(0.86, rgb(28, 58, 148)));
+      }
+
+    </style>
+  </head>
+  <img src="https://i.imgur.com/yEaYZDS.jpg" style="width:100%;user-drag: none; user-select: none; -moz-user-select: none; -webkit-user-drag: none; -webkit-user-select: none; -ms-user-select: none;position:relative;">
+  <br><br>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <table id="table" class="table" hidden>
+    <tr>
+      <th>No</th>
+      <th>Device IDs</th>
+      <th>Date Modified</th>
+      <th></th>
+    </tr>
+	<tr> 
+	<td></td> 
+	<td></td> 
+	<td></td> 
+	<td><button class="button1">>></button></td> 
+	</tr>
+  </table>
+  <div class="chart" id="chart" hidden>
+    <img src="https://freeiconshop.com/wp-content/uploads/edd/cross-flat.png" style="width:8%;position:absolute;right:0%;max-width:30px;" onclick="backButton();">
+    <canvas id="turbidityChart"></canvas>
+    <canvas id="ECChart"></canvas>
+  </div>
+
+  <body style="padding:3%;" class="scrollStyle">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+    <script>
+      console.log(location.href);
+	//window.addEventListener('load', function() {
+      //setTimeout(function(){document.getElementById('table').innerHTML+='<tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr><tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr><tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr><tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr>';},50);
+      //setTimeout(function(){document.getElementById('table').innerHTML='<tr> <th>No</th> <th>Device IDs</th> <th>Date Modified</th> <th></th> </tr><tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr>';},100);
+	   // });
+		    
+	let isHome=true;
+	 history.pushState(null, null, window.location.href);
+	 window.addEventListener('popstate', function () {
+    	 	if(isHome) window.location.replace("http://www.return.com");
+		else {
+			history.pushState(null, null, window.location.href);
+			backButton();
+		}
+	 });
+	    
+      let socket = io("https://drone-end-user.glitch.me/"), //connect to server
+        partitionKey = location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/waterResultv1.html?partitionKey=","");//get partitionkey by url
+
+      socket.on("sensorData", function(data) {
+        //xlabels.push(data.EC);
+        //ylabels.push(data.date);
+        //chart.update();
+      });
+
+
+      let ctx_turbidityChart = document.getElementById('turbidityChart').getContext('2d'),
+        ctx_ECChart = document.getElementById('ECChart').getContext('2d'),
+        xlabels_turbidity = [],
+        xlabels_EC = [],
+        ylabels = [],
+        table = document.getElementById('table');
+
+      let turbidityChart = new Chart(ctx_turbidityChart, {
+          // The type of chart we want to create
+          type: 'line',
+          // The data for our dataset
+          data: {
+            labels: ylabels,
+            datasets: [{
+              label: 'Turbidity (NTU over time)',
+              backgroundColor: 'rgba(255, 255, 255,0)',
+              borderColor: 'rgba(26,206,197,1)',
+              data: xlabels_turbidity
+
+            }]
+          },
+          // Configuration options go here
+          options: {}
+        }),
+        ECChart = new Chart(ctx_ECChart, {
+          // The type of chart we want to create
+          type: 'line',
+          // The data for our dataset
+          data: {
+            labels: ylabels,
+            datasets: [{
+              label: 'Electrical Conductivity (us/cm over time)',
+              backgroundColor: 'rgba(255, 255, 255,0)',
+              borderColor: 'rgba(38, 98, 193,1)',
+              data: xlabels_EC
+
+            }]
+          },
+          // Configuration options go here
+          options: {}
+        });
+      socket.on("connect", function() { //return;
+	      setTimeout(function(){
+        socket.emit("getRecords", {
+          partitionKey: partitionKey,
+          measurementType: "water"
+        });
+	      },250);
+      });
+      socket.on("getRecords", function(data) {
+        console.log(JSON.stringify(data));
+        string = "";
+        string = "<tr> <th>No</th> <th>Device IDs</th> <th>Date Modified</th><th></th> </tr>";
+        for (let loop = 0; loop < data.length; loop++) {
+          let temp = loop + 1;
+          string += "<tr><td>" + temp + "</td>";
+          string += "<td>" + data[loop].deviceID + "</td>";
+          let d = new Date(data[loop].date); //create Date obj from the old records
+		let debugMonth=d.getMonth()+1;
+          string += "<td>" + d.getDate() + "/" + debugMonth + "/" + d.getFullYear() + " " + addZero(d.getHours()) + ":" + addZero(d.getMinutes()) + "</td><td>";
+          string += "<button class='button1' onclick='openGraph(" + JSON.stringify(data[loop].data) + ");'>>></button></td></tr>";
+          table.innerHTML = string;
+        }
+      });
+
+      function addZero(i) {
+        if (i < 10) {
+          i = "0" + i;
+        }
+        return i;
+      }
+      let isSwitchingScene = false;
+	 setTimeout(backButton,500);//init
+	    
+      function backButton() {//show table but hide chart diagram
+        if (isSwitchingScene) return;
+        isSwitchingScene = true;isHome=true;
+        document.getElementById("chart").style.left = "105%";
+        document.getElementById("table").hidden=false;
+        document.getElementById("table").style.left = "-105%";
+        setTimeout(function(){
+          document.getElementById("table").style.left="3%";
+        },50);
+        setTimeout(function(){
+          isSwitchingScene=false;
+		      document.getElementById("chart").hidden=true;
+        },1500);
+      }
+
+      function openGraph(data) {
+        if (isSwitchingScene) return;
+        isSwitchingScene = true;isHome=false;
+        console.log(data);
+        xlabels_EC.length = 0;
+        xlabels_turbidity.length = 0;
+        ylabels.length = 0;
+        for (let loop = 0; loop < data.length; loop++) {
+          xlabels_EC.push(data[loop].EC);
+          xlabels_turbidity.push(data[loop].turbidity);
+          ylabels.push(data[loop].date);
+        }
+        turbidityChart.update();
+        ECChart.update();
+        document.getElementById("chart").hidden=false;
+		    document.getElementById("chart").style.left="105%";
+        setTimeout(function(){
+            document.getElementById("chart").style.left="3%";
+        },50);
+        document.getElementById("table").style.left="-100%";
+        setTimeout(function(){
+            isSwitchingScene=false;
+		        document.getElementById("table").hidden=true;
+         },1500);
+      }
+
+    </script>
+
+  </body>
+
+</html>
