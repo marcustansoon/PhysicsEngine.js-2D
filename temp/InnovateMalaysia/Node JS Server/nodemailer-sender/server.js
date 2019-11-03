@@ -1,10 +1,5 @@
-let transporter = require('nodemailer').createTransport({
-    service: "Gmail",
-    auth: {
-      user: "sarawakdragonfly@gmail.com",
-      pass: "12345678Abc"
-    }
-  }),
+let nodemailer = require("nodemailer"),
+  smtpTransport = require("nodemailer-smtp-transport"),
   app = require("http")
     .createServer(function(req, res) {
       if (req.url.includes("/views/activate")) {
@@ -40,8 +35,28 @@ let transporter = require('nodemailer').createTransport({
 
 function sendMail(obj) {
   //send mail to a specified user
-  transporter.sendMail(obj, function (error, info) {
-    console.log(error);
+
+  let transporter = nodemailer.createTransport(
+    smtpTransport({
+      service: "gmail",
+      host: 'smtp.gmail.com',
+      port: 25,
+      requireTLS: true,
+      tls: { ciphers: "SSLv3" },
+      secureConnection: false,
+      auth: {
+        user: "marcustansoonqwe@gmail.com", // my mail
+        pass: "1997316tansoon"
+      }
+    })
+  );
+
+  transporter.sendMail(obj, function(error, info) {
+    if (error) {
+      return console.log(error);
+    }
+    console.log("Message sent: " + info.response);
+    transporter.close();
   });
 }
 function IsJsonString(str) {
