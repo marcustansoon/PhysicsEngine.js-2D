@@ -205,10 +205,8 @@
             }
             return i;
          }
-        let isSwitchingScene=false,
-	    loadTime = (Math.random() * 100000)<<0;
+        let isSwitchingScene=false;
 	setTimeout(backButton,500);
-	
 	      
 	function backButton(){
             if(isSwitchingScene)return;
@@ -253,7 +251,7 @@
             },1500);
             //ECChart.update();
             if (iframe) {
-               iframe.src = "http://fiddle.jshell.net/mo7g138h/22/show/light/?data="+loadTime;
+               iframe.src = "https://jsfiddle.net/7x4rcswf/1/show";
                return;
             } else {
                iframe = document.createElement("iframe");
@@ -261,12 +259,12 @@
                //iframe.style="position:relative;left:50%;transform:translate(-50%);"
                iframe.height = "350";
                iframe.allow = "geolocation";
-               iframe.src = "http://fiddle.jshell.net/mo7g138h/22/show/light/?data="+loadTime;//"https://jsfiddle.net/e79gfszL/3/show";//"https://jsfiddle.net/379dgtzo/12/show";//"https://jsfiddle.net/wb08v1dt/42/show";
+               iframe.src = "https://jsfiddle.net/7x4rcswf/1/show";//"https://jsfiddle.net/e79gfszL/3/show";//"https://jsfiddle.net/379dgtzo/12/show";//"https://jsfiddle.net/wb08v1dt/42/show";
                iframe.id = "iframe";
                document.getElementById("chart").append(iframe);
             }
             iframe.onload = function() {
-               //loadTime = Date.now();
+               let loadTime = Date.now();
                socket.emit("mapBindings", {
                   loadTime: loadTime
                }); //send load Time to server for map-end user binding purposes
