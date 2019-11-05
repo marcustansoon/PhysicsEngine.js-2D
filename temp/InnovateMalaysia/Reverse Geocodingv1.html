@@ -1,0 +1,83 @@
+<script>
+  let toBeProcessed = 0,
+    isRun = false,
+    data=localStorage.getItem("data", data)||undefined;
+
+  function receiver(e) {
+    //console.log('msg received by iframe: ' + JSON.stringify(e.data)); //receive msg from outside frame
+    if (isRun) return;
+    isRun = true;
+    
+    if(!data)
+    data = e.data;
+    
+    console.log(JSON.stringify(e.data));
+    setTimeout(function() {
+      startGeoFinding(e);
+    }, 1500);
+
+  }
+  window.addEventListener('message', receiver, false);
+
+  function startGeoFinding(e) {
+    // for (let index = 0; index < data.length; index++) {
+    for (let index2 = 0; index2 < data.data.length; index2++) {
+			if(data.data[index2].region)continue;
+      reverseGeocoding(data.data[index2].lat, data.data[index2].lng, index2, e);
+      toBeProcessed++;
+    }
+  }
+  let errorCount = 0;
+
+  function reverseGeocoding(lat, lng, index2, e) {
+    let geocoder = new google.maps.Geocoder;
+    geocoder.geocode({
+      'location': {
+        lat: lat,
+        lng: lng
+      }
+    }, function(results, status) {
+
+      if (status === 'OK') {
+        if (results[0]) {
+          let _arr = results[0].formatted_address.split(", ");
+          //console.log(results);
+          console.log(_arr[_arr.length - 4]);
+          if (_arr[_arr.length - 4].includes("Kuching") || _arr[_arr.length - 4].includes("Sarawak")) {
+            data.data[index2].region = _arr[0] + ' ' + _arr[1] + ' ' + _arr[2];
+          } else
+            data.data[index2].region = _arr[_arr.length - 4]; //return region name
+
+          toBeProcessed--;
+        } else {
+          //window.alert('No results found');
+        }
+      } else {
+        console.log('Geocoder failed due to: ' + status);
+        if (errorCount < 60) {
+          setTimeout(function() {
+            reverseGeocoding(lng, lat, index2, e);
+            errorCount++;
+          }, 100);
+        } else {
+        	
+          location.reload();
+          localStorage.setItem("data", data);
+        	return;
+        	
+        	data.error=true;
+          e.source.postMessage(data, "*"); //send mesage back to parent
+          e.source.postMessage(errorCount, "*"); //send mesage back to parent
+        }
+      }
+      if (!toBeProcessed) {
+        console.log(JSON.stringify(data));
+        e.source.postMessage(data, "*"); //send mesage back to parent
+        e.source.postMessage(errorCount, "*"); //send mesage back to parent
+      }
+    });
+  }
+
+</script>
+<script id="googleMap" async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkUOdZ5y7hMm0yrcCQoCvLwzdM6M8s5qk">
+</script>
