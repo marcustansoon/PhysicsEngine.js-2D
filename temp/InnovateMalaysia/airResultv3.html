@@ -95,7 +95,6 @@
   </head>
   <img src="https://i.imgur.com/ezOaz8e.jpg" style="width:100%;user-drag: none; user-select: none; -moz-user-select: none; -webkit-user-drag: none; -webkit-user-select: none; -ms-user-select: none;position:relative;">
   <br><br>
-
   <table id="table" class="table" hidden>
     <tr>
       <th>No</th>
@@ -184,7 +183,7 @@
           _iframe.src = "https://jsfiddle.net/sazvuype/10/show";
           _iframe.id = "iframe";
           graphData=data;
-          document.getElementById("chart").append(_iframe);
+          document.getElementById("chart").appendChild(_iframe);
           console.log(JSON.stringify(data));
       });
       function createTable(data){
@@ -291,7 +290,7 @@
         	isStreetRetrieved=true;
             console.log("retrieved street address");
             _iframe.src="about:blank";
-            document.getElementById("chart").remove(_iframe);
+            document.getElementById("chart").removeChild(_iframe);
             createTable(e.data);
         }
       }, false);
