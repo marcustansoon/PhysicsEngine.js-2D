@@ -135,7 +135,7 @@
       });
 
       let socket = io("https://drone-end-user.glitch.me/"), //connect to server
-        partitionKey = 1234; //location.href.replace("https://marcustansoon.000webhostapp.com/Azure/airResult.html?partitionKey=","");//get partitionkey by url
+        partitionKey = location.href.replace("https://marcustansoon.000webhostapp.com/Azure/airResult.html?partitionKey=","");//get partitionkey by url
       function setEndUserPhone() {
         socket.emit("setEndUserPhone");
       }
