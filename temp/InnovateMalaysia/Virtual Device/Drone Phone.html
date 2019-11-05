@@ -73,8 +73,8 @@ registerDeviceID(passcode,deviceID)
       d = addZero(d.getHours()) + ":" + addZero(d.getMinutes()) + ":" + addZero(d.getSeconds()); //convert date to string
       socket.emit('sensorData', {
         data: {
-          lng: lat[count],
-          lat: lng[count],
+          lng: lng[count],
+          lat: lat[count],
           alt: 0,
           date: d,
           //turbidity: 12,EC: 23
