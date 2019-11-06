@@ -188,6 +188,10 @@ io.on("connection", function(socket) {
   socket.on("getSocketID", function() {
     socket.emit("getSocketID", socket.id);
   });
+  socket.on("updateData", function(data) {
+    //console.log(data);
+    replaceItem(data);
+  });
   socket.on("disconnect", function() {
     if (socket.sensorData && !socket.sensorData.isStored) {
       //check if sensorData exists and not yet been stored, if so, then store it
@@ -275,7 +279,7 @@ async function getDataByQuery(text, callback) {
   try {
     let temp = await container.items.query(text).toArray();
     callback(temp.result);
-    console.log(temp.result[0]);
+    //console.log(temp.result[0]);
     //replaceItem({ deviceID: 1234, partitionKey: '1234', measurementType: 'air', date: 1572858798625, data: [ { lng: 1.532105, lat: 110.3571208, alt: 0, date: '17:13:23', NH3: 15, CO: 1, NO2: 2, CH4: 3 }, { lng: 1.531751, lat: 110.3574778, alt: 0, date: '17:13:29', NH3: 15, CO: 1, NO2: 2, CH4: 3 }, { lng: 1.531413, lat: 110.3571078, alt: 0, date: '17:13:34', NH3: 15, CO: 1, NO2: 2, CH4: 3 }, { lng: 1.530938, lat: 110.3568878, alt: 0, date: '17:13:39', NH3: 15, CO: 1, NO2: 2, CH4: 3 } ], lat: 1.532197, lng: 110.3568138, alt: 0, isStored: true,id:"f0a982dd-d581-dea6-c705-5da7af780c23"});
   } catch (e) {
     console.log("Error caught");
@@ -284,8 +288,6 @@ async function getDataByQuery(text, callback) {
 async function replaceItem(itemBody) {
   try {
     console.log(itemBody);
-    // Change property 'grade'
-    itemBody.alt = 1;
     let temp = await container.item(itemBody.id).replace(itemBody);
   } catch (e) {
     console.log("Error caught" + JSON.stringify(e));
