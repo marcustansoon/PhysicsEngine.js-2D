@@ -90,7 +90,11 @@
             color-stop(0.72, rgb(73, 125, 189)),
             color-stop(0.86, rgb(28, 58, 148)));
       }
-
+	canvas{
+    	border: 0px;
+        margin: 0px;
+        padding: 0px;
+    }
     </style>
   </head>
   <img src="https://i.imgur.com/ezOaz8e.jpg" style="width:100%;user-drag: none; user-select: none; -moz-user-select: none; -webkit-user-drag: none; -webkit-user-select: none; -ms-user-select: none;position:relative;">
@@ -113,10 +117,13 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
   <div class="chart" id="chart" hidden>
     <img src="https://freeiconshop.com/wp-content/uploads/edd/cross-flat.png" style="width:8%;position:absolute;right:0%;max-width:30px;" onclick="backButton();">
-    <canvas id="temperatureChart"></canvas>
-    <canvas id="CH4Chart"></canvas>
-    <canvas id="SO2Chart"></canvas>
-    <canvas id="COChart"></canvas>
+    <canvas id="temperatureChart" height="100"></canvas>
+    <canvas id="NH3Chart" height="100"></canvas>
+    <canvas id="COChart" height="100"></canvas>
+    <canvas id="NO2Chart" height="100"></canvas>
+    <canvas id="CH4Chart" height="100"></canvas>
+    <canvas id="HUChart" height="100"></canvas>
+    <canvas id="CO2Chart" height="100"></canvas>
   </div>
 
   <body class="scrollStyle">
@@ -137,8 +144,8 @@
       });
 
       let socket = io("https://drone-end-user.glitch.me/"), //connect to server
-        partitionKey = 1234; //location.href.replace("https://marcustansoon.000webhostapp.com/Azure/airResult.html?partitionKey=","");//get partitionkey by url
-      function setEndUserPhone() {
+        partitionKey = 1234;//location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/airResult.html?partitionKey=","");//get partitionkey by url
+ 	function setEndUserPhone() {
         socket.emit("setEndUserPhone");
       }
       socket.on("sensorData", function(data) {
@@ -154,100 +161,14 @@
         iframe,
         isStreetRetrieved = false;
 
-      let temperatureChart = new Chart(document.getElementById("temperatureChart"), {
-          "type": "line",
-          "data": {
-            "labels": [],
-            "datasets": [{
-              "label": "",
-              "data": [],
-              "fill": false,
-              "backgroundColor": []
-            }]
-          },
-          "options": {
-            "legend": {
-              display: false,
-              labels: {
-                "fillStyle": 'rgb(42, 121, 12)'
-              }
-            },
-            "scales": {
-              "yAxes": [{
-                "ticks": {
-                  "beginAtZero": true
-                },
-                scaleLabel: {
-                  display: true,
-                  labelString: 'Temperature (*C)'
-                }
-              }]
-            }
-          }
-        }),
-        CH4Chart = new Chart(document.getElementById("CH4Chart"), {
-          "type": "bar",
-          "data": {
-            "labels": [],
-            "datasets": [{
-              "label": "",
-              "data": [],
-              "fill": true,
-              "backgroundColor": []
-            }]
-          },
-          "options": {
-            "legend": {
-              display: false,
-              labels: {
-                "fillStyle": 'rgb(42, 121, 12)'
-              }
-            },
-            "scales": {
-              "yAxes": [{
-                "ticks": {
-                  "beginAtZero": true
-                },
-                scaleLabel: {
-                  display: true,
-                  labelString: 'CH4'
-                }
-              }]
-            }
-          }
-        }),
-        SO2Chart = new Chart(document.getElementById("SO2Chart"), {
-          "type": "bar",
-          "data": {
-            "labels": [],
-            "datasets": [{
-              "label": "",
-              "data": [],
-              "fill": true,
-              "backgroundColor": []
-            }]
-          },
-          "options": {
-            "legend": {
-              display: false,
-              labels: {
-                "fillStyle": 'rgb(42, 121, 12)'
-              }
-            },
-            "scales": {
-              "yAxes": [{
-                "ticks": {
-                  "beginAtZero": true
-                },
-                scaleLabel: {
-                  display: true,
-                  labelString: 'SO2'
-                }
-              }]
-            }
-          }
-        });
-
+      let temperatureChart = new Chart(document.getElementById("temperatureChart"), { "type": "line", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": false, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "yAxes": [{ "ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'Temperature' } }] } } }),
+        NH3Chart = new Chart(document.getElementById("NH3Chart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "xAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", } }],"yAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", },"ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'NH3' } }] } } }),
+        COChart = new Chart(document.getElementById("COChart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "xAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", } }],"yAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", },"ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'CO' } }] } } }),
+        NO2Chart = new Chart(document.getElementById("NO2Chart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "xAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", } }],"yAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", },"ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'NO2' } }] } } }),
+        CH4Chart = new Chart(document.getElementById("CH4Chart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "xAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", } }],"yAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", },"ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'CH4' } }] } } }),
+        HUChart = new Chart(document.getElementById("HUChart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "xAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", } }],"yAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", },"ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'HU' } }] } } }),
+        CO2Chart = new Chart(document.getElementById("CO2Chart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "xAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", } }],"yAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", },"ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'CO2' } }] } } });
+        
       socket.on("connect", function() { //return;
         setTimeout(function() {
           socket.emit("getRecords", {
@@ -309,7 +230,17 @@
         }, 1500);
       }
 
-      function updateGraph(chart, x, y, color, clearGraph) {
+      function updateGraph(chart, x, y, color, clearGraph,arr) {
+      
+      	//[0,green,25,blue,35,orange,55,red]
+        //array
+        
+        if(arr){
+        	for(let temp=0;temp<arr.length;temp+=2){
+            	if(arr[temp] )
+            }
+        }
+        
         if (clearGraph) {
           chart.data.datasets[0].backgroundColor.length = 0;
           chart.data.datasets[0].data.length = 0;
@@ -354,12 +285,23 @@
         isSwitchingScene = true;
         isHome = false;
 
+		updateGraph(NH3Chart, undefined, undefined, undefined, true);
+		updateGraph(HUChart, undefined, undefined, undefined, true);
+        updateGraph(NO2Chart, undefined, undefined, undefined, true);
+        updateGraph(CO2Chart, undefined, undefined, undefined, true);
         updateGraph(temperatureChart, undefined, undefined, undefined, true);
         updateGraph(CH4Chart, undefined, undefined, undefined, true);
+        updateGraph(COChart, undefined, undefined, undefined, true);
+        
         //update CH4,SO2,Temperature graph
         for (let loop = 0; loop < data.data.length; loop++) {
           updateGraph(CH4Chart, data.data[loop].date, data.data[loop].CH4, 'rgb(42, 121, 12)');
-          updateGraph(temperatureChart, data.data[loop].date, data.data[loop].CH4, 'rgb(42, 121, 12)');
+          updateGraph(temperatureChart, data.data[loop].date, data.data[loop].temperature, 'rgb(42, 121, 12)');
+          updateGraph(NH3Chart, data.data[loop].date, data.data[loop].NH3, 'rgb(42, 121, 12)');
+          updateGraph(NO2Chart, data.data[loop].date, data.data[loop].NO2, 'rgb(42, 121, 12)');
+          updateGraph(CO2Chart, data.data[loop].date, data.data[loop].CO2, 'rgb(42, 121, 12)');
+          updateGraph(HUChart, data.data[loop].date, data.data[loop].humidity, 'rgb(42, 121, 12)');
+          updateGraph(COChart, data.data[loop].date, data.data[loop].CO, 'rgb(42, 121, 12)');
         }
 
         document.getElementById("chart").hidden = false;
@@ -399,7 +341,7 @@
       }
 
       window.addEventListener("message", function(e) {
-        console.log("message received frm iframe:" + JSON.stringify(e.data));
+        //console.log("message received frm iframe:" + JSON.stringify(e.data));
         if (e.source && e.source.postMessage)
           e.source.postMessage(graphData, '*'); //send  msg to iframe
         if (e.data && e.data.id && document.getElementById(e.data.id)) {
