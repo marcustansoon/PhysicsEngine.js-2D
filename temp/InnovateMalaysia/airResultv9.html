@@ -232,23 +232,27 @@
 
       function updateGraph(chart, x, y, color, clearGraph,arr) {
       
-      	//[0,green,25,blue,35,orange,55,red]
-        //array
-        
-        if(arr){
-        	for(let temp=0;temp<arr.length;temp+=2){
-            	if(arr[temp] )
-            }
-        }
+      	//[0,green,55,red]
         
         if (clearGraph) {
           chart.data.datasets[0].backgroundColor.length = 0;
           chart.data.datasets[0].data.length = 0;
           chart.data.labels.length = 0;
         } else {
-          chart.data.datasets[0].backgroundColor.push(color);
           chart.data.datasets[0].data.push(y);
           chart.data.labels.push(x);
+          if(arr){
+          	color=arr[arr.length-1];
+        	for(let temp=0;temp<arr.length;temp+=2){    
+				if(y >= arr[temp] && arr[temp+2] && y < arr[temp+2]){
+                	color=arr[temp+1];
+                    break;
+                }
+            }
+            chart.data.datasets[0].backgroundColor.push(color);
+          }else{
+              chart.data.datasets[0].backgroundColor.push(color);
+          }
         }
         chart.update();
       }
@@ -299,9 +303,9 @@
           updateGraph(temperatureChart, data.data[loop].date, data.data[loop].temperature, 'rgb(42, 121, 12)');
           updateGraph(NH3Chart, data.data[loop].date, data.data[loop].NH3, 'rgb(42, 121, 12)');
           updateGraph(NO2Chart, data.data[loop].date, data.data[loop].NO2, 'rgb(42, 121, 12)');
-          updateGraph(CO2Chart, data.data[loop].date, data.data[loop].CO2, 'rgb(42, 121, 12)');
+          updateGraph(CO2Chart, data.data[loop].date, data.data[loop].CO2, 'rgb(42, 121, 12)',false,[0,'rgb(12,54,125)',55,'rgb(255,25,125)',95,'rgb(42, 121, 255)']);
           updateGraph(HUChart, data.data[loop].date, data.data[loop].humidity, 'rgb(42, 121, 12)');
-          updateGraph(COChart, data.data[loop].date, data.data[loop].CO, 'rgb(42, 121, 12)');
+          updateGraph(COChart, data.data[loop].date, data.data[loop].CO, 'rgb(42, 121, 12)',false,[0,'rgba(12,228,1,0.98)',30,'rgba(245,245,0,0.9)',60,'rgba(255, 150, 55,0.95)',50, 'rgba(255,15,15,0.9)',61,'rgba(144,61,152,0.9)',65,'rgba(127,0,30,0.9)']);
         }
 
         document.getElementById("chart").hidden = false;
