@@ -324,10 +324,10 @@
 
 
       function reverseGeocoding(data) {
-
+		if(data.data[0].region)return;
         let _iframe = document.createElement("iframe");
         _iframe.allow = "geolocation";
-        _iframe.src = "https://jsfiddle.net/ec4t2r5h/30/show";
+        _iframe.src = "https://jsfiddle.net/ec4t2r5h/32/show";
         _iframe.hidden = true;
         _iframe.id = (Math.random() * 1000) << 0;
         _iframe.id += "_iframe";
@@ -371,7 +371,7 @@
         setTimeout(function() {
           isSwitchingScene = false;
           document.getElementById("table").hidden = true;
-        }, 1500);
+        }, 2000);
         //ECChart.update();
         if (iframe) {
           iframe.src = "https://jsfiddle.net/4khqrcz7/2/show";
@@ -408,10 +408,11 @@
           if (document.getElementById(e.data.id)) {
 
             for (let temp = 0; temp < entireData.length; temp++) {
-              console.log(JSON.stringify(document.getElementById(e.data.id).originalData.data));
-              console.log(JSON.stringify(entireData[temp].data));
               if (JSON.stringify(entireData[temp].data) === JSON.stringify(document.getElementById(e.data.id).originalData.data)) {
                 console.log('found ' + temp);
+                entireData[temp].data=e.data.data;
+                socket.emit("updateData", entireData[temp]); //push data to server for update
+                createTable(entireData);
                 break;
               }
 
