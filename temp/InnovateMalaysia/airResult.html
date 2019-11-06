@@ -95,6 +95,9 @@
         margin: 0px;
         padding: 0px;
     }
+    ul.list {
+  list-style-type: square;
+}
     </style>
   </head>
   <img src="https://i.imgur.com/ezOaz8e.jpg" style="width:100%;user-drag: none; user-select: none; -moz-user-select: none; -webkit-user-drag: none; -webkit-user-select: none; -ms-user-select: none;position:relative;">
@@ -127,7 +130,14 @@
     <canvas id="CH4Chart" height="70"style="background-color:rgba(218,235,243,0.2);"></canvas>
     <canvas id="HUChart" height="70" style="background-color:rgba(218,235,243,0.2);"></canvas>
     <canvas id="CO2Chart" height="70"style="background-color:rgba(218,235,243,0.2);"></canvas>
-    <div style="color:rgba(69,134,199,1);">Geolocation Map View</div>
+    <div style="color:rgba(69,134,199,1);">Geolocation Map View</div>    
+    
+    <ul class="list" id="list">
+  	<li>
+    <span style="color:red;">Uplands</span><br>&nbsp;&nbsp;&nbsp;<span style="font-size:10px;">NH3 Max:120 Min:30 &nbsp;&nbsp;&nbsp; CO Max:120 Min:30<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NO2 Max:120 Min:30 &nbsp;&nbsp;&nbsp; CH4 Max:120 Min:30<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CO2 Max:120 Min:30 &nbsp;&nbsp;&nbsp; Temp Max:120 Min:30 </span>
+    </li>
+    </ul>
+    
   </div>
 
   <body class="scrollStyle">
@@ -292,6 +302,26 @@
 
         isSwitchingScene = true;
         isHome = false;
+		
+        let regions=[],
+        colors=['#f9ff59','#8bff59','#a6fff0','#f3b0ff','#ffcb8f','#b2abff'],
+        index=0;
+        
+        for(let temp=0;temp<data.data.length;temp++){
+        	if(data.data[temp].region && !regions.includes(data.data[temp].region))
+        	regions.push(data.data[temp].region);
+        }
+        console.log(regions);
+		
+        let string="";
+        for(let temp=0;temp<regions.length;temp++){
+        	string+="<li>";
+            string+='<span style="-webkit-text-stroke-width: 0.2px; -webkit-text-stroke-color: black;font-size:12px;color:'+colors[index]+';">' + regions[temp]+'</span>';
+            string+="</li>";
+            index++;
+        	if(index===colors.length)index=0;
+        }
+		document.getElementById("list").innerHTML=string;
 
 		updateGraph(NH3Chart, undefined, undefined, undefined, true);
 		updateGraph(HUChart, undefined, undefined, undefined, true);
@@ -324,7 +354,7 @@
         }, 2000);
         //ECChart.update();
         if (iframe) {
-          iframe.src = "https://jsfiddle.net/4khqrcz7/2/show";
+          iframe.src = "https://jsfiddle.net/0c35ejr6/30/show";
           return;
         } else {
           iframe = document.createElement("iframe");
@@ -332,7 +362,7 @@
           //iframe.style="position:relative;left:50%;transform:translate(-50%);"
           iframe.height = "350";
           iframe.allow = "geolocation";
-          iframe.src = "https://jsfiddle.net/4khqrcz7/2/show"; //"https://jsfiddle.net/e79gfszL/3/show";//"https://jsfiddle.net/379dgtzo/12/show";//"https://jsfiddle.net/wb08v1dt/42/show";
+          iframe.src = "https://jsfiddle.net/0c35ejr6/30/show"; //"https://jsfiddle.net/0c35ejr6/30/show";"https://jsfiddle.net/e79gfszL/3/show";//"https://jsfiddle.net/379dgtzo/12/show";//"https://jsfiddle.net/wb08v1dt/42/show";
           iframe.id = "iframe";
           document.getElementById("chart").append(iframe);
         }
