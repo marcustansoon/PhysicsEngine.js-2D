@@ -123,7 +123,7 @@
     <canvas id="NO2Chart" height="80"></canvas>
     <canvas id="CH4Chart" height="80"></canvas>
     <canvas id="HUChart" height="80"></canvas>
-    <canvas id="SO2Chart" height="80"></canvas>
+    <canvas id="CO2Chart" height="80"></canvas>
   </div>
 
   <body class="scrollStyle">
@@ -145,7 +145,7 @@
 
       let socket = io("https://drone-end-user.glitch.me/"), //connect to server
         partitionKey = location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/airResult.html?partitionKey=","");//get partitionkey by url
-      function setEndUserPhone() {
+ 	function setEndUserPhone() {
         socket.emit("setEndUserPhone");
       }
       socket.on("sensorData", function(data) {
@@ -167,7 +167,7 @@
         NO2Chart = new Chart(document.getElementById("NO2Chart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "yAxes": [{ "ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'NO2' } }] } } }), 
         CH4Chart = new Chart(document.getElementById("CH4Chart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "yAxes": [{ "ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'CH4' } }] } } }), 
         HUChart = new Chart(document.getElementById("HUChart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "yAxes": [{ "ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'HU' } }] } } }),
-        SO2Chart = new Chart(document.getElementById("SO2Chart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "yAxes": [{ "ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'SO2' } }] } } });
+        CO2Chart = new Chart(document.getElementById("CO2Chart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "yAxes": [{ "ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'CO2' } }] } } });
         
 
       socket.on("connect", function() { //return;
@@ -279,17 +279,18 @@
 		updateGraph(NH3Chart, undefined, undefined, undefined, true);
 		updateGraph(HUChart, undefined, undefined, undefined, true);
         updateGraph(NO2Chart, undefined, undefined, undefined, true);
-        updateGraph(SO2Chart, undefined, undefined, undefined, true);
+        updateGraph(CO2Chart, undefined, undefined, undefined, true);
         updateGraph(temperatureChart, undefined, undefined, undefined, true);
         updateGraph(CH4Chart, undefined, undefined, undefined, true);
         //update CH4,SO2,Temperature graph
         for (let loop = 0; loop < data.data.length; loop++) {
           updateGraph(CH4Chart, data.data[loop].date, data.data[loop].CH4, 'rgb(42, 121, 12)');
-          updateGraph(temperatureChart, data.data[loop].date, data.data[loop].CH4, 'rgb(42, 121, 12)');
+          updateGraph(temperatureChart, data.data[loop].date, data.data[loop].temperature, 'rgb(42, 121, 12)');
           updateGraph(NH3Chart, data.data[loop].date, data.data[loop].NH3, 'rgb(42, 121, 12)');
           updateGraph(NO2Chart, data.data[loop].date, data.data[loop].NO2, 'rgb(42, 121, 12)');
-          updateGraph(SO2Chart, data.data[loop].date, data.data[loop].SO2, 'rgb(42, 121, 12)');
-          updateGraph(HUChart, data.data[loop].date, data.data[loop].HU, 'rgb(42, 121, 12)');
+          updateGraph(CO2Chart, data.data[loop].date, data.data[loop].CO2, 'rgb(42, 121, 12)');
+          updateGraph(HUChart, data.data[loop].date, data.data[loop].humidity, 'rgb(42, 121, 12)');
+          updateGraph(COChart, data.data[loop].date, data.data[loop].CO, 'rgb(42, 121, 12)');
         }
 
         document.getElementById("chart").hidden = false;
