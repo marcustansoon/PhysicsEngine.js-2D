@@ -114,7 +114,7 @@
     <div style="color:rgba(69,134,199,1);">Water Quality Index Information</div>
     <canvas id="turbidityChart"></canvas>
     <canvas id="ECChart"></canvas>
-    <div style="color:rgba(69,134,199,1);">Geolocation Map View</div>
+    <div style="color:rgba(69,134,199,1);" id="geoText">Geolocation Map View <img src="https://cdn.dribbble.com/users/902865/screenshots/4814970/loading-opaque.gif" style="width:8%"></div>
     <ul class="list" id="list">
       <li>
         <span style="color:red;">Uplands</span><br>&nbsp;&nbsp;&nbsp;<span style="font-size:10px;">NH3 Max:120 Min:30 &nbsp;&nbsp;&nbsp; CO Max:120 Min:30<br></span>
@@ -147,7 +147,7 @@
       });
 
       let socket = io("https://drone-end-user.glitch.me/"), //connect to server
-        partitionKey = location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/waterResult.html?partitionKey=", ""); //get partitionkey by url
+        partitionKey = location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/waterResult.html?partitionKey=","");//get partitionkey by url
 
       socket.on("sensorData", function(data) {
         //xlabels.push(data.EC);
@@ -261,7 +261,12 @@
 
       function reverseGeocoding(data) {
 
-        if (data.data[0].region) return;
+        if (data.data[0].region) {
+          document.getElementById("geoText").innerHTML = "Geolocation Map View";
+          return;
+        }
+        document.getElementById("geoText").innerHTML = "Geolocation Map View" + '<img src="https://cdn.dribbble.com/users/902865/screenshots/4814970/loading-opaque.gif" style="width:8%">';
+
         let _iframe = document.createElement("iframe");
         _iframe.allow = "geolocation";
         _iframe.src = "https://jsfiddle.net/r016dv7b/16/show";
@@ -426,6 +431,7 @@
                 console.log(entireData[temp]);
                 socket.emit("updateData", entireData[temp]); //push data to server for update
                 createTable(entireData);
+                document.getElementById("geoText").innerHTML = "Geolocation Map View";
                 break;
               }
             }
