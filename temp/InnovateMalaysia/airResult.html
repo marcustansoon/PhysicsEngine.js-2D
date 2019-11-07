@@ -202,6 +202,10 @@
       });
 
       function createTable(data) {
+        if(!data.length)
+        	table.innerHTML ='<tr> <th>No</th> <th>Device IDs</th> <th>Date Modified</th> <th></th> </tr> <tr> <td></td> <td></td> <td></td> <td><button class="button1">>></button></td> </tr>';
+        
+        
         let string = "";
         string = "<tr> <th>No</th> <th>Device IDs</th> <th>Date Modified</th><th></th> </tr>";
         for (let loop = 0; loop < data.length; loop++) {
@@ -217,7 +221,7 @@
             lng: data[loop].lng,
             region: data[loop].region
           };
-          string += "<button class='button1' onclick='openGraph(" + JSON.stringify(temp) + ");'>>></button></td></tr>";
+          string += "<button class='button1' onclick='openGraph(" + JSON.stringify(temp) + ");getTableRowIndex("+loop+");'>>></button></td></tr>";
           table.innerHTML = string;
         }
       }
@@ -348,6 +352,20 @@
         }
         return data;
       }
+      
+      let currentRowIndex=undefined;
+      function getTableRowIndex(index){
+      	currentRowIndex=index;
+      }
+      function deleteTableRowData(){
+      	if(currentRowIndex===undefined)return;
+      	socket.emit("deleteData",entireData[currentRowIndex]);
+      	setTimeout(backButton, 200);
+        entireData.splice(currentRowIndex, 1);
+        currentRowIndex=undefined;
+        createTable(entireData);
+        console.log('delete');
+      }
 
       function openGraph(data) {
         if (isSwitchingScene) return;
@@ -427,6 +445,13 @@
           iframe.src = "https://jsfiddle.net/5n8ysfgm/2/show"; //"https://jsfiddle.net/0c35ejr6/30/show";"https://jsfiddle.net/e79gfszL/3/show";//"https://jsfiddle.net/379dgtzo/12/show";//"https://jsfiddle.net/wb08v1dt/42/show";
           iframe.id = "iframe";
           document.getElementById("chart").append(iframe);
+          
+          let deleteButton=document.createElement("img");
+          deleteButton.src = "https://cdn1.iconfinder.com/data/icons/round-ui/123/47-512.png";
+          deleteButton.style="width:9%;max-width:45px;position:relative;transform:translate(-50%);left:50%;";
+          deleteButton.onclick=deleteTableRowData;
+          document.getElementById("chart").append(deleteButton);
+          
         }
         iframe.onload = function() {
           let loadTime = Date.now();
