@@ -90,14 +90,17 @@
             color-stop(0.72, rgb(73, 125, 189)),
             color-stop(0.86, rgb(28, 58, 148)));
       }
-	canvas{
-    	border: 0px;
+
+      canvas {
+        border: 0px;
         margin: 0px;
         padding: 0px;
-    }
-    ul.list {
-  list-style-type: square;
-}
+      }
+
+      ul.list {
+        list-style-type: square;
+      }
+
     </style>
   </head>
   <img src="https://i.imgur.com/ezOaz8e.jpg" style="width:100%;user-drag: none; user-select: none; -moz-user-select: none; -webkit-user-drag: none; -webkit-user-select: none; -ms-user-select: none;position:relative;">
@@ -124,20 +127,20 @@
     <img src="https://i.imgur.com/ldiERbv.png" style="width:100%;">
     <div style="color:rgba(69,134,199,1);">Air Quality Index Information</div>
     <canvas id="temperatureChart" height="70" style="background-color:rgba(218,235,243,0.2);"></canvas>
-    <canvas id="NH3Chart" height="70"style="background-color:rgba(218,235,243,0.2);"></canvas>
-    <canvas id="COChart" height="70"style="background-color:rgba(218,235,243,0.2);"></canvas>
-    <canvas id="NO2Chart" height="70"style="background-color:rgba(218,235,243,0.2);"></canvas>
-    <canvas id="CH4Chart" height="70"style="background-color:rgba(218,235,243,0.2);"></canvas>
+    <canvas id="NH3Chart" height="70" style="background-color:rgba(218,235,243,0.2);"></canvas>
+    <canvas id="COChart" height="70" style="background-color:rgba(218,235,243,0.2);"></canvas>
+    <canvas id="NO2Chart" height="70" style="background-color:rgba(218,235,243,0.2);"></canvas>
+    <canvas id="CH4Chart" height="70" style="background-color:rgba(218,235,243,0.2);"></canvas>
     <canvas id="HUChart" height="70" style="background-color:rgba(218,235,243,0.2);"></canvas>
-    <canvas id="CO2Chart" height="70"style="background-color:rgba(218,235,243,0.2);"></canvas>
+    <canvas id="CO2Chart" height="70" style="background-color:rgba(218,235,243,0.2);"></canvas>
     <div style="color:rgba(69,134,199,1);" id="geoText">Geolocation Map View <img src="https://cdn.dribbble.com/users/902865/screenshots/4814970/loading-opaque.gif" style="width:8%"></div>
-    
+
     <ul class="list" id="list">
-  	<li>
-    <span style="color:red;">Uplands</span><br>&nbsp;&nbsp;&nbsp;<span style="font-size:10px;">NH3 Max:120 Min:30 &nbsp;&nbsp;&nbsp; CO Max:120 Min:30<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NO2 Max:120 Min:30 &nbsp;&nbsp;&nbsp; CH4 Max:120 Min:30<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CO2 Max:120 Min:30 &nbsp;&nbsp;&nbsp; Temp Max:120 Min:30 </span>
-    </li>
+      <li>
+        <span style="color:red;">Uplands</span><br>&nbsp;&nbsp;&nbsp;<span style="font-size:10px;">NH3 Max:120 Min:30 &nbsp;&nbsp;&nbsp; CO Max:120 Min:30<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NO2 Max:120 Min:30 &nbsp;&nbsp;&nbsp; CH4 Max:120 Min:30<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CO2 Max:120 Min:30 &nbsp;&nbsp;&nbsp; Temp Max:120 Min:30 </span>
+      </li>
     </ul>
-    
+
   </div>
 
   <body class="scrollStyle">
@@ -158,8 +161,8 @@
       });
 
       let socket = io("https://drone-end-user.glitch.me/"), //connect to server
-        partitionKey = location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/airResult.html?partitionKey=","");//get partitionkey by url
- 	function setEndUserPhone() {
+        partitionKey = 1234; // location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/airResult.html?partitionKey=","");//get partitionkey by url
+      function setEndUserPhone() {
         socket.emit("setEndUserPhone");
       }
       socket.on("sensorData", function(data) {
@@ -175,14 +178,272 @@
         iframe,
         isStreetRetrieved = false;
 
-      let temperatureChart = new Chart(document.getElementById("temperatureChart"), { "type": "line", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": false, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "yAxes": [{ "ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'Temperature' } }] } } }),
-        NH3Chart = new Chart(document.getElementById("NH3Chart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "xAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", } }],"yAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", },"ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'NH3' } }] } } }),
-        COChart = new Chart(document.getElementById("COChart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "xAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", } }],"yAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", },"ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'CO' } }] } } }),
-        NO2Chart = new Chart(document.getElementById("NO2Chart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "xAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", } }],"yAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", },"ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'NO2' } }] } } }),
-        CH4Chart = new Chart(document.getElementById("CH4Chart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "xAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", } }],"yAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", },"ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'CH4' } }] } } }),
-        HUChart = new Chart(document.getElementById("HUChart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "xAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", } }],"yAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", },"ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'HU' } }] } } }),
-        CO2Chart = new Chart(document.getElementById("CO2Chart"), { "type": "bar", "data": { "labels": [], "datasets": [{ "label": "", "data": [], "fill": true, "backgroundColor": [] }] }, "options": { "legend": { display: false, labels: { "fillStyle": 'rgb(42, 121, 12)' } }, "scales": { "xAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", } }],"yAxes": [{ "gridLines": { color: "rgba(0, 0, 0, 0)", },"ticks": { "beginAtZero": true }, scaleLabel: { display: true, labelString: 'CO2' } }] } } });
-        
+      let temperatureChart = new Chart(document.getElementById("temperatureChart"), {
+          "type": "line",
+          "data": {
+            "labels": [],
+            "datasets": [{
+              "label": "",
+              "data": [],
+              "fill": false,
+              "backgroundColor": []
+            }]
+          },
+          "options": {
+            "legend": {
+              display: false,
+              labels: {
+                "fillStyle": 'rgb(42, 121, 12)'
+              }
+            },
+            "scales": {
+              "yAxes": [{
+                "ticks": {
+                  "beginAtZero": true
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'Temperature'
+                }
+              }]
+            }
+          }
+        }),
+        NH3Chart = new Chart(document.getElementById("NH3Chart"), {
+          "type": "bar",
+          "data": {
+            "labels": [],
+            "datasets": [{
+              "label": "",
+              "data": [],
+              "fill": true,
+              "backgroundColor": []
+            }]
+          },
+          "options": {
+            "legend": {
+              display: false,
+              labels: {
+                "fillStyle": 'rgb(42, 121, 12)'
+              }
+            },
+            "scales": {
+              "xAxes": [{
+                "gridLines": {
+                  color: "rgba(0, 0, 0, 0)",
+                }
+              }],
+              "yAxes": [{
+                "gridLines": {
+                  color: "rgba(0, 0, 0, 0)",
+                },
+                "ticks": {
+                  "beginAtZero": true
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'NH3'
+                }
+              }]
+            }
+          }
+        }),
+        COChart = new Chart(document.getElementById("COChart"), {
+          "type": "bar",
+          "data": {
+            "labels": [],
+            "datasets": [{
+              "label": "",
+              "data": [],
+              "fill": true,
+              "backgroundColor": []
+            }]
+          },
+          "options": {
+            "legend": {
+              display: false,
+              labels: {
+                "fillStyle": 'rgb(42, 121, 12)'
+              }
+            },
+            "scales": {
+              "xAxes": [{
+                "gridLines": {
+                  color: "rgba(0, 0, 0, 0)",
+                }
+              }],
+              "yAxes": [{
+                "gridLines": {
+                  color: "rgba(0, 0, 0, 0)",
+                },
+                "ticks": {
+                  "beginAtZero": true
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'CO'
+                }
+              }]
+            }
+          }
+        }),
+        NO2Chart = new Chart(document.getElementById("NO2Chart"), {
+          "type": "bar",
+          "data": {
+            "labels": [],
+            "datasets": [{
+              "label": "",
+              "data": [],
+              "fill": true,
+              "backgroundColor": []
+            }]
+          },
+          "options": {
+            "legend": {
+              display: false,
+              labels: {
+                "fillStyle": 'rgb(42, 121, 12)'
+              }
+            },
+            "scales": {
+              "xAxes": [{
+                "gridLines": {
+                  color: "rgba(0, 0, 0, 0)",
+                }
+              }],
+              "yAxes": [{
+                "gridLines": {
+                  color: "rgba(0, 0, 0, 0)",
+                },
+                "ticks": {
+                  "beginAtZero": true
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'NO2'
+                }
+              }]
+            }
+          }
+        }),
+        CH4Chart = new Chart(document.getElementById("CH4Chart"), {
+          "type": "bar",
+          "data": {
+            "labels": [],
+            "datasets": [{
+              "label": "",
+              "data": [],
+              "fill": true,
+              "backgroundColor": []
+            }]
+          },
+          "options": {
+            "legend": {
+              display: false,
+              labels: {
+                "fillStyle": 'rgb(42, 121, 12)'
+              }
+            },
+            "scales": {
+              "xAxes": [{
+                "gridLines": {
+                  color: "rgba(0, 0, 0, 0)",
+                }
+              }],
+              "yAxes": [{
+                "gridLines": {
+                  color: "rgba(0, 0, 0, 0)",
+                },
+                "ticks": {
+                  "beginAtZero": true
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'CH4'
+                }
+              }]
+            }
+          }
+        }),
+        HUChart = new Chart(document.getElementById("HUChart"), {
+          "type": "bar",
+          "data": {
+            "labels": [],
+            "datasets": [{
+              "label": "",
+              "data": [],
+              "fill": true,
+              "backgroundColor": []
+            }]
+          },
+          "options": {
+            "legend": {
+              display: false,
+              labels: {
+                "fillStyle": 'rgb(42, 121, 12)'
+              }
+            },
+            "scales": {
+              "xAxes": [{
+                "gridLines": {
+                  color: "rgba(0, 0, 0, 0)",
+                }
+              }],
+              "yAxes": [{
+                "gridLines": {
+                  color: "rgba(0, 0, 0, 0)",
+                },
+                "ticks": {
+                  "beginAtZero": true
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'HU'
+                }
+              }]
+            }
+          }
+        }),
+        CO2Chart = new Chart(document.getElementById("CO2Chart"), {
+          "type": "bar",
+          "data": {
+            "labels": [],
+            "datasets": [{
+              "label": "",
+              "data": [],
+              "fill": true,
+              "backgroundColor": []
+            }]
+          },
+          "options": {
+            "legend": {
+              display: false,
+              labels: {
+                "fillStyle": 'rgb(42, 121, 12)'
+              }
+            },
+            "scales": {
+              "xAxes": [{
+                "gridLines": {
+                  color: "rgba(0, 0, 0, 0)",
+                }
+              }],
+              "yAxes": [{
+                "gridLines": {
+                  color: "rgba(0, 0, 0, 0)",
+                },
+                "ticks": {
+                  "beginAtZero": true
+                },
+                scaleLabel: {
+                  display: true,
+                  labelString: 'CO2'
+                }
+              }]
+            }
+          }
+        });
+
       socket.on("connect", function() { //return;
         setTimeout(function() {
           socket.emit("getRecords", {
@@ -244,10 +505,10 @@
         }, 1500);
       }
 
-      function updateGraph(chart, x, y, color, clearGraph,arr) {
-      
-      	//[0,green,55,red]
-        
+      function updateGraph(chart, x, y, color, clearGraph, arr) {
+
+        //[0,green,55,red]
+
         if (clearGraph) {
           chart.data.datasets[0].backgroundColor.length = 0;
           chart.data.datasets[0].data.length = 0;
@@ -255,17 +516,17 @@
         } else {
           chart.data.datasets[0].data.push(y);
           chart.data.labels.push(x);
-          if(arr){
-          	color=arr[arr.length-1];
-        	for(let temp=0;temp<arr.length;temp+=2){    
-				if(y >= arr[temp] && arr[temp+2] && y < arr[temp+2]){
-                	color=arr[temp+1];
-                    break;
-                }
+          if (arr) {
+            color = arr[arr.length - 1];
+            for (let temp = 0; temp < arr.length; temp += 2) {
+              if (y >= arr[temp] && arr[temp + 2] && y < arr[temp + 2]) {
+                color = arr[temp + 1];
+                break;
+              }
             }
             chart.data.datasets[0].backgroundColor.push(color);
-          }else{
-              chart.data.datasets[0].backgroundColor.push(color);
+          } else {
+            chart.data.datasets[0].backgroundColor.push(color);
           }
         }
         chart.update();
@@ -273,13 +534,13 @@
 
 
       function reverseGeocoding(data) {
-		if (data.data[0].region) {
+        if (data.data[0].region) {
           document.getElementById("geoText").innerHTML = "Geolocation Map View";
           return;
         }
         document.getElementById("geoText").innerHTML = "Geolocation Map View" + '<img src="https://cdn.dribbble.com/users/902865/screenshots/4814970/loading-opaque.gif" style="width:8%">';
 
-        
+
         let _iframe = document.createElement("iframe");
         _iframe.allow = "geolocation";
         _iframe.src = "https://jsfiddle.net/r016dv7b/16/show";
@@ -300,6 +561,52 @@
         }, 10000);
       }
 
+      function getMaxMin(data, obj) {
+        if (!data[obj.region]) {
+          data[obj.region] = {
+            CH4min: obj.CH4,
+            CH4max: obj.CH4,
+            COmin: obj.CO,
+            COmax: obj.CO,
+            CO2min: obj.CO2,
+            CO2max: obj.CO2,
+            NH3min: obj.NH3,
+            NH3max: obj.NH3,
+            NO2max: obj.NO2,
+            NO2min: obj.NO2,
+            humidityMax: obj.humidity,
+            humidityMin: obj.humidity
+          };
+        } else {
+          if (obj.CH4 > data[obj.region].CH4max)
+            data[obj.region].CH4max = obj.CH4;
+          else if (obj.CH4 < data[obj.region].CH4min)
+            data[obj.region].CH4min = obj.CH4;
+          if (obj.CO > data[obj.region].COmax)
+            data[obj.region].COmax = obj.CO;
+          else if (obj.CO < data[obj.region].COmin)
+            data[obj.region].COmin = obj.CO;
+          if (obj.CO2 > data[obj.region].CO2max)
+            data[obj.region].CO2max = obj.CO2;
+          else if (obj.CO2 < data[obj.region].CO2min)
+            data[obj.region].CO2min = obj.CO2;
+          if (obj.NH3 > data[obj.region].NH3max)
+            data[obj.region].NH3max = obj.NH3;
+          else if (obj.NH3 < data[obj.region].NH3min)
+            data[obj.region].NH3min = obj.NH3;
+          if (obj.NO2 > data[obj.region].NO2max)
+            data[obj.region].NO2max = obj.NO2;
+          else if (obj.NH3 < data[obj.region].NO2min)
+            data[obj.region].NO2min = obj.NO2;
+          if (obj.humidity > data[obj.region].humidityMax)
+            data[obj.region].humidityMax = obj.humidity;
+          else if (obj.humidity < data[obj.region].humidityMin)
+            data[obj.region].humidityMin = obj.humidity;
+
+        }
+        return data;
+      }
+
       function openGraph(data) {
         if (isSwitchingScene) return;
         reverseGeocoding(data);
@@ -308,44 +615,51 @@
 
         isSwitchingScene = true;
         isHome = false;
-		
-        let regions=[],
-        colors=['#f9ff59','#8bff59','#a6fff0','#f3b0ff','#ffcb8f','#b2abff'],
-        index=0;
-        
-        for(let temp=0;temp<data.data.length;temp++){
-        	if(data.data[temp].region && !regions.includes(data.data[temp].region))
-        	regions.push(data.data[temp].region);
+
+        let regions = [],
+          colors = ['#f9ff59', '#8bff59', '#a6fff0', '#f3b0ff', '#ffcb8f', '#b2abff'],
+          index = 0;
+
+        for (let temp = 0; temp < data.data.length; temp++) {
+          if (data.data[temp].region && !regions.includes(data.data[temp].region))
+            regions.push(data.data[temp].region);
         }
         console.log(regions);
-		
-        let string="";
-        for(let temp=0;temp<regions.length;temp++){
-        	string+="<li><img src='https://media.giphy.com/media/eujQxUv8B06wo/giphy.gif' style='width:20px;height:15px;margin-left:-5px;'>";
-            string+='<span style="-webkit-text-stroke-width: 0.2px; -webkit-text-stroke-color: black;font-size:12px;color:'+colors[index]+';">' + regions[temp]+'</span>';
-            string+="</li>";
-            index++;
-        	if(index===colors.length)index=0;
-        }
-		document.getElementById("list").innerHTML=string;
 
-		updateGraph(NH3Chart, undefined, undefined, undefined, true);
-		updateGraph(HUChart, undefined, undefined, undefined, true);
+        let string = "",
+          minMaxResult = data.data.reduce(getMaxMin, {});
+
+        console.log(minMaxResult);
+        for (let temp = 0; temp < regions.length; temp++) {
+          string += "<li>";
+          string += '<span style="-webkit-text-stroke-width: 0.2px; -webkit-text-stroke-color: black;font-size:12px;color:' + colors[index] + ';">' + regions[temp] + '</span>';
+          string += "</li>" + '<span style="font-size:10px;"><span style="color:rgba(5,180,252,1);">NH3</span> Max:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].NH3max + '</span> Min:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].NH3min + '</span> &nbsp;&nbsp;&nbsp; <span style="color:rgba(5,180,252,1);">CO</span>  Max:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].COmax + '</span> Min:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].COmin + '</span><br></span>';
+          string += '<span style="font-size:10px;"><span style="color:rgba(5,180,252,1);">NO2</span> Max:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].NO2max + '</span> Min:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].NO2min + '</span> &nbsp;&nbsp;&nbsp; <span style="color:rgba(5,180,252,1);">CH4</span>  Max:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].CH4max + '</span> Min:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].CH4min + '</span><br></span>';
+          string += '<span style="font-size:10px;"><span style="color:rgba(5,180,252,1);">HU</span> Max:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].humidityMax + '</span> Min:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].humidityMin + '</span> &nbsp;&nbsp;&nbsp; <span style="color:rgba(5,180,252,1);">CO2</span>  Max:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].CO2max + '</span> Min:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].CO2min + '</span><br></span>';
+
+
+          index++;
+          if (index === colors.length) index = 0;
+        }
+        document.getElementById("list").innerHTML = string;
+
+        updateGraph(NH3Chart, undefined, undefined, undefined, true);
+        updateGraph(HUChart, undefined, undefined, undefined, true);
         updateGraph(NO2Chart, undefined, undefined, undefined, true);
         updateGraph(CO2Chart, undefined, undefined, undefined, true);
         updateGraph(temperatureChart, undefined, undefined, undefined, true);
         updateGraph(CH4Chart, undefined, undefined, undefined, true);
         updateGraph(COChart, undefined, undefined, undefined, true);
-        
+
         //update CH4,SO2,Temperature graph
         for (let loop = 0; loop < data.data.length; loop++) {
-          updateGraph(CH4Chart, data.data[loop].date, data.data[loop].CH4, 'rgb(42, 121, 12)',false,[0,'rgba(12,228,1,0.98)',50,'rgba(255,255,0,0.9)',80,'rgba(255, 150, 0,0.95)',100,'rgba(255,0,0,0.9)']);
+          updateGraph(CH4Chart, data.data[loop].date, data.data[loop].CH4, 'rgb(42, 121, 12)', false, [0, 'rgba(12,228,1,0.98)', 50, 'rgba(255,255,0,0.9)', 80, 'rgba(255, 150, 0,0.95)', 100, 'rgba(255,0,0,0.9)']);
           updateGraph(temperatureChart, data.data[loop].date, data.data[loop].temperature, 'rgb(42, 121, 12)');
-          updateGraph(NH3Chart, data.data[loop].date, data.data[loop].NH3, 'rgb(42, 121, 12)',false,[0,'rgba(12,228,1,0.98)',50,'rgba(255,255,0,0.9)',80,'rgba(255, 150, 0,0.95)',100,'rgba(255,0,0,0.9)']);
-          updateGraph(NO2Chart, data.data[loop].date, data.data[loop].NO2, 'rgb(42, 121, 12)',false,[0,'rgba(12,228,1,0.98)',50,'rgba(255,255,0,0.9)',80,'rgba(255, 150, 0,0.95)',100,'rgba(255,0,0,0.9)']);
-          updateGraph(CO2Chart, data.data[loop].date, data.data[loop].CO2, 'rgb(42, 121, 12)',false,[0,'rgba(12,228,1,0.98)',50,'rgba(255,255,0,0.9)',80,'rgba(255, 150, 0,0.95)',100,'rgba(255,0,0,0.9)']);
-          updateGraph(HUChart, data.data[loop].date, data.data[loop].humidity, 'rgb(42, 121, 12)',false,[0,'rgba(12,228,1,0.98)',50,'rgba(255,255,0,0.9)',80,'rgba(255, 150, 0,0.95)',100,'rgba(255,0,0,0.9)']);
-          updateGraph(COChart, data.data[loop].date, data.data[loop].CO, 'rgb(42, 121, 12)',false,[0,'rgba(12,228,1,0.98)',50,'rgba(255,255,0,0.9)',80,'rgba(255, 150, 0,0.95)',100,'rgba(255,0,0,0.9)']);
+          updateGraph(NH3Chart, data.data[loop].date, data.data[loop].NH3, 'rgb(42, 121, 12)', false, [0, 'rgba(12,228,1,0.98)', 50, 'rgba(255,255,0,0.9)', 80, 'rgba(255, 150, 0,0.95)', 100, 'rgba(255,0,0,0.9)']);
+          updateGraph(NO2Chart, data.data[loop].date, data.data[loop].NO2, 'rgb(42, 121, 12)', false, [0, 'rgba(12,228,1,0.98)', 50, 'rgba(255,255,0,0.9)', 80, 'rgba(255, 150, 0,0.95)', 100, 'rgba(255,0,0,0.9)']);
+          updateGraph(CO2Chart, data.data[loop].date, data.data[loop].CO2, 'rgb(42, 121, 12)', false, [0, 'rgba(12,228,1,0.98)', 50, 'rgba(255,255,0,0.9)', 80, 'rgba(255, 150, 0,0.95)', 100, 'rgba(255,0,0,0.9)']);
+          updateGraph(HUChart, data.data[loop].date, data.data[loop].humidity, 'rgb(42, 121, 12)', false, [0, 'rgba(12,228,1,0.98)', 50, 'rgba(255,255,0,0.9)', 80, 'rgba(255, 150, 0,0.95)', 100, 'rgba(255,0,0,0.9)']);
+          updateGraph(COChart, data.data[loop].date, data.data[loop].CO, 'rgb(42, 121, 12)', false, [0, 'rgba(12,228,1,0.98)', 50, 'rgba(255,255,0,0.9)', 80, 'rgba(255, 150, 0,0.95)', 100, 'rgba(255,0,0,0.9)']);
         }
 
         document.getElementById("chart").hidden = false;
@@ -396,7 +710,7 @@
             for (let temp = 0; temp < entireData.length; temp++) {
               if (JSON.stringify(entireData[temp].data) === JSON.stringify(document.getElementById(e.data.id).originalData.data)) {
                 console.log('found ' + temp);
-                entireData[temp].data=e.data.data;
+                entireData[temp].data = e.data.data;
                 socket.emit("updateData", entireData[temp]); //push data to server for update
                 createTable(entireData);
                 document.getElementById("geoText").innerHTML = "Geolocation Map View";
