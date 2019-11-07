@@ -109,8 +109,21 @@
   </table>
   <div class="chart" id="chart" hidden>
     <img src="https://freeiconshop.com/wp-content/uploads/edd/cross-flat.png" style="width:8%;position:absolute;right:0%;max-width:30px;" onclick="backButton();">
+    <br>
+    <img src="https://i.imgur.com/WEhaVmh.png" style="width:100%;">
+    <div style="color:rgba(69,134,199,1);">Water Quality Index Information</div>
     <canvas id="turbidityChart"></canvas>
     <canvas id="ECChart"></canvas>
+    <div style="color:rgba(69,134,199,1);">Geolocation Map View</div>
+    <ul class="list" id="list">
+      <li>
+        <span style="color:red;">Uplands</span><br>&nbsp;&nbsp;&nbsp;<span style="font-size:10px;">NH3 Max:120 Min:30 &nbsp;&nbsp;&nbsp; CO Max:120 Min:30<br></span>
+      </li>
+      <li>
+        <span style="color:red;">Uplands</span><br>&nbsp;&nbsp;&nbsp;<span style="font-size:10px;">NH3 Max:120 Min:30 &nbsp;&nbsp;&nbsp; CO Max:120 Min:30<br></span>
+      </li>
+    </ul>
+
   </div>
 
   <body style="padding:3%;" class="scrollStyle">
@@ -269,6 +282,29 @@
         }, 10000);
       }
 
+      function getMaxMin(data, obj) {
+        if (!data[obj.region]) {
+          data[obj.region] = {
+            ECmin: obj.EC,
+            ECmax: obj.EC,
+            turbidityMin: obj.turbidity,
+            turbidityMax: obj.turbidity
+          };
+        } else {
+          if (obj.EC > data[obj.region].ECmax)
+            obj.EC = data[obj.region].ECmax;
+          else if (obj.EC < data[obj.region].ECmin)
+            obj.EC = data[obj.region].ECmin;
+
+          if (obj.turbidity > data[obj.region].turbidityMax)
+            obj.turbidity = data[obj.region].turbidityMax;
+          else if (obj.turbidity < data[obj.region].turbidityMin)
+            obj.turbidity = data[obj.region].turbidityMin;
+
+        }
+        return data;
+      }
+
       function openGraph(data) {
         if (isSwitchingScene) return;
         isSwitchingScene = true;
@@ -277,17 +313,27 @@
         reverseGeocoding(data);
         console.log(data);
 
-        /*
-        xlabels_EC.length = 0;
-        xlabels_turbidity.length = 0;
-        ylabels.length = 0;
-        for (let loop = 0; loop < data.data.length; loop++) {
-          xlabels_EC.push(data.data[loop].EC);
-          xlabels_turbidity.push(data.data[loop].turbidity);
-          ylabels.push(data.data[loop].date);
+        let regions = [],
+          colors = ['#f9ff59', '#8bff59', '#a6fff0', '#f3b0ff', '#ffcb8f', '#b2abff'],
+          index = 0;
+
+        for (let temp = 0; temp < data.data.length; temp++) {
+          if (data.data[temp].region && !regions.includes(data.data[temp].region))
+            regions.push(data.data[temp].region);
         }
-        turbidityChart.update();
-        ECChart.update();*/
+        console.log(regions);
+
+        let string = "",
+          minMaxResult = data.data.reduce(getMaxMin, {});
+        for (let temp = 0; temp < regions.length; temp++) {
+          string += "<li>";
+          string += '<span style="-webkit-text-stroke-width: 0.2px; -webkit-text-stroke-color: black;font-size:12px;color:' + colors[index] + ';">' + regions[temp] + '</span>';
+          string += "</li>" + '<span style="font-size:10px;"><span style="color:rgba(5,180,252,1);">EC</span> Max:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].ECmax + '</span> Min:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].ECmin + '</span> &nbsp;&nbsp;&nbsp; <span style="color:rgba(5,180,252,1);">Turb</span>  Max:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].turbidityMax + '</span> Min:<span style="color:rgba(83,108,173,1);">' + minMaxResult[regions[temp]].turbidityMin + '</span><br></span>';
+          index++;
+          if (index === colors.length) index = 0;
+        }
+        document.getElementById("list").innerHTML = string;
+
 
         updateGraph(turbidityChart, undefined, undefined, undefined, true);
         updateGraph(ECChart, undefined, undefined, undefined, true);
