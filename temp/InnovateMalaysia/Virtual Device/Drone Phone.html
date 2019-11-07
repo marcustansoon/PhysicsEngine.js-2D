@@ -83,7 +83,7 @@ registerDeviceID(passcode,deviceID)
         }
       });
       count+=2;
-      if (count === lat.length) {
+      if (count === latlng.length) {
         socket.emit('endSensorData');
         count = 0; //reset
         clearInterval(repeat);
