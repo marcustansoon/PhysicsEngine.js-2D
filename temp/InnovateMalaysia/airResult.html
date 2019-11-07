@@ -120,7 +120,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
   <div class="chart" id="chart" hidden>
     <img src="https://freeiconshop.com/wp-content/uploads/edd/cross-flat.png" style="width:8%;position:absolute;right:0%;max-width:30px;" onclick="backButton();">
-    <br>
+    <br><br>
     <img src="https://i.imgur.com/ldiERbv.png" style="width:100%;">
     <div style="color:rgba(69,134,199,1);">Air Quality Index Information</div>
     <canvas id="temperatureChart" height="70" style="background-color:rgba(218,235,243,0.2);"></canvas>
@@ -130,7 +130,7 @@
     <canvas id="CH4Chart" height="70"style="background-color:rgba(218,235,243,0.2);"></canvas>
     <canvas id="HUChart" height="70" style="background-color:rgba(218,235,243,0.2);"></canvas>
     <canvas id="CO2Chart" height="70"style="background-color:rgba(218,235,243,0.2);"></canvas>
-    <div style="color:rgba(69,134,199,1);">Geolocation Map View</div>    
+    <div style="color:rgba(69,134,199,1);" id="geoText">Geolocation Map View <img src="https://cdn.dribbble.com/users/902865/screenshots/4814970/loading-opaque.gif" style="width:8%"></div>
     
     <ul class="list" id="list">
   	<li>
@@ -273,7 +273,13 @@
 
 
       function reverseGeocoding(data) {
-		if(data.data[0].region)return;
+		if (data.data[0].region) {
+          document.getElementById("geoText").innerHTML = "Geolocation Map View";
+          return;
+        }
+        document.getElementById("geoText").innerHTML = "Geolocation Map View" + '<img src="https://cdn.dribbble.com/users/902865/screenshots/4814970/loading-opaque.gif" style="width:8%">';
+
+        
         let _iframe = document.createElement("iframe");
         _iframe.allow = "geolocation";
         _iframe.src = "https://jsfiddle.net/r016dv7b/16/show";
@@ -393,6 +399,7 @@
                 entireData[temp].data=e.data.data;
                 socket.emit("updateData", entireData[temp]); //push data to server for update
                 createTable(entireData);
+                document.getElementById("geoText").innerHTML = "Geolocation Map View";
                 break;
               }
 
