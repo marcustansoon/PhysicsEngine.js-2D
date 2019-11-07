@@ -18,8 +18,7 @@ registerDeviceID(passcode,deviceID)
     measurementType,
     deviceID,
     repeat,
-    lat = [1.532197, 1.532105, 1.531751, 1.531413, 1.530938, 1.53072, 1.531321, 1.531487],
-    lng = [110.3568138, 110.3571208, 110.3574778, 110.3571078, 110.3568878, 110.3576018, 110.3580528, 110.3586988],
+    latlng = [1.532197,110.3568138, 1.532105,110.3571208, 1.531751,110.3574778, 1.531413, 110.3571078,1.530938, 110.3568878, 1.53072,110.3576018],
     count = 0;
 
 
@@ -52,12 +51,12 @@ registerDeviceID(passcode,deviceID)
       measurementType: measurementType,
       date: Date.now(),
       data: [],
-      lat: lat[count],
-      lng: lng[count],
+      lat: latlng[count],
+      lng: latlng[count+1],
       alt: 0
 
     });
-    count++;
+    count+=2;
   });
 
   socket.on('initiateSensorData', function(data) {
@@ -73,8 +72,8 @@ registerDeviceID(passcode,deviceID)
       d = addZero(d.getHours()) + ":" + addZero(d.getMinutes()) + ":" + addZero(d.getSeconds()); //convert date to string
       socket.emit('sensorData', {
         data: {
-          lng: lng[count],
-          lat: lat[count],
+          lng: latlng[count],
+          lat: latlng[count+1],
           alt: 0,
           date: d,
           //turbidity: (Math.random()*100)<<0,EC: (Math.random()*100)<<0
@@ -83,7 +82,7 @@ registerDeviceID(passcode,deviceID)
           
         }
       });
-      count++;
+      count+=2;
       if (count === lat.length) {
         socket.emit('endSensorData');
         count = 0; //reset
