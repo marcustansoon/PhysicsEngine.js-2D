@@ -147,7 +147,7 @@
       });
 
       let socket = io("https://drone-end-user.glitch.me/"), //connect to server
-        partitionKey = location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/waterResult.html?partitionKey=","");//get partitionkey by url
+        partitionKey = location.href.replace("https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMalaysia/waterResult.html?partitionKey=", ""); //get partitionkey by url
 
       socket.on("sensorData", function(data) {
         //xlabels.push(data.EC);
@@ -260,6 +260,7 @@
       }
 
       function reverseGeocoding(data) {
+
         if (data.data[0].region) return;
         let _iframe = document.createElement("iframe");
         _iframe.allow = "geolocation";
@@ -292,14 +293,14 @@
           };
         } else {
           if (obj.EC > data[obj.region].ECmax)
-            obj.EC = data[obj.region].ECmax;
+            data[obj.region].ECmax = obj.EC;
           else if (obj.EC < data[obj.region].ECmin)
-            obj.EC = data[obj.region].ECmin;
+            data[obj.region].ECmin = obj.EC;
 
           if (obj.turbidity > data[obj.region].turbidityMax)
-            obj.turbidity = data[obj.region].turbidityMax;
+            data[obj.region].turbidityMax = obj.turbidity;
           else if (obj.turbidity < data[obj.region].turbidityMin)
-            obj.turbidity = data[obj.region].turbidityMin;
+            data[obj.region].turbidityMin = obj.turbidity;
 
         }
         return data;
@@ -344,7 +345,6 @@
         }
 
 
-
         document.getElementById("chart").hidden = false;
         document.getElementById("chart").style.left = "105%";
         setTimeout(function() {
@@ -357,7 +357,7 @@
         }, 1500);
 
         if (iframe) {
-          iframe.src = "https://jsfiddle.net/0c35ejr6/30/show";
+          iframe.src = "https://jsfiddle.net/5n8ysfgm/2/show";
           return;
         } else {
           iframe = document.createElement("iframe");
@@ -365,7 +365,7 @@
           //iframe.style="position:relative;left:50%;transform:translate(-50%);"
           iframe.height = "350";
           iframe.allow = "geolocation";
-          iframe.src = "https://jsfiddle.net/0c35ejr6/30/show"; //"https://jsfiddle.net/0c35ejr6/30/show";"https://jsfiddle.net/e79gfszL/3/show";//"https://jsfiddle.net/379dgtzo/12/show";//"https://jsfiddle.net/wb08v1dt/42/show";
+          iframe.src = "https://jsfiddle.net/5n8ysfgm/2/show"; //"https://jsfiddle.net/0c35ejr6/30/show";"https://jsfiddle.net/e79gfszL/3/show";//"https://jsfiddle.net/379dgtzo/12/show";//"https://jsfiddle.net/wb08v1dt/42/show";
           iframe.id = "iframe";
           document.getElementById("chart").append(iframe);
         }
