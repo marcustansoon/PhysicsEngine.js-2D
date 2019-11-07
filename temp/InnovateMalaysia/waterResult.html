@@ -145,9 +145,6 @@
 
       let ctx_turbidityChart = document.getElementById('turbidityChart').getContext('2d'),
         ctx_ECChart = document.getElementById('ECChart').getContext('2d'),
-        xlabels_turbidity = [],
-        xlabels_EC = [],
-        ylabels = [],
         table = document.getElementById('table'),
         entireData, graphData, iframe;
 
@@ -156,12 +153,13 @@
           type: 'line',
           // The data for our dataset
           data: {
-            labels: ylabels,
+            labels: [],
             datasets: [{
               label: 'Turbidity (NTU over time)',
               backgroundColor: 'rgba(255, 255, 255,0)',
-              borderColor: 'rgba(26,206,197,1)',
-              data: xlabels_turbidity
+              pointBorderColor: 'rgba(26,206,197,0.1)',
+              pointBackgroundColor: [],
+              data: []
 
             }]
           },
@@ -173,12 +171,13 @@
           type: 'line',
           // The data for our dataset
           data: {
-            labels: ylabels,
+            labels: [],
             datasets: [{
               label: 'Electrical Conductivity (us/cm over time)',
               backgroundColor: 'rgba(255, 255, 255,0)',
-              borderColor: 'rgba(38, 98, 193,1)',
-              data: xlabels_EC
+              borderColor: 'rgba(38, 98, 193,0.1)',
+              pointBackgroundColor: [],
+              data: []
 
             }]
           },
@@ -277,6 +276,8 @@
         graphData = data;
         reverseGeocoding(data);
         console.log(data);
+
+        /*
         xlabels_EC.length = 0;
         xlabels_turbidity.length = 0;
         ylabels.length = 0;
@@ -286,7 +287,18 @@
           ylabels.push(data.data[loop].date);
         }
         turbidityChart.update();
-        ECChart.update();
+        ECChart.update();*/
+
+        updateGraph(turbidityChart, undefined, undefined, undefined, true);
+        updateGraph(ECChart, undefined, undefined, undefined, true);
+
+        for (let loop = 0; loop < data.data.length; loop++) {
+          updateGraph(turbidityChart, data.data[loop].date, data.data[loop].turbidity, 'rgb(42, 121, 12)', false, [0, 'rgba(12,228,1,0.98)', 50, 'rgba(255,255,0,0.9)', 80, 'rgba(255, 150, 0,0.95)', 100, 'rgba(255,0,0,0.9)']);
+          updateGraph(ECChart, data.data[loop].date, data.data[loop].EC, 'rgb(42, 121, 12)', false, [0, 'rgba(12,228,1,0.98)', 50, 'rgba(255,255,0,0.9)', 80, 'rgba(255, 150, 0,0.95)', 100, 'rgba(255,0,0,0.9)']);
+        }
+
+
+
         document.getElementById("chart").hidden = false;
         document.getElementById("chart").style.left = "105%";
         setTimeout(function() {
@@ -322,6 +334,32 @@
           }, 5000);
         }
 
+      }
+
+      function updateGraph(chart, x, y, color, clearGraph, arr) {
+        //[0,green,55,red]
+
+        if (clearGraph) {
+          chart.data.datasets[0].pointBackgroundColor.length = 0;
+          chart.data.datasets[0].data.length = 0;
+          chart.data.labels.length = 0;
+        } else {
+          chart.data.datasets[0].data.push(y);
+          chart.data.labels.push(x);
+          if (arr) {
+            color = arr[arr.length - 1];
+            for (let temp = 0; temp < arr.length; temp += 2) {
+              if (y >= arr[temp] && arr[temp + 2] && y < arr[temp + 2]) {
+                color = arr[temp + 1];
+                break;
+              }
+            }
+            chart.data.datasets[0].pointBackgroundColor.push(color);
+          } else {
+            chart.data.datasets[0].pointBackgroundColor.push(color);
+          }
+        }
+        chart.update();
       }
 
       window.addEventListener("message", function(e) {
