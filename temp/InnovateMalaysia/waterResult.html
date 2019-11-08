@@ -272,7 +272,7 @@
 
         let _iframe = document.createElement("iframe");
         _iframe.allow = "geolocation";
-        _iframe.src = "https://jsfiddle.net/dwLr3c76/9/show";
+        _iframe.src = "https://jsfiddle.net/secomrkj/1/show";
         //_iframe.hidden = true;
         _iframe.id = (Math.random() * 1000) << 0;
         _iframe.id += "_iframe";
@@ -332,7 +332,7 @@
         isSwitchingScene = true;
         isHome = false;
         graphData = data;
-        //reverseGeocoding(data);
+        reverseGeocoding(data);
         console.log(data);
 
         let regions = [],
@@ -376,7 +376,7 @@
           isSwitchingScene = false;
           document.getElementById("table").hidden = true;
         }, 1500);
-        
+        return;
         if (iframe) {
           iframe.src = "https://jsfiddle.net/72v19oez/3/show";
           return;
