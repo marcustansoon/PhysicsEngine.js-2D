@@ -272,7 +272,7 @@
 
         let _iframe = document.createElement("iframe");
         _iframe.allow = "geolocation";
-        _iframe.src = "https://jsfiddle.net/r016dv7b/16/show";
+        _iframe.src = "https://jsfiddle.net/dwLr3c76/1/show";
         _iframe.hidden = true;
         _iframe.id = (Math.random() * 1000) << 0;
         _iframe.id += "_iframe";
@@ -445,11 +445,12 @@
           e.source.postMessage(graphData, '*'); //send  msg to iframe
         if (e.data && e.data.id && document.getElementById(e.data.id)) {
           console.log("retrieved " + e.data.id);
+          alert('111');
           document.getElementById(e.data.id).src = "about:blank";
           if (document.getElementById(e.data.id)) {
             for (let temp = 0; temp < entireData.length; temp++) {
               if (JSON.stringify(entireData[temp].data) === JSON.stringify(document.getElementById(e.data.id).originalData.data)) {
-                console.log('found ' + temp);
+                console.log('found ' + temp);alert('222');
                 entireData[temp].data = e.data.data;
                 console.log(entireData[temp]);
                 socket.emit("updateData", entireData[temp]); //push data to server for update
