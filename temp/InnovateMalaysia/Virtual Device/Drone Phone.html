@@ -7,7 +7,7 @@ https://raw.githack.com/marcustansoon/PhysicsEngine.js-2D/master/temp/InnovateMa
   Drone Phone (OTG to Microcontroller)
 </h3>
 
-registerDeviceID(passcode,deviceID)
+registerDeviceID(passcode,deviceID,_latlng)
 <br>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
@@ -22,12 +22,13 @@ registerDeviceID(passcode,deviceID)
     count = 0;
 
 
-  function registerDeviceID(passcode, _deviceID) {
+  function registerDeviceID(passcode, _deviceID,_latlng) {
     socket.emit('registerDeviceID', {
       passcode: passcode + '',
       deviceID: _deviceID + ''
     });
     deviceID = _deviceID;
+    if(_latlng)latlng=_latlng;
   }
 
   socket.on('registerDeviceIDStatus', function(data) {
