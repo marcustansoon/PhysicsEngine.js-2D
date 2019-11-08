@@ -332,7 +332,7 @@
         isSwitchingScene = true;
         isHome = false;
         graphData = data;
-        reverseGeocoding(data);
+        //reverseGeocoding(data);
         console.log(data);
 
         let regions = [],
@@ -376,9 +376,9 @@
           isSwitchingScene = false;
           document.getElementById("table").hidden = true;
         }, 1500);
-        return;
+        
         if (iframe) {
-          iframe.src = "https://jsfiddle.net/5n8ysfgm/2/show";
+          iframe.src = "https://jsfiddle.net/dwLr3c76/9/show";
           return;
         } else {
           iframe = document.createElement("iframe");
@@ -386,7 +386,7 @@
           //iframe.style="position:relative;left:50%;transform:translate(-50%);"
           iframe.height = "350";
           iframe.allow = "geolocation";
-          iframe.src = "https://jsfiddle.net/5n8ysfgm/2/show"; //"https://jsfiddle.net/0c35ejr6/30/show";"https://jsfiddle.net/e79gfszL/3/show";//"https://jsfiddle.net/379dgtzo/12/show";//"https://jsfiddle.net/wb08v1dt/42/show";
+          iframe.src = "https://jsfiddle.net/dwLr3c76/9/show"; //"https://jsfiddle.net/0c35ejr6/30/show";"https://jsfiddle.net/e79gfszL/3/show";//"https://jsfiddle.net/379dgtzo/12/show";//"https://jsfiddle.net/wb08v1dt/42/show";
           iframe.id = "iframe";
           document.getElementById("chart").append(iframe);
           
