@@ -16,32 +16,24 @@ class AnimatedSpriteManager extends PIXI.AnimatedSprite {
     
 
     if (frames.length) //check is an animation state consists of multiple frames (either array or string)
-    {
-      //let textures = [];//create an empty array
-      if (typeof frames==='string'){//check if string
-        this.textures=this._animationStates[frames];
-        return; 
-      }
+    {  
+      if(typeof frames==='string')//check if string
+      	frames=this._animationStates[frames];  
       
-      if (frames.length > this._totalTextures.length) //check if total frame number exceeded total combined animation frames
-      {
-        throw new Error("Animated State Frames is more than total frames");
-      }
-      this.textures.length=0;
-      for(let temp=0;temp<frames.length;temp++){
+
+      for(let temp=0;temp<frames.length;temp++){//for each 'frames' value, assign the relevant animated frames into the 'textures'
         this.textures.push(this._totalTextures[temp]);
       }
-      /*frames.forEach(texture => { //for each 'frames' value, assign the relevant animated frames into the 'textures'
+       /*frames.forEach(texture => { //for each 'frames' value, assign the relevant animated frames into the 'textures'
         textures.push(this._totalTextures[texture]);
       });*/
       //this.textures = textures;//assign back the new animation state frames
+      
+      this.textures.splice(0, this.textures.length-frames.length);
       this.gotoAndPlay(0); //play the animation state, start from zero
 
     } else //following statements only execute if animation state is static (consist of  a single frame)
     {
-      if (frames > this._totalTextures.length)
-        throw new Error("Frame index is exceeded");
-
       this.textures = [this._totalTextures[frames]];
       this.gotoAndStop(0);//go to that particular frame
     }
