@@ -16,7 +16,7 @@ class AnimatedSpriteTextureManager {
       if (isJSON && PIXI.Loader.shared.resources[src].textures[properties.name]) //check is json and texture is loaded
       {
         //console.log('is json');
-        this.AnimatedSpriteTextureBaseT = PIXI.loader.resources[src].textures[properties.name];
+        this.AnimatedSpriteTextureBaseT = PIXI.Loader.shared.resources[src].textures[properties.name];
 
         this.AnimatedSpriteTextureProperties.x = this.AnimatedSpriteTextureBaseT.frame.x;//store the x,y position
         this.AnimatedSpriteTextureProperties.y = this.AnimatedSpriteTextureBaseT.frame.y;
@@ -26,7 +26,7 @@ class AnimatedSpriteTextureManager {
       }
       else if (PIXI.Loader.shared.resources[src].texture) //check if texture is loaded (non json)
       {
-        this.AnimatedSpriteTextureBaseT = PIXI.loader.resources[src].texture;
+        this.AnimatedSpriteTextureBaseT = PIXI.Loader.shared.resources[src].texture;
       }
     }
   }
