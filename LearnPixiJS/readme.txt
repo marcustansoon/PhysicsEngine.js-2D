@@ -11,6 +11,7 @@ Example of AnimatedSpriteManager and AnimatedSpriteTextureManager usage :-
 http://jsfiddle.net/rh3eqdfk/193/
 http://jsfiddle.net/oqy7jedL/show
 https://www.w3schools.com/code/tryit.asp?filename=G0U2WL54N3RS 12/12/2019
+https://www.w3schools.com/code/tryit.asp?filename=G0UDA0SF99PO
 
 10/8/18
 https://files.fm/u/jswh3ndu
