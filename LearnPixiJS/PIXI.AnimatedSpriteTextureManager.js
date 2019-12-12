@@ -13,7 +13,7 @@ class AnimatedSpriteTextureManager {
 
     if (typeof src === "string") {
 
-      if (isJSON && PIXI.loader.resources[src].textures[properties.name]) //check is json and texture is loaded
+      if (isJSON && PIXI.Loader.shared.resources[src].textures[properties.name]) //check is json and texture is loaded
       {
         //console.log('is json');
         this.AnimatedSpriteTextureBaseT = PIXI.loader.resources[src].textures[properties.name];
@@ -24,7 +24,7 @@ class AnimatedSpriteTextureManager {
         this.AnimatedSpriteTextureProperties.height = this.AnimatedSpriteTextureBaseT.frame.height;
         
       }
-      else if (PIXI.loader.resources[src].texture) //check if texture is loaded (non json)
+      else if (PIXI.Loader.shared.resources[src].texture) //check if texture is loaded (non json)
       {
         this.AnimatedSpriteTextureBaseT = PIXI.loader.resources[src].texture;
       }
