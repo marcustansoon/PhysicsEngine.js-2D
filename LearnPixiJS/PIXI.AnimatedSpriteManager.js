@@ -29,7 +29,7 @@ class AnimatedSpriteManager extends PIXI.AnimatedSprite {
       }
       this.textures.length=0;
       for(let temp=0;temp<frames.length;temp++){
-        this.textures.push(this._totalTextures[texture]);
+        this.textures.push(this._totalTextures[temp]);
       }
       /*frames.forEach(texture => { //for each 'frames' value, assign the relevant animated frames into the 'textures'
         textures.push(this._totalTextures[texture]);
