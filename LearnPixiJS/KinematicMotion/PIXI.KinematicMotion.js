@@ -1,6 +1,7 @@
 //https://rawgit.com/marcustansoon/PhysicsEngine.js-2D/master/LearnPixiJS/KinematicMotion/PIXI.KinematicMotion.js
 //example usage : https://jsfiddle.net/6ad5ugs3/127/ 
 //example usage : https://jsfiddle.net/ftz5n6co/4/   --cleaner version
+//https://jsfiddle.net/s420ucfL/
 
 //method :    registerChild(SPRITE)             -> registeration must be done first before attaching any kineamtic motion
 //            unregisterChild(SPRITE)           -> remove all previously added kinematic-related properties from sprite
