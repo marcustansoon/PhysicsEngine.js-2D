@@ -12,23 +12,15 @@
 	
 <script>
 var enginetick=new Game2DEngine.EngineTick();
-
 var Kinematic=new Game2DEngine.Kinematic();
-
 function CallBackFunc(){//define the function to be invoked each time the Engine Tick is incremented
-
 	Kinematic.KinematicHandler(enginetick);//invoke the Kinematic HANDLER which control the motions of an object
 }
-
 enginetick.Start(CallBackFunc);
 //Start the engine with 20millisecond tick loop rate (default) and specify the function to be invoked
 //Note: The tick loop rate can be altered by including the tick loop rate as the 1st param, for instance, enginetick.Start(30,CallBackFunc); , indicating 30 millisecond tick loop rate
-
-
 var Canvas=document.getElementById('canvas');
 var Context=Canvas.getContext('2d');//Get canvas
-
-
 var stringB=[];
 var stringA=[];
 function Animation(){
@@ -38,8 +30,8 @@ function Animation(){
 		Context.font = "10px Arial";//set font size
 		
         for (let x=0;x<=4;x++){//display motion status on canvas
-		Context.fillText(stringA[x],Coin.x-40,Coin.y+x*10-20);
-        Context.fillText(stringB[x],Coin.x+110,Coin.y+x*10-20);
+		Context.fillText(stringA[x],Coin.x-40,Coin.y+x*10-50);
+        Context.fillText(stringB[x],Coin.x+110,Coin.y+x*10-50);
         }
 		
          Context.drawImage(CoinImage,//Image
@@ -49,8 +41,8 @@ function Animation(){
                                 CoinImage.width,//Image width
                                 Coin.x,//Position x of the image
                                 Coin.y,//Position y of the image
-                                CoinImage.height,//Image height
-                                CoinImage.width//Image width
+                                50,//Image height
+                                50//Image width
                                 );
    
     
@@ -78,13 +70,10 @@ function YourObj (x,y){//An Object with X and Y properties included
     this.y=y;//Both X and Y properties are REQUIRED!!!
     //X and Y will be modified by the Kinematic Handler
 }
-
 var Coin =new YourObj(50,50);//Create an Object with x and  y properties
-
 Kinematic.RegisterKinematicObject(Coin);//Register the Coin as Kinematic Object
-
 var CoinImage=new Image();//Create Image Object
-CoinImage.src="http://img8.downloadapk.net/8/54/e5daa0_150.png";//Image src
+CoinImage.src="http://i.imgur.com/nxxnP5i.png";//Image src
 var p5_collision = new p5();//using p5 collision detection
 CoinImage.onload=function(){
 	Animation();//Start the animation function
@@ -141,7 +130,6 @@ document.onkeydown = function(e)
 		stringA[4]='Motion Expire Time	: 0';
 	}
 }
-
 </script>
 
 		<p style="color:green;font-size:15px;">To remove 'Bounce' motion, <strong>press Space Bar</strong></p>
