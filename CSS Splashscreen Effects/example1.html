@@ -1,134 +1,118 @@
 <style>
-  * {
-    padding: 0px;
-    margin: 0px;
-  }
-
-  .image {
+*{
+	padding:0px;
+    margin:0px;
+}
+.image {
     overflow: hidden;
-    width: 5%;
-    min-width: 35px;
+    width:5vw;
+    min-width:100px;
+    
+     -webkit-filter: blur(30px);
 
-    -webkit-filter: blur(30px);
-
-    -webkit-animation: image_blur 1.75s ease-in-out forwards, move 1s forwards;
-    animation: image_blur 1.75s ease-in-out forwards, move 1s forwards;
-
-    -webkit-animation-delay: 0s, 1.75s;
+     -webkit-animation: image_blur 1.75s ease-in-out forwards, move 1s forwards;
+            animation: image_blur 1.75s ease-in-out forwards, move 1s forwards;
+            
+	-webkit-animation-delay: 0s, 1.75s;
 
 
-  }
+}
+.imageContainer{
+    -webkit-animation:  move 1s forwards;
+            animation:   move 1s forwards;
+            
+-webkit-animation-delay: 1.75s;
+}
 
-  .imageContainer {
-    -webkit-animation: move 1s forwards;
-    animation: move 1s forwards;
-
-    -webkit-animation-delay: 1.75s;
-  }
-
-  .text {
-    text-align: center;
-
-    font-size: calc(5px + 0.7vw);
-    position: relative;
+.text{
+	text-align:center;
+	
+    font-size:calc(5px + 0.7vw);
+    position:relative;
     top: 45%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    -webkit-animation: textMove 1s forwards;
-    animation: textMove 1s forwards;
-
-    -webkit-animation-delay: 1.75s;
-  }
-
-  @-webkit-keyframes image_blur {
-    0% {
-      -webkit-filter: blur(25px);
+    transform: translate(-50%,-50%);
+    opacity:0;
+    -webkit-animation:  textMove 1s forwards;
+            animation:   textMove 1s forwards;
+            
+-webkit-animation-delay: 1.75s;
+}
+@-webkit-keyframes image_blur {
+   0% { -webkit-filter: blur(25px);
       -webkit-transform: scale(0) rotate(-180deg);
     }
-
-    50% {
-      -webkit-filter: blur(8px);
+   
+    50% { -webkit-filter: blur(8px);
+    
+    }
+    80% { -webkit-filter: blur(0px);
+    -webkit-transform: scale(3.5) rotate(360deg);
 
     }
-
-    80% {
-      -webkit-filter: blur(0px);
-      -webkit-transform: scale(3.5) rotate(360deg);
+    100% { -webkit-filter: blur(0px);
+    -webkit-transform: scale(3) rotate(360deg);
 
     }
-
-    100% {
-      -webkit-filter: blur(0px);
-      -webkit-transform: scale(3) rotate(360deg);
-
-    }
-  }
-
-  @keyframes image_blur {
-    0% {
-      -webkit-filter: blur(25px);
+}
+@keyframes image_blur {
+    0% { -webkit-filter: blur(25px);
       -webkit-transform: scale(0) rotate(-180deg);
     }
-
-    50% {
-      -webkit-filter: blur(8px);
+   
+    50% { -webkit-filter: blur(8px);
+    
+    }
+    80% { -webkit-filter: blur(0px);
+    -webkit-transform: scale(3.5) rotate(360deg);
 
     }
-
-    80% {
-      -webkit-filter: blur(0px);
-      -webkit-transform: scale(3.5) rotate(360deg);
+    100% { -webkit-filter: blur(0px);
+    -webkit-transform: scale(3) rotate(360deg);
 
     }
+}
 
+
+@-webkit-keyframes move {
     100% {
-      -webkit-filter: blur(0px);
-      -webkit-transform: scale(3) rotate(360deg);
-
+        top:41%;
+        
     }
-  }
+}
 
-
-  @-webkit-keyframes move {
+@keyframes move {
     100% {
-      top: 41%;
-
+        top:41%;
     }
-  }
-
-  @keyframes move {
+}
+@-webkit-keyframes textMove {
     100% {
-      top: 41%;
+        top:60%;
+        opacity:1;
+       font-size:calc(14px + 0.5vw);
     }
-  }
+}
 
-  @-webkit-keyframes textMove {
+@keyframes textMove {
     100% {
-      top: 60%;
-      opacity: 1;
-      font-size: calc(14px + 0.5vw);
+        top:60%;
+        opacity:1;
+       font-size:calc(14px + 0.5vw);
     }
-  }
+}
 
-  @keyframes textMove {
-    100% {
-      top: 60%;
-      opacity: 1;
-      font-size: calc(14px + 0.5vw);
-    }
-  }
 
 </style>
 <div style="border:0px solid;width:50%;position:relative;height:25%;left:50%;top:50%;transform: translate(-50%,-50%);">
 
-  <div style="width:100%;text-align:center;position:absolute;border:0px solid;left:50%;top:50%;transform:translate(-50%,-50%);" class="imageContainer">
-    <img class="image" src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png">
-  </div>
+<div style="width:100%;text-align:center;position:absolute;border:0px solid;left:50%;top:50%;transform:translate(-50%,-50%);" class="imageContainer">
+<img class="image" src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png">
+</div>
 
-  <div class="text">
-    Title
-  </div>
+<div class="text">
+Title
+</div>
 
 </div>
 <!--
