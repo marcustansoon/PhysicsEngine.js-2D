@@ -1,4 +1,5 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Lemon" />
 <style>
   * {
     padding: 0px;
@@ -7,6 +8,7 @@
 
   body {
     overflow: hidden;
+    font-family: Lemon; 
   }
 
   .image {
@@ -52,12 +54,12 @@
 
     80% {
       -webkit-filter: blur(0px);
-      -webkit-transform: scale(3.5) rotate(360deg);
+      -webkit-transform: scale(5) rotate(360deg);
     }
 
     100% {
       -webkit-filter: blur(0px);
-      -webkit-transform: scale(3) rotate(360deg);
+      -webkit-transform: scale(4) rotate(360deg);
     }
   }
 
@@ -73,12 +75,12 @@
 
     80% {
       -webkit-filter: blur(0px);
-      -webkit-transform: scale(3.5) rotate(360deg);
+      -webkit-transform: scale(5) rotate(360deg);
     }
 
     100% {
       -webkit-filter: blur(0px);
-      -webkit-transform: scale(3) rotate(360deg);
+      -webkit-transform: scale(4) rotate(360deg);
     }
   }
 
@@ -117,7 +119,7 @@
     width: 100%;
     height: 100%;
     --pos: 100%;
-    background: radial-gradient(circle, rgba(255, 0, 0, 0) 1%, rgba(255, 0, 0, 0) var(--pos), rgba(249, 249, 249, 1) 0);
+    background: radial-gradient(circle, rgba(255, 0, 0, 0) 1%, rgba(255, 0, 0, 0) var(--pos), rgba(252, 252, 252, 1) 0.1%);
     animation: a 0s infinite;
     -webkit-animation: circularZoomOut 0.75s ease-in-out forwards, hideElement 1s forwards;
     animation: circularZoomOut 0.75s ease-in-out forwards, hideElement 1s forwards;
@@ -131,7 +133,7 @@
     }
 
     100% {
-      --pos: 0%;
+      --pos: 1%;
     }
   }
 
@@ -141,7 +143,7 @@
     }
 
     100% {
-      --pos: 0%;
+      --pos: 1%;
     }
   }
 
@@ -166,11 +168,11 @@
   <div style="border:0px solid;width:50%;position:relative;height:25%;left:50%;top:50%;transform: translate(-50%,-50%);z-index:-1;">
 
     <div style="width:100%;text-align:center;position:relative;border:0px solid;left:50%;top:50%;transform:translate(-50%,-50%);" class="imageContainer">
-      <img class="image" src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png">
+      <img class="image" src="https://www.freepnglogos.com/uploads/googlem-old-google-logo-png-5.png">
     </div>
 
     <div class="text">
-      Google
+      Google .Inc
     </div>
 
   </div>
