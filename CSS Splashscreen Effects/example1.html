@@ -10,7 +10,6 @@
   }
 
   .image {
-    overflow: hidden;
     width: 5vw;
     min-width: 40px;
     max-width: 70px;
@@ -83,7 +82,6 @@
     }
   }
 
-
   @-webkit-keyframes move {
     100% {
       top: 38%;
@@ -116,13 +114,11 @@
 
   .backgroundCoverUp {
     position: absolute;
-    overflow: hidden;
-    background-image: radial-gradient(circle, rgba(255, 0, 0, 0) 1%, rgba(255, 0, 0, 0) 1%, rgba(249, 249, 249,1) 0.1%);
-    height: 0vh;
-    width: 0vw;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    --pos: 100%;
+    background: radial-gradient(circle, rgba(255, 0, 0, 0) 1%, rgba(255, 0, 0, 0) var(--pos), rgba(249, 249, 249, 1) 0);
+    animation: a 0s infinite;
     -webkit-animation: circularZoomOut 0.75s ease-in-out forwards, hideElement 1s forwards;
     animation: circularZoomOut 0.75s ease-in-out forwards, hideElement 1s forwards;
     -webkit-animation-delay: 3s, 3.75s;
@@ -130,30 +126,29 @@
   }
 
   @-webkit-keyframes circularZoomOut {
-   0%{
-     height: 10000vh;
-      width: 10000vw;
-   }
+    0% {
+      --pos: 100%;
+    }
+
     100% {
-      height: 100vh;
-      width: 100vw;
+      --pos: 0%;
     }
   }
 
   @keyframes circularZoomOut {
-    0%{
-     height: 10000vh;
-      width: 10000vw;
-   }
+    0% {
+      --pos: 100%;
+    }
+
     100% {
-      height: 100vh;
-      width: 100vw;
+      --pos: 0%;
     }
   }
 
   @-webkit-keyframes hideElement {
     100% {
       opacity: 0;
+
     }
   }
 
@@ -162,12 +157,12 @@
       opacity: 0;
     }
   }
+
 </style>
 
 <body>
- <div style="position:absolute;width:100%;height:100%;overflow:hidden;">
   <div class="backgroundCoverUp"></div>
-</div>
+
   <div style="border:0px solid;width:50%;position:relative;height:25%;left:50%;top:50%;transform: translate(-50%,-50%);z-index:-1;">
 
     <div style="width:100%;text-align:center;position:relative;border:0px solid;left:50%;top:50%;transform:translate(-50%,-50%);" class="imageContainer">
@@ -175,13 +170,20 @@
     </div>
 
     <div class="text">
-      Title
+      Google
     </div>
 
   </div>
- 
- <script>
-   setTimeout(function(){window.location.replace("http://www.google.com");},3750);
- </script>
-</body>
 
+  <script>
+    //setTimeout(function(){window.location.replace("http://www.google.com");},3750);
+
+    CSS.registerProperty({
+      name: '--pos',
+      syntax: '<length-percentage>',
+      initialValue: '0%',
+      inherits: true
+    });
+
+  </script>
+</body>
