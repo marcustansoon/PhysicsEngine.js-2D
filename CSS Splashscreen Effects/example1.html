@@ -161,7 +161,7 @@
   }
 
 </style>
-
+<script src="https://unpkg.com/current-device/umd/current-device.min.js"></script>
 <body>
   <div class="backgroundCoverUp"></div>
 
@@ -178,6 +178,7 @@
   </div>
 
   <script>
+    console.log(device.type);
     //setTimeout(function(){window.location.replace("https://about.google/");},3750);
 
     CSS.registerProperty({
