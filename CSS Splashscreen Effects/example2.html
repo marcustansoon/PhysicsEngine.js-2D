@@ -1,0 +1,50 @@
+<style>
+html {
+  height: 100%;
+  --c0: #f90;
+  --c1: #444;
+  background: radial-gradient(circle, var(--c0) var(--pos, 0%), var(--c1) 0);
+  animation: a 0s infinite;
+  animation-name: c0, pos, c1;
+  animation-duration: 2s, 1s;
+  animation-timing-function: steps(1), ease-in-out;
+}
+
+@keyframes pos {
+  90%, 100% {
+    --pos: 100% ;
+  }
+}
+@keyframes c0 {
+  50% {
+    --c0: #444 ;
+  }
+}
+@keyframes c1 {
+  50% {
+    --c1: #f90 ;
+  }
+}
+</style>
+<script>
+CSS.registerProperty({
+	name: '--pos', 
+	syntax: '<length-percentage>', 
+	initialValue: '0%', 
+	inherits: true
+});
+
+CSS.registerProperty({
+	name: '--c0', 
+	syntax: '<color>', 
+	initialValue: 'red', 
+	inherits: true
+});
+
+CSS.registerProperty({
+	name: '--c1', 
+	syntax: '<color>', 
+	initialValue: 'red', 
+	inherits: true
+});
+</script>
