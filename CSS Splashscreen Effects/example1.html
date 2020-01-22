@@ -15,25 +15,20 @@
     min-width: 40px;
     max-width: 70px;
     -webkit-filter: blur(30px);
-
     -webkit-animation: image_blur 1.75s ease-in-out forwards, move 1s forwards, hideElement 0.75s forwards;
     animation: image_blur 1.75s ease-in-out forwards, move 1s forwards, hideElement 0.75s forwards;
-
     -webkit-animation-delay: 0s, 1.75s, 3.5s;
-
-
   }
 
   .imageContainer {
     -webkit-animation: move 1s forwards;
     animation: move 1s forwards;
-
     -webkit-animation-delay: 1.75s;
+    animation-delay: 1.75s;
   }
 
   .text {
     text-align: center;
-
     font-size: calc(5px + 0.7vw);
     position: relative;
     top: 45%;
@@ -42,8 +37,8 @@
     opacity: 0;
     -webkit-animation: textMove 1s forwards, hideElement 0.75s forwards;
     animation: textMove 1s forwards, hideElement 0.75s forwards;
-
     -webkit-animation-delay: 1.75s, 3.75s;
+    animation-delay: 1.75s, 3.75s;
   }
 
   @-webkit-keyframes image_blur {
@@ -54,19 +49,16 @@
 
     50% {
       -webkit-filter: blur(8px);
-
     }
 
     80% {
       -webkit-filter: blur(0px);
       -webkit-transform: scale(3.5) rotate(360deg);
-
     }
 
     100% {
       -webkit-filter: blur(0px);
       -webkit-transform: scale(3) rotate(360deg);
-
     }
   }
 
@@ -78,19 +70,16 @@
 
     50% {
       -webkit-filter: blur(8px);
-
     }
 
     80% {
       -webkit-filter: blur(0px);
       -webkit-transform: scale(3.5) rotate(360deg);
-
     }
 
     100% {
       -webkit-filter: blur(0px);
       -webkit-transform: scale(3) rotate(360deg);
-
     }
   }
 
@@ -98,7 +87,6 @@
   @-webkit-keyframes move {
     100% {
       top: 38%;
-
     }
   }
 
@@ -126,26 +114,19 @@
     }
   }
 
-
-
-
-
   .backgroundCoverUp {
     position: absolute;
     overflow: hidden;
-    background-image: radial-gradient(circle, rgba(255, 0, 0, 0) 1%, rgba(255, 0, 0, 0) 1%, rgba(255, 255, 0, 1) 0.1%);
+    background-image: radial-gradient(circle, rgba(255, 0, 0, 0) 1%, rgba(255, 0, 0, 0) 1%, rgba(255, 255, 255, 1) 0.1%);
     height: 12000vh;
     width: 12000vw;
-
     top: 50%;
     left: 50%;
-
     transform: translate(-50%, -50%);
-
     -webkit-animation: circularZoomOut 0.75s ease-in-out forwards, hideElement 1s forwards;
     animation: circularZoomOut 0.75s ease-in-out forwards, hideElement 1s forwards;
-
     -webkit-animation-delay: 3s, 3.75s;
+    animation-delay: 3s, 3.75s;
   }
 
   @-webkit-keyframes circularZoomOut {
@@ -173,7 +154,6 @@
       opacity: 0;
     }
   }
-
 </style>
 
 <body>
@@ -192,7 +172,4 @@
 
   </div>
 </body>
-<!--
-<img class="image" src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png">
-<div class="text">123qwe</div>
--->
+
