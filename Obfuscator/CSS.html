@@ -305,10 +305,10 @@
       else{
       		searchTerms = document.getElementById('searchTerms').value;//['#', '{', '.', '{'],
       }
-      searchTerms.replace("[",'');
-      searchTerms.replace("]",'');
+      searchTerms=searchTerms.replace("[",'');
+      searchTerms=searchTerms.replace("]",'');
       searchTerms=searchTerms.split(',');
-
+		console.log(searchTerms);
       for (let temp = 0; temp < arr2.length; temp++) {
         for (let t = 0; t < searchTerms.length; t += 2) {
           let x = getStringInBetween(arr2[temp], searchTerms[t], searchTerms[t + 1]);
