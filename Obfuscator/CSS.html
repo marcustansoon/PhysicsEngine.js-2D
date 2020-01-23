@@ -27,8 +27,8 @@
         height: 100%;
         border: 1px solid;
       }
-      
-      .obfuscate{
+
+      .obfuscate {
         position: absolute;
         left: 50%;
         top: 63%;
@@ -239,38 +239,38 @@
 </textarea>
       <textarea id="outputTextarea"></textarea>
     </div>
-	<button class="obfuscate button" onclick="obfuscate();" id="obfuscate">Obfuscate</button>
+    <button class="obfuscate button" onclick="obfuscate();" id="obfuscate">Obfuscate</button>
     <div class="obfuscate" style="left:20%;margin:2%;">Replace Selector Conditions
-    <br>
-    <input value="[#,{,.,{]" style="top:20%;font-size:20px;" id="searchTerms">
-   <button class="button" onclick="setSearchTerms();">Set</button>
-   </div>
+      <br>
+      <input value="[#,{,.,{]" style="top:20%;font-size:20px;" id="searchTerms">
+      <button class="button" onclick="setSearchTerms();">Set</button>
+    </div>
     <br>
     <div id="selectorRenaming" class="selectorRenaming"><b>CSS Selector Renaming</b><br>
-   
+
       <button class="button" onclick="selectorRenaming();" id="replace">Replace</button>
       <button class="button" onclick="shuffleContent();">Shuffle Content</button>
     </div>
 
     <script>
-    
-    	function obfuscate(){
-        	localStorage.setItem('CSSObfuscateData', document.getElementById("inputTextarea").value);
-            location.reload(true);
-        }
-        function setSearchTerms(){	localStorage.setItem('CSSObfuscateSearchTerms',document.getElementById("searchTerms").value);
-            location.reload(true);
-        }
-    
-    	let str='';
-    	if(localStorage.getItem('CSSObfuscateData')){
-        	str=localStorage.getItem('CSSObfuscateData').replace(/(\r\n|\n|\r)/gm, "").replace(/ +/g, " ");
-        	document.getElementById("inputTextarea").value=localStorage.getItem('CSSObfuscateData');        
-        }
-    	else{
-       	str = document.getElementById("inputTextarea").value.replace(/(\r\n|\n|\r)/gm, "").replace(/ +/g, " "); //remove newline,tabs, multiple spaces
-		}
-        
+      function obfuscate() {
+        localStorage.setItem('CSSObfuscateData', document.getElementById("inputTextarea").value);
+        location.reload(true);
+      }
+
+      function setSearchTerms() {
+        localStorage.setItem('CSSObfuscateSearchTerms', document.getElementById("searchTerms").value);
+        //location.reload(true);
+      }
+
+      let str = '';
+      if (localStorage.getItem('CSSObfuscateData')) {
+        str = localStorage.getItem('CSSObfuscateData').replace(/(\r\n|\n|\r)/gm, "").replace(/ +/g, " ");
+        document.getElementById("inputTextarea").value = localStorage.getItem('CSSObfuscateData');
+      } else {
+        str = document.getElementById("inputTextarea").value.replace(/(\r\n|\n|\r)/gm, "").replace(/ +/g, " "); //remove newline,tabs, multiple spaces
+      }
+
       let start, expectingClosingBracket = 0,
         arr = [];
 
@@ -295,20 +295,20 @@
       document.getElementById("outputTextarea").value = arr2.join(' ');
 
       //show CSS Selector names
-      
-      
-      let searchTerms = '',alphabet = 'abcdefghijklmnopqrstuvwxyz';
-      if(localStorage.getItem('CSSObfuscateSearchTerms')){
-        	searchTerms=localStorage.getItem('CSSObfuscateSearchTerms');		
-            document.getElementById("searchTerms").value=localStorage.getItem('CSSObfuscateSearchTerms');
+
+
+      let searchTerms = '',
+        alphabet = 'abcdefghijklmnopqrstuvwxyz';
+      if (localStorage.getItem('CSSObfuscateSearchTerms')) {
+        searchTerms = localStorage.getItem('CSSObfuscateSearchTerms');
+        document.getElementById("searchTerms").value = localStorage.getItem('CSSObfuscateSearchTerms');
+      } else {
+        searchTerms = document.getElementById('searchTerms').value; //['#', '{', '.', '{'],
       }
-      else{
-      		searchTerms = document.getElementById('searchTerms').value;//['#', '{', '.', '{'],
-      }
-      searchTerms=searchTerms.replace("[",'');
-      searchTerms=searchTerms.replace("]",'');
-      searchTerms=searchTerms.split(',');
-		console.log(searchTerms);
+      searchTerms = searchTerms.replace("[", '');
+      searchTerms = searchTerms.replace("]", '');
+      searchTerms = searchTerms.split(',');
+      console.log(searchTerms);
       for (let temp = 0; temp < arr2.length; temp++) {
         for (let t = 0; t < searchTerms.length; t += 2) {
           let x = getStringInBetween(arr2[temp], searchTerms[t], searchTerms[t + 1]);
@@ -323,6 +323,7 @@
 
         }
       }
+
       function getStringInBetween(string, text1, text2) {
         let l = string.indexOf(text1),
           z = string.indexOf(text2);
