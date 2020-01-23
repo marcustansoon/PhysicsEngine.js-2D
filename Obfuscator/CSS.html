@@ -257,17 +257,17 @@
 </textarea>
       <textarea id="outputTextarea"></textarea>
     </div>
-    <button class="obfuscate button" onclick="obfuscate();" id="obfuscate">Obfuscate</button>
+    <button class="obfuscate button" onclick="obfuscate();" id="obfuscate">Obfuscate 2</button>
     <div class="obfuscate" style="left:20%;margin:2%;">Replace Selector Conditions
       <br>
       <input value="[#,{,.,{]" style="top:20%;font-size:20px;" id="searchTerms">
-      <button class="button" onclick="setSearchTerms();">Set</button>
+      <button class="button" onclick="setSearchTerms();">Set 1</button>
     </div>
     <br>
     <div id="selectorRenaming" class="selectorRenaming"><b>CSS Selector Renaming</b><br>
 
-      <button class="button" onclick="selectorRenaming();" id="replace">Replace</button>
-      <button class="button" onclick="shuffleContent();">Shuffle Content</button>
+      <button class="button" onclick="selectorRenaming();" id="replace">Replace 3</button>
+      <button class="button" onclick="shuffleContent();">Shuffle Content 4</button>
     </div>
 
     <script>
@@ -384,6 +384,14 @@
       }
       localStorage.clear();
 
+	    
+	    
+	    
+	    let s = ".imageContainer { -webkit-animation: move 1s forwards; animation: move 1s forwards; -webkit-animation-delay: 1.75s; animation-delay: 1.75s; }";
+s = s.match(/[0-9.]+%+/g, "");
+	    
+	    
+	    console.log(s);
     </script>
   </body>
 
