@@ -233,28 +233,26 @@
     </div>
 
     <div id="selectorRenaming" class="selectorRenaming"><b>CSS Selector Renaming</b><br>
-    <button class="button" onclick="obfuscate();" id="obfuscate">Obfuscate</button>
+      <button class="button" onclick="obfuscate();" id="obfuscate">Obfuscate</button>
       <button class="button" onclick="selectorRenaming();" id="replace">Replace</button>
       <button class="button" onclick="shuffleContent();">Shuffle Content</button>
     </div>
 
     <script>
-    
-    	function obfuscate(){
-        	localStorage.setItem('CSSObfuscateData', document.getElementById("inputTextarea").value);
-            location.reload(true);
-        }
-    
-    	let str='';
-    	if(localStorage.getItem('CSSObfuscateData')){
-        	str=localStorage.getItem('CSSObfuscateData').replace(/(\r\n|\n|\r)/gm, "").replace(/ +/g, " ");
-        	document.getElementById("inputTextarea").value=localStorage.getItem('CSSObfuscateData');
-        localStorage.setItem('CSSObfuscateData',undefined);
-        }
-    	else{
-       	str = document.getElementById("inputTextarea").value.replace(/(\r\n|\n|\r)/gm, "").replace(/ +/g, " "); //remove newline,tabs, multiple spaces
-		}
-        
+      function obfuscate() {
+        localStorage.setItem('CSSObfuscateData', document.getElementById("inputTextarea").value);
+        location.reload(true);
+      }
+
+      let str = '';
+      if (localStorage.getItem('CSSObfuscateData')) {
+        str = localStorage.getItem('CSSObfuscateData').replace(/(\r\n|\n|\r)/gm, "").replace(/ +/g, " ");
+        document.getElementById("inputTextarea").value = localStorage.getItem('CSSObfuscateData');
+        localStorage.clear();
+      } else {
+        str = document.getElementById("inputTextarea").value.replace(/(\r\n|\n|\r)/gm, "").replace(/ +/g, " "); //remove newline,tabs, multiple spaces
+      }
+
       let start, expectingClosingBracket = 0,
         arr = [];
 
@@ -296,6 +294,7 @@
 
         }
       }
+
       function getStringInBetween(string, text1, text2) {
         let l = string.indexOf(text1),
           z = string.indexOf(text2);
