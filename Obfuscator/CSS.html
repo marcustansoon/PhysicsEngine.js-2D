@@ -2,12 +2,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Quattrocento+Sans" />
 <html>
+
   <head>
     <title>Page Title</title>
     <style>
-    * {
-      font-family: Quattrocento Sans; 
-    }
+      * {
+        font-family: Quattrocento Sans;
+      }
+
       .container {
         position: absolute;
         top: 30%;
@@ -25,12 +27,38 @@
         height: 100%;
         border: 1px solid;
       }
-      .selectorRenaming{
-      	position:absolute;
-        width:50%;
-        left:50%;
-        top:82%;
+
+      .selectorRenaming {
+        position: absolute;
+        width: 50%;
+        left: 50%;
+        top: 83%;
+        text-align: center;
         transform: translate(-50%, -50%);
+      }
+
+      .button {
+        background: linear-gradient(to right, rgba(221, 238, 222, 0.5), rgba(196, 224, 238, 0.8)) !important;
+        color: black !important;
+        text-transform: uppercase;
+        text-decoration: none;
+        background: #ffffff;
+        padding: 5px;
+        margin: 5px;
+        border: 3px solid #494949 !important;
+        display: inline-block;
+        transition: all 0.4s ease 0s;
+        border-radius: 10%;
+      }
+
+      .button:hover {
+        background: linear-gradient(to right, rgba(221, 238, 222, 1), rgba(156, 224, 238, 1)) !important;
+        transition: all 0.4s ease 0s;
+      }
+
+      .button:disabled {
+        text-decoration: line-through;
+        color: rgba(0, 0, 0, 0.3) !important;
       }
 
     </style>
@@ -198,32 +226,26 @@
       opacity: 0;
     }
   }
+  
 </textarea>
       <textarea id="outputTextarea"></textarea>
     </div>
-    
+
     <div id="selectorRenaming" class="selectorRenaming"><b>CSS Selector Renaming</b><br>
-    <button onclick="selectorRenaming();">Replace</button>
+      <button class="button" onclick="selectorRenaming();" id="replace">Replace</button>
+      <button class="button" onclick="shuffleContent();">Shuffle Content</button>
     </div>
-    
+
     <script>
-    
-    function shuffle(a) {
-        for (let i = a.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [a[i], a[j]] = [a[j], a[i]];
-        }
-        return a;
-    }
-    function getStringInBetween(string,text1,text2){
-		let l=string.indexOf(text1),
-        z=string.indexOf(text2);  
-        return l===-1||z===-1||l>z?undefined:string.substring(l+text1.length,z); 
-    }
-    
-    
-    
-    
+      function getStringInBetween(string, text1, text2) {
+        let l = string.indexOf(text1),
+          z = string.indexOf(text2);
+        return l === -1 || z === -1 || l > z ? undefined : string.substring(l + text1.length, z);
+      }
+
+
+
+
       let str = document.getElementById("inputTextarea").value.replace(/(\r\n|\n|\r)/gm, "").replace(/ +/g, " "); //remove newline,tabs, multiple spaces
 
       let start, expectingClosingBracket = 0,
@@ -248,46 +270,62 @@
         arr2.push(str.substring(arr[temp], arr[temp + 1]));
       }
 
-      
-      //arr2=shuffle(arr2); //nt working
-		let searchTerms=['#','{','.','{'],
-        alphabet='abcdefghijklmnopqrstuvwxyz';
-
-        for (let temp = 0; temp < arr2.length; temp++) {
-        	for(let t=0;t<searchTerms.length;t+=2){
-            	let x=getStringInBetween(arr2[temp],searchTerms[t],searchTerms[t+1]);
-                if(x){
-                	//arr3.push(x);
-                	arr2[temp]=arr2[temp].replace(x, alphabet[0]);
-                    document.getElementById('selectorRenaming').innerHTML+=
-                    '<br><input type="checkbox" value="'+x+','+alphabet[0]+','+temp+'" onchange="selectorRenamingCheckbox(this);">'+x+'→ '+alphabet[0];
-                    //from, to, index
-                    alphabet=alphabet.replace(alphabet[0],"");          
-                }
-                
-            }
-        }
-      //let t=getStringInBetween(arr2[9],'.','{');
-      
-      
-      let selectorRenamingList=[];
-      
-      function selectorRenamingCheckbox(that){
-      	let t=that.value.split(',');
-      	if(that.checked){
-        	selectorRenamingList.push(t);       
-        }else{
-        	selectorRenamingList.splice
-        }
-      }
-      function selectorRenaming(){
-      	
-      }
-      
-      //console.log(arr3);
-      
-
       document.getElementById("outputTextarea").value = arr2.join(' ');
+
+
+      //show CSS Selector names
+      let searchTerms = ['#', '{', '.', '{'],
+        alphabet = 'abcdefghijklmnopqrstuvwxyz';
+
+      for (let temp = 0; temp < arr2.length; temp++) {
+        for (let t = 0; t < searchTerms.length; t += 2) {
+          let x = getStringInBetween(arr2[temp], searchTerms[t], searchTerms[t + 1]);
+          if (x) {
+            //arr3.push(x);
+            //arr2[temp]=arr2[temp].replace(x, alphabet[0]);
+            document.getElementById('selectorRenaming').innerHTML +=
+              '<br><input type="checkbox" value="' + x + ',' + alphabet[0] + ',' + temp + '" onchange="selectorRenamingCheckbox(this);">' + x + '→ ' + alphabet[0];
+            //from, to, index
+            alphabet = alphabet.replace(alphabet[0], "");
+          }
+
+        }
+      }
+
+      let selectorRenamingList = [];
+
+      function selectorRenamingCheckbox(that) {
+        let t = that.value.split(',');
+        if (that.checked) {
+          selectorRenamingList = selectorRenamingList.concat(t);
+        } else {
+          selectorRenamingList.splice(selectorRenamingList.indexOf(t[0]), 3);
+        }
+      }
+
+      function selectorRenaming() {
+        console.log(selectorRenamingList);
+        let arr3 = arr2.slice(0);
+        for (let temp = 0; temp < selectorRenamingList.length; temp += 3) {
+          arr3[parseInt(selectorRenamingList[temp + 2])] = arr3[parseInt(selectorRenamingList[temp + 2])].replace(selectorRenamingList[temp], selectorRenamingList[temp + 1]);
+        }
+        document.getElementById("outputTextarea").value = arr3.join(' ');
+      }
+
+      function shuffleContent() {
+        //after shuffle content, u can no longer replace selector names
+        document.getElementById('replace').disabled = true;
+        arr2 = shuffle(arr2); //might nt working
+        document.getElementById("outputTextarea").value = arr2.join(' ');
+      }
+
+      function shuffle(a) {
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      }
 
     </script>
   </body>
