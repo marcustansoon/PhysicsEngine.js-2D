@@ -37,6 +37,7 @@
       }
 
       textarea {
+      background: linear-gradient(to right, rgba(221, 238, 222, 0.1), rgba(196, 224, 238, 0.3)) !important;
         float: left;
         position: relative;
         width: 48%;
@@ -310,6 +311,78 @@
       for (let temp = 0; temp < arr.length - 1; temp++) {
         arr2.push(str.substring(arr[temp], arr[temp + 1]));
       }
+      
+
+      percentageReplacement();
+      function percentageReplacement(){
+      	let percentageMap=new Map(),
+        percentageAlphabet = 'abcdefghijklmnopqrstuvwxyz';
+        
+      	for (let temp = 0; temp < arr2.length; temp++) {
+            let s = arr2[temp].match(/[0-9.]+%+/g, "");
+            if(s){
+            	//console.log(s);
+                s.forEach(function(elem){
+                	if(!percentageMap.has(elem)){
+                		percentageMap.set(elem, percentageAlphabet[0]);
+                        percentageAlphabet = percentageAlphabet.replace(percentageAlphabet[0], "");
+                    }
+                    //console.log(arr2[temp]);
+                    arr2[temp]=arr2[temp].replace(new RegExp(' '+elem+';', 'gi'), ' var(--'+percentageMap.get(elem)+');');
+                    arr2[temp]=arr2[temp].replace(new RegExp(' '+elem+' ;', 'gi'), ' var(--'+percentageMap.get(elem)+');');
+                    arr2[temp]=arr2[temp].replace(new RegExp(' '+elem+':', 'gi'), ' --'+percentageMap.get(elem)+':');
+                    arr2[temp]=arr2[temp].replace(new RegExp(' '+elem+' :', 'gi'), ' --'+percentageMap.get(elem)+':');
+                    //console.log(arr2[temp]);
+                })
+            }
+        }
+        console.log(percentageMap);
+
+        let percentageScript='';
+        percentageMap.forEach(function(value, key){
+        	percentageScript+="CSS.registerProperty({ name: '--"+value+"', syntax: '<length-percentage>', initialValue: '"+key+"', inherits: true });";
+        });
+        
+        console.log(percentageScript);
+        
+        //time
+        let timeMap=new Map();
+        for (let temp = 0; temp < arr2.length; temp++) {
+            let s = arr2[temp].match(/[0-9.]+s+/g, "");
+            if(s){
+            	//console.log(s);
+                s.forEach(function(elem){
+                	if(!timeMap.has(elem)){
+                		timeMap.set(elem, percentageAlphabet[0]);
+                        percentageAlphabet = percentageAlphabet.replace(percentageAlphabet[0], "");
+                    }
+                    //console.log(arr2[temp]);
+                    arr2[temp]=arr2[temp].replace(new RegExp(' '+elem, 'gi'), ' var(--'+timeMap.get(elem)+')');
+                    //console.log(arr2[temp]);
+                })
+            }
+        }
+        let timeScript='';
+        timeMap.forEach(function(value, key){
+        	timeScript+="CSS.registerProperty({ name: '--"+value+"', syntax: '<time>', initialValue: '"+key+"', inherits: true });";
+        });
+        console.log(timeScript);
+        /*
+        window.CSS.registerProperty({
+          name: '--my-color',
+          syntax: '<color>',
+          inherits: false,
+          initialValue: '#c0ffee',
+        });
+        CSS.registerProperty({
+          name: '--'+value,
+          syntax: '<length-percentage>',
+          initialValue: key,
+          inherits: true
+        });
+        */
+      }
+
       document.getElementById("outputTextarea").value = arr2.join(' ');
 
       //show CSS Selector names
@@ -382,16 +455,19 @@
         }
         return a;
       }
+      
+      
       localStorage.clear();
 
 	    
+	    /*
 	    
-	    
-	    let s = ".imageContainer { -webkit-animation: move 1s forwards; animation: move 1s forwards; -webkit-animation-delay: 1.75s; animation-delay: 1.75s; }";
-s = s.match(/[0-9.]+%+/g, "");
-	    
-	    
-	    console.log(s);
+	    let s = "animation: textMove 1s forwards, hideElement 0.75s forwards; -webkit-animation-delay: 1.75s, 3.75s; animation-delay: 1.75s, 3.75s; }";
+let z = s.match(/[0-9.]+s+/g, "");
+	    console.log(z);
+        console.log(s);
+	     z=s.replace(new RegExp(''+z[0],'gi'),' zzz');
+	    console.log(z);*/
     </script>
   </body>
 
