@@ -9,20 +9,22 @@
       * {
         font-family: Quattrocento Sans;
       }
+	*::-webkit-scrollbar-track
+	{
+		-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+		background-color: #F5F5F5;
+	}
 
-      *::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
-        background-color: #F5F5F5;
-      }
+	*::-webkit-scrollbar
+	{
+		width: 6px;
+		background-color: #F5F5F5;
+	}
 
-      *::-webkit-scrollbar {
-        width: 6px;
-        background-color: #F5F5F5;
-      }
-
-      *::-webkit-scrollbar-thumb {
-        background-color: #000000;
-      }
+	*::-webkit-scrollbar-thumb
+	{
+		background-color: #000000;
+	}
 
       .container {
         position: absolute;
@@ -35,7 +37,7 @@
       }
 
       textarea {
-        background: linear-gradient(to right, rgba(221, 238, 222, 0.1), rgba(196, 224, 238, 0.3)) !important;
+      background: linear-gradient(to right, rgba(221, 238, 222, 0.1), rgba(196, 224, 238, 0.3)) !important;
         float: left;
         position: relative;
         width: 48%;
@@ -309,51 +311,50 @@
       for (let temp = 0; temp < arr.length - 1; temp++) {
         arr2.push(str.substring(arr[temp], arr[temp + 1]));
       }
-
+      
 
       percentageReplacement();
-
-      function percentageReplacement() {
-        let percentageMap = new Map(),
-          percentageAlphabet = '1234567890abcdefghijklmnopqrstuvwxyz',
-          varLength = 1,
-          percentageAlphabet_ = percentageAlphabet;
-
-
-        for (let temp = 0; temp < arr2.length; temp++) {
-          let s = arr2[temp].match(/[0-9.]+%+/g, "");
-          if (s) {
-            //console.log(s);
-            s.forEach(function(elem) {
-              if (!percentageMap.has(elem)) {
-                if (percentageAlphabet.length < varLength) {
-                  percentageAlphabet = percentageAlphabet_;
-                  varLength++;
-                }
-                percentageMap.set(elem, percentageAlphabet.slice(0, varLength));
-                console.log(percentageAlphabet.slice(0, varLength));
-                percentageAlphabet = percentageAlphabet.slice(varLength, percentageAlphabet.length);
-              }
-              //console.log(arr2[temp]);
-              arr2[temp] = arr2[temp].replace(new RegExp(' ' + elem + ';', 'gi'), ' var(--' + percentageMap.get(elem) + ');');
-              arr2[temp] = arr2[temp].replace(new RegExp(' ' + elem + ' ;', 'gi'), ' var(--' + percentageMap.get(elem) + ');');
-              arr2[temp] = arr2[temp].replace(new RegExp(' ' + elem + ':', 'gi'), ' --' + percentageMap.get(elem) + ':');
-              arr2[temp] = arr2[temp].replace(new RegExp(' ' + elem + ' :', 'gi'), ' --' + percentageMap.get(elem) + ':');
-              //console.log(arr2[temp]);
-            })
-          }
+      function percentageReplacement(){
+      	let percentageMap=new Map(),
+        percentageAlphabet = '1234567890abcdefghijklmnopqrstuvwxyz',
+        varLength=1,
+        percentageAlphabet_=percentageAlphabet;
+        
+        
+      	for (let temp = 0; temp < arr2.length; temp++) {
+            let s = arr2[temp].match(/[0-9.]+%+/g, "");
+            if(s){
+            	//console.log(s);
+                s.forEach(function(elem){
+                	if(!percentageMap.has(elem)){
+                    	if(percentageAlphabet.length<varLength){
+                        	percentageAlphabet=percentageAlphabet_;
+                            varLength++;
+                        }
+                		percentageMap.set(elem, percentageAlphabet.slice(0,varLength));
+                        console.log(percentageAlphabet.slice(0,varLength));
+                        percentageAlphabet = percentageAlphabet.slice(varLength,percentageAlphabet.length);
+                    }
+                    //console.log(arr2[temp]);
+                    arr2[temp]=arr2[temp].replace(new RegExp(' '+elem+';', 'gi'), ' var(--'+percentageMap.get(elem)+');');
+                    arr2[temp]=arr2[temp].replace(new RegExp(' '+elem+' ;', 'gi'), ' var(--'+percentageMap.get(elem)+');');
+                    arr2[temp]=arr2[temp].replace(new RegExp(' '+elem+':', 'gi'), ' --'+percentageMap.get(elem)+':');
+                    arr2[temp]=arr2[temp].replace(new RegExp(' '+elem+' :', 'gi'), ' --'+percentageMap.get(elem)+':');
+                    //console.log(arr2[temp]);
+                })
+            }
         }
         console.log(percentageMap);
 
-        let percentageScript = '';
-        percentageMap.forEach(function(value, key) {
-          percentageScript += "CSS.registerProperty({ name: '--" + value + "', syntax: '<length-percentage>', initialValue: '" + key + "', inherits: true });";
+        let percentageScript='';
+        percentageMap.forEach(function(value, key){
+        	percentageScript+="CSS.registerProperty({ name: '--"+value+"', syntax: '<length-percentage>', initialValue: '"+key+"', inherits: true });";
         });
-
+        
         //console.log(percentageScript);
-
-
-        /*
+        
+        
+        
         //time
         let timeMap=new Map();
         for (let temp = 0; temp < arr2.length; temp++) {
@@ -377,50 +378,48 @@
         });
         console.log(timeScript);
         
-        */
-        let timeMap = new Map();
+        
+        let customMap=new Map();
         for (let temp = 0; temp < arr2.length; temp++) {
-          //let s = arr2[temp].match(/:+/g, "");
-          let bb = {
-              beginSearchIndex: 0
-            },
-            t = [];
-          //let inc=9;
-          while (1) {
-            let m = getStringInBetween(arr2[temp], ': ', ';', bb);
-            bb.beginSearchIndex = bb.endIndex + 1;
-            if (!m) break;
-            if (!m.includes("var")) {
-              t.push(m);
-              console.log(m);
-            }
-          }
-          //if(t){     
-          //  console.log(t);
-          for (let index = 0; index < t.length; index++) {
-            if (!timeMap.has(t[index])) {
-              if (percentageAlphabet.length < varLength) {
-                percentageAlphabet = percentageAlphabet_;
-                varLength++;
+            //let s = arr2[temp].match(/:+/g, "");
+            let bb={beginSearchIndex:0},
+            t=[];
+            //let inc=9;
+            while(1){
+              let m=getStringInBetween(arr2[temp], ': ', ';',bb);
+              bb.beginSearchIndex=bb.endIndex+1;
+              if(!m)break;
+              if(!m.includes("var")){
+              	t.push(m);
+                console.log(m);
               }
-              timeMap.set(t[index], percentageAlphabet.slice(0, varLength));
-              percentageAlphabet = percentageAlphabet.slice(varLength, percentageAlphabet.length);
+            }  
+              //if(t){     
+                //  console.log(t);
+              for(let index=0;index<t.length;index++){
+                      if(!customMap.has(t[index])){
+                          if(percentageAlphabet.length<varLength){
+                              percentageAlphabet=percentageAlphabet_;
+                              varLength++;
+                          }
+                          customMap.set(t[index], percentageAlphabet.slice(0,varLength));
+                          percentageAlphabet = percentageAlphabet.slice(varLength,percentageAlphabet.length);
 
-            }
-            // console.log(t[index])
-            //console.log(arr2[temp]);
-            arr2[temp] = arr2[temp].replace(' ' + t[index] + ';', ' var(--' + timeMap.get(t[index]) + ');');
-            //console.log(arr2[temp]);
-            //}
-          }
-          // }
+                      }
+                     // console.log(t[index])
+                      //console.log(arr2[temp]);
+                      arr2[temp]=arr2[temp].replace(' '+t[index]+';', ' var(--'+customMap.get(t[index])+');');
+                      //console.log(arr2[temp]);
+					//}
+              }
+           // }
         }
-        let timeScript = '';
-        timeMap.forEach(function(value, key) {
-          timeScript += "CSS.registerProperty({ name: '--" + value + "', syntax: '*', initialValue: '" + key + "', inherits: false });";
+        let customScript='';
+        customMap.forEach(function(value, key){
+        	customScript+="CSS.registerProperty({ name: '--"+value+"', syntax: '*', initialValue: '"+key+"', inherits: false });";
         });
-        console.log(timeScript + percentageScript);
-
+        console.log(customScript+percentageScript+timeScript);
+        
         /*
         window.CSS.registerProperty({
           name: '--my-color',
@@ -469,13 +468,13 @@
         }
       }
 
-      function getStringInBetween(string, text1, text2, obj) { //obj{beginSearchIndex,...}
-        let beginSearchIndex = obj ? obj.beginSearchIndex : 0;
-        let l = string.indexOf(text1, beginSearchIndex),
-          z = string.indexOf(text2, beginSearchIndex);
-        if (obj)
-          obj.endIndex = string.substring(0, z).length;
-
+      function getStringInBetween(string, text1, text2,obj) {//obj{beginSearchIndex,...}
+      	let beginSearchIndex=obj?obj.beginSearchIndex:0;
+        let l = string.indexOf(text1,beginSearchIndex),
+          z = string.indexOf(text2,beginSearchIndex);
+          if(obj)
+          obj.endIndex=string.substring(0, z).length;
+          
         return l === -1 || z === -1 || l > z ? undefined : string.substring(l + text1.length, z);
       }
 
@@ -513,12 +512,12 @@
         }
         return a;
       }
-
-
+      
+      
       localStorage.clear();
 
-
-      /*
+	    
+	    /*
 	    
 	    let s = "animation: textMove 1s forwards, hideElement 0.75s forwards; -webkit-animation-delay: 1.75s, 3.75s; animation-delay: 1.75s, 3.75s; }";
 let z = s.match(/[0-9.]+s+/g, "");
@@ -526,16 +525,16 @@ let z = s.match(/[0-9.]+s+/g, "");
         console.log(s);
 	     z=s.replace(new RegExp(''+z[0],'gi'),' zzz');
 	    console.log(z);*/
+        
+        var test = "animation: textMove 1s forwards, hideElement 0.75s forwards; -webkit-animation-delay: 1.75s, 3.75s; animation-delay: 1.75s, 3.75s; }";
 
-      var test = "animation: textMove 1s forwards, hideElement 0.75s forwards; -webkit-animation-delay: 1.75s, 3.75s; animation-delay: 1.75s, 3.75s; }";
+var testRE = test.match(":(.*);");
+let asd={beginSearchIndex:60};
+console.log(getStringInBetween(test,":",";",asd));
+console.log(asd);
 
-      var testRE = test.match(":(.*);");
-      let asd = {
-        beginSearchIndex: 60
-      };
-      console.log(getStringInBetween(test, ":", ";", asd));
-      console.log(asd);
 
+        
     </script>
   </body>
 
