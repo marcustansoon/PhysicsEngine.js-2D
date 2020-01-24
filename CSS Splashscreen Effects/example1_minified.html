@@ -1,165 +1,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Quattrocento+Sans" />
 <style>
-  * {
-    padding: 0px;
-    margin: 0px;
-  }
-
-  body {
-    overflow: hidden;
-    font-family: Quattrocento Sans; 
-  }
-
-  .image {
-    width: 5vw;
-    min-width: 40px;
-    max-width: 70px;
-    -webkit-filter: blur(30px);
-    -webkit-animation: image_blur 1.75s ease-in-out forwards, move 1s forwards, hideElement 0.75s forwards;
-    animation: image_blur 1.75s ease-in-out forwards, move 1s forwards, hideElement 0.75s forwards;
-    -webkit-animation-delay: 0s, 1.75s, 3.5s;
-  }
-
-  .imageContainer {
-    -webkit-animation: move 1s forwards;
-    animation: move 1s forwards;
-    -webkit-animation-delay: 1.75s;
-    animation-delay: 1.75s;
-  }
-
-  .text {
-    text-align: center;
-    font-size: calc(5px + 0.7vw);
-    position: relative;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0;
-    -webkit-animation: textMove 1s forwards, hideElement 0.75s forwards;
-    animation: textMove 1s forwards, hideElement 0.75s forwards;
-    -webkit-animation-delay: 1.75s, 3.75s;
-    animation-delay: 1.75s, 3.75s;
-  }
-
-  @-webkit-keyframes image_blur {
-    0% {
-      -webkit-filter: blur(25px);
-      -webkit-transform: scale(0) rotate(-180deg);
-    }
-
-    50% {
-      -webkit-filter: blur(8px);
-    }
-
-    80% {
-      -webkit-filter: blur(0px);
-      -webkit-transform: scale(5) rotate(360deg);
-    }
-
-    100% {
-      -webkit-filter: blur(0px);
-      -webkit-transform: scale(4) rotate(360deg);
-    }
-  }
-
-  @keyframes image_blur {
-    0% {
-      -webkit-filter: blur(25px);
-      -webkit-transform: scale(0) rotate(-180deg);
-    }
-
-    50% {
-      -webkit-filter: blur(8px);
-    }
-
-    80% {
-      -webkit-filter: blur(0px);
-      -webkit-transform: scale(5) rotate(360deg);
-    }
-
-    100% {
-      -webkit-filter: blur(0px);
-      -webkit-transform: scale(4) rotate(360deg);
-    }
-  }
-
-  @-webkit-keyframes move {
-    100% {
-      top: 38%;
-    }
-  }
-
-  @keyframes move {
-    100% {
-      top: 38%;
-    }
-  }
-
-  @-webkit-keyframes textMove {
-    100% {
-      top: 59%;
-      opacity: 1;
-      font-size: calc(14px + 0.45vw);
-      padding-top: 0.9vw;
-    }
-  }
-
-  @keyframes textMove {
-    100% {
-      top: 59%;
-      opacity: 1;
-      font-size: calc(14px + 0.45vw);
-      padding-top: 0.9vw;
-    }
-  }
-
-  .backgroundCoverUp {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    --pos: 100%;
-    background: radial-gradient(circle, rgba(255, 0, 0, 0) 1%, rgba(255, 0, 0, 0) var(--pos), rgba(252, 252, 252, 1) 0.1%);
-    animation: a 0s infinite;
-    -webkit-animation: circularZoomOut 0.75s ease-in-out forwards, hideElement 1s forwards;
-    animation: circularZoomOut 0.75s ease-in-out forwards, hideElement 1s forwards;
-    -webkit-animation-delay: 3s, 3.75s;
-    animation-delay: 3s, 3.75s;
-  }
-
-  @-webkit-keyframes circularZoomOut {
-    0% {
-      --pos: 100%;
-    }
-
-    100% {
-      --pos: 1%;
-    }
-  }
-
-  @keyframes circularZoomOut {
-    0% {
-      --pos: 100%;
-    }
-
-    100% {
-      --pos: 1%;
-    }
-  }
-
-  @-webkit-keyframes hideElement {
-    100% {
-      opacity: 0;
-
-    }
-  }
-
-  @keyframes hideElement {
-    100% {
-      opacity: 0;
-    }
-  }
-
+	* { padding: var(--0); margin: var(--0); }  body { overflow: var(--a); font-family: var(--b); }  .image { width: var(--c); min-width: var(--d); max-width: var(--e); -webkit-filter: var(--f); -webkit-animation: var(--g); animation: var(--g); -webkit-animation-delay: var(--h); }  .imageContainer { -webkit-animation: var(--i); animation: var(--i); -webkit-animation-delay: var(--j); animation-delay: var(--j); }  .text { text-align: var(--k); font-size: var(--l); position: var(--m); top: var(--1); left: var(--2); transform: var(--n); opacity: var(--o); -webkit-animation: var(--p); animation: var(--p); -webkit-animation-delay: var(--q); animation-delay: var(--q); }  @-webkit-keyframes image_blur { 0% { -webkit-filter: var(--r); -webkit-transform: var(--s); } 50% { -webkit-filter: var(--t); } 80% { -webkit-filter: var(--u); -webkit-transform: var(--v); } 100% { -webkit-filter: var(--u); -webkit-transform: var(--w); } }  @keyframes image_blur { 0% { -webkit-filter: var(--r); -webkit-transform: var(--s); } 50% { -webkit-filter: var(--t); } 80% { -webkit-filter: var(--u); -webkit-transform: var(--v); } 100% { -webkit-filter: var(--u); -webkit-transform: var(--w); } }  @-webkit-keyframes move { 100% { top: var(--6); } }  @keyframes move { 100% { top: var(--6); } }  @-webkit-keyframes textMove { 100% { top: var(--7); opacity: var(--x); font-size: var(--y); padding-top: var(--z); } }  @keyframes textMove { 100% { top: var(--7); opacity: var(--x); font-size: var(--y); padding-top: var(--z); } }  .backgroundCoverUp { position: var(--12); width: var(--5); height: var(--5); --pos: var(--5); background: radial-gradient(circle, rgba(255, 0, 0, 0) 1%, rgba(255, 0, 0, 0) var(--pos), rgba(252, 252, 252, 1) 0.1%); animation: var(--34); -webkit-animation: var(--56); animation: var(--56); -webkit-animation-delay: var(--78); animation-delay: var(--78); }  @-webkit-keyframes circularZoomOut { 0% { --pos: var(--5); } 100% { --pos: var(--8); } }  @keyframes circularZoomOut { 0% { --pos: var(--5); } 100% { --pos: var(--8); } }  @-webkit-keyframes hideElement { 100% { opacity: var(--o); } }  @keyframes hideElement { 100% { opacity: var(--o); } }
 </style>
 <script src="https://unpkg.com/current-device/umd/current-device.min.js"></script>
 <body>
@@ -178,11 +20,14 @@
   </div>
 
   <script>
-    
+CSS.registerProperty({ name: '--0', syntax: '*', initialValue: '0px', inherits: false });CSS.registerProperty({ name: '--a', syntax: '*', initialValue: 'hidden', inherits: false });CSS.registerProperty({ name: '--b', syntax: '*', initialValue: 'Quattrocento Sans', inherits: false });CSS.registerProperty({ name: '--c', syntax: '*', initialValue: '5vw', inherits: false });CSS.registerProperty({ name: '--d', syntax: '*', initialValue: '40px', inherits: false });CSS.registerProperty({ name: '--e', syntax: '*', initialValue: '70px', inherits: false });CSS.registerProperty({ name: '--f', syntax: '*', initialValue: 'blur(30px)', inherits: false });CSS.registerProperty({ name: '--g', syntax: '*', initialValue: 'image_blur 1.75s ease-in-out forwards, move 1s forwards, hideElement 0.75s forwards', inherits: false });CSS.registerProperty({ name: '--h', syntax: '*', initialValue: '0s, 1.75s, 3.5s', inherits: false });CSS.registerProperty({ name: '--i', syntax: '*', initialValue: 'move 1s forwards', inherits: false });CSS.registerProperty({ name: '--j', syntax: '*', initialValue: '1.75s', inherits: false });CSS.registerProperty({ name: '--k', syntax: '*', initialValue: 'center', inherits: false });CSS.registerProperty({ name: '--l', syntax: '*', initialValue: 'calc(5px + 0.7vw)', inherits: false });CSS.registerProperty({ name: '--m', syntax: '*', initialValue: 'relative', inherits: false });CSS.registerProperty({ name: '--n', syntax: '*', initialValue: 'translate(-50%, -50%)', inherits: false });CSS.registerProperty({ name: '--o', syntax: '*', initialValue: '0', inherits: false });CSS.registerProperty({ name: '--p', syntax: '*', initialValue: 'textMove 1s forwards, hideElement 0.75s forwards', inherits: false });CSS.registerProperty({ name: '--q', syntax: '*', initialValue: '1.75s, 3.75s', inherits: false });CSS.registerProperty({ name: '--r', syntax: '*', initialValue: 'blur(25px)', inherits: false });CSS.registerProperty({ name: '--s', syntax: '*', initialValue: 'scale(0) rotate(-180deg)', inherits: false });CSS.registerProperty({ name: '--t', syntax: '*', initialValue: 'blur(8px)', inherits: false });CSS.registerProperty({ name: '--u', syntax: '*', initialValue: 'blur(0px)', inherits: false });CSS.registerProperty({ name: '--v', syntax: '*', initialValue: 'scale(5) rotate(360deg)', inherits: false });CSS.registerProperty({ name: '--w', syntax: '*', initialValue: 'scale(4) rotate(360deg)', inherits: false });CSS.registerProperty({ name: '--x', syntax: '*', initialValue: '1', inherits: false });CSS.registerProperty({ name: '--y', syntax: '*', initialValue: 'calc(14px + 0.45vw)', inherits: false });CSS.registerProperty({ name: '--z', syntax: '*', initialValue: '0.9vw', inherits: false });CSS.registerProperty({ name: '--12', syntax: '*', initialValue: 'absolute', inherits: false });CSS.registerProperty({ name: '--34', syntax: '*', initialValue: 'a 0s infinite', inherits: false });CSS.registerProperty({ name: '--56', syntax: '*', initialValue: 'circularZoomOut 0.75s ease-in-out forwards, hideElement 1s forwards', inherits: false });CSS.registerProperty({ name: '--78', syntax: '*', initialValue: '3s, 4s', inherits: false });CSS.registerProperty({ name: '--1', syntax: '<length-percentage>', initialValue: '45%', inherits: true });CSS.registerProperty({ name: '--2', syntax: '<length-percentage>', initialValue: '50%', inherits: true });CSS.registerProperty({ name: '--3', syntax: '<length-percentage>', initialValue: '0%', inherits: true });CSS.registerProperty({ name: '--4', syntax: '<length-percentage>', initialValue: '80%', inherits: true });CSS.registerProperty({ name: '--5', syntax: '<length-percentage>', initialValue: '100%', inherits: true });CSS.registerProperty({ name: '--6', syntax: '<length-percentage>', initialValue: '38%', inherits: true });CSS.registerProperty({ name: '--7', syntax: '<length-percentage>', initialValue: '59%', inherits: true });CSS.registerProperty({ name: '--8', syntax: '<length-percentage>', initialValue: '1%', inherits: true });CSS.registerProperty({ name: '--9', syntax: '<length-percentage>', initialValue: '0.1%', inherits: true });
+    CSS.registerProperty({
+      name: '--pos',
+      syntax: '<length-percentage>',
+      initialValue: '100%',
+      inherits: true
+    });
+     CSS.registerProperty=undefined;
+CSS=undefined;
   </script>
 </body>
-<script>
-document.write("<script>console.log(device.type); CSS.registerProperty({ name: '--pos', syntax: '<length-percentage>', initialValue: '0%', inherits: true });<\/script>");
-document.write("");
-</script>
-
