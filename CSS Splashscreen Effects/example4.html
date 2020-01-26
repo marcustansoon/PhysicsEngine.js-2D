@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+img{
+	-webkit-animation: image_blur 1.75s ease-in-out forwards;
+    animation: image_blur 1.75s ease-in-out forwards;
+}
+
+
+
+.img1 {
+  clip-path: inset(0% 0% 80% 0%);
+  position:absolute;
+  left:-15%;
+}
+.img2 {
+  clip-path: inset(20% 0% 60% 0%);
+  position:absolute;
+  left:15%;
+}
+.img3 {
+  clip-path: inset(40% 0% 40% 0%);
+  position:absolute;
+  left:-15%;
+}
+.img4 {
+  clip-path: inset(60% 0% 20% 0%);
+  position:absolute;
+  left:15%;
+}
+
+  @keyframes image_blur {
+    0% {
+      -webkit-filter: blur(200px);
+      -webkit-transform: scale(1) rotate(-180deg);
+
+      
+    }
+
+    50% {
+      -webkit-filter: blur(70px);
+    }
+
+    80% {
+      -webkit-filter: blur(15px);
+      -webkit-transform: scale(1) rotate(0deg);
+      left:0%;
+    }
+
+    100% {
+      -webkit-filter: blur(0px);
+      -webkit-transform: scale(1) rotate(0deg);
+      left:-0%;
+    }
+  }
+
+</style>
+</head>
+<body>
+
+<img src="w3css.gif" class="img1" width="100" height="140">
+<img src="w3css.gif" class="img2" width="100" height="140">
+<img src="w3css.gif" class="img3" width="100" height="140">
+<img src="w3css.gif" class="img4" width="100" height="140">
+
+</body>
+</html>
