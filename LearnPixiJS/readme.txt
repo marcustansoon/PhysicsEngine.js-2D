@@ -1,5 +1,6 @@
 https://www.w3schools.com/code/tryit.asp?filename=FVG427WY84YB
 https://www.w3schools.com/code/tryit.asp?filename=FVGVCNYIMKGD
+
 For Local system operation of testing HTML file:
 CORS can be an issue when it comes to accessing and loading image from local file system via browser.
 To bypass it, open cmd.exe
@@ -11,6 +12,7 @@ Example of AnimatedSpriteManager and AnimatedSpriteTextureManager usage :-
 http://jsfiddle.net/rh3eqdfk/193/
 http://jsfiddle.net/oqy7jedL/show
 https://www.w3schools.com/code/tryit.asp?filename=G0U2WL54N3RS 12/12/2019
+https://www.w3schools.com/code/tryit.asp?filename=GBLWJDTQQRCV 5/2/2020 animatedsprite + pixi viewport
 https://www.w3schools.com/code/tryit.asp?filename=G0UDA0SF99PO
 https://www.w3schools.com/code/tryit.asp?filename=GABQH7RQ622G
 
