@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<style>
+  canvas {
+    background-image: url("https://i.pinimg.com/originals/5f/c7/17/5fc7178051b5aaad548ac98689881e64.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+
+</style>
+<html>
+
+  <body>
+    <canvas id="canvas" height="500" width="500">
+      <script>
+        var c = document.getElementById('canvas');
+        var ctx = c.getContext('2d');
+        loop();
+
+        function loop() {
+          ctx.clearRect(0, 0, c.width, c.height);
+          ctx.fillStyle = 'rgba(0,0,0,0.9)';
+          ctx.fillRect(15, 15, 1024, 512);
+          
+          ctx.globalCompositeOperation = 'destination-out';
+          var radgrad = ctx.createRadialGradient(150, 150, 0, 150, 150, 100); //where 60 radius, 120 position
+          radgrad.addColorStop(0, 'rgba(255,0,0,1)');
+          radgrad.addColorStop(0.6, 'rgba(228,0,0,.7)');
+          radgrad.addColorStop(1, 'rgba(228,0,0,0)');
+
+          // draw shape
+          ctx.fillStyle = radgrad;
+          ctx.fillRect(0, 0, 1024, 512);
+          //requestAnimationFrame(loop);
+        }
+
+      </script>
+  </body>
+
+</html>
