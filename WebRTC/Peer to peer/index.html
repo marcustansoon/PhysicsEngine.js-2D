@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+   <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Hammersmith+One" />
+   <style>
+      * {
+         font-family: "Hammersmith One";
+         letter-spacing: .5px;
+      }
+
+      ::-webkit-scrollbar {
+         width: 10px;
+      }
+
+      /* Track */
+
+      ::-webkit-scrollbar-track {
+         background: #f1f1f1;
+      }
+
+      /* Handle */
+
+      ::-webkit-scrollbar-thumb {
+         background: #888;
+      }
+
+      /* Handle on hover */
+
+      ::-webkit-scrollbar-thumb:hover {
+         background: #555;
+      }
+
+      .messageInnerBox {
+         position: relative;
+         height: 100%;
+         width: 100%;
+         border-style: ;
+         font-size: calc(12px + 0.3vw);
+      }
+
+      .messageContainer {
+         overflow-y: auto;
+         overflow-x: hidden;
+         position: absolute;
+         height: 50%;
+         border-style: groove;
+         width: 90%;
+         max-width: 600px;
+         left: 50%;
+         transform: translate(-50%);
+         background-image: url(https://i.pinimg.com/originals/79/5c/ab/795cabc4647f73b365e2e6eabd0f34dc.png);
+         background-size: cover;
+      }
+
+      .messageInputHeader {
+         position: sticky;
+         background-color: lightgrey;
+         width: 100%;
+         padding: 1%;
+         bottom: 0%;
+         text-align: center;
+         font-size: calc(10px + 0.3vw);
+      }
+
+   </style>
+
+   <head>
+      <title>Sample WebRTC Data Channel Text-Based Chat</title>
+   </head>
+
+
+   <body>
+
+      <br>
+      <br>
+      <br>
+      <button style="margin-left:10%;" onclick="initiateConnection();" id="connectButton">Connect as Initiator</button>
+      <br>
+
+      <br>
+      <button style="margin-left:10%;" onclick="closeConnection();" id="closeButton" hidden>Close Connection</button>
+      <br>
+      <br>
+
+      <div style="text-align:Center;">Ice Connection State : <span id="iceConnectionState">Not Initiated</span> </div>
+
+      <br>
+      <div style="text-align:Center;">Message Box</div>
+      <br>
+
+      <div class="messageContainer">
+
+         <div id="messageInnerBox" class="messageInnerBox">
+         </div>
+
+         <div class="messageInputHeader">
+            Name
+            <input type="text" size="8" id="name"> Message
+            <input type="text" size="13" id="message">
+            <button onclick="sendMessage()">Send</button>
+         </div>
+
+      </div>
+
+
+
+
+
+
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+
+      <script>
+         let socket = io("https://colorful-fender.glitch.me/"); //connect to node js server
+         socket.on("message", gotMessageFromServer); //receive msg from server handler
+
+         let peerConnection, dataChannel;
+         let peerConnectionConfig = { //config
+            'iceServers': [{
+               'urls': 'stun:stun.services.mozilla.com'
+            }, {
+               'urls': 'stun:stun.l.google.com:19302'
+            }]
+         };
+
+
+         let autoReset;
+
+         function initiateConnection() { //initiate connection
+            start(true); //invoke as initiator
+            autoReset = setTimeout(function() {
+               closeConnection(); //auto close connection on timeout
+            }, 3000);
+         }
+
+
+         function closeConnection() { //close ongoing data channel connection
+            dataChannel.close();
+            peerConnection.close();
+         }
+
+         function sendMessage() { //send message handler
+            let msgContent = { //get input values
+               "name": document.getElementById("name").value,
+               "message": document.getElementById("message").value
+            };
+
+            if (dataChannel) { //check if dataChannel != null (connection not initiated)
+               dataChannel.send(JSON.stringify(msgContent)); //send user message other connected client
+               document.getElementById("message").value = "";
+
+               document.getElementById("messageInnerBox").innerHTML += "<br> " + msgContent.name + " : " + msgContent.message; //display user message on self Message Box
+            } else { //
+               alert("Connection NOT initiated");
+            }
+         }
+
+
+         function start(isCaller) { //start RTC connection
+            peerConnection = new RTCPeerConnection(peerConnectionConfig); //init
+
+
+            peerConnection.oniceconnectionstatechange = function(event) { //data channel connection status handler
+               console.log(peerConnection.iceConnectionState);
+               document.getElementById("iceConnectionState").innerHTML = peerConnection.iceConnectionState;
+               //checking->connected->completed
+               if (peerConnection.iceConnectionState === "failed" || peerConnection.iceConnectionState === "closed" || peerConnection.iceConnectionState === "disconnected") { // connection fail handler
+                  document.getElementById("closeButton").hidden = true; //enable connect button
+                  document.getElementById("connectButton").disabled = false;
+                  document.getElementById("connectButton").innerHTML = "Connect as Initiator";
+
+                  closeConnection(); //close connection
+                  peerConnection.oniceconnectionstatechange = null; //reset to default 
+                  peerConnection = null;
+                  dataChannel = null;
+               }
+
+               if (peerConnection.iceConnectionState === "completed" || peerConnection.iceConnectionState === "connected") { //indicate successful connectionis made
+                  document.getElementById("connectButton").disabled = true; //disabled connect button
+                  document.getElementById("connectButton").innerHTML = "Receiver";
+                  document.getElementById("closeButton").hidden = false;
+               }
+            }
+
+            function onmessage(event) { //on receive msg from opponent
+               let msgContent = JSON.parse(event.data); //event.data represent the message received (MUST BE IN STRING)
+               document.getElementById("messageInnerBox").innerHTML += "<br> " + msgContent.name + " : " + msgContent.message;
+            }
+
+            function onopen() { // data channel open connection handler
+               clearTimeout(autoReset); //clear 'auto timeout'
+               console.log("datachannel open");
+            }
+
+
+            function onclose() { //data channel close connection handler
+               console.log("datachannel close");
+            }
+
+
+            peerConnection.onicecandidate = gotIceCandidate; //ice candidate handler
+
+            if (isCaller) {
+               console.log('Connect as Initiator');
+
+               dataChannel = peerConnection.createDataChannel("my channel"); //create data channel as connection initiator
+               dataChannel.onmessage = onmessage; //data channel handler
+               dataChannel.onopen = onopen;
+               dataChannel.onclose = onclose;
+
+               peerConnection.createOffer(gotDescription, createOfferError); //create offer as initiator
+            } else {
+               console.log('Connect as Receiver');
+
+               peerConnection.ondatachannel = receiveChannelCallback; //listen to data channel as non-initiator
+               function receiveChannelCallback(event) {
+                  dataChannel = event.channel;
+                  dataChannel.onmessage = onmessage; //data channel handler
+                  dataChannel.onopen = onopen;
+                  dataChannel.onclose = onclose;
+               }
+            }
+
+
+         }
+
+         function gotDescription(description) {
+            console.log('got description');
+            peerConnection.setLocalDescription(description, function() {
+               socket.emit("message", JSON.stringify({
+                  'sdp': description
+               }));
+            }, function() {
+               console.log('set description error')
+            });
+         }
+
+         function gotIceCandidate(event) {
+            console.log("got ice candidate");
+            if (event.candidate != null) {
+               socket.emit("message", JSON.stringify({
+                  'ice': event.candidate
+               }));
+            }
+         }
+
+
+         function createOfferError(error) {
+            console.log(error);
+         }
+
+
+         function gotMessageFromServer(message) { //message from server handler
+            if (!peerConnection) start(false); //start RTC connection as non-initiator
+
+            var signal = JSON.parse(message);
+            if (signal.sdp) {
+               peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp), function() {
+                  if (signal.sdp.type == 'offer') {
+                     peerConnection.createAnswer(gotDescription, createAnswerError); //create answer for the offer
+                  }
+               });
+            } else if (signal.ice) {
+               peerConnection.addIceCandidate(new RTCIceCandidate(signal.ice));
+            }
+         }
+
+         function createAnswerError(error) {
+            console.log(error);
+         }
+
+      </script>
+
+   </body>
+
+</html>
