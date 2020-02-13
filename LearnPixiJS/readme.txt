@@ -16,6 +16,8 @@ https://www.w3schools.com/code/tryit.asp?filename=GBLWJDTQQRCV 5/2/2020 animated
 https://www.w3schools.com/code/tryit.asp?filename=G0UDA0SF99PO
 https://www.w3schools.com/code/tryit.asp?filename=GABQH7RQ622G
 https://www.w3schools.com/code/tryit.asp?filename=GBUURA0RTKSS 13/2/2020 animatedsprite + pixi viewport
+https://www.w3schools.com/code/tryit.asp?filename=GBVCB55RRUW9
+https://www.w3schools.com/code/tryit.asp?filename=GBVCHPKXQTY8
 
 10/8/18
 https://files.fm/u/jswh3ndu
