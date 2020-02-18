@@ -570,7 +570,7 @@
 
   </head>
 
-  <body onresize="resizeAuto()" style="background-image:url(https://i.imgur.com/acwYE0W.jpg">
+  <body onresize="resizeAuto()" style="background-image:url(https://i.imgur.com/PbjVQJk.jpg)">
   <!-- http://idenko.co.za/wp-content/uploads/2015/06/black-abstract-11-background.jpg-->
 
 
@@ -743,14 +743,14 @@
             </div>
             <div class="login-content">
 
-              <img src="https://cdn3.iconfinder.com/data/icons/toolbar-people/512/user_lock_man_male_profile_account_person-512.png" style="width:8%;padding:8px;" class="login-icon" draggable="false">
+              <img src="https://i.imgur.com/01GXKpf.png" style="width:8%;padding:8px;" class="login-icon" draggable="false">
               <br> <span style="font-size:calc(13px + 0.2vw);">Username</span> <input type="text" style="border-style:groove;" id="username">
               <br><br> <span style="font-size:calc(13px + 0.2vw);">Password</span> <input type="password" style="border-style:groove;" id="password">
               <img src="https://i.imgur.com/nOPS8r0.png" class ="eye-img" onclick="togglePasswordDisplay()">
               <br><br>
               <div id="incorrectCredentialBox" hidden class="incorrectCredentialBox">Incorrect username or password</div>
-              <img src="https://www.freeiconspng.com/uploads/login-button-png-5.png" class="login-img" onclick="login();" id="loginButton">
-              <img src="http://www.stickpng.com/assets/images/58e91965eb97430e819064f5.png" onclick="facebookRedirect();" class="facebook-img">
+              <img src="https://i.imgur.com/blTR3wx.png" class="login-img" onclick="login();" id="loginButton">
+              <img src="https://i.imgur.com/qXnWbOW.png" onclick="facebookRedirect();" class="facebook-img">
 
             </div>
           </div>
@@ -768,7 +768,7 @@
 
 
     <div style="position:fixed;width:100%;height:100%;background-color:rgba(0,0,0,0.3);left:0;top:0;z-index:5;" hidden id="bufferBg">
-      <img src="https://www.iabc.com/wp-content/uploads/images/loading.gif" style="width:25px;left:50%;position:relative;top:50%;transform:translate(-50%,-50%);user-drag: none; user-select: none;">
+      <img src="https://i.imgur.com/BFCPVoi.gif" style="width:25px;left:50%;position:relative;top:50%;transform:translate(-50%,-50%);user-drag: none; user-select: none;">
     </div>
 
 
@@ -880,7 +880,7 @@
       }
 
       let locName = location.hostname;
-      if (locName === "marcustansoon.000webhostapp.com") {
+      if (locName === "shianliangpetroleum.000webhostapp.com"||locName === "shianliangpetroleum.com") {
         setTimeout(function() {
           let list = document.querySelectorAll("div");
           console.log(list[list.length - 1].innerHTML);
@@ -1062,7 +1062,7 @@
           if (userData[1]!=="")
             document.getElementById("globalRank" + temp + "Img").src = userData[1];
           else
-            document.getElementById("globalRank" + temp + "Img").src = "https://www.transparenttextures.com/patterns/asfalt-light.png";
+            document.getElementById("globalRank" + temp + "Img").src = "https://i.imgur.com/nKiAsAd.png";
           
           if (userData[0])
             document.getElementById("globalRank" + temp + "Litres").innerHTML = numberWithCommas(userData[0]) + " Litres";
@@ -1227,7 +1227,7 @@
         if (orderListTotalCount === orderListReceiveCount) {
           console.log(orderListRawDataFromServer.length);
           sessionStorage.setItem("rawOrderListData", JSON.stringify(orderListRawDataFromServer));
-          location.replace("http://shianliangpetroleum.com/Reward/Main");
+          location.replace("http://shianliangpetroleum.com/reward/main");
         }
       });
       let orderListTotalCount = 99,
