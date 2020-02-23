@@ -1121,7 +1121,7 @@
             logout();
           }
         
-          if (globalRankingCalculationInit){//execute once
+          if (globalRankingCalculationInit && Math.floor(Math.random() * 100)<10){//execute once
             globalRankingCalculationInit();
             globalRankingCalculationInit=null;
           }
