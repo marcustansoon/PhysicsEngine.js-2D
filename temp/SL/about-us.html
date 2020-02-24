@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+    .aboutUs {
+      background-image: url(https://www.codeyetechnologies.com/wp-content/uploads/2019/07/codeye.png);
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+    }
+
+    .aboutUsInner {
+      background-color: rgba(255, 255, 255, 0.93);
+      border-radius: 50px 20px;
+      padding: 8px;
+      white-space: nowrap;
+      font-size: calc(25px + 0.75vw);
+
+    }
+
+    .bgHistory {}
+
+    .bgHistory::after {
+      content: "";
+      background: url(https://www.appnovation.com/sites/default/files/2019-06/atlassian.png);
+      opacity: 0.03;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      position: absolute;
+      z-index: -1;
+      background-repeat: no-repeat;
+      background-size: 80%;
+      background-position: 50% 150%;
+    }
+
+    .carousel-inner img {
+      width: 100%;
+      height: %;
+    }
+
+  </style>
+
+  <head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+  </head>
+
+  <body>
+
+    <div class="row jumbotron container-fluid aboutUs">
+      <div class="col-sm-4">
+        <h1 class='text-center aboutUsInner'>About Us</h1>
+      </div>
+    </div>
+
+    <div class="container bgHistory">
+      <div class="row">
+        <div class="col-sm-4 text-center">
+          <h3>Background History</h3>
+          <img src='https://i.imgur.com/GcCR9Pn.png' style='width:100%;background-color:white;max-width:300px;border-style:groove;margin:2%;'>
+        </div>
+        <div class="col-sm-8" style='text-align: justify; text-justify: inter-word;'>
+          <p>Since 2015, Shian Liang Petroleum Shd Bhd had being established to distribute oil products and offer oil storage-related services throughout Sarawak region. Delivering unfeigned oil products is affirmed as their main obligation at work. Hence, quality services and products' assurance are deemed as their focal point to suit customer demands. So, there is no worries for any unforseen degradation of industry machines upon usage as products' quality is guaranteed. Furthermore, all oil-related products are acquired legally from the licensed distributors.</p>
+          <p>Over the years, Shian Liang company has offered various services for businesses from different industries of both land and water sector in assisting their business operation. They also sell a wide variety of oils for uses in industrial and construction sectors. One of their best selling products is Diesel Oil.</p>
+        </div>
+      </div>
+      <div class="row" style="">
+        <div class="col-8" style='text-align: justify; text-justify: inter-word;'>
+          <p>In pursuit of customer satisfaction, they have introduced Customer Loyalty Programme as a way of engaging and benefits customers. Points are accumulated for every purchases of the products and can be utilised to redeem valuable rewards.</p>
+          <p>As customers' needs are always evolving, new possibilities and new consequences may unfolding all around us. Hence, they are always eager to take in new innovative ideas to improve their products and provide more services in future.</p>
+        </div>
+        <div class="col-4 text-center">
+          <img src="https://i.imgur.com/KN1x2jD.png" style="width:100%;max-width:300px;border-style:groove;margin:2%;">
+        </div>
+      </div>
+      <br>
+      <div class='jumbotron text-center' style="background-color:rgba(70,70,70,.9);">
+        <h3 style='color:white;'>Corporate Booklet</h3>
+        <br>
+
+        <div class="row">
+          <div class="col-sm-12" style="color:white;text-align: justify; text-justify: inter-word;">
+            Want to know more about our company profile and oil business solutions? We are aspired to introduce you our corporate booklet which can downloaded in below section. To us, its the best way to inform our customers of our products and services
+          </div>
+        </div>
+        <br>
+        <img src="https://i.imgur.com/OV0V8ys.png" class="download-icon" draggable="false" onclick="window.open('file.doc')">
+      </div>
+
+    </div>
+    <div style='rgba(112, 112, 112,1);text-align:center;font-size:12px;margin:2%;'>
+      Copyrights © <?php echo date("Y");?>. All Rights Reserved by SL Petroleum Sdn. Bhd.
+    </div>
+  </body>
+
+</html>
