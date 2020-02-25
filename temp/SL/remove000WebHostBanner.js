@@ -13,7 +13,7 @@ function remove000WebHostBanner(){
           console.log(list[list.length - 2].style);
               
               for(let t=0;t<list.length;t++){
-                  if(list[t].cssText.includes("9999")){
+                  if(list[t].style.cssText.includes("9999")){
                      list[t].innerHTML="";
                         list[t].hidden=true;
                         break;
