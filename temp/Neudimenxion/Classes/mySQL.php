@@ -1,3 +1,5 @@
+
+
 class mySQL{
 	public $dblocation, $dbname, $dbusername, $dbpass, $mysqli;
 	
@@ -51,3 +53,18 @@ class mySQL{
 
 	
 }
+
+
+$test=new mySQL("localhost",'marath1673_year17','marath1673_usex','}@KqJoi+sw}U');
+
+$test->connectToDatabase();
+
+//$temp= $test->querySelectPrepared('Select * from registration where participant_firstname LIKE "%Chiew%" limit 1');
+$temp= $test->getQueryRSelectPrepared('Select * from kchmr_users where user_login in (?,?)','ss technical myadmin');
+
+//similar to mysqli_query result
+echo mysqli_num_rows($temp);
+while ($row = mysqli_fetch_assoc($temp)) {
+	echo $row['user_login'].'<br>';
+}
+
