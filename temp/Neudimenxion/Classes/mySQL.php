@@ -19,24 +19,35 @@ class mySQL{
 		//success
 	}
 	//SELECT id, name, age FROM myTable WHERE name = ?
-	function querySelectPrepared($queryString,$param){//'ii', $betweenStart, $betweenEnd
+	function getQueryRSelectPrepared($queryString,$paramsString){//'ii', $betweenStart, $betweenEnd
+
+		//using Object oriented style
 		$stmt = $this->mysqli->prepare($queryString);
-		call_user_func_array($stmt->bind_param, $param);
+		//$stmt = mysqli_prepare($this->mysqli,$queryString);
+		call_user_func_array(array($stmt, 'bind_param'), explode(' ',$paramsString));
+
+		//mysqli_stmt_bind_param($stmt, "s", $city);
+		//$temp=explode(' ',$paramsString);
+		//array_unshift($temp,$stmt);
+
+		//call_user_func_array(mysqli_stmt_bind_param,array($stmt,'ss','technical'));
+
 		$stmt -> execute();
-		return $stmt -> get_result();
-		//call_user_func_array($stmt -> bind_result, $bind);
-		//return $stmt;
+		//mysqli_stmt_execute($stmt);
+		$temp=$stmt->get_result();
+		$stmt->free_result();
+		$stmt->close();
+
+		return $temp;
+		//return mysqli_stmt_fetch($stmt);
 	}
 
 	
-}
+	function userLogin($name,$pass,$tableName){
+		//$this=>querySelectPrepared("Select ");	
+		getQueryRSelectPrepared("Select ",$paramsString)
+	}
+	
 
-
-$test=new mySQL("localhost",'marath1673_year17','marath1673_usex','}@KqJoi+sw}U');
-
-$test->connectToDatabase();
-
-$temp= $test->querySelectPrepared('Select * from registration where participant_firstname = " Chiew Siew Cheng"');
-while ($row = $temp -> fetch_assoc()) {
-	echo $row['autoID'];
+	
 }
