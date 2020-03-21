@@ -7,5 +7,4 @@
 	s = status
 	l = log
 	lg = log --pretty=format:'%C(bold red)%C(noul) %x09%h %C(auto,bold magenta)%G?%C(bold ul cyan)%C(auto,reset)%C(auto,reset) %C(bold white)%<(30,trunc)%s %C(bold green)(%cr) %C(bold blue)<%an>%Creset %C(auto)%d' --graph --all -15 --abbrev-commit
-	ll = log --color --graph --pretty=format:'%Cred%h%Creset -%Creset %s %C(bold green)(%cr) %C(bold cyan)%an%Creset%C(auto)%d' --graph --all -15 --abbrev-commit
-	p = push
+	ll = log --color --graph --pretty=format:'%Cred%h%Creset -%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset%C(auto)%d' --graph --all -15 --abbrev-commit
