@@ -4,4 +4,7 @@ https://jsfiddle.net/eaLzm7d1/
 https://jsfiddle.net/2kef9bjp/1/https://jsfiddle.net/hsxwtmj1/2/
 https://jsfiddle.net/12hLfeok/3/show
 
+https://jsfiddle.net/r0gmjdnp/1/show
+https://www.w3schools.com/code/tryit.asp?filename=GD7HU1AU9R93
+
 git log --shortstat --pretty=oneline  git log --pretty=format:"%h" --numstat -2  git log --pretty=tformat:"%H" --shortstat git log --name-only --oneline -5 && git log --pretty=tformat:"%h" --shortstat -5
