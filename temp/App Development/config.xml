@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.neudimenxion.joinnow" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.___.___" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>JoinNow</name>
     <description>
         An event management system, responsible for processing and handling both local and international events happening around the globe
     </description>
-    <author email="marcus@neudimenxion.com" href="http://cordova.io">
+    <author email="___@___.com" href="http://cordova.io">
         Neudimenxion Team
     </author>
     <content src="index.html" />
