@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Page Title</title>
+</head>
+Register this device as <input placeholder="PC 1" id="localKey">
+<button onclick="registerLocalKey();">Register</button>
+<br><br>
+Call <input placeholder="PC 2" id="remoteKey">
+<button onclick="callRemoteKey();">Call</button>
+<br>
+Local
+<video id="local" autoplay=""></video>
+Remote
+<video id="remote" autoplay=""></video>
+<body>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js'></script>
+<script>
+class RTCPeerConnectionAdapter{
+	constructor(configuration){
+    	// Instantiate RTC based on the configuration given
+    	this.peerConnection = new RTCPeerConnection(configuration);
+    }
+    
+    /*************************************************************************/
+    
+    // Create a signaling channel
+    initSocketServer(serverURL){
+    	// Set server URL
+    	this.serverURL = serverURL;
+    	// Connect to server
+    	this.signalingChannel = io(serverURL);
+        
+        // Listen for unique id and store it locally
+        this.signalingChannel.on('id', id => this._id = id);
+        // Listen for remote 'Offer' candidates and add them to the setRemoteDescription
+        this.signalingChannel.on('offer', this.onReceiveOffer.bind(this));
+        // Listen for remote 'Answer' candidates and add them to the setRemoteDescription
+        this.signalingChannel.on('answer', this.onReceiveAnswer.bind(this));
+        // Listen for remote 'ICE' candidates and add them to the local RTCPeerConnection
+		this.signalingChannel.on('ice', this.onReceiveICE.bind(this));
+
+		this.signalingChannel.setKey = (key, value) => {
+			this.signalingChannel.emit('setKey', {'key': key, 'value': value});
+		}
+
+		this.signalingChannel.getValueByKey = key => new Promise(resolve => {
+			this.signalingChannel.emit('getValueByKey', key);
+			this.signalingChannel.on('getValueByKey', resolve);
+		});
+
+		this.signalingChannel.getId = () => new Promise(resolve => {
+			this.signalingChannel.emit('getId');
+			this.signalingChannel.on('getId', resolve);
+		})
+    }
+    
+    /*************************************************************************/
+    
+    // Send offer (only for caller)
+    createAndSendOffer(remotePeerID){
+    	// Create offer and send to remote peer
+        this.peerConnection.createOffer().then(offer => 
+        {
+        	// Set local offer
+        	this.peerConnection.setLocalDescription(offer);
+            // Send local offer to remote peer
+            this.signalingChannel.emit('sendOffer', {'offer': offer, 'to': remotePeerID, 'from': this._id});
+    		console.log('Creating and sending offer');
+        });
+
+        // Listen for local ICE candidates on the local RTCPeerConnection
+        this.peerConnection.addEventListener('icecandidate', event => {
+            if (event.candidate) {
+                console.log('Sending ICE');
+                this.signalingChannel.emit('sendICE', {'iceCandidate': event.candidate, 'to': remotePeerID, 'from': this._id});
+            }
+        });
+	}
+    
+    // On receiving offer handler (invoked on receiver side)
+    async onReceiveOffer(obj){
+    	console.log('Received offer');
+    	this.peerConnection.setRemoteDescription(await new RTCSessionDescription(obj.offer));
+        this.peerConnection.createAnswer().then(answer =>
+        {
+        	this.peerConnection.setLocalDescription(answer);
+            console.log('Sending answer');
+            this.signalingChannel.emit('sendAnswer', {'answer': answer, 'to': obj.from, 'from': this._id});
+        });
+    }
+    
+    // On receiving answer handler (invoked on caller side)
+    onReceiveAnswer(obj){
+    	console.log('Received answer');
+    	this.peerConnection.setRemoteDescription(new RTCSessionDescription(obj.answer));
+    }
+    
+    // On receiving ICE handler (invoked on both side)
+    async onReceiveICE(obj){
+        console.log('Received ICE');
+    	try {
+            await this.peerConnection.addIceCandidate(obj.iceCandidate);
+        } catch (e) {
+            console.error('Error adding received ICE candidate', e);
+        }
+    }
+    
+    /*************************************************************************/
+    
+    // Create data channel
+    enableDataChannel(isCaller){
+    	if(isCaller){
+            this.dataChannel = this.peerConnection.createDataChannel('dataChannel');
+        	this.bindDataChannelListeners();
+        	return;
+        }
+        this.peerConnection.addEventListener('datachannel', event => {
+            console.log('Received channel');
+        	this.dataChannel = event.channel;
+        	this.bindDataChannelListeners();
+        });
+    }
+
+    // Bind event listeners for data channel
+    bindDataChannelListeners(){
+        this.dataChannel.addEventListener('open', event => {
+            console.log('open');
+        }); 
+        this.dataChannel.addEventListener('message', message => {
+            console.log(message.data);
+        }); 
+    }
+
+    /*************************************************************************/
+    
+    // Create data channel
+    enableMediaStream(constraints, localMedia, remoteMedia){
+    	this.remoteStream = new MediaStream();
+		remoteMedia.srcObject = this.remoteStream;
+
+    	navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+    		localMedia.srcObject = stream;
+    		stream.getTracks().forEach(track => this.peerConnection.addTrack(track));
+    	});
+    	this.bindMediaStreamListeners();
+    }
+
+    // Bind event listeners for data channel
+    bindMediaStreamListeners(){
+        this.peerConnection.addEventListener('track', async (event) => {
+		    this.remoteStream.addTrack(event.track);
+		});
+    }
+}
+
+    
+    function invokeRTCAsCaller(boolean){
+    	// Enable datachannel as a caller/receiver
+    	//rtcPeerConnectionAdapter.enableDataChannel(boolean);
+    	//navigator.mediaDevices.getUserMedia({video: true, audio: true}).then(stream => stream.getTracks().forEach(track => rtcPeerConnectionAdapter.peerConnection.addTrack(track)));
+    	//rtcPeerConnectionAdapter.enableMediaStream({video: true, audio: true}, document.getElementById('local'), document.getElementById('remote'));
+    }
+
+	// Instantiate RTC Adapter
+    let id, rtcPeerConnectionAdapter = new RTCPeerConnectionAdapter({'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]});
+
+    // Initiate server connection
+    rtcPeerConnectionAdapter.initSocketServer('https://webrtc-socket.glitch.me');
+
+    function registerLocalKey(){
+    	rtcPeerConnectionAdapter.signalingChannel.getId().then(id => rtcPeerConnectionAdapter.signalingChannel.setKey(document.getElementById('localKey').value, id));
+
+    	// get local media stream
+    	rtcPeerConnectionAdapter.enableMediaStream({video: true, audio: true}, document.getElementById('local'), document.getElementById('remote'));
+
+	    // Enable datachannel as receiver
+	    rtcPeerConnectionAdapter.enableDataChannel(false);
+    }
+
+    function callRemoteKey(){
+    	rtcPeerConnectionAdapter.enableDataChannel(true);
+    	rtcPeerConnectionAdapter.signalingChannel.getValueByKey(document.getElementById('remoteKey').value).then(remotePeerID => {
+    		console.log('Calling ' + remotePeerID);
+    		rtcPeerConnectionAdapter.createAndSendOffer(remotePeerID);
+    	});
+    }
+</script>
+</body>
+</html>
