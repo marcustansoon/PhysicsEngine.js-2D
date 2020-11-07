@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-let redirectedURL = 'http://joinnow.my/app-view/redirection',
+let redirectedURL = 'https://joinnow.my/app-view/redirection',
     isFCMRegistered,
     FCMToken,
     FCMID,
