@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-let redirectedURL = 'https://joinnow.my/app-view/redirection',
+let redirectedURL = 'https://gettix2u.com/mymua',
     isFCMRegistered,
     FCMToken,
     FCMID,
@@ -131,7 +131,7 @@ let redirectedURL = 'https://joinnow.my/app-view/redirection',
 			cordova.plugins.firebase.dynamiclinks.onDynamicLink(function(data) {
 				alert("Dynamic link click with data:" + JSON.stringify(data));
 			});
-			
+			/*
 			FirebasePlugin.getToken(this.getFCMToken.bind(this), this.onError);
 			FirebasePlugin.getId(this.getID.bind(this), this.onError);
 			FirebasePlugin.onTokenRefresh(this.getFCMToken.bind(this), this.onError);
@@ -144,7 +144,7 @@ let redirectedURL = 'https://joinnow.my/app-view/redirection',
 			// FirebasePlugin request permission to receive push notification (for IOS only. Always return true for android)
 			FirebasePlugin.grantPermission(function(hasPermission){
 				//alert("Permission was " + (hasPermission ? "granted" : "denied"));
-			});
+			});*/
 		}
 		
         // Lock device orientation at 'portrait'
@@ -216,14 +216,14 @@ let redirectedURL = 'https://joinnow.my/app-view/redirection',
                 })()`
             }, function(data){
                 // Check if back button is pressed (2 is return) AND previousURL and current URL is home page.
-                if(data && data[0] && (previousURL === "https://joinnow.my/home" || previousURL === "https://joinnow.my/login"|| previousURL === "https://joinnow.my/app-view")){
+                if(data && data[0] && (previousURL === "https://gettix2u.com/mymua/" || previousURL === "https://gettix2u.com/mymua/login"|| previousURL === "https://gettix2u.com/app-view")){
                     navigator.app.exitApp();
                 }else{
                     previousURL = e.url;
                 }
             });
             return;
-            if(previousURL === e.url && (e.url === "https://joinnow.my/home")){
+            if(previousURL === e.url && (e.url === "https://gettix2u.com/mymua/")){
                 navigator.app.exitApp();
             }
             previousURL = e.url;
@@ -259,12 +259,12 @@ let redirectedURL = 'https://joinnow.my/app-view/redirection',
                 // The scan completed, display the contents of the QR code:
                 
                 if(messageData.user === 'admin' && messageData.eventQRcode){
-                    let href = 'https://joinnow.my/invite?qrcode='+text+'&eventID='+messageData.eventQRcode;
+                    let href = 'https://gettix2u.com/mymua/invite?qrcode='+text+'&eventID='+messageData.eventQRcode;
                     // alert(href);
                     ref.executeScript({
                         code: 'window.location.href = "'+href+'";'
                     });
-                }else if(messageData.user === 'user' && text.includes('joinnow.my')){
+                }else if(messageData.user === 'user' && text.includes('gettix2u.com')){
                     ref.executeScript({
                         code: 'window.location.href = "'+text+'";'
                     });
