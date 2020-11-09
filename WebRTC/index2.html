@@ -147,16 +147,19 @@ class RTCPeerConnectionAdapter{
     bindDataChannelListeners(){
 	    this.buffer = [];
 	    this.receivedSize = 0;
+        this.startTime = 0;
+        this.endTime = 0;
     	this.dataChannel.addEventListener('open', event => {
 	            console.log('open');
 	    }); 
         this.dataChannel.addEventListener('message', data => {
         	let message = data.data;
             if (typeof message !== 'string') {
+            	if(!this.buffer.length) this.startTime = Date.now();
             	this.buffer.push(message);
             	this.receivedSize += message.byteLength;
 	            if(this.receivedSize === 209715200){
-	            	alert('done');
+	            	console.log(Date.now() - this.startTime);
 	            	const received = new Blob(this.buffer);
 				    this.buffer = [];
 				    document.querySelector('a').href = URL.createObjectURL(received);
@@ -217,9 +220,9 @@ class RTCPeerConnectionAdapter{
 
 class FileChunker {
 
-    constructor(file, onChunk, onPartitionEnd) {
+    constructor(file, onChunk, onPartitionEnd, dataChannel) {
         this._chunkSize = 64000; // 64 KB
-        this._maxPartitionSize = 2e6; // 1 MB
+        this._maxPartitionSize = 15e6; // 1 MB
         this._offset = 0;
         this._partitionSize = 0;
         this._file = file;
@@ -227,6 +230,7 @@ class FileChunker {
         this._onPartitionEnd = onPartitionEnd;
         this._reader = new FileReader();
         this._reader.addEventListener('load', e => this._onChunkRead(e.target.result));
+        this.dataChannel = dataChannel;
     }
 
     nextPartition() {
@@ -256,7 +260,9 @@ class FileChunker {
     }
 
     _isPartitionEnd() {
-        return this._partitionSize >= this._maxPartitionSize;
+    	//console.log(this.dataChannel.bufferedAmount >= this._maxPartitionSize)
+        //return this._partitionSize >= this._maxPartitionSize;
+       	return this.dataChannel.bufferedAmount >= this._maxPartitionSize;
     }
 
     isFileEnd() {
@@ -297,7 +303,7 @@ class FileChunker {
 
   		
   		let fileChunker = new FileChunker(file, chunk => rtcPeerConnectionAdapter.dataChannel.send(chunk), offset => 
-  			rtcPeerConnectionAdapter.dataChannel.send(JSON.stringify({ 'type': 'partition', 'offset': offset })));
+  			rtcPeerConnectionAdapter.dataChannel.send(JSON.stringify({ 'type': 'partition', 'offset': offset })), rtcPeerConnectionAdapter.dataChannel);
   		rtcPeerConnectionAdapter.setChunker(fileChunker);
 
     	fileChunker.nextPartition();
