@@ -16,7 +16,7 @@ Remote
 <video id="remote" autoplay=""></video>
 
 <a href=''>asd</a>
-
+1
 <input type="file" name="" onchange="onFileChange();" id="fileInput">
 
 
@@ -261,7 +261,7 @@ class FileChunker {
 
     _isPartitionEnd() {
     	//console.log(this.dataChannel.bufferedAmount >= this._maxPartitionSize)
-        //return this._partitionSize >= this._maxPartitionSize;
+        return this._partitionSize >= this._maxPartitionSize;
        	return this.dataChannel.bufferedAmount >= this._maxPartitionSize;
     }
 
