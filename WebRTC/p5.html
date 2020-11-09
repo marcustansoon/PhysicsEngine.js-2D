@@ -133,6 +133,7 @@ class RTCPeerConnectionAdapter{
     
     // On receiving answer handler (invoked on caller side)
     onReceiveAnswer(obj){
+        console.log(obj)
     	console.log('Received answer');
     	this.peerConnection.setRemoteDescription(new RTCSessionDescription(obj.answer));
     }
