@@ -94,15 +94,6 @@ class RTCPeerConnectionAdapter{
     // On receiving offer handler (invoked on receiver side)
     async onReceiveOffer(obj){
     	console.log('Received offer');
-        /*
-        this._conn.setRemoteDescription(new RTCSessionDescription(message.sdp))
-                .then( _ => {
-                    if (message.sdp.type === 'offer') {
-                        return this._conn.createAnswer()
-                            .then(d => this._onDescription(d));
-                    }
-                })
-                .catch(e => this._onError(e));*/
     	this.peerConnection.setRemoteDescription(new RTCSessionDescription(obj.offer))
         .then( _ => {
                 console.log(obj.offer)
@@ -112,7 +103,7 @@ class RTCPeerConnectionAdapter{
                                 this.peerConnection.setLocalDescription(answer);
                                 console.log('Sending answer');
                                 this.signalingChannel.emit('sendAnswer', {'answer': answer, 'to': obj.from, 'from': this._id});
-                            });
+                        });
                     }
                 });
         /*
@@ -134,7 +125,7 @@ class RTCPeerConnectionAdapter{
     async onReceiveICE(obj){
         console.log('Received ICE');
     	try {
-            await this.peerConnection.addIceCandidate(obj.iceCandidate);
+            await this.peerConnection.addIceCandidate(new RTCIceCandidate(obj.iceCandidate));
         } catch (e) {
             console.error('Error adding received ICE candidate', e);
         }
