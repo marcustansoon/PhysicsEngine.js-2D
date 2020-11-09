@@ -16,7 +16,7 @@ Remote
 <video id="remote" autoplay=""></video>
 
 <a href=''>asd</a>
-1
+12
 <input type="file" name="" onchange="onFileChange();" id="fileInput">
 
 
@@ -222,7 +222,7 @@ class FileChunker {
 
     constructor(file, onChunk, onPartitionEnd, dataChannel) {
         this._chunkSize = 64000; // 64 KB
-        this._maxPartitionSize = 15e6; // 1 MB
+        this._maxPartitionSize = 1e6; // 1 MB
         this._offset = 0;
         this._partitionSize = 0;
         this._file = file;
