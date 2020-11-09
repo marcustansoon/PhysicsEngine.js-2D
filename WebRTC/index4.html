@@ -261,7 +261,7 @@ class FileChunker {
 
     _isPartitionEnd() {
     	//console.log(this.dataChannel.bufferedAmount >= this._maxPartitionSize)
-        return this._partitionSize >= this._maxPartitionSize;
+        //return this._partitionSize >= this._maxPartitionSize;
        	return this.dataChannel.bufferedAmount >= this._maxPartitionSize;
     }
 
