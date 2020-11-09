@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Page Title</title>
+</head>
+Register this device as <input placeholder="PC 1" id="localKey">
+<button onclick="registerLocalKey();">Register</button>
+<br><br>
+Call <input placeholder="PC 2" id="remoteKey">
+<button onclick="callRemotePeer();">Call</button>
+<br>
+Local
+<video id="local" autoplay=""></video>
+Remote
+<video id="remote" autoplay=""></video>
+
+<a href=''>asd</a>
+
+<input type="file" name="" onchange="onFileChange();" id="fileInput">
+
+
+<body>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js'></script>
+<script>
+class RTCPeerConnectionAdapter{
+	constructor(configuration){
+    	// Instantiate RTC based on the configuration given
+    	this.peerConnection = new RTCPeerConnection(configuration);
+
+        // Enable data channel
+        this.enableDataChannel(false);
+
+        this.peerConnection.onconnectionstatechange = console.log;
+    }
+    
+    /*************************************************************************/
+    
+    // Create a signaling channel
+    initSocketServer(serverURL){
+    	// Set server URL
+    	this.serverURL = serverURL;
+    	// Connect to server
+    	this.signalingChannel = io(serverURL);
+        
+        // Listen for unique id and store it locally
+        this.signalingChannel.on('id', id => this._id = id);
+        // Listen for remote 'Offer' candidates and add them to the setRemoteDescription
+        this.signalingChannel.on('offer', this.onReceiveOffer.bind(this));
+        // Listen for remote 'Answer' candidates and add them to the setRemoteDescription
+        this.signalingChannel.on('answer', this.onReceiveAnswer.bind(this));
+        // Listen for remote 'ICE' candidates and add them to the local RTCPeerConnection
+		this.signalingChannel.on('ice', this.onReceiveICE.bind(this));
+
+		this.signalingChannel.setKey = (key, value) => {
+			this.signalingChannel.emit('setKey', {'key': key, 'value': value});
+		}
+
+		this.signalingChannel.getValueByKey = key => new Promise(resolve => {
+			this.signalingChannel.emit('getValueByKey', key);
+			this.signalingChannel.on('getValueByKey', resolve);
+		});
+
+		this.signalingChannel.getId = () => new Promise(resolve => {
+			if(this._id) resolve(this._id);
+			this.signalingChannel.emit('getId');
+			this.signalingChannel.on('getId', resolve);
+		})
+    }
+    
+    /*************************************************************************/
+    
+    // Send offer (only for caller)
+    createAndSendOffer(remotePeerID){
+        // Enable data channel
+        this.enableDataChannel(true);
+
+        // Listen for local ICE candidates on the local RTCPeerConnection
+        this.peerConnection.addEventListener('icecandidate', event => {
+            if (event.candidate) {
+                console.log('Sending ICE');
+                this.signalingChannel.emit('sendICE', {'iceCandidate': event.candidate, 'to': remotePeerID, 'from': this._id});
+            }
+        });
+
+    	// Create offer and send to remote peer
+        this.peerConnection.createOffer().then(offer => 
+        {
+        	// Set local offer
+        	this.peerConnection.setLocalDescription(offer);
+            // Send local offer to remote peer
+            this.signalingChannel.emit('sendOffer', {'offer': offer, 'to': remotePeerID, 'from': this._id});
+    		console.log('Creating and sending offer');
+        });
+	}
+    
+    // On receiving offer handler (invoked on receiver side)
+    async onReceiveOffer(obj){
+
+    	console.log('Received offer');
+    	this.peerConnection.setRemoteDescription(await new RTCSessionDescription(obj.offer));
+        this.peerConnection.createAnswer().then(answer =>
+        {
+        	this.peerConnection.setLocalDescription(answer);
+            console.log('Sending answer');
+            this.signalingChannel.emit('sendAnswer', {'answer': answer, 'to': obj.from, 'from': this._id});
+        });
+    }
+    
+    // On receiving answer handler (invoked on caller side)
+    onReceiveAnswer(obj){
+    	console.log('Received answer');
+    	this.peerConnection.setRemoteDescription(new RTCSessionDescription(obj.answer));
+    }
+    
+    // On receiving ICE handler (invoked on both side)
+    async onReceiveICE(obj){
+        console.log('Received ICE');
+    	try {
+            await this.peerConnection.addIceCandidate(obj.iceCandidate);
+        } catch (e) {
+            console.error('Error adding received ICE candidate', e);
+        }
+    }
+    
+    /*************************************************************************/
+    
+    // Create data channel
+    async enableDataChannel(isCaller){
+    	if(isCaller){
+    		this.isCaller = true;
+            this.dataChannel = this.peerConnection.createDataChannel('dataChannel');
+        	this.dataChannel.binaryType = 'arraybuffer';
+	        this.bindDataChannelListeners();
+        }
+        this.peerConnection.addEventListener('datachannel', event => {
+            console.log('Received channel');
+        	this.dataChannel = event.channel;
+        	this.dataChannel.binaryType = 'arraybuffer';
+	        this.bindDataChannelListeners();
+        });
+    }
+    setChunker(chunker){
+    	this.chunker = chunker;
+    }
+    // Bind event listeners for data channel
+    bindDataChannelListeners(){
+	    this.buffer = [];
+	    this.receivedSize = 0;
+    	this.dataChannel.addEventListener('open', event => {
+	            console.log('open');
+	    }); 
+        this.dataChannel.addEventListener('message', data => {
+        	let message = data.data;
+            if (typeof message !== 'string') {
+            	this.buffer.push(message);
+            	this.receivedSize += message.byteLength;
+	            if(this.receivedSize === 209715200){
+	            	alert('done');
+	            	const received = new Blob(this.buffer);
+				    this.buffer = [];
+				    document.querySelector('a').href = URL.createObjectURL(received);
+   		 			document.querySelector('a').download = '1.pdf';
+	            }
+	            return;
+	        }
+	        message = JSON.parse(message);
+
+            switch (message.type) {
+	            case 'header':
+
+	                break;
+	            case 'partition':
+	                console.log('received partition');
+	                this.dataChannel.send(JSON.stringify({ 'type': 'partition-received', 'offset': message.offset }))
+	                break;
+	            case 'partition-received':
+	                console.log('received partition received');
+	                console.log(message);
+	               	this.chunker.nextPartition();
+	                break;
+	            case 'progress':
+
+	                break;
+	            case 'transfer-complete':
+
+	                break;
+	            case 'text':
+
+	                break;
+	        }
+        });
+    }
+
+    /*************************************************************************/
+    
+    // Create data channel
+    enableMediaStream(constraints, localMedia, remoteMedia){
+    	this.remoteStream = new MediaStream();
+		remoteMedia.srcObject = this.remoteStream;
+
+    	navigator.mediaDevices.getUserMedia(constraints).then(stream => {
+    		localMedia.srcObject = stream;
+    		stream.getTracks().forEach(track => this.peerConnection.addTrack(track));
+    	});
+    	this.bindMediaStreamListeners();
+    }
+
+    // Bind event listeners for data channel
+    bindMediaStreamListeners(){
+        this.peerConnection.addEventListener('track', async (event) => {
+		    this.remoteStream.addTrack(event.track);
+		});
+    }
+}
+
+
+class FileChunker {
+
+    constructor(file, onChunk, onPartitionEnd) {
+        this._chunkSize = 64000; // 64 KB
+        this._maxPartitionSize = 2e6; // 1 MB
+        this._offset = 0;
+        this._partitionSize = 0;
+        this._file = file;
+        this._onChunk = onChunk;
+        this._onPartitionEnd = onPartitionEnd;
+        this._reader = new FileReader();
+        this._reader.addEventListener('load', e => this._onChunkRead(e.target.result));
+    }
+
+    nextPartition() {
+        this._partitionSize = 0;
+        this._readChunk();
+    }
+
+    _readChunk() {
+        const chunk = this._file.slice(this._offset, this._offset + this._chunkSize);
+        this._reader.readAsArrayBuffer(chunk);
+    }
+
+    _onChunkRead(chunk) {
+        this._offset += chunk.byteLength;
+        this._partitionSize += chunk.byteLength;
+        this._onChunk(chunk);
+        if (this._isPartitionEnd() || this.isFileEnd()) {
+            this._onPartitionEnd(this._offset);
+            return;
+        }
+        this._readChunk();
+    }
+
+    repeatPartition() {
+        this._offset -= this._partitionSize;
+        this._nextPartition();
+    }
+
+    _isPartitionEnd() {
+        return this._partitionSize >= this._maxPartitionSize;
+    }
+
+    isFileEnd() {
+        return this._offset > this._file.size;
+    }
+
+    get progress() {
+        return this._offset / this._file.size;
+    }
+}
+
+
+	// Instantiate RTC Adapter
+    let id, rtcPeerConnectionAdapter = new RTCPeerConnectionAdapter({'iceServers': [{'urls': 'stun:stun.l.google.com:19302'}]});
+
+    // Initiate server connection
+    rtcPeerConnectionAdapter.initSocketServer('https://webrtc-socket.glitch.me');
+
+    function registerLocalKey(){
+    	rtcPeerConnectionAdapter.signalingChannel.getId().then(id => rtcPeerConnectionAdapter.signalingChannel.setKey(document.getElementById('localKey').value, id));
+
+    	// get local media stream
+    	//rtcPeerConnectionAdapter.enableMediaStream({video: true, audio: true}, document.getElementById('local'), document.getElementById('remote'));
+    }
+
+    function callRemotePeer(){
+    	rtcPeerConnectionAdapter.signalingChannel.getValueByKey(document.getElementById('remoteKey').value).then(remotePeerID => {
+    		console.log('Calling ' + remotePeerID);
+    		rtcPeerConnectionAdapter.createAndSendOffer(remotePeerID);
+    	});
+    }
+
+    function onFileChange(){
+    	
+	    let receiveBuffer = [], receivedSize = 0;
+	    const file = document.getElementById('fileInput').files[0];
+  		console.log(`File is ${[file.name, file.size, file.type, file.lastModified].join(' ')}`);
+
+  		
+  		let fileChunker = new FileChunker(file, chunk => rtcPeerConnectionAdapter.dataChannel.send(chunk), offset => 
+  			rtcPeerConnectionAdapter.dataChannel.send(JSON.stringify({ 'type': 'partition', 'offset': offset })));
+  		rtcPeerConnectionAdapter.setChunker(fileChunker);
+
+    	fileChunker.nextPartition();
+    }
+</script>
+</body>
+</html>
