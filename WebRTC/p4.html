@@ -25,10 +25,24 @@ class RTCPeerConnectionAdapter{
     	// Instantiate RTC based on the configuration given
     	this.peerConnection = new RTCPeerConnection(configuration);
 
+        this.peerConnection.onconnectionstatechange = this._onConnectionStateChange;
+
         // Enable data channel
         this.enableDataChannel(false);
 
         this.peerConnection.onconnectionstatechange = console.log;
+    }
+    _onConnectionStateChange(e) {
+        console.log('RTC: state changed:', this.peerConnection.connectionState);
+        switch (this.peerConnection.connectionState) {
+            case 'disconnected':
+
+                break;
+            case 'failed':
+                this.peerConnection = null;
+
+                break;
+        }
     }
     
     /*************************************************************************/
@@ -65,6 +79,10 @@ class RTCPeerConnectionAdapter{
 		})
     }
     
+    _onError(err){
+        alert(err);
+    }
+
     /*************************************************************************/
     
     // Send offer (only for caller)
@@ -83,10 +101,8 @@ class RTCPeerConnectionAdapter{
     	// Create offer and send to remote peer
         this.peerConnection.createOffer().then(offer => 
         {
-        	// Set local offer
-        	this.peerConnection.setLocalDescription(offer);
-            // Send local offer to remote peer
-            this.signalingChannel.emit('sendOffer', {'offer': offer, 'to': remotePeerID, 'from': this._id});
+        	// Set local offer and send it to remote peer
+        	this.peerConnection.setLocalDescription(offer).then(_ => this.signalingChannel.emit('sendOffer', {'offer': offer, 'to': remotePeerID, 'from': this._id})).catch(e => this._onError(e));
     		console.log('Creating and sending offer');
         });
 	}
