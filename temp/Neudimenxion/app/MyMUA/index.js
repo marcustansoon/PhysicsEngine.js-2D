@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-let redirectedURL = 'https://gettix2u.com/mymua',
+let redirectedURL = 'https://gettix2u.com/mymua/app-view/redirection',
     isFCMRegistered,
     FCMToken,
     FCMID,
