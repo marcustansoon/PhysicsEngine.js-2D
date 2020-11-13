@@ -1,11 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.___.___" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.__.__" version="1.0.4" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>JoinNow</name>
     <description>
         An event management system, responsible for processing and handling both local and international events happening around the globe
     </description>
     <author email="___@___.com" href="http://cordova.io">
-        Team
+        ____ Team
     </author>
     <content src="index.html" />
     <plugin name="cordova-plugin-whitelist" spec="1"/>
@@ -43,6 +43,17 @@
         <icon src="res/android/xxxhdpi.png" density="xxxhdpi" />
     </platform>
     <platform name="ios">
+        <preference name="WKWebViewOnly" value="true" />
+
+        <feature name="CDVWKWebViewEngine">
+            <param name="ios-package" value="CDVWKWebViewEngine" />
+        </feature>
+
+        <preference name="CordovaWebViewEngine" value="CDVWKWebViewEngine" />
+        
+        <preference name="UseSwiftLanguageVersion" value="5" />
+        <plugin name="cordova-plugin-add-swift-support" spec="1.7.2" />
+        
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
         
@@ -105,6 +116,8 @@
         <splash src="res/screen/ios/Default-667h.png" width="750" height="1334"/>
         <splash src="res/screen/ios/Default-736h.png" width="1242" height="2208"/>
         <splash src="res/screen/ios/Default-Landscape-736h.png" width="2208" height="1242"/>
+        <splash src="res/screen/ios/Default-2436h.png" width="1125" height="2436"/>
+        <splash src="res/screen/ios/Default-Landscape-2436h.png" width="2436" height="1125"/>
         
         
         <!-- Storyboard method (supports all devices):
@@ -128,8 +141,22 @@
 
     <!-- Universal Deeplinks https://github.com/e-imaxina/cordova-plugin-deeplinks -->
     <universal-links>
-        <host name="joinnow.my" scheme="https" event="redirection">
-            <path url="/redirect-url" />
+        <ios-team-id value="65FV27HR__" />
+        <host name="google.my" scheme="https">
+            <path url="/events*"/>
+            <path url="/users*"/>
+            <path url="/home"/>
+            <path url="/profile"/>
+            <path url="/login"/>
+            <path url="/join" event="joinEventHandler" />
+            <path url="/invite" event="inviteParticipantHandler" />
         </host>
     </universal-links>
+
+    <preference name="AndroidLaunchMode" value="singleInstance" />
+
+    <preference name="AndroidPersistentFileLocation" value="Compatibility" />
+    <preference name="iosPersistentFileLocation" value="Compatibility" />
+    <preference name="AndroidExtraFilesystems" value="files,files-external,documents,sdcard,root" />
+    <preference name="iosExtraFilesystems" value="library,library-nosync,documents,documents-nosync,cache,bundle,root" />
 </widget>
