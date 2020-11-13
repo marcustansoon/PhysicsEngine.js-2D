@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-let redirectedURL = 'https://gettix2u.com/mymua/app-view/redirection',
+let redirectedURL = 'https://gettix2u.com/mypusaka',
     isFCMRegistered,
     FCMToken,
     FCMID,
@@ -216,14 +216,14 @@ let redirectedURL = 'https://gettix2u.com/mymua/app-view/redirection',
                 })()`
             }, function(data){
                 // Check if back button is pressed (2 is return) AND previousURL and current URL is home page.
-                if(data && data[0] && (previousURL === "https://gettix2u.com/mymua/" || previousURL === "https://gettix2u.com/mymua/login"|| previousURL === "https://gettix2u.com/mymua/app-view")){
+                if(data && data[0] && (previousURL === "https://gettix2u.com/mypusaka/" || previousURL === "https://gettix2u.com/mypusaka/login"|| previousURL === "https://gettix2u.com/mypusaka/app-view")){
                     navigator.app.exitApp();
                 }else{
                     previousURL = e.url;
                 }
             });
             return;
-            if(previousURL === e.url && (e.url === "https://gettix2u.com/mymua/")){
+            if(previousURL === e.url && (e.url === "https://gettix2u.com/mypusaka/")){
                 navigator.app.exitApp();
             }
             previousURL = e.url;
@@ -259,7 +259,7 @@ let redirectedURL = 'https://gettix2u.com/mymua/app-view/redirection',
                 // The scan completed, display the contents of the QR code:
                 
                 if(messageData.user === 'admin' && messageData.eventQRcode){
-                    let href = 'https://gettix2u.com/mymua/invite?qrcode='+text+'&eventID='+messageData.eventQRcode;
+                    let href = 'https://gettix2u.com/mypusaka/invite?qrcode='+text+'&eventID='+messageData.eventQRcode;
                     // alert(href);
                     ref.executeScript({
                         code: 'window.location.href = "'+href+'";'
