@@ -166,7 +166,11 @@ class RTCPeer {
         return this._signalingChannel;
     }
 
+    // {'from':..., 'to':..., '...'}
     onServerMessage(data) {
+        // Make sure the recipient is correct
+        if(data.to !== this.id || data.from !== this.peerID) return;
+
         switch (true) {
             case 'offer' in data:
                 this._onReceivedOffer(data.offer);
@@ -193,7 +197,7 @@ class RTCPeer {
         console.log('Sending offer');
         this.signalingChannel.send({
             'from': this.id,
-            'to': this._peerID,
+            'to': this.peerID,
             'offer': this._peerConnection.localDescription
         });
     }
@@ -212,7 +216,7 @@ class RTCPeer {
         console.log('Sending answer');
         this.signalingChannel.send({
             'from': this.id,
-            'to': this._peerID,
+            'to': this.peerID,
             'answer': this._peerConnection.localDescription
         });
     }
@@ -241,6 +245,9 @@ class SignalingChannel {
         this._signalingChannel.on('id', console.log);
 
         this._signalingChannel.on('message', (d) => this.messangeHandler(d));
+
+        this._signalingChannel.on('newClient', console.log);
+
     }
 
     set messangeHandler(fn) {
