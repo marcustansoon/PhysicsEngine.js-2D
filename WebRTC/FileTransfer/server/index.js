@@ -17,20 +17,23 @@ io.on("connection", client => {
   // Get client public ip
   client._ip = client.handshake.headers["x-forwarded-for"].split(",")[0];
 
-  // Inform other clients (of the same room) about the new client joining
+  // Inform other clients (of the same public ip/room) about the new client joining
   io.to(client._ip).emit("newClient", client.id);
 
-  // Get client id
+  // Get ids of clients in the same room and send to joining client
   io.in(client._ip).clients((err, clientsInRoom) => {
     if (err) throw new Error(err);
-    // For each existing clients in a room, sends their ids to new joining client
+    // 'clientsInRoom' is an array of client ids in the room
     clientsInRoom.forEach(perClientInARoom =>
+      // send client ids to joining client
       client.emit("newClient", perClientInARoom)
     );
   });
 
-  // Invite client into public IP room
+  // Invite client into its public IP room
   client.join(client._ip);
+  
+  
 
   // data -> {'key' : '', 'value' : ''}
   client.on("setKey", function(data) {
