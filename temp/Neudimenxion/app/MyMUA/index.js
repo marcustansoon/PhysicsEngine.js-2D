@@ -214,7 +214,7 @@ let redirectedURL = 'https://gettix2u.com/mymua/app-view/redirection',
                 'code': `(function(){
                     return performance.navigation.type;
                 })()`
-            }, function(data){
+            }, function(data){alert(e.url);
                 // Check if back button is pressed (2 is return) AND previousURL and current URL is home page.
                 if(data && data[0] && (previousURL === "https://gettix2u.com/mymua/" || previousURL === "https://gettix2u.com/mymua/login"|| previousURL === "https://gettix2u.com/mymua/app-view")){
                     navigator.app.exitApp();
