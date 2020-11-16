@@ -321,6 +321,7 @@ class FileDigester{
         this._receivedSize = 0;
     }
     reset(){
+        this.timeStart = Date.now();
         this._buffer = [];
         this._receivedSize = 0;
     }
@@ -362,6 +363,7 @@ class FileDigester{
             document.getElementById('downloadFile').href = URL.createObjectURL(blob);
             document.getElementById('downloadFile').download = this.name;
             this.callback && this.callback();
+            console.log((Date.now() - this.timeStart)/1000);
         }
     }
 
