@@ -1,0 +1,484 @@
+<input type="file" name="" onchange="onFileInputHandler();" id="fileInput">
+<a id="downloadFile">Download</a>
+<div id="progress"></div>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js'></script>
+<script>
+class RTCPeer {
+    constructor(config) {
+        this._peerConnection = new RTCPeerConnection(config);
+
+        // Enable data channel
+        this._enableDataChannel(false);
+
+        // Bind event listeners
+        this._bindRTCListeners();
+    }
+
+    _bindRTCListeners() {
+        this._peerConnection.onconnectionstatechange = () => this._onConnectionStateChange();
+        this._peerConnection.oniceconnectionstatechange = () => this._onIceConnectionStateChange();
+        this._peerConnection.onicegatheringstatechange = () => this._onIceGatheringStateChange();
+        this._peerConnection.onsignalingstatechange = () => this._onSignalingStateChange();
+        this._peerConnection.onnegotiationneeded = () => this._onNegotiationNeeded();
+        this._peerConnection.onicecandidate = (e) => this._onIceCandidate(e);
+
+    }
+
+    _onConnectionStateChange(e) {
+        console.log('connectionState: ' + this._peerConnection.connectionState);
+        switch (this._peerConnection.connectionState) {
+            case "connected":
+                // The connection has become fully connected
+                break;
+            case "disconnected":
+            case "failed":
+                // One or more transports has terminated unexpectedly or in an error
+                break;
+            case "closed":
+                // The connection has been closed
+                break;
+        }
+    }
+
+    _onIceGatheringStateChange(){
+        console.log('iceGatheringState: ' + this._peerConnection.iceGatheringState)
+    }
+
+    _onIceConnectionStateChange() {
+        console.log('iceConnectionState: ' + this._peerConnection.iceConnectionState);
+        // For more info, https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/iceConnectionState
+        switch (this._peerConnection.iceConnectionState) {
+            case "new":
+                // The connection has become fully connected
+                break;
+            case "checking":
+                // One or more transports has terminated unexpectedly or in an error
+                break;
+            case "connected":
+                // One or more transports has terminated unexpectedly or in an error
+                break;
+            case "completed":
+                // One or more transports has terminated unexpectedly or in an error
+                break;
+            case "failed":
+                // The connection has been closed
+                break;
+            case "disconnected":
+                // The connection has been closed
+                break;
+            case "closed":
+                // The connection has been closed
+                break;
+        }
+    }
+
+    _onSignalingStateChange() {
+        console.log('SignalingState: ' + this._peerConnection.signalingState);
+        // For more info, https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/signalingState
+        switch (this._peerConnection.signalingState) {
+            case "stable":
+                // ICE negotiation complete
+                break;
+            case "have-local-offer":
+                break;
+            case "have-remote-offer":
+                break;
+            case "have-local-pranswer":
+                break;
+            case "have-remote-pranswer":
+                break;
+            case "closed":
+                break;
+        }
+    }
+
+    _onNegotiationNeeded() {
+        console.log('Negotiation needed');
+    }
+
+    _onIceCandidate(e) {
+        if (!e.candidate) return;
+        console.log('Sending ICE');
+        this.signalingChannel.send({
+            'iceCandidate': e.candidate,
+            'to': this.peerID,
+            'from': this.id
+        });
+    }
+
+    _onReceivedICECandidate(iceCandidate) {
+        console.log('Received ICE');
+        this._peerConnection.addIceCandidate(new RTCIceCandidate(iceCandidate)).catch(this._onError);
+    }
+
+    _enableDataChannel(isCaller) {
+        if (isCaller) {
+            this._isCaller = true;
+            this._dataChannel = this._peerConnection.createDataChannel('dataChannel');
+            this._dataChannel.binaryType = 'arraybuffer';
+            this._bindDataChannelListeners();
+        }
+        this._peerConnection.addEventListener('datachannel', event => {
+            console.log('Received channel');
+            this._dataChannel = event.channel;
+            this._dataChannel.binaryType = 'arraybuffer';
+            this._bindDataChannelListeners();
+        });
+    }
+
+    _bindDataChannelListeners() {
+        this._dataChannel.addEventListener('open', event => {
+            console.log('DC opened');
+        });
+        this._dataChannel.addEventListener('close', event => {
+            console.log('DC closed');
+        });
+        this._dataChannel.addEventListener('message', data => {
+            //console.log(data);
+            this.dataChannelHandler && this.dataChannelHandler(data);
+        });
+    }
+
+    get dataChannel(){
+        return this._dataChannel;
+    }
+
+    set dataChannelHandler(fn){
+        this._dataChannelHandler = fn;
+    }
+
+    get dataChannelHandler(){
+        return this._dataChannelHandler;
+    }
+
+    set id(id) {
+        this._id = id;
+    }
+
+    get id() {
+        return this._id;
+    }
+
+    set peerID(peerID) {
+        this._peerID = peerID;
+    }
+
+    get peerID() {
+        return this._peerID;
+    }
+
+    set signalingChannel(channel) {
+        this._signalingChannel = channel;
+    }
+
+    get signalingChannel() {
+        return this._signalingChannel;
+    }
+
+    // {'from':..., 'to':..., '...'}
+    onServerMessage(data) {
+        // Make sure the recipient and sender are correct
+        if(data.to !== this.id || data.from !== this.peerID) return;
+
+        switch (true) {
+            case 'offer' in data:
+                this._onReceivedOffer(data.offer);
+                break;
+            case 'answer' in data:
+                this._onReceivedAnswer(data.answer);
+                break;
+            case 'iceCandidate' in data:
+                this._onReceivedICECandidate(data.iceCandidate);
+                break;
+        }
+    }
+
+    createAndSendOffer() {
+        if (!this._dataChannel) this._enableDataChannel(true);
+        this._peerConnection.createOffer().then(offer => this._onCreateOffer(offer)).then(() => this._sendOffer()).catch(this._onError);
+    }
+
+    _onCreateOffer(offer) {
+        this._peerConnection.setLocalDescription(new RTCSessionDescription(offer));
+    }
+
+    _sendOffer() {
+        console.log('Sending offer');
+        this.signalingChannel.send({
+            'from': this.id,
+            'to': this.peerID,
+            'offer': this._peerConnection.localDescription
+        });
+    }
+
+    _onReceivedOffer(offer) {
+        console.log('Received offer');
+        this._peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
+        this._peerConnection.createAnswer().then(answer => this._onCreateAnswer(answer)).then(() => this._sendAnswer()).catch(this._onError);
+    }
+
+    _onCreateAnswer(answer) {
+        this._peerConnection.setLocalDescription(answer);
+    }
+
+    _sendAnswer() {
+        console.log('Sending answer');
+        this.signalingChannel.send({
+            'from': this.id,
+            'to': this.peerID,
+            'answer': this._peerConnection.localDescription
+        });
+    }
+
+    _onReceivedAnswer(answer) {
+        console.log('Received answer');
+        this._peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+    }
+
+    _onError(err) {
+        console.error(err);
+    }
+}
+
+class FileChunker {
+    constructor(file, dataChannel) {
+        this._chunkSize = 64000; // 16KB  (max = 64kb)
+        this._maxPartitionSize = 1e6; // 1 MB for older browser/phone (15mb for modern pc)
+        this._offset = 0;
+        this._partitionSize = 0;
+        this._file = file;
+        this.dataChannel = dataChannel;
+        this._onChunk = dataChannel.send;
+        this._onPartitionEnd = offset => {
+            console.log('Sending partition');
+            this.dataChannel.send(JSON.stringify({'type': 'partition', 'offset': offset}));
+        };
+        this._reader = new FileReader();
+        this._reader.addEventListener('load', e => this._onChunkRead(e.target.result));
+        this._isFirstTime = true;
+    }
+
+    nextPartition() {
+        this._partitionSize = 0;
+        this._readChunk();
+    }
+
+    _readChunk() {
+        // Inform peer of incoming file size
+        if(this._isFirstTime){
+           this.sendFileProperties();
+            this._isFirstTime = false;
+        }   
+
+        //console.log(this._offset + this._chunkSize);
+        const chunk = this._file.slice(this._offset, this._offset + this._chunkSize);
+        this._reader.readAsArrayBuffer(chunk);
+    }
+
+    sendFileProperties(){
+        this.dataChannel.send(JSON.stringify({
+            'type': 'fileProperties',
+            'name': this._file.name,
+            'mime': this._file.type,
+            'size': this._file.size
+        }));
+    }
+
+    _onChunkRead(chunk) {
+        this._offset += chunk.byteLength;
+        this._partitionSize += chunk.byteLength;
+        this.dataChannel.send(chunk);
+        //console.log('seee')
+        //this._onChunk(chunk);
+        if (this._isPartitionEnd() || this.isFileEnd()) {
+            this._onPartitionEnd(this._offset);
+            return;
+        }
+        this._readChunk();
+    }
+
+    repeatPartition() {
+        this._offset -= this._partitionSize;
+        this._nextPartition();
+    }
+
+    _isPartitionEnd() {
+        //console.log(this.dataChannel.bufferedAmount >= this._maxPartitionSize)
+        //return this._partitionSize >= this._maxPartitionSize;
+        return this.dataChannel.bufferedAmount >= this._maxPartitionSize;
+    }
+
+    isFileEnd() {
+        //console.log(this._offset + ' ' + this._file.size);
+        return this._offset >= this._file.size;
+    }
+
+    get progress() {
+        return this._offset / this._file.size;
+    }
+}
+
+class FileDigester{
+    constructor(){
+        this._buffer = [];
+        this._receivedSize = 0;
+    }
+    reset(){
+        this.timeStart = Date.now();
+        this._buffer = [];
+        this._receivedSize = 0;
+    }
+    // Onfile received success callback
+    set callback(callback){
+        this._callback = callback;
+    }
+    get callback(){
+        return this._callback;
+    }
+    // File size
+    set size(size){
+        this._size = size;
+    }
+    get size(){
+        return this._size;
+    }
+    // File mime
+    set mime(mime){
+        this._mime = mime  || 'application/octet-stream';
+    }
+    get mime(){
+        return this._mime ;
+    }
+    // File name
+    set name(name){
+        this._name  = name ;
+    }
+    get name(){
+        return this._name;
+    }
+    onReceived(chunk){
+        this._buffer.push(chunk);
+        this._receivedSize += chunk.byteLength;
+
+        if(this.isFileEnd()){
+            console.log('File done Received');
+            let blob = new Blob(this._buffer, {'type': this.mime});
+            document.getElementById('downloadFile').href = URL.createObjectURL(blob);
+            document.getElementById('downloadFile').download = this.name;
+            this.callback && this.callback();
+            console.log((Date.now() - this.timeStart)/1000);
+        }
+    }
+
+    isFileEnd(){
+        return this._receivedSize === this.size;
+    }
+}
+
+// Instantiate RTC Adapter
+// Init socket connection
+let signalingChannel = io('https://webrtc-socket.glitch.me'),
+peerIDs = [], id, rtcPeers = [];
+
+
+function onFileInputHandler(){
+    const file = document.getElementById('fileInput').files[0];
+    console.log(file)
+
+    //return;
+    // File, datachannel
+    rtcPeers[0].fileChunker = new FileChunker(file, rtcPeers[0].dataChannel);
+    rtcPeers[0].fileChunker.nextPartition();
+    console.log('Starting to send file data');
+}
+
+
+function onNewClientHandler(peerID){
+    const rtcPeer = new RTCPeer({
+        'iceServers': [{
+            'urls': 'stun:stun.l.google.com:19302'
+        }]
+    });
+
+    // Set peer id
+    rtcPeer.peerID = peerID;
+    // Set client id
+    rtcPeer.id = id;
+    // Set signaling channel
+    rtcPeer.signalingChannel = signalingChannel;
+    // Set onMessage handler
+    // signalingChannel.on('message', rtcPeer.onServerMessage.bind(rtcPeer));
+    
+    rtcPeer.fileDigester = new FileDigester();
+
+    rtcPeer.fileDigester.callback = function(){
+        console.log('d');
+        //rtcPeer.datachannel.send(JSON.stringify())
+    }
+
+    // Handler for onDatachannel message
+    rtcPeer.dataChannelHandler = function(d){
+        if(typeof d.data === 'string'){
+            let data = JSON.parse(d.data);
+            switch(data.type){
+                case "fileProperties":
+                    rtcPeer.fileDigester.name = data.name;
+                    rtcPeer.fileDigester.mime = data.mime;
+                    rtcPeer.fileDigester.size = data.size;
+                    rtcPeer.fileDigester.size = data.size;
+                    rtcPeer.fileDigester.reset();
+                    break;
+                case "partition":
+                    //console.log('Received partition');
+                    console.log('Sending partition-received');
+                    rtcPeer.dataChannel.send(JSON.stringify({'type': 'partition-received', 'offset': data.offset}));
+                    break;
+                case "partition-received":
+                    console.log('Received partition-received');
+                   
+                   !rtcPeer.fileChunker.isFileEnd() && rtcPeer.fileChunker.nextPartition();
+
+                   if(rtcPeer.fileChunker.isFileEnd()) console.log('end')
+                    //rtcPeer.dataChannel.send({'type': 'partition-received', 'offset': data.offset});
+                    break;
+            }
+        }else{
+            document.getElementById('progress').innerHTML = rtcPeer.fileDigester._receivedSize / rtcPeer.fileDigester._size * 100;
+            //console.log('Received ' + d.data.byteLength);
+            rtcPeer.fileDigester.onReceived(d.data);
+        }
+    }
+
+    rtcPeers.push(rtcPeer);
+}
+
+signalingChannel.on('connect', () => console.log('Connected'));
+signalingChannel.on('id', _id => {id = _id; console.log(_id);});
+signalingChannel.on('newClient', _clientID => {
+    peerIDs.push(_clientID); 
+    console.log('newClient : ' + _clientID);
+    onNewClientHandler(_clientID);
+});
+
+// Set clientDisconnection handler
+signalingChannel.on('disconnectedClient', _clientID => {
+    let index = peerIDs.indexOf(_clientID);
+    console.log('disconnectedClient : ' + _clientID);
+    if(index < 0) return;
+    // Remove disconnected client id and rtcPeer
+    peerIDs.splice(index, 1);
+    rtcPeers.splice(index, 1);
+});
+
+// Set onMessage handler for each rtcPeer
+signalingChannel.on('message', data => {
+    rtcPeers.forEach(rtcPeer =>  rtcPeer.onServerMessage(data));
+});
+
+// Define how signaling channel send out data
+signalingChannel.send = function(data){
+    // data = {'from': ..., 'to':..., '...'}
+    this.emit('message', data);
+}
+
+</script>
