@@ -287,7 +287,7 @@ class FileChunker {
         this._offset += chunk.byteLength;
         this._partitionSize += chunk.byteLength;
         this.dataChannel.send(chunk);
-        console.log('seee')
+        //console.log('seee')
         //this._onChunk(chunk);
         if (this._isPartitionEnd() || this.isFileEnd()) {
             this._onPartitionEnd(this._offset);
