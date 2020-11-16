@@ -267,8 +267,9 @@ class FileChunker {
         if(this._isFirstTime){
            this.sendFileProperties();
             this._isFirstTime = false;
-        }
+        }   
 
+        //console.log(this._offset + this._chunkSize);
         const chunk = this._file.slice(this._offset, this._offset + this._chunkSize);
         this._reader.readAsArrayBuffer(chunk);
     }
@@ -286,7 +287,7 @@ class FileChunker {
         this._offset += chunk.byteLength;
         this._partitionSize += chunk.byteLength;
         this.dataChannel.send(chunk);
-        //return;
+        console.log('seee')
         //this._onChunk(chunk);
         if (this._isPartitionEnd() || this.isFileEnd()) {
             this._onPartitionEnd(this._offset);
@@ -307,7 +308,8 @@ class FileChunker {
     }
 
     isFileEnd() {
-        return this._offset > this._file.size;
+        //console.log(this._offset + ' ' + this._file.size);
+        return this._offset >= this._file.size;
     }
 
     get progress() {
@@ -459,12 +461,15 @@ function onNewClientHandler(peerID){
                     break;
                 case "partition":
                     //console.log('Received partition');
-                    //console.log('Sending partition-received');
+                    console.log('Sending partition-received');
                     rtcPeer.dataChannel.send(JSON.stringify({'type': 'partition-received', 'offset': data.offset}));
                     break;
                 case "partition-received":
-                    //console.log('Received partition-received');
-                    rtcPeer.fileChunker.nextPartition();
+                    console.log('Received partition-received');
+                   
+                   !rtcPeer.fileChunker.isFileEnd() && rtcPeer.fileChunker.nextPartition();
+
+                   if(rtcPeer.fileChunker.isFileEnd())console.log('end')
                     //rtcPeer.dataChannel.send({'type': 'partition-received', 'offset': data.offset});
                     break;
             }
