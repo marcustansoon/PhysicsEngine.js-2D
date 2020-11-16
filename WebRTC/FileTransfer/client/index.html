@@ -1,5 +1,6 @@
 <input type="file" name="" onchange="onFileInputHandler();" id="fileInput">
 <a id="downloadFile">Download</a>
+<div id="progress"></div>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.js'></script>
 <script>
 class RTCPeer {
@@ -241,7 +242,7 @@ class RTCPeer {
 
 class FileChunker {
     constructor(file, dataChannel) {
-        this._chunkSize = 16000; // 16KB  (max = 64kb)
+        this._chunkSize = 32000; // 16KB  (max = 64kb)
         this._maxPartitionSize = 1e6; // 1 MB for older browser/phone (15mb for modern pc)
         this._offset = 0;
         this._partitionSize = 0;
@@ -374,38 +375,6 @@ class FileDigester{
     }
 }
 
-class SignalingChannel {
-    constructor(socketURL) {
-        this._serverURL = socketURL;
-    }
-
-    connect() {
-        // Connect to server
-        this._signalingChannel = io(this._serverURL);
-
-        this._signalingChannel.on('connect', () => console.log('connected'));
-
-        this._signalingChannel.on('id', console.log);
-
-        this._signalingChannel.on('message', (d) => this.messangeHandler(d));
-
-        this._signalingChannel.on('newClient', console.log);
-    }
-
-    set messangeHandler(fn) {
-        this._onMessageHandler = fn;
-    }
-
-    get messangeHandler() {
-        return this._onMessageHandler;
-    }
-
-    send(data) {
-        this._signalingChannel.emit('message', data);
-    }
-}
-
-
 // Instantiate RTC Adapter
 // Init socket connection
 let signalingChannel = io('https://webrtc-socket.glitch.me'),
@@ -469,11 +438,12 @@ function onNewClientHandler(peerID){
                    
                    !rtcPeer.fileChunker.isFileEnd() && rtcPeer.fileChunker.nextPartition();
 
-                   if(rtcPeer.fileChunker.isFileEnd())console.log('end')
+                   if(rtcPeer.fileChunker.isFileEnd()) console.log('end')
                     //rtcPeer.dataChannel.send({'type': 'partition-received', 'offset': data.offset});
                     break;
             }
         }else{
+            document.getElementById('progress').innerHTML = rtcPeer.fileDigester._receivedSize / rtcPeer.fileDigester._size * 100;
             //console.log('Received ' + d.data.byteLength);
             rtcPeer.fileDigester.onReceived(d.data);
         }
