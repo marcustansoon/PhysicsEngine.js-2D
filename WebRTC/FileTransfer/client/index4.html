@@ -175,7 +175,7 @@ class RTCPeer {
         return this._signalingChannel;
     }
 
-    // {'from':..., 'to':..., '...'}
+    // {'from':..., 'to':..., '...': '...'}
     onServerMessage(data) {
         // Make sure the recipient and sender are correct
         if(data.to !== this.id || data.from !== this.peerID) return;
@@ -189,6 +189,9 @@ class RTCPeer {
                 break;
             case 'iceCandidate' in data:
                 this._onReceivedICECandidate(data.iceCandidate);
+                break;
+            case 'hostingProbability' in data:
+                this._onReceivedHostingProbability(data.hostingProbability);
                 break;
         }
     }
@@ -235,6 +238,25 @@ class RTCPeer {
         this._peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
     }
 
+    sendHostingProbability(){
+        console.log('Sending hosting probability');
+        this._hostingProbability = Math.floor(Math.random() * 1000);
+        this.signalingChannel.send({
+            'from': this.id,
+            'to': this.peerID,
+            'hostingProbability': this._hostingProbability
+        });
+    }
+
+    _onReceivedHostingProbability(peerHostingProbability) {
+        if(peerHostingProbability > this._hostingProbability){
+            console.log('I am peer');
+        }else{
+            console.log('I am host');
+            this.createAndSendOffer();
+        }
+    }
+
     _onError(err) {
         console.error(err);
     }
@@ -243,7 +265,7 @@ class RTCPeer {
 class FileChunker {
     constructor(file, dataChannel) {
         this._chunkSize = 16000; // 16KB  (max = 64kb)
-        this._maxPartitionSize = 1e6; // 1 MB for older browser/phone (15mb for modern pc)
+        this._maxPartitionSize = Math.max(this._chunkSize * 8, 1e6); // 8 chunks or at least 1 MiB // 1e6; // 1 MB for older browser/phone (15mb for modern pc)
         this._offset = 0;
         this._partitionSize = 0;
         this._file = file;
@@ -383,15 +405,12 @@ peerIDs = [], id, rtcPeers = [];
 
 function onFileInputHandler(){
     const file = document.getElementById('fileInput').files[0];
-    console.log(file)
-
-    //return;
+    if(!file) return;
     // File, datachannel
     rtcPeers[0].fileChunker = new FileChunker(file, rtcPeers[0].dataChannel);
     rtcPeers[0].fileChunker.nextPartition();
     console.log('Starting to send file data');
 }
-
 
 function onNewClientHandler(peerID){
     const rtcPeer = new RTCPeer({
@@ -412,8 +431,7 @@ function onNewClientHandler(peerID){
     rtcPeer.fileDigester = new FileDigester();
 
     rtcPeer.fileDigester.callback = function(){
-        console.log('d');
-        //rtcPeer.datachannel.send(JSON.stringify())
+        console.log('done');
     }
 
     // Handler for onDatachannel message
@@ -448,6 +466,8 @@ function onNewClientHandler(peerID){
             rtcPeer.fileDigester.onReceived(d.data);
         }
     }
+
+    rtcPeer.sendHostingProbability();
 
     rtcPeers.push(rtcPeer);
 }
