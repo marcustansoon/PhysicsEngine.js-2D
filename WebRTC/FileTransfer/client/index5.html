@@ -392,6 +392,7 @@ class FileDigester{
             document.getElementById('downloadFile').download = this.name;
             this.callback && this.callback();
             console.log((Date.now() - this.timeStart)/1000);
+            alert((Date.now() - this.timeStart)/1000);
         }
     }
 
