@@ -132,6 +132,9 @@ class RTCPeer {
         });
         this._dataChannel.addEventListener('close', event => {
             console.log('DC closed');
+            // Close channel
+            this._peerConnection.close();
+            this._dataChannel.close();
         });
         this._dataChannel.addEventListener('message', data => {
             //console.log(data);
