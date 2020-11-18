@@ -32,8 +32,19 @@ io.on("connection", client => {
 
   // Invite client into its public IP room
   client.join(client._ip);
-  
-  
+
+  client.on("disconnect", function() {
+    io.in(client._ip).clients((err, clientsInRoom) => {
+      if (err) throw new Error(err);
+      // 'clientsInRoom' is an array of client ids in the room
+      clientsInRoom.forEach(
+        perClientInARoom =>
+          // send client ids to joining client
+          io.to(perClientInARoom).emit("disconnectedClient", client.id)
+        //perClientInARoom.emit("disconnectedClient", client.id)
+      );
+    });
+  });
 
   // data -> {'key' : '', 'value' : ''}
   client.on("setKey", function(data) {
