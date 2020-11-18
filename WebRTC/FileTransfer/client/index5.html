@@ -133,13 +133,29 @@ class RTCPeer {
         this._dataChannel.addEventListener('close', event => {
             console.log('DC closed');
             // Close channel
-            this._peerConnection.close();
-            this._dataChannel.close();
+            //this._peerConnection.close();
+            //this._dataChannel.close();
+            console.log('Attempt to reconnect in 2 seconds...');
+            setTimeout(this.reconnect.bind(this), 2000);
         });
         this._dataChannel.addEventListener('message', data => {
             //console.log(data);
             this.dataChannelHandler && this.dataChannelHandler(data);
         });
+    }
+
+    reconnect(){   
+        switch(this._peerConnection.connectionState){
+            case 'failed':
+            case 'disconnected':
+            case 'closed':
+                console.log('Opss... RTC connection is closed... Refreshing browser in 5 seconds..');
+                setTimeout(window.reload, 5000);
+                break;
+            case 'connected':
+                if(this._isCaller) this.createAndSendOffer();
+                break;
+        }
     }
 
     get dataChannel(){
@@ -200,7 +216,8 @@ class RTCPeer {
     }
 
     createAndSendOffer() {
-        if (!this._dataChannel) this._enableDataChannel(true);
+        this._enableDataChannel(true);
+        //if (!this._dataChannel) this._enableDataChannel(true);
         this._peerConnection.createOffer().then(offer => this._onCreateOffer(offer)).then(() => this._sendOffer()).catch(this._onError);
     }
 
@@ -504,5 +521,4 @@ signalingChannel.send = function(data){
     // data = {'from': ..., 'to':..., '...'}
     this.emit('message', data);
 }
-
 </script>
