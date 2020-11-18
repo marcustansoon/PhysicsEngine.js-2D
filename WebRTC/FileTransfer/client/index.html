@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+<input type="file"
+       id="file" name="avatar" onchange='fileOnChanged()'
+       accept="">
+<h1>My First Heading</h1>
+<p>My first paragraph.</p>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.min.js'></script>
+<script>
+let id;
+let socket = io('https://webrtc-socket.glitch.me');
+socket.on('id',_id => id = _id);
+socket.on('message',(data) => console.log('rec'));
+
+let file_ ;
+let offset = 0;
+let reader = new FileReader();
+reader.addEventListener('load', onFinishRead);
+let chunkSize = 16 * 1024;
+
+function readInit(){
+	const chunk = file_.slice(offset, offset + chunkSize);
+	reader.readAsArrayBuffer(chunk);
+}
+
+function onFinishRead(e){
+	offset += e.target.result.byteLength;
+	console.log(e.target.result);
+	socket.emit('message', {'from':id,'to':id, 'chunk':e.target.result});
+    if(offset >= file_.size){
+    	console.log('end');return;
+    }
+    readInit();
+}
+
+function fileOnChanged(){
+file_ = document.getElementById('file').files[0];
+if(!file) return;
+
+readInit();
+        
+}
+        
+        
+</script>
+
+</body>
+</html>
