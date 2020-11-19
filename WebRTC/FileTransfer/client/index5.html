@@ -145,6 +145,7 @@ class RTCPeer {
     }
 
     reconnect(){   
+        console.log(this._peerConnection.connectionState);
         switch(this._peerConnection.connectionState){
             case 'failed':
             case 'disconnected':
@@ -284,7 +285,7 @@ class RTCPeer {
 
 class FileChunker {
     constructor(file, dataChannel) {
-        this._chunkSize = 16000; // 16KB  (max = 64kb)
+        this._chunkSize = 16 * 1024; // 16KB  (max = 64kb)
         this._maxPartitionSize = 1e6; //Math.max(this._chunkSize * 8, 1e6); // 8 chunks or at least 1 MiB // 1 MB for older browser/phone (15mb for modern pc)
         this._offset = 0;
         this._partitionSize = 0;
@@ -332,7 +333,7 @@ class FileChunker {
         this.dataChannel.send(chunk);
         //console.log('seee')
         //this._onChunk(chunk);
-        if (this._isPartitionEnd() || this.isFileEnd()) {
+        if (this._isPartitionEnd() || this.isFileEnd()) {//console.log('ful')
             this._onPartitionEnd(this._offset);
             return;
         }
