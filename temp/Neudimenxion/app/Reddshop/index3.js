@@ -61,7 +61,7 @@ let redirectedURL = 'https://reddshop.com',
                     'Please update your app to the latest version.', // message
                     (pressedButtonIndex) => {
 			// Exit if 'cancel' button is pressed
-			if(pressedButtonIndex) return;
+			if(pressedButtonIndex === 2) return;
 			// Open app store URL
                         ref = cordova.InAppBrowser.open(response.data, '_system', '');
                         this.addIABEventListener();
