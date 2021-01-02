@@ -54,17 +54,20 @@ let redirectedURL = 'https://reddshop.com',
 	    
         // Send POST request to server for FCM Token registration
         cordova.plugin.http.sendRequest('https://reddshop.com/app-version?v=1.0.0&platform=android', options, function(response) {
-		if(response.data){
-			navigator.notification.confirm(
-    				'Please update your app to the latest version.', // message
-     				() => {
-					ref = cordova.InAppBrowser.open(response.data, '_system', '');
-                			this.addIABEventListener();
-				},            // callback to invoke with index of button pressed
-    				'New version is available',           // title
-    				['Go to App Store','Cancel']     // buttonLabels
-			);	
+		// 'response.data' -> app store URL
+		if(!response.data){
+			return;
 		}
+		
+		navigator.notification.confirm(
+    			'Please update your app to the latest version.', // message
+     			() => {
+				ref = cordova.InAppBrowser.open(response.data, '_system', '');
+                		this.addIABEventListener();
+			},      // callback to invoke with index of button pressed
+    			'New version is available',           // title
+    			['UPDATE','NO,THANKS']     // buttonLabels
+		);	
         }, function(response) {
             alert(response.error);
         });    
