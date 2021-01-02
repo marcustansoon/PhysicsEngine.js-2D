@@ -38,6 +38,24 @@ let redirectedURL = 'https://reddshop.com',
     onOffline: function(){
 	window.location.replace(window.location.href.replace('index', 'offline'));
     },
+	    
+    checkAppVersion: function(){
+	// Make a post request to server
+        let options = {
+            method: 'GET',
+            data: {
+                'v': '1.0.0',
+            },
+            responseType: 'text',
+            serializer: 'json',
+        };
+        // Send POST request to server for FCM Token registration
+        cordova.plugin.http.sendRequest('https://reddshop.com/app-version', options, function(response) {
+            alert(JSON.stringify(response.data));
+        }, function(response) {
+            alert(response.error);
+        });    
+    },
 
     handleOpenURL: function(url){
         alert(url);
@@ -154,6 +172,9 @@ let redirectedURL = 'https://reddshop.com',
 		
         // Lock device orientation at 'portrait'
         window.screen.orientation.lock('portrait');
+	
+	// Check app version
+	this.checkAppVersion();
 
         setTimeout(()=>{this.init();}, 1500);
         setTimeout(()=>{
