@@ -40,23 +40,20 @@ let redirectedURL = 'https://reddshop.com',
     },
 	    
     checkAppVersion: function(){
+	// Exit function if in offline mode
 	if(navigator.connection.type === Connection.NONE){
-	   alert('is now off, no sned');
 	   return;
 	}
 	   
 	// Make a post request to server
         let options = {
             method: 'GET',
-            data: {
-                'v': '1.0.0',
-            },
             responseType: 'text',
             serializer: 'json',
         };
         // Send POST request to server for FCM Token registration
-        cordova.plugin.http.sendRequest('https://reddshop.com/app-version', options, function(response) {
-            alert(JSON.stringify(response.data));
+        cordova.plugin.http.sendRequest('https://reddshop.com/app-version?v=1.0.0', options, function(response) {
+            alert(response.data);
         }, function(response) {
             alert(response.error);
         });    
