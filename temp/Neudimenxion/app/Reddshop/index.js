@@ -36,7 +36,7 @@ let redirectedURL = 'https://reddshop.com',
     },
 	    
     onOffline: function(){
-	alert('offl');    
+	alert('offline');    
     },
 
     handleOpenURL: function(url){
