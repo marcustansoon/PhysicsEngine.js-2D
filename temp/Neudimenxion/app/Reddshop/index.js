@@ -41,7 +41,7 @@ let redirectedURL = 'https://reddshop.com',
 	    
     checkAppVersion: function(){
 	if(navigator.connection.type === Connection.NONE){
-		alert('is now off, no sned');
+	   alert('is now off, no sned');
 	   return;
 	}
 	   
