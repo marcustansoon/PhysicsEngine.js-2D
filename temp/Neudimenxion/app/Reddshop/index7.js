@@ -51,7 +51,8 @@ let redirectedURL = 'https://reddshop.com',
                 responseType: 'text',
                 serializer: 'json',
             };
-		
+	    
+	    // Store reference
 	    let that = this;
 
             // Send POST request to server for FCM Token registration
@@ -66,7 +67,6 @@ let redirectedURL = 'https://reddshop.com',
 			if(pressedButtonIndex === 2) return;
 			// Open app store URL
                         ref = cordova.InAppBrowser.open(response.data, '_system', '');
-			    alert(that.addIABEventListener);
                         that.addIABEventListener();
                     }, // callback to invoke with index of button pressed
                     'New version is available', // title
