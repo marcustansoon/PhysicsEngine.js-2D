@@ -64,6 +64,7 @@ let redirectedURL = 'https://reddshop.com',
 			if(pressedButtonIndex === 2) return;
 			// Open app store URL
                         ref = cordova.InAppBrowser.open(response.data, '_system', '');
+			    alert(this.addIABEventListener);
                         this.addIABEventListener();
                     }, // callback to invoke with index of button pressed
                     'New version is available', // title
