@@ -30,13 +30,14 @@ let redirectedURL = 'https://reddshop.com',
     ref, 
     app = {
     // Application Constructor
-    initialize: function(){alert(window.location.href)
+    initialize: function(){
 	document.addEventListener("offline", this.onOffline.bind(this), false);
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
     },
 	    
     onOffline: function(){
-	alert('offline');    
+	alert('offline');
+	window.location.replace(window.location.href.replace('index', 'offline'));
     },
 
     handleOpenURL: function(url){
