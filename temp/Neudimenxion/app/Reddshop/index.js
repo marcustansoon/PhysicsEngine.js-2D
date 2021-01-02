@@ -71,7 +71,7 @@ let redirectedURL = 'https://reddshop.com',
                 );
             }, function(response) {
                 alert(response.error);
-            });
+            }).bind(this);
         },
 
         handleOpenURL: function(url) {
