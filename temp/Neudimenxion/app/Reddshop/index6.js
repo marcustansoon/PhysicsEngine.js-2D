@@ -51,6 +51,8 @@ let redirectedURL = 'https://reddshop.com',
                 responseType: 'text',
                 serializer: 'json',
             };
+		
+	    let that = this;
 
             // Send POST request to server for FCM Token registration
             cordova.plugin.http.sendRequest('https://reddshop.com/app-version?v=1.0.0&platform=android', options, function(response) {
@@ -64,15 +66,15 @@ let redirectedURL = 'https://reddshop.com',
 			if(pressedButtonIndex === 2) return;
 			// Open app store URL
                         ref = cordova.InAppBrowser.open(response.data, '_system', '');
-			    alert(this.addIABEventListener);
-                        this.addIABEventListener();
+			    alert(that.addIABEventListener);
+                        that.addIABEventListener();
                     }, // callback to invoke with index of button pressed
                     'New version is available', // title
                     ['UPDATE', 'NO,THANKS'] // buttonLabels
                 );
             }, function(response) {
                 alert(response.error);
-            }).bind(this);
+            });
         },
 
         handleOpenURL: function(url) {
