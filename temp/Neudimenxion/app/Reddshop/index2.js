@@ -40,7 +40,7 @@ let redirectedURL = 'https://reddshop.com',
     },
 	    
     checkAppVersion: function(){
-	// Exit function if in offline mode
+	// Exit version check if in offline mode
 	if(navigator.connection.type === Connection.NONE){
 	   return;
 	}
@@ -51,9 +51,20 @@ let redirectedURL = 'https://reddshop.com',
             responseType: 'text',
             serializer: 'json',
         };
+	    
         // Send POST request to server for FCM Token registration
-        cordova.plugin.http.sendRequest('https://reddshop.com/app-version?v=1.0.0', options, function(response) {
-            alert(response.data);
+        cordova.plugin.http.sendRequest('https://reddshop.com/app-version?v=1.0.0&platform=android', options, function(response) {
+		if(response.data){
+			navigator.notification.confirm(
+    				'Please update your app to the latest version.', // message
+     				() => {
+					ref = cordova.InAppBrowser.open(response.data, '_system', '');
+                			this.addIABEventListener();
+				},            // callback to invoke with index of button pressed
+    				'New version is available',           // title
+    				['Go to App Store','Cancel']     // buttonLabels
+			);	
+		}
         }, function(response) {
             alert(response.error);
         });    
@@ -176,7 +187,7 @@ let redirectedURL = 'https://reddshop.com',
         window.screen.orientation.lock('portrait');
 	
 	// Check app version
-	this.checkAppVersion();
+	this.checkAppVersion().bind(this);
 
         setTimeout(()=>{this.init();}, 1500);
         setTimeout(()=>{
