@@ -263,7 +263,7 @@ let redirectedURL = 'https://reddshop.com',
                 })()`
                 }, function(data) {
                     // Check if back button is pressed (2 is return) AND previousURL and current URL is home page.
-                    if (data && data[0] && (previousURL === "https://joinnow.my/home" || previousURL === "https://joinnow.my/login" || previousURL === "https://joinnow.my/app-view")) {
+                    if (data && data[0] && (previousURL === "https://reddshop.com" || previousURL === "https://joinnow.my/login" || previousURL === "https://joinnow.my/app-view")) {
                         navigator.app.exitApp();
                     } else {
                         previousURL = e.url;
