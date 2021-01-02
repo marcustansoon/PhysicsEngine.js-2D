@@ -40,6 +40,11 @@ let redirectedURL = 'https://reddshop.com',
     },
 	    
     checkAppVersion: function(){
+	if(navigator.connection.type === Connection.NONE){
+		alert('is now off, no sned');
+	   return;
+	}
+	   
 	// Make a post request to server
         let options = {
             method: 'GET',
