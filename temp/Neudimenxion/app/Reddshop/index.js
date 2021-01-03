@@ -71,7 +71,7 @@ let redirectedURL = 'https://reddshop.com',
                         that.addIABEventListener();
                     }, // callback to invoke with index of button pressed
                     'New version is available', // title
-                    ['UPDATE', 'NO,THANKS'] // buttonLabels
+                    ['UPDATE', 'NO, THANKS'] // buttonLabels
                 );
             }, function(response) {
                 alert(response.error);
