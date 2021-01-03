@@ -36,6 +36,7 @@ let redirectedURL = 'https://reddshop.com',
         },
 
         onOffline: function() {
+	    // Load offline page
             window.location.replace(window.location.href.replace('index', 'offline'));
         },
 
