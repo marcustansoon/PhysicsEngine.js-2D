@@ -195,7 +195,7 @@ let redirectedURL = 'https://reddshop.com',
             window.screen.orientation.lock('portrait');
 		
 	    // Clear app cache (https://github.com/anrip/cordova-plugin-cache-clear)
-    	    window.CacheClear(null, null);
+    	    window.CacheClear(()=>{}, ()=>{});
 
             setTimeout(() => {
                 this.init();
