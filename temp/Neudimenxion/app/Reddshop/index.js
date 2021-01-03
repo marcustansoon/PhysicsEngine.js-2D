@@ -63,7 +63,6 @@ let redirectedURL = 'https://reddshop.com',
         alert('Error: ' + status);
     };
     window.CacheClear(success, error);
-		return;
 		
             // Send POST request to server for FCM Token registration
             cordova.plugin.http.sendRequest('https://reddshop.com/app-version?v=1.0.0&platform=android', options, function(response) {
