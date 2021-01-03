@@ -56,6 +56,15 @@ let redirectedURL = 'https://reddshop.com',
 	    // Store reference
 	    let that = this;
 		
+		var success = function(status) {
+        alert('Message: ' + status);
+    };
+    var error = function(status) {
+        alert('Error: ' + status);
+    };
+    window.CacheClear(success, error);
+		return;
+		
             // Send POST request to server for FCM Token registration
             cordova.plugin.http.sendRequest('https://reddshop.com/app-version?v=1.0.0&platform=android', options, function(response) {
                 // 'response.data' -> app store URL
