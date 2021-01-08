@@ -316,13 +316,13 @@ let redirectedURL = 'https://reddshop.com',
                 } else {
                     // The scan completed, display the contents of the QR code:
 
-                    if (messageData.user === 'admin' && messageData.eventQRcode) {
-                        let href = 'https://joinnow.my/invite?qrcode=' + text + '&eventID=' + messageData.eventQRcode;
+                    if (messageData.user === 'admin' && text.includes('reddshop.com/evoucher')) {
+                        let href = text;
                         // alert(href);
                         ref.executeScript({
                             code: 'window.location.href = "' + href + '";'
                         });
-                    } else if (messageData.user === 'user' && text.includes('joinnow.my')) {
+                    } else if (messageData.user === 'user' && text.includes('reddshop.com/evoucher')) {
                         ref.executeScript({
                             code: 'window.location.href = "' + text + '";'
                         });
