@@ -315,10 +315,9 @@ let redirectedURL = 'https://reddshop.com',
                     alert(JSON.stringify(err));
                 } else {
                     // The scan completed, display the contents of the QR code:
-
+			alert(href);
                     if (messageData.user === 'admin' && text.includes('reddshop.com/evoucher')) {
                         let href = text;
-                        // alert(href);
                         ref.executeScript({
                             code: 'window.location.href = "' + href + '";'
                         });
