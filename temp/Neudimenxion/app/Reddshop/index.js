@@ -321,9 +321,10 @@ let redirectedURL = 'https://reddshop.com',
                         ref.executeScript({
                             code: 'window.location.href = "' + href + '";'
                         });
-                    } else if (messageData.user === 'user' && text.includes('reddshop.com/evoucher')) {
+                    } else if (messageData.user === 'user' && messageData.voucherUID && text.includes('reddshop.com/evoucher')) {
+			let href = text+'&voucherUID='+messageData.voucherUID;
                         ref.executeScript({
-                            code: 'window.location.href = "' + text + '";'
+                            code: 'window.location.href = "' + href + '";'
                         });
                     }
 
