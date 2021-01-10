@@ -54,10 +54,13 @@ let redirectedURL = 'https://reddshop.com',
             };
 	    
 	    // Store reference
-	    let that = this;
+	    let that = this,
+		currentAppVersion = typeof BuildInfo === 'undefined' ? '1.0.1' : BuildInfo.versionCode,
+		platformType = typeof device === 'undefined' ? 'android' : device.platform;
+		
 		
             // Send POST request to server for FCM Token registration
-            cordova.plugin.http.sendRequest('https://reddshop.com/app-version?v=1.0.0&platform=android', options, function(response) {
+            cordova.plugin.http.sendRequest('https://reddshop.com/app-version?v=' + currentAppVersion + '&platform=' + platformType, options, function(response) {
                 // 'response.data' -> app store URL
                 if (!response.data) return;
 		// Prompt user to update app
