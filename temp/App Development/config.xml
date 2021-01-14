@@ -144,6 +144,7 @@
     <preference name="SplashScreenDelay" value="2000" />
     <preference name="AutoHideSplashScreen" value="true" />
     <preference name="SplashShowOnlyFirstTime" value="false" />
+    <preference name="SplashMaintainAspectRatio" value="true" />
 
     <!-- Universal Deeplinks https://github.com/e-imaxina/cordova-plugin-deeplinks -->
     <universal-links>
