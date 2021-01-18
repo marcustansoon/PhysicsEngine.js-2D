@@ -223,7 +223,7 @@ let redirectedURL = 'https://reddshop.com',
             this.createLightingButton();
             this.hideButtons();
             // return;
-            ref = cordova.InAppBrowser.open(redirectedURL, '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no');
+            ref = cordova.InAppBrowser.open(redirectedURL, '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no,allowInlineMediaPlayback=yes');
 
             document.addEventListener('backbutton', () => {
                 // alert('camra');
