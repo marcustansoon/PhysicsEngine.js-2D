@@ -1,6 +1,7 @@
 <?php 
 
-	function validateAndUploadFile(?array $file, string $uploadPath = "/", array $extensions, int $maxFileSize, bool $shouldRenameFile = true, bool $shouldOverrideFile = true){
+	function validateAndUploadFile(?array $file, string $uploadPath = "/", array $extensions, int $maxFileSize, bool $shouldRenameFile = true, bool $shouldOverrideFile = true) : object
+	{
 		// Make sure file to be uploaded exists
 		if(!is_array($file)){
 			echo 'nope';
