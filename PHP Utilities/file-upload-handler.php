@@ -33,4 +33,11 @@
 	}
 
 	// Example usage
-	echo validateAndUploadFile($_FILES['fileToUpload'] ?? null, 'uploads/', ['jpg', 'jpeg', 'png'], 1024 * 1024 *  1, false, false)->responseMessage;
+	$response = validateAndUploadFile($_FILES['fileToUpload'] ?? null, 'uploads/', ['jpg', 'jpeg', 'png'], 1024 * 1024 *  1, false, false);
+	
+	if($response->status){
+		// ...	upload success
+	}else{
+		// ... upload fail
+		throw new Exception($response->responseMessage);	
+	}
