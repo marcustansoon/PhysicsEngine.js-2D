@@ -29,7 +29,7 @@
 		// Upload file
 		move_uploaded_file($file['tmp_name'], $uploadPath.$fileName.'.'.$fileExtension);
 
-		return (object)['status' => 1, 'responseMessage' => 'File uploaded successfully'];
+		return (object)['status' => 1, 'responseMessage' => 'File uploaded successfully', 'filePath' => $uploadPath.$fileName.'.'.$fileExtension];
 	}
 
 	// Example usage
@@ -37,7 +37,8 @@
 	
 	if($response->status){
 		// ...	upload success
+		echo '$response->filePath;
 	}else{
 		// ... upload fail
-		throw new Exception($response->responseMessage);	
+		echo $response->responseMessage;	
 	}
