@@ -14,7 +14,7 @@
 		}
 		
 		// Validate file size
-		if($file['size'] > $maxFileSize){
+		if($file['error'] === 1 || $file['size'] > $maxFileSize){
 			return (object)['status' => 0, 'responseMessage' => 'File size is too large'];
 		}
 		
