@@ -1,3 +1,0 @@
-<p><div class="pb-3 text-da1nger"><i class="far fa-calendar-minus text-danger fa-lg"></i> <b> Valid from 1/1/2021 until 2/1/2021</b></div><div class="pb-3 text-da1nger"><i class="fas fa-tags text-danger fa-l0g"></i> <span class="badge badge-danger p-1">15% Off</span><span class="badge badge-warning ml-2 p-1">Minimum purchase of $150</span></div>
-<div class="pb-3"><b>Description</b></div>
-<div></div></p>
