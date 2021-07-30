@@ -11255,6 +11255,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 							return e.wrap(function(e) {
 								for(;;) switch(e.prev = e.next) {
 									case 0:
+										return e.abrupt("return", Promise.resolve(o));
 										return e.prev = 0, e.next = 3, this.xhrService.fetch(this.xhrService.createAPIUrl("customers/phone/verify"), {
 											method: "POST",
 											headers: {
