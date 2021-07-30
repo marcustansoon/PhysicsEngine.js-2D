@@ -11410,7 +11410,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				key: "verifyCode",
 				value: function() {
 					var e = this.$(".modal-verify-sms__verification-code-input").val();
-					return e && !this.$(".modal-verify-sms__submit").hasClass("button--disabled") && (this.disableDialog(), this.$(".sms-error-message").addClass("hide"), this.$(".modal-verify-sms__verification-code-input").removeClass("invalid"), this._sendTrackingEvent("mobile_verification.clicked"), this.verificationService.verifyPhoneNumber(e).then(this.verifySuccess, this.verifySuccess)), !1
+					return e && !this.$(".modal-verify-sms__submit").hasClass("button--disabled") && (this.disableDialog(), this.$(".sms-error-message").addClass("hide"), this.$(".modal-verify-sms__verification-code-input").removeClass("invalid"), this._sendTrackingEvent("mobile_verification.clicked"), this.verifySuccess), !1
 				}
 			}, {
 				key: "disableDialog",
