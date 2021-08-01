@@ -11211,6 +11211,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 							return e.wrap(function(e) {
 								for(;;) switch(e.prev = e.next) {
 									case 0:
+										return this.setMobileCountryCode(t), this.setMobileNumber(n), e.abrupt("return", Promise.resolve({"status_code":200,"data":{"mobile_number":this.mobileNumber,"mobile_country_code":this.mobileCountryCode,"result":"confirmation-sent"}}));
 										return this.setMobileCountryCode(t), this.setMobileNumber(n), e.prev = 2, e.next = 5, this.xhrService.fetch(this.xhrService.createAPIUrl("customers/phone/update"), {
 											method: "POST",
 											headers: {
