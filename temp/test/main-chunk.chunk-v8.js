@@ -3,10 +3,10 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		var r = "object" == typeof t ? t : "object" == typeof window ? window : "object" == typeof self ? self : this,
 			o = r.regeneratorRuntime && Object.getOwnPropertyNames(r).indexOf("regeneratorRuntime") >= 0,
 			i = o && r.regeneratorRuntime;
-		if(r.regeneratorRuntime = void 0, e.exports = n(570), o) r.regeneratorRuntime = i;
+		if (r.regeneratorRuntime = void 0, e.exports = n(570), o) r.regeneratorRuntime = i;
 		else try {
 			delete r.regeneratorRuntime
-		} catch(e) {
+		} catch (e) {
 			r.regeneratorRuntime = void 0
 		}
 	}).call(t, n(36))
@@ -43,14 +43,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		"use strict";
 
 		function n() {
-			for(var e = [], t = 0; t < arguments.length; t++) {
+			for (var e = [], t = 0; t < arguments.length; t++) {
 				var r = arguments[t];
-				if(r) {
+				if (r) {
 					var o = typeof r;
-					if("string" === o || "number" === o) e.push(r);
-					else if(Array.isArray(r)) e.push(n.apply(null, r));
-					else if("object" === o)
-						for(var a in r) i.call(r, a) && r[a] && e.push(a)
+					if ("string" === o || "number" === o) e.push(r);
+					else if (Array.isArray(r)) e.push(n.apply(null, r));
+					else if ("object" === o)
+						for (var a in r) i.call(r, a) && r[a] && e.push(a)
 				}
 			}
 			return e.join(" ")
@@ -71,9 +71,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			return t(e)
 		}, e)
 	}, t.validateComponentDependencies = function(e) {
-		for(var t = arguments.length, n = Array(t > 1 ? t - 1 : 0), o = 1; o < t; o++) n[o - 1] = arguments[o];
+		for (var t = arguments.length, n = Array(t > 1 ? t - 1 : 0), o = 1; o < t; o++) n[o - 1] = arguments[o];
 		n.forEach(function(t) {
-			if(!(0, r.has)(e, t)) throw new Error(t + " dependency is required")
+			if (!(0, r.has)(e, t)) throw new Error(t + " dependency is required")
 		})
 	}
 }, , function(e, t, n) {
@@ -86,14 +86,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		}
 
 		function o(e, t) {
-			if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+			if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 		}
 		Object.defineProperty(t, "__esModule", {
 			value: !0
 		});
 		var i = function() {
 				function e(e, t) {
-					for(var n = 0; n < t.length; n++) {
+					for (var n = 0; n < t.length; n++) {
 						var r = t[n];
 						r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 					}
@@ -116,7 +116,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					function a(e) {
 						try {
 							u(r.next(e))
-						} catch(e) {
+						} catch (e) {
 							i(e)
 						}
 					}
@@ -124,7 +124,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					function s(e) {
 						try {
 							u(r.throw(e))
-						} catch(e) {
+						} catch (e) {
 							i(e)
 						}
 					}
@@ -147,14 +147,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						return v(r, void 0, void 0, e.mark(function r() {
 							var o, i, a, s, u, c;
 							return e.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
 										return o = this.getRequestHeaders(n), i = this.createAPIUrl(t), e.next = 4, this.fetch(i, {
 											method: "GET",
 											headers: o
 										});
 									case 4:
-										if(a = e.sent, !a.ok) {
+										if (a = e.sent, !a.ok) {
 											e.next = 12;
 											break
 										}
@@ -175,7 +175,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						return v(r, void 0, void 0, e.mark(function r() {
 							var o, i, a, s, u, c, l;
 							return e.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
 										return o = this.getRequestPayload(n), i = this.getRequestHeaders(n), a = this.createAPIUrl(t), e.next = 5, this.fetch(a, {
 											method: "POST",
@@ -186,7 +186,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 											})
 										});
 									case 5:
-										if(s = e.sent, !s.ok) {
+										if (s = e.sent, !s.ok) {
 											e.next = 13;
 											break
 										}
@@ -207,7 +207,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						return v(r, void 0, void 0, e.mark(function r() {
 							var o, i, a, s, u, c, l;
 							return e.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
 										return o = this.getRequestPayload(n), i = this.getRequestHeaders(n), a = this.createAPIUrl(t), e.next = 5, this.fetch(a, {
 											method: "PUT",
@@ -218,7 +218,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 											})
 										});
 									case 5:
-										if(s = e.sent, !s.ok) {
+										if (s = e.sent, !s.ok) {
 											e.next = 13;
 											break
 										}
@@ -239,14 +239,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						return v(this, void 0, void 0, e.mark(function r() {
 							var o, i, a;
 							return e.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
 										return o = this.getRequestHeaders(n), i = this.createAPIUrl(t), e.next = 4, this.fetch(i, {
 											method: "DELETE",
 											headers: o
 										});
 									case 4:
-										if(a = e.sent, !a.ok) {
+										if (a = e.sent, !a.ok) {
 											e.next = 9;
 											break
 										}
@@ -271,7 +271,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					value: function(e) {
 						var t = this,
 							n = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : {};
-						return(0, f.default)(e, ["url"]), this.$.ajax(Object.assign({}, this.attachAuthenticationHeaders(e.url, e, n), {
+						return (0, f.default)(e, ["url"]), this.$.ajax(Object.assign({}, this.attachAuthenticationHeaders(e.url, e, n), {
 							beforeSend: function(e, n) {
 								n.url = t.encodeUrl(n.url)
 							}
@@ -281,7 +281,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					key: "prepareQueryString",
 					value: function(e) {
 						var t = new l.default(window.location.search);
-						for(var n in e) e.hasOwnProperty(n) && t.set(n, e[n]);
+						for (var n in e) e.hasOwnProperty(n) && t.set(n, e[n]);
 						return t.toString()
 					}
 				}, {
@@ -340,9 +340,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 							o = this.isMatchingApiUrl(e, this.apiUrl),
 							i = this.isMatchingApiUrl(e, this.foodprintApiUrl),
 							a = {};
-						if(r || o || i || !0 === n.overrideRequest && n.overrideToken) {
+						if (r || o || i || !0 === n.overrideRequest && n.overrideToken) {
 							var s = (0, h.default)();
-							if(n.overrideToken && (0, u.isString)(n.overrideToken) && (s = n.overrideToken), s && (0, u.isString)(s)) {
+							if (n.overrideToken && (0, u.isString)(n.overrideToken) && (s = n.overrideToken), s && (0, u.isString)(s)) {
 								a = {
 									Authorization: "Bearer " + s
 								}
@@ -361,12 +361,12 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 							n = (0, u.get)(t, "[1]", ""),
 							r = (0, u.get)(t, ["0"], e),
 							o = n.replace(/\+/g, "%20");
-						return(0, u.trim)(r + "?" + o, "?")
+						return (0, u.trim)(r + "?" + o, "?")
 					}
 				}, {
 					key: "isMatchingApiUrl",
 					value: function(e, t) {
-						if(!(0, u.isString)(e)) throw new Error("url is not string");
+						if (!(0, u.isString)(e)) throw new Error("url is not string");
 						return -1 !== e.indexOf(t)
 					}
 				}]), t
@@ -430,7 +430,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		return localStorage.removeItem(s)
 	}, t.getLocationAddress = function() {
 		var e = localStorage.getItem(c + "-1");
-		if(e) return JSON.parse(e);
+		if (e) return JSON.parse(e);
 		var t = localStorage.getItem(c);
 		return t ? t.split(",").reduce(function(e, t) {
 			var n = JSON.parse(localStorage.getItem(c + "-" + t));
@@ -462,12 +462,12 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}, t.getGroupOrderParticipantsCountFromView = function(e) {
 		var t = "checkout" === e ? "checkoutCartView" : "cartView",
 			n = VOLO.components && VOLO.components.views && VOLO.components.views[t] && VOLO.components.views[t].newGroupOrder && VOLO.components.views[t].newGroupOrder.meta;
-		return(n && n.guests ? n.guests.length : 0) + 1
+		return (n && n.guests ? n.guests.length : 0) + 1
 	}, t.getGroupOrderFromOtp = function() {
 		try {
 			var e = v();
 			return JSON.parse(e)
-		} catch(e) {
+		} catch (e) {
 			return null
 		}
 	}, t.isHost = function(e) {
@@ -481,7 +481,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			value: !0
 		}), t.default = function(t, n) {
 			e.forEach(n, function(n) {
-				if(!e.has(t, n)) throw new Error("missing property " + n + " on " + t.toString())
+				if (!e.has(t, n)) throw new Error("missing property " + n + " on " + t.toString())
 			})
 		}
 	}).call(t, n(1))
@@ -573,21 +573,21 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					o = !1,
 					i = void 0;
 				try {
-					for(var a, s = e[Symbol.iterator](); !(r = (a = s.next()).done) && (n.push(a.value), !t || n.length !== t); r = !0);
-				} catch(e) {
+					for (var a, s = e[Symbol.iterator](); !(r = (a = s.next()).done) && (n.push(a.value), !t || n.length !== t); r = !0);
+				} catch (e) {
 					o = !0, i = e
 				} finally {
 					try {
 						!r && s.return && s.return()
 					} finally {
-						if(o) throw i
+						if (o) throw i
 					}
 				}
 				return n
 			}
 			return function(t, n) {
-				if(Array.isArray(t)) return t;
-				if(Symbol.iterator in Object(t)) return e(t, n);
+				if (Array.isArray(t)) return t;
+				if (Symbol.iterator in Object(t)) return e(t, n);
 				throw new TypeError("Invalid attempt to destructure non-iterable instance")
 			}
 		}(),
@@ -603,7 +603,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		},
 		f = function(e) {
 			var t = e.split(VOLO.configuration.dpsSessionIdDelimiter);
-			if(5 === t.length) {
+			if (5 === t.length) {
 				var n = JSON.stringify({
 					session_id: (0, c.default)(e),
 					perseus_id: t[2],
@@ -615,7 +615,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		},
 		p = (t.shouldAttachDpsSessionHeader = function(e) {
 			return l.some(function(t) {
-				return(e.match(t) || []).length > 0
+				return (e.match(t) || []).length > 0
 			})
 		}, function(e, t, n) {
 			var r = n.split(VOLO.configuration.dpsSessionIdDelimiter),
@@ -631,8 +631,8 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			var n = (0, s.get)(e, "latitude", null),
 				r = (0, s.get)(e, "longitude", null),
 				o = a.default.get(VOLO.configuration.dpsSessionIdCookieName);
-			if(o || n || r) {
-				if(h(n, r, o)) {
+			if (o || n || r) {
+				if (h(n, r, o)) {
 					o = d(n, r, a.default.get("dhhPerseusGuestId"));
 					var i = o.split(VOLO.configuration.dpsSessionIdDelimiter).slice(-1)[0];
 					v(o, i), g()
@@ -646,7 +646,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		}),
 		g = (t.getDpsTrackingParam = function() {
 			var e = a.default.get(VOLO.configuration.dpsSessionIdCookieName);
-			if(e) return {
+			if (e) return {
 				dpsSessionId: (0, c.default)(e)
 			}
 		}, t.getDynamicPricingParam = function() {
@@ -673,12 +673,12 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		s = a.Provider,
 		u = a.Consumer,
 		c = function(e, t, n, r) {
-			if(e) {
+			if (e) {
 				var o = null;
 				try {
 					var i = d(e, t, n);
 					o = l(i, r)
-				} catch(r) {
+				} catch (r) {
 					window.trackJs && window.trackJs.console.error(r, "missing translation key", "translation-key: " + e, "delimiter: " + t, "translation: " + JSON.stringify(n))
 				}
 				return o
@@ -692,7 +692,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		},
 		d = function(e, t, n) {
 			var r = n;
-			if(e.split(t).forEach(function(e) {
+			if (e.split(t).forEach(function(e) {
 					return r = r[e]
 				}), r) return r;
 			throw new Error("translation-key: " + e + " does not exist in object: " + JSON.stringify(n) + "}")
@@ -920,8 +920,8 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 	(function(e, r) {
 		function o(e) {
-			if(Array.isArray(e)) {
-				for(var t = 0, n = Array(e.length); t < e.length; t++) n[t] = e[t];
+			if (Array.isArray(e)) {
+				for (var t = 0, n = Array(e.length); t < e.length; t++) n[t] = e[t];
 				return n
 			}
 			return Array.from(e)
@@ -1140,16 +1140,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function o(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function i(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -1164,7 +1164,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	});
 	var a = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -1280,22 +1280,22 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		}
 
 		function o(e) {
-			if(Array.isArray(e)) {
-				for(var t = 0, n = Array(e.length); t < e.length; t++) n[t] = e[t];
+			if (Array.isArray(e)) {
+				for (var t = 0, n = Array(e.length); t < e.length; t++) n[t] = e[t];
 				return n
 			}
 			return Array.from(e)
 		}
 
 		function i(e, t) {
-			if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+			if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 		}
 		Object.defineProperty(t, "__esModule", {
 			value: !0
 		}), t.createVendorService = t.VendorService = void 0;
 		var a = function() {
 				function e(e, t) {
-					for(var n = 0; n < t.length; n++) {
+					for (var n = 0; n < t.length; n++) {
 						var r = t[n];
 						r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 					}
@@ -1353,10 +1353,10 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				}, {
 					key: "getTileTag",
 					value: function(e, t) {
-						if(!e) return null;
+						if (!e) return null;
 						var n = e,
 							r = p.get(e);
-						if(r) {
+						if (r) {
 							var o = r[0],
 								i = r[1],
 								a = t[o];
@@ -1372,7 +1372,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				}, {
 					key: "getFormattedDistance",
 					value: function(e, t, n) {
-						if(e < 1) {
+						if (e < 1) {
 							var r = 10 * Math.round(100 * e);
 							return 1e3 !== r ? r + " " + n : "1 " + t
 						}
@@ -1384,7 +1384,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						var t = this.groomParams(e),
 							n = (0, s.get)(t, "latitude", null),
 							r = (0, s.get)(t, "longitude", null);
-						if(!n || !r) return Promise.reject(new Error("Location not found for vendor service"));
+						if (!n || !r) return Promise.reject(new Error("Location not found for vendor service"));
 						this.request && this.request.abort();
 						var o = (0, s.get)(t, "search_term", null);
 						return o ? this.makeDiscoSearchRequest(o, t) : this.makeDiscoListingRequest(t)
@@ -1426,7 +1426,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				}, {
 					key: "groomParams",
 					value: function(e) {
-						return(0, s.reduce)(e, function(e, t, n) {
+						return (0, s.reduce)(e, function(e, t, n) {
 							return void 0 !== t && "delivery" !== t && (e[n] = t), e
 						}, {})
 					}
@@ -1517,7 +1517,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		o = t.createGet = function(e) {
 			var t = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : null;
 			return function(n) {
-				return(0, r.get)(n, e, t)
+				return (0, r.get)(n, e, t)
 			}
 		},
 		i = (t.identity = function(e) {
@@ -1525,7 +1525,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				return e
 			}
 		}, t.pipeFunc = function() {
-			for(var e = arguments.length, t = Array(e), n = 0; n < e; n++) t[n] = arguments[n];
+			for (var e = arguments.length, t = Array(e), n = 0; n < e; n++) t[n] = arguments[n];
 			return function(e) {
 				return t.reduce(function(e, t) {
 					return t(e)
@@ -1568,21 +1568,21 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						o = !1,
 						i = void 0;
 					try {
-						for(var a, s = e[Symbol.iterator](); !(r = (a = s.next()).done) && (n.push(a.value), !t || n.length !== t); r = !0);
-					} catch(e) {
+						for (var a, s = e[Symbol.iterator](); !(r = (a = s.next()).done) && (n.push(a.value), !t || n.length !== t); r = !0);
+					} catch (e) {
 						o = !0, i = e
 					} finally {
 						try {
 							!r && s.return && s.return()
 						} finally {
-							if(o) throw i
+							if (o) throw i
 						}
 					}
 					return n
 				}
 				return function(t, n) {
-					if(Array.isArray(t)) return t;
-					if(Symbol.iterator in Object(t)) return e(t, n);
+					if (Array.isArray(t)) return t;
+					if (Symbol.iterator in Object(t)) return e(t, n);
 					throw new TypeError("Invalid attempt to destructure non-iterable instance")
 				}
 			}(),
@@ -1602,10 +1602,10 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		]);
 		t.getPageType = function() {
 			var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : "";
-			if(!e) return "";
+			if (!e) return "";
 			var t = new URL(e),
 				i = t.pathname;
-			if("/" === i) return r.HOME;
+			if ("/" === i) return r.HOME;
 			var a = Array.from(o).find(function(e) {
 				var t = n(e, 2),
 					r = t[0];
@@ -1625,7 +1625,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			var e = (0, r.get)(VOLO, 'configuration.features.flags["help-center"]', a.ZOPIM);
 			return o(e)
 		}, t.convertFeatureFlagToComponentValue = function(e) {
-			switch(e) {
+			switch (e) {
 				case a.GLOBAL_HELP_CENTER:
 					return i.GLOBAL_HELP_CENTER;
 				case a.SELF_SERVICE:
@@ -1654,15 +1654,15 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		}
 
 		function o(e, t) {
-			if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+			if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 		}
 		Object.defineProperty(t, "__esModule", {
 			value: !0
 		}), t.setupGtmService = t.GTM_PAGE_CHANGE_EVENT = t.GTM_PUSH_EVENT = t.MKT_PAGE_VIEW_EVENT = void 0;
 		var i = Object.assign || function(e) {
-				for(var t = 1; t < arguments.length; t++) {
+				for (var t = 1; t < arguments.length; t++) {
 					var n = arguments[t];
-					for(var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
+					for (var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
 				}
 				return e
 			},
@@ -1673,27 +1673,27 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						o = !1,
 						i = void 0;
 					try {
-						for(var a, s = e[Symbol.iterator](); !(r = (a = s.next()).done) && (n.push(a.value), !t || n.length !== t); r = !0);
-					} catch(e) {
+						for (var a, s = e[Symbol.iterator](); !(r = (a = s.next()).done) && (n.push(a.value), !t || n.length !== t); r = !0);
+					} catch (e) {
 						o = !0, i = e
 					} finally {
 						try {
 							!r && s.return && s.return()
 						} finally {
-							if(o) throw i
+							if (o) throw i
 						}
 					}
 					return n
 				}
 				return function(t, n) {
-					if(Array.isArray(t)) return t;
-					if(Symbol.iterator in Object(t)) return e(t, n);
+					if (Array.isArray(t)) return t;
+					if (Symbol.iterator in Object(t)) return e(t, n);
 					throw new TypeError("Invalid attempt to destructure non-iterable instance")
 				}
 			}(),
 			s = function() {
 				function e(e, t) {
-					for(var n = 0; n < t.length; n++) {
+					for (var n = 0; n < t.length; n++) {
 						var r = t[n];
 						r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 					}
@@ -1732,17 +1732,17 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					value: function(e, t, n) {
 						try {
 							e.setItem(t, n)
-						} catch(e) {
+						} catch (e) {
 							this.fakeLocalStorage.setItem(t, n)
 						}
 					}
 				}, {
 					key: "_getItem",
 					value: function(e, t) {
-						if(this.fakeLocalStorage) return this.fakeLocalStorage.getItem(t);
+						if (this.fakeLocalStorage) return this.fakeLocalStorage.getItem(t);
 						try {
 							return e.getItem(t)
-						} catch(t) {
+						} catch (t) {
 							return trackJs.console.error("Storage error on " + e + " : " + t), null
 						}
 					}
@@ -1785,7 +1785,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				}, {
 					key: "_trackPageView",
 					value: function() {
-						if(e.includes(_, this.tagManager.pageType)) return !1;
+						if (e.includes(_, this.tagManager.pageType)) return !1;
 						var t = {
 							event: "virtual_page_view",
 							event_page_type: this.tagManager.pageType
@@ -1890,16 +1890,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					key: "checkABTestBlockedFlags",
 					value: function(e) {
 						var t = e.experimentId;
-						if("ab_test.participated" === e.event) {
-							if(b.includes(t)) return !0;
-							if("loc-geolocator_provider" === t && b.includes("geolocator-providers-ab-testing-experimental")) return !0
+						if ("ab_test.participated" === e.event) {
+							if (b.includes(t)) return !0;
+							if ("loc-geolocator_provider" === t && b.includes("geolocator-providers-ab-testing-experimental")) return !0
 						}
 					}
 				}, {
 					key: "push",
 					value: function(t) {
 						var n = e.clone(t);
-						if(this.localGtm = this.localGtm || JSON.parse(this._getItem(this.localStorage, "localGtm") || "{}") || {}, this.localGtm.events = this.localGtm.events || [], this._sendOnlyOnce(n.event)) return !1;
+						if (this.localGtm = this.localGtm || JSON.parse(this._getItem(this.localStorage, "localGtm") || "{}") || {}, this.localGtm.events = this.localGtm.events || [], this._sendOnlyOnce(n.event)) return !1;
 						this._addToLocal(n.event, n.event_page_type), "virtual_page_view" === n.event && (n.event_page_referrer = this.tagManager.referrer), "shop_details.loaded" === n.event && (n.referrer = this.tagManager.referrer), n.event && (n.event_count = this._getEventCount(n.event, n.event_page_type), n.eventCount = n.event_count), n.event_platform = this.getEventPlatform(), n.eventPlatform = n.event_platform, this.checkABTestBlockedFlags(n) || this.dataLayer.push(n)
 					}
 				}, {
@@ -1951,14 +1951,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					value: function() {
 						var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {},
 							t = null;
-						return(0, d.get)(e, "features.user.custom.user_logged_in", !0) && (t = e.countryCode + "_" + (0, d.get)(e, "features.user.userId")), t
+						return (0, d.get)(e, "features.user.custom.user_logged_in", !0) && (t = e.countryCode + "_" + (0, d.get)(e, "features.user.userId")), t
 					}
 				}, {
 					key: "_mapFeatureValue",
 					value: function(e, t) {
-						if("verticals" === e) try {
+						if ("verticals" === e) try {
 							return JSON.parse(t), "On"
-						} catch(e) {
+						} catch (e) {
 							return t
 						}
 						return t
@@ -2053,7 +2053,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	t.unwrapEnvelope = function(e) {
 		var t = e.status_code,
 			n = e.data;
-		if("2" !== (t + "").substr(0, 1)) throw new Error("response error, status_code is " + t);
+		if ("2" !== (t + "").substr(0, 1)) throw new Error("response error, status_code is " + t);
 		return n
 	}, t.jqxhr2Promise = function(e) {
 		return new Promise(function(t, n) {
@@ -2076,16 +2076,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 	(function(e) {
 		function r(e, t) {
-			if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+			if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 		}
 
 		function o(e, t) {
-			if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+			if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 			return !t || "object" != typeof t && "function" != typeof t ? e : t
 		}
 
 		function i(e, t) {
-			if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+			if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 			e.prototype = Object.create(t && t.prototype, {
 				constructor: {
 					value: e,
@@ -2100,7 +2100,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		}), t.FORM_VALID_EVENT = void 0;
 		var a = function() {
 				function e(e, t) {
-					for(var n = 0; n < t.length; n++) {
+					for (var n = 0; n < t.length; n++) {
 						var r = t[n];
 						r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 					}
@@ -2182,7 +2182,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					key: "_showErrorMessages",
 					value: function(e) {
 						this.trigger("form:error"), (0, u.each)(this.$("input[name], select[name]"), function(t) {
-							if(e[t.name]) {
+							if (e[t.name]) {
 								var n = "SELECT" === t.tagName ? (0, l.default)(t).closest(".select-box") : t;
 								(0, l.default)(n).addClass(this.inputErrorClass), this.displayErrorMessage(t)
 							}
@@ -2243,13 +2243,13 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	(function(t) {
 		function n(e) {
 			var t, n, i, s, u, c, l = Object.create(null);
-			if(this[f] = l, e)
-				if("string" == typeof e)
-					for("?" === e.charAt(0) && (e = e.slice(1)), s = e.split("&"), u = 0, c = s.length; u < c; u++) i = s[u], t = i.indexOf("="), -1 < t ? r(l, o(i.slice(0, t)), o(i.slice(t + 1))) : i.length && r(l, o(i), "");
-				else if(a(e))
-				for(u = 0, c = e.length; u < c; u++) i = e[u], r(l, i[0], i[1]);
+			if (this[f] = l, e)
+				if ("string" == typeof e)
+					for ("?" === e.charAt(0) && (e = e.slice(1)), s = e.split("&"), u = 0, c = s.length; u < c; u++) i = s[u], t = i.indexOf("="), -1 < t ? r(l, o(i.slice(0, t)), o(i.slice(t + 1))) : i.length && r(l, o(i), "");
+				else if (a(e))
+				for (u = 0, c = e.length; u < c; u++) i = e[u], r(l, i[0], i[1]);
 			else
-				for(n in e) r(l, n, e[n])
+				for (n in e) r(l, n, e[n])
 		}
 
 		function r(e, t, n) {
@@ -2306,15 +2306,15 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			}, s.toString = function() {
 				var e, t, n, r, o = this[f],
 					a = [];
-				for(t in o)
-					for(n = i(t), e = 0, r = o[t]; e < r.length; e++) a.push(n + "=" + i(r[e]));
+				for (t in o)
+					for (n = i(t), e = 0, r = o[t]; e < r.length; e++) a.push(n + "=" + i(r[e]));
 				return a.join("&")
 			}, n = e.exports = t.URLSearchParams || n,
 			function(e) {
 				var t = function() {
 					try {
 						return !!Symbol.iterator
-					} catch(e) {
+					} catch (e) {
 						return !1
 					}
 				}();
@@ -2377,9 +2377,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						return n
 					}), n
 				}), !t || Symbol.iterator in e || (e[Symbol.iterator] = e.entries), "sort" in e || (e.sort = function() {
-					for(var e, t, n, r = this.entries(), o = r.next(), i = o.done, a = [], s = Object.create(null); !i;) n = o.value, t = n[0], a.push(t), t in s || (s[t] = []), s[t].push(n[1]), o = r.next(), i = o.done;
-					for(a.sort(), e = 0; e < a.length; e++) this.delete(a[e]);
-					for(e = 0; e < a.length; e++) t = a[e], this.append(t, s[t].shift())
+					for (var e, t, n, r = this.entries(), o = r.next(), i = o.done, a = [], s = Object.create(null); !i;) n = o.value, t = n[0], a.push(t), t in s || (s[t] = []), s[t].push(n[1]), o = r.next(), i = o.done;
+					for (a.sort(), e = 0; e < a.length; e++) this.delete(a[e]);
+					for (e = 0; e < a.length; e++) t = a[e], this.append(t, s[t].shift())
 				})
 			}(n.prototype)
 	}).call(t, n(36))
@@ -2406,16 +2406,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function o(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function i(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -2430,7 +2430,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	});
 	var a = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -2489,7 +2489,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			}, {
 				key: "validate",
 				value: function(e) {
-					if(!this.isValidationRequired) return !1;
+					if (!this.isValidationRequired) return !1;
 					var t = (0, u.find)(this.requiredFields, function(t) {
 						return !e[t]
 					});
@@ -2535,21 +2535,21 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 	(function(e) {
 		function r(e, t) {
-			if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+			if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 		}
 		Object.defineProperty(t, "__esModule", {
 			value: !0
 		});
 		var o = Object.assign || function(e) {
-				for(var t = 1; t < arguments.length; t++) {
+				for (var t = 1; t < arguments.length; t++) {
 					var n = arguments[t];
-					for(var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
+					for (var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
 				}
 				return e
 			},
 			i = function() {
 				function e(e, t) {
-					for(var n = 0; n < t.length; n++) {
+					for (var n = 0; n < t.length; n++) {
 						var r = t[n];
 						r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 					}
@@ -2656,14 +2656,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	}), t.setupCartDataStore = void 0;
 	var o = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -2730,16 +2730,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 	(function(e) {
 		function r(e, t) {
-			if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+			if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 		}
 
 		function o(e, t) {
-			if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+			if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 			return !t || "object" != typeof t && "function" != typeof t ? e : t
 		}
 
 		function i(e, t) {
-			if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+			if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 			e.prototype = Object.create(t && t.prototype, {
 				constructor: {
 					value: e,
@@ -2754,7 +2754,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		}), t.ALAN_CHAT_OPEN = void 0;
 		var a = function() {
 				function e(e, t) {
-					for(var n = 0; n < t.length; n++) {
+					for (var n = 0; n < t.length; n++) {
 						var r = t[n];
 						r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 					}
@@ -2766,10 +2766,10 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			s = n(409),
 			u = n(0),
 			c = function(e) {
-				if(e && e.__esModule) return e;
+				if (e && e.__esModule) return e;
 				var t = {};
-				if(null != e)
-					for(var n in e) Object.prototype.hasOwnProperty.call(e, n) && (t[n] = e[n]);
+				if (null != e)
+					for (var n in e) Object.prototype.hasOwnProperty.call(e, n) && (t[n] = e[n]);
 				return t.default = e, t
 			}(u),
 			l = n(572),
@@ -2785,7 +2785,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					function a(e) {
 						try {
 							u(r.next(e))
-						} catch(e) {
+						} catch (e) {
 							i(e)
 						}
 					}
@@ -2793,7 +2793,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					function s(e) {
 						try {
 							u(r.throw(e))
-						} catch(e) {
+						} catch (e) {
 							i(e)
 						}
 					}
@@ -2856,9 +2856,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					value: function() {
 						return h(this, void 0, void 0, e.mark(function t() {
 							return e.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
-										if(!VOLO.isGuest) {
+										if (!VOLO.isGuest) {
 											e.next = 6;
 											break
 										}
@@ -2882,9 +2882,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						return h(this, void 0, void 0, e.mark(function t() {
 							var n;
 							return e.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
-										if(this.ALANUrl) {
+										if (this.ALANUrl) {
 											e.next = 6;
 											break
 										}
@@ -2938,10 +2938,10 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						try {
 							var a = t[o](i),
 								s = a.value
-						} catch(e) {
+						} catch (e) {
 							return void n(e)
 						}
-						if(!a.done) return Promise.resolve(s).then(function(e) {
+						if (!a.done) return Promise.resolve(s).then(function(e) {
 							r("next", e)
 						}, function(e) {
 							r("throw", e)
@@ -2954,21 +2954,21 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		}
 
 		function a(e, t) {
-			if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+			if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 		}
 		Object.defineProperty(t, "__esModule", {
 			value: !0
 		}), t.setupCorporateService = void 0;
 		var s = Object.assign || function(e) {
-				for(var t = 1; t < arguments.length; t++) {
+				for (var t = 1; t < arguments.length; t++) {
 					var n = arguments[t];
-					for(var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
+					for (var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
 				}
 				return e
 			},
 			u = function() {
 				function e(e, t) {
-					for(var n = 0; n < t.length; n++) {
+					for (var n = 0; n < t.length; n++) {
 						var r = t[n];
 						r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 					}
@@ -3092,10 +3092,10 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				}, {
 					key: "vendorHasVoucherTag",
 					value: function() {
-						if(VOLO && VOLO.vendorTags) {
+						if (VOLO && VOLO.vendorTags) {
 							var e = VOLO.vendorTags;
-							for(var t in e)
-								if(e[t] && e[t].name.toLowerCase().indexOf("corporate-voucher") > -1) return !0
+							for (var t in e)
+								if (e[t] && e[t].name.toLowerCase().indexOf("corporate-voucher") > -1) return !0
 						}
 						return !1
 					}
@@ -3149,7 +3149,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						try {
 							var e = JSON.parse(localStorage.getItem("groceries-menu-cart"));
 							return window.location.pathname.indexOf(e.vendorId) > -1
-						} catch(e) {
+						} catch (e) {
 							return !1
 						}
 					}
@@ -3172,19 +3172,19 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						var t = i(o.mark(function e() {
 							var t, n;
 							return o.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
 										return e.prev = 0, e.next = 3, this.xhrService.send({
 											url: this.corporateApi + "/user/link_details"
 										});
 									case 3:
-										if(t = e.sent, !(n = t.data) || !n.link_invitation_sent || n.api_linked_customer_code || !n.require_account_linking) {
+										if (t = e.sent, !(n = t.data) || !n.link_invitation_sent || n.api_linked_customer_code || !n.require_account_linking) {
 											e.next = 8;
 											break
 										}
 										return this.goToAccountLinkingPage(), e.abrupt("return");
 									case 8:
-										if(!n || !n.api_linked_customer_code) {
+										if (!n || !n.api_linked_customer_code) {
 											e.next = 11;
 											break
 										}
@@ -3236,15 +3236,15 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						var t = i(o.mark(function e(t) {
 							var n, r, i;
 							return o.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
-										if(n = window.location.origin, !(n.indexOf("corporate") > -1)) {
+										if (n = window.location.origin, !(n.indexOf("corporate") > -1)) {
 											e.next = 23;
 											break
 										}
 										return e.prev = 2, e.next = 5, this.getLinkedToken();
 									case 5:
-										if(r = e.sent, !r.data || !r.data.accessToken) {
+										if (r = e.sent, !r.data || !r.data.accessToken) {
 											e.next = 18;
 											break
 										}
@@ -3258,7 +3258,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 											overrideApiKey: "volo"
 										});
 									case 9:
-										if(!(r = e.sent) || !r.email || r.code !== t) {
+										if (!(r = e.sent) || !r.email || r.code !== t) {
 											e.next = 15;
 											break
 										}
@@ -3332,10 +3332,10 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e) {
-		if(e && e.__esModule) return e;
+		if (e && e.__esModule) return e;
 		var t = {};
-		if(null != e)
-			for(var n in e) Object.prototype.hasOwnProperty.call(e, n) && (t[n] = e[n]);
+		if (null != e)
+			for (var n in e) Object.prototype.hasOwnProperty.call(e, n) && (t[n] = e[n]);
 		return t.default = e, t
 	}
 	Object.defineProperty(t, "__esModule", {
@@ -3479,7 +3479,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		var t = e.captchaContainerId,
 			n = e.initFn,
 			r = document.querySelector("#" + t);
-		if(null === r) return void(window.trackJs && window.trackJs.console.error("PerimeterX : could not find captcha container element with given id, did you forget to pass captchaContainerId?"));
+		if (null === r) return void(window.trackJs && window.trackJs.console.error("PerimeterX : could not find captcha container element with given id, did you forget to pass captchaContainerId?"));
 		r.innerHTML = "";
 		var o = document.createElement("div");
 		o.id = "px-captcha", r.appendChild(o), n()
@@ -3509,7 +3509,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 
 	function i(e) {
 		var t = (0, a.get)(e, "responseJSON.appId", !1);
-		return(0, d.isFeatureEnabled)(f) && t
+		return (0, d.isFeatureEnabled)(f) && t
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
@@ -3537,7 +3537,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 	(function(e, r) {
 		function o(e) {
-			if(!e.appConfig) throw new Error("Location model has to be created with app config");
+			if (!e.appConfig) throw new Error("Location model has to be created with app config");
 			var t = new l({
 				id: 1
 			}, e);
@@ -3547,9 +3547,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			value: !0
 		}), t.setupLocationModel = t.LocationModel = void 0;
 		var i = Object.assign || function(e) {
-				for(var t = 1; t < arguments.length; t++) {
+				for (var t = 1; t < arguments.length; t++) {
 					var n = arguments[t];
-					for(var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
+					for (var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
 				}
 				return e
 			},
@@ -3589,14 +3589,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					r.bindAll(this), this.addressFormatter = t.addressFormatter, this.on("change", this._saveLocationModel), this.set("countryCode", t.appConfig.isoCountryCode)
 				},
 				set: function(t, n) {
-					if("object" === (void 0 === t ? "undefined" : a(t))) {
+					if ("object" === (void 0 === t ? "undefined" : a(t))) {
 						var r = i({}, this.defaults, t);
 						return e.Model.prototype.set.call(this, r, n)
 					}
 					return e.Model.prototype.set.call(this, t, n)
 				},
 				validate: function(e) {
-					if(r.isNull(e.latitude) || r.isNull(e.longitude)) return "no_location"
+					if (r.isNull(e.latitude) || r.isNull(e.longitude)) return "no_location"
 				},
 				updateFromUrl: function(e) {
 					var t = this,
@@ -3679,7 +3679,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				}
 			});
 		t.setupLocationModel = function(e) {
-			return(0, c.validateComponentDependencies)(e, "config", "services.locationService"), i({}, e, {
+			return (0, c.validateComponentDependencies)(e, "config", "services.locationService"), i({}, e, {
 				models: i({}, e.models, {
 					locationModel: e.services.locationService.getModel()
 				})
@@ -3763,9 +3763,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			i = n(419).bin,
 			a = function(e, n) {
 				e.constructor == String ? e = n && "binary" === n.encoding ? i.stringToBytes(e) : r.stringToBytes(e) : o(e) ? e = Array.prototype.slice.call(e, 0) : Array.isArray(e) || (e = e.toString());
-				for(var s = t.bytesToWords(e), u = 8 * e.length, c = 1732584193, l = -271733879, d = -1732584194, f = 271733878, p = 0; p < s.length; p++) s[p] = 16711935 & (s[p] << 8 | s[p] >>> 24) | 4278255360 & (s[p] << 24 | s[p] >>> 8);
+				for (var s = t.bytesToWords(e), u = 8 * e.length, c = 1732584193, l = -271733879, d = -1732584194, f = 271733878, p = 0; p < s.length; p++) s[p] = 16711935 & (s[p] << 8 | s[p] >>> 24) | 4278255360 & (s[p] << 24 | s[p] >>> 8);
 				s[u >>> 5] |= 128 << u % 32, s[14 + (u + 64 >>> 9 << 4)] = u;
-				for(var h = a._ff, v = a._gg, g = a._hh, m = a._ii, p = 0; p < s.length; p += 16) {
+				for (var h = a._ff, v = a._gg, g = a._hh, m = a._ii, p = 0; p < s.length; p += 16) {
 					var _ = c,
 						y = l,
 						b = d,
@@ -3776,18 +3776,18 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			};
 		a._ff = function(e, t, n, r, o, i, a) {
 			var s = e + (t & n | ~t & r) + (o >>> 0) + a;
-			return(s << i | s >>> 32 - i) + t
+			return (s << i | s >>> 32 - i) + t
 		}, a._gg = function(e, t, n, r, o, i, a) {
 			var s = e + (t & r | n & ~r) + (o >>> 0) + a;
-			return(s << i | s >>> 32 - i) + t
+			return (s << i | s >>> 32 - i) + t
 		}, a._hh = function(e, t, n, r, o, i, a) {
 			var s = e + (t ^ n ^ r) + (o >>> 0) + a;
-			return(s << i | s >>> 32 - i) + t
+			return (s << i | s >>> 32 - i) + t
 		}, a._ii = function(e, t, n, r, o, i, a) {
 			var s = e + (n ^ (t | ~r)) + (o >>> 0) + a;
-			return(s << i | s >>> 32 - i) + t
+			return (s << i | s >>> 32 - i) + t
 		}, a._blocksize = 16, a._digestsize = 16, e.exports = function(e, n) {
-			if(void 0 === e || null === e) throw new Error("Illegal argument " + e);
+			if (void 0 === e || null === e) throw new Error("Illegal argument " + e);
 			var r = t.wordsToBytes(a(e, n));
 			return n && n.asBytes ? r : n && n.asString ? i.bytesToString(r) : t.bytesToHex(r)
 		}
@@ -3813,16 +3813,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		}
 
 		function o(e, t) {
-			if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+			if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 		}
 
 		function i(e, t) {
-			if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+			if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 			return !t || "object" != typeof t && "function" != typeof t ? e : t
 		}
 
 		function a(e, t) {
-			if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+			if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 			e.prototype = Object.create(t && t.prototype, {
 				constructor: {
 					value: e,
@@ -3836,15 +3836,15 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			value: !0
 		});
 		var s = Object.assign || function(e) {
-				for(var t = 1; t < arguments.length; t++) {
+				for (var t = 1; t < arguments.length; t++) {
 					var n = arguments[t];
-					for(var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
+					for (var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
 				}
 				return e
 			},
 			u = function() {
 				function e(e, t) {
-					for(var n = 0; n < t.length; n++) {
+					for (var n = 0; n < t.length; n++) {
 						var r = t[n];
 						r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 					}
@@ -3856,13 +3856,13 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			c = function e(t, n, r) {
 				null === t && (t = Function.prototype);
 				var o = Object.getOwnPropertyDescriptor(t, n);
-				if(void 0 === o) {
+				if (void 0 === o) {
 					var i = Object.getPrototypeOf(t);
 					return null === i ? void 0 : e(i, n, r)
 				}
-				if("value" in o) return o.value;
+				if ("value" in o) return o.value;
 				var a = o.get;
-				if(void 0 !== a) return a.call(r)
+				if (void 0 !== a) return a.call(r)
 			},
 			l = n(108),
 			d = r(l),
@@ -3952,7 +3952,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						(0, g.each)(e.customer, function(e, n) {
 							t[n] = (0, g.isString)(e) ? (0, g.escape)(e) : e
 						}), t.customer_additional_fields_order = this._prepareCustomerAdditionalFieldsData(e.customer_additional_fields_order), this.$(".form__error-message").remove(), this._checkIfUserExists(t.email).then(function(e) {
-							if(!e.exists) return this.xhrService.send({
+							if (!e.exists) return this.xhrService.send({
 								url: Routing.generate("_customer_validate_phone_number", r),
 								success: (0, g.curry)(this._onSuccessMobileNumberValidation.bind(this), 2)(t),
 								error: this._onErrorMobileNumberValidation.bind(this)
@@ -3997,7 +3997,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				}, {
 					key: "_onErrorMobileNumberValidation",
 					value: function(e) {
-						if((0, g.get)(e, "responseJSON.error.mobile_number")) {
+						if ((0, g.get)(e, "responseJSON.error.mobile_number")) {
 							var t = this.$("#contact-information-mobile-number")[0];
 							this.removeCurrentErrorMessage(t), this.createErrorMessage((0, g.get)(e, "responseJSON.error.mobile_number"), t), this.trigger("form:error")
 						}
@@ -4054,7 +4054,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 							NEXTGEN_PROFILE_CAT4_FEEDBACK2: "invalid_number",
 							ApiCustomerMobileAlreadyVerifiedException: "already_verified",
 							ApiConfirmationVerificationAttemptsExceededException: "rate_limited"
-						}[e] || "general"
+						} [e] || "general"
 					}
 				}, {
 					key: "_saveCustomerModel",
@@ -4082,7 +4082,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				}, {
 					key: "_validateForm",
 					value: function() {
-						if(!this._canBeSubmitted()) return !1;
+						if (!this._canBeSubmitted()) return !1;
 						var t = e.collectFormValues(this.el);
 						return e.async(t, this.constraints).then(this.processForm.bind(this), this._showErrorMessages.bind(this)), !1
 					}
@@ -4127,16 +4127,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function o(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function i(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -4151,7 +4151,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	});
 	var a = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -4221,14 +4221,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	}), t.setupFacebookService = t.createFacebookService = t.FacebookService = void 0;
 	var o = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -4315,7 +4315,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	t.createFacebookService = function(e) {
 		return VOLO.facebookService || (VOLO.facebookService = new l(e)), VOLO.facebookService
 	}, t.setupFacebookService = function(e) {
-		return(0, a.validateComponentDependencies)(e, "config"), Object.assign({}, e, {
+		return (0, a.validateComponentDependencies)(e, "config"), Object.assign({}, e, {
 			services: Object.assign({}, e.services, {
 				facebookService: new l(e.config)
 			})
@@ -4329,7 +4329,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	var r = n(1);
 	t.isFeatureEnabled = function(e) {
 		var t = !(arguments.length > 1 && void 0 !== arguments[1]) || arguments[1];
-		return(0, r.get)(VOLO, "configuration.features.flags." + e, !1) === t
+		return (0, r.get)(VOLO, "configuration.features.flags." + e, !1) === t
 	}
 }, function(e, t, n) {
 	"use strict";
@@ -4340,7 +4340,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		var n = t.trackError = function(e, t) {
 				try {
 					t.track(e)
-				} catch(e) {}
+				} catch (e) {}
 			},
 			r = t.TRACK_ERROR = "track:error";
 		t.bindErrorTracking = function(t, o) {
@@ -4409,9 +4409,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		s = r(a),
 		u = function(e, t) {
 			var n = {};
-			for(var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
-			if(null != e && "function" == typeof Object.getOwnPropertySymbols)
-				for(var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
+			for (var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
+			if (null != e && "function" == typeof Object.getOwnPropertySymbols)
+				for (var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
 			return n
 		},
 		c = function(e) {
@@ -4440,14 +4440,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	}), t.setupGTMUserProfileTracker = void 0;
 	var o, i = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -4553,7 +4553,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}();
 	t.default = u;
 	t.setupGTMUserProfileTracker = function(e) {
-		return(0, s.validateComponentDependencies)(e, "models.customerModel", "services.gtmService"), Object.assign({}, e, {
+		return (0, s.validateComponentDependencies)(e, "models.customerModel", "services.gtmService"), Object.assign({}, e, {
 			services: Object.assign({}, e.services, {
 				gtmUserProfileTracker: new u(e.services.gtmService, e.models.customerModel)
 			})
@@ -4574,7 +4574,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 
 	function r() {
 		var e = (0, o.get)(VOLO, "components.models.locationModel", {});
-		if((0, o.isEmpty)(e)) {
+		if ((0, o.isEmpty)(e)) {
 			var t = VOLO.components.services.locationService.getAddressFormatter();
 			e = (0, i.createLocationModel)({
 				appConfig: VOLO.configuration,
@@ -4620,9 +4620,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			value: !0
 		}), t.setupCartModel = t.CartModel = void 0;
 		var a = Object.assign || function(e) {
-			for(var t = 1; t < arguments.length; t++) {
+			for (var t = 1; t < arguments.length; t++) {
 				var n = arguments[t];
-				for(var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
+				for (var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
 			}
 			return e
 		};
@@ -4692,7 +4692,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			},
 			parse: function(e, t) {
 				var n = e;
-				if(this.dataStore = this.dataStore || t.dataStore, this.appConfig = this.appConfig || t.appConfig, r.isUndefined(this.vendorCarts) && (this.vendorCarts = new c.default([], {
+				if (this.dataStore = this.dataStore || t.dataStore, this.appConfig = this.appConfig || t.appConfig, r.isUndefined(this.vendorCarts) && (this.vendorCarts = new c.default([], {
 						cart: this,
 						dataStore: this.dataStore
 					})), r.isObject(n) && r.isArray(n.vendor_cart)) {
@@ -4773,7 +4773,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			}
 		});
 		t.setupCartModel = function(e) {
-			return(0, f.validateComponentDependencies)(e, "config", "services.cartDataStore"), a({}, e, {
+			return (0, f.validateComponentDependencies)(e, "config", "services.cartDataStore"), a({}, e, {
 				models: a({}, e.models, {
 					cartModel: i(e.services.cartDataStore, e.config)
 				})
@@ -4881,16 +4881,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function o(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function i(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -4911,7 +4911,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}), t.setupCustomerModel = t.CustomerModel = void 0;
 	var s = function() {
 		function e(e, t) {
-			for(var n = 0; n < t.length; n++) {
+			for (var n = 0; n < t.length; n++) {
 				var r = t[n];
 				r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 			}
@@ -4961,12 +4961,12 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			}, {
 				key: "getFullMobileNumber",
 				value: function() {
-					return(0, c.trim)([this.get("mobile_country_code"), this.get("mobile_number")].join(" "))
+					return (0, c.trim)([this.get("mobile_country_code"), this.get("mobile_number")].join(" "))
 				}
 			}, {
 				key: "getFullName",
 				value: function() {
-					return(0, c.trim)([this.get("first_name"), this.get("last_name")].join(" "))
+					return (0, c.trim)([this.get("first_name"), this.get("last_name")].join(" "))
 				}
 			}]), t
 		}(u.Model);
@@ -4989,14 +4989,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}
 
 	function o(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	});
 	var i = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -5120,14 +5120,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}
 
 	function o(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	}), t.setupSelectComponent = t.createSelectComponent = t.BootstrapSelectComponent = void 0;
 	var i = function() {
 		function e(e, t) {
-			for(var n = 0; n < t.length; n++) {
+			for (var n = 0; n < t.length; n++) {
 				var r = t[n];
 				r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 			}
@@ -5258,7 +5258,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					function a(e) {
 						try {
 							u(r.next(e))
-						} catch(e) {
+						} catch (e) {
 							i(e)
 						}
 					}
@@ -5266,7 +5266,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					function s(e) {
 						try {
 							u(r.throw(e))
-						} catch(e) {
+						} catch (e) {
 							i(e)
 						}
 					}
@@ -5285,13 +5285,13 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		t.getData = function(e) {
 			var t = new l.default(e);
 			return t.getSelfServiceContent(h(e, "currentLanguageCode")).catch(function(n) {
-				if(403 === n.status) return t.getSelfServiceContent(h(e, "primaryLanguageCode"))
+				if (403 === n.status) return t.getSelfServiceContent(h(e, "primaryLanguageCode"))
 			})
 		}, t.getAlanParams = function() {
 			return p(void 0, void 0, void 0, e.mark(function t() {
 				var n, r;
 				return e.wrap(function(e) {
-					for(;;) switch(e.prev = e.next) {
+					for (;;) switch (e.prev = e.next) {
 						case 0:
 							return n = u.default.Deferred(), r = (0, f.getCustomerServiceComponentValue)(), u.default.ajax({
 								type: "GET",
@@ -5314,7 +5314,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			return p(void 0, void 0, void 0, e.mark(function t() {
 				var n, r;
 				return e.wrap(function(e) {
-					for(;;) switch(e.prev = e.next) {
+					for (;;) switch (e.prev = e.next) {
 						case 0:
 							return n = u.default.Deferred(), r = (0, f.getCustomerServiceComponentValue)(), u.default.ajax({
 								type: "GET",
@@ -5341,14 +5341,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	}), t.setupHeaderAnimation = void 0;
 	var o = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -5409,13 +5409,13 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			}, {
 				key: "pageScrolledDownForHeaderChange",
 				value: function() {
-					return(this.$window.get(0).pageYOffset || this.$document.get(0).documentElement.scrollTop) > 1
+					return (this.$window.get(0).pageYOffset || this.$document.get(0).documentElement.scrollTop) > 1
 				}
 			}]), e
 		}();
 	t.default = c;
 	t.setupHeaderAnimation = function(e) {
-		return(0, u.validateComponentDependencies)(e, "config"), Object.assign({}, e, {
+		return (0, u.validateComponentDependencies)(e, "config"), Object.assign({}, e, {
 			views: Object.assign({}, e.views, {
 				headerAnimation: new c({
 					appConfig: e.config,
@@ -5442,9 +5442,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		s = r(a),
 		u = function(e, t) {
 			var n = {};
-			for(var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
-			if(null != e && "function" == typeof Object.getOwnPropertySymbols)
-				for(var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
+			for (var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
+			if (null != e && "function" == typeof Object.getOwnPropertySymbols)
+				for (var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
 			return n
 		},
 		c = function(e) {
@@ -5480,9 +5480,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		s = r(a),
 		u = function(e, t) {
 			var n = {};
-			for(var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
-			if(null != e && "function" == typeof Object.getOwnPropertySymbols)
-				for(var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
+			for (var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
+			if (null != e && "function" == typeof Object.getOwnPropertySymbols)
+				for (var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
 			return n
 		},
 		c = function(e) {
@@ -5517,9 +5517,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		l = r(c),
 		d = function(e, t) {
 			var n = {};
-			for(var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
-			if(null != e && "function" == typeof Object.getOwnPropertySymbols)
-				for(var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
+			for (var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
+			if (null != e && "function" == typeof Object.getOwnPropertySymbols)
+				for (var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
 			return n
 		},
 		f = function(e) {
@@ -5558,9 +5558,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		s = r(a),
 		u = function(e, t) {
 			var n = {};
-			for(var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
-			if(null != e && "function" == typeof Object.getOwnPropertySymbols)
-				for(var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
+			for (var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
+			if (null != e && "function" == typeof Object.getOwnPropertySymbols)
+				for (var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
 			return n
 		},
 		c = function(e) {
@@ -5582,16 +5582,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}
 
 	function o(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function i(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function a(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -5606,7 +5606,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	});
 	var s = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -5686,7 +5686,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}(0, function() {
 		return function(e) {
 			function t(r) {
-				if(n[r]) return n[r].exports;
+				if (n[r]) return n[r].exports;
 				var o = n[r] = {
 					i: r,
 					l: !1,
@@ -5707,14 +5707,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					value: !0
 				})
 			}, t.t = function(e, n) {
-				if(1 & n && (e = t(e)), 8 & n) return e;
-				if(4 & n && "object" == typeof e && e && e.__esModule) return e;
+				if (1 & n && (e = t(e)), 8 & n) return e;
+				if (4 & n && "object" == typeof e && e && e.__esModule) return e;
 				var r = Object.create(null);
-				if(t.r(r), Object.defineProperty(r, "default", {
+				if (t.r(r), Object.defineProperty(r, "default", {
 						enumerable: !0,
 						value: e
 					}), 2 & n && "string" != typeof e)
-					for(var o in e) t.d(r, o, function(t) {
+					for (var o in e) t.d(r, o, function(t) {
 						return e[t]
 					}.bind(null, o));
 				return r
@@ -5750,13 +5750,13 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					return e instanceof NodeList
 				},
 				s = function(e, t) {
-					if(e && t) {
+					if (e && t) {
 						e = a(e) ? e : [e];
-						for(var n = 0; n < e.length && !0 !== t(e[n], n, e.length); n++);
+						for (var n = 0; n < e.length && !0 !== t(e[n], n, e.length); n++);
 					}
 				},
 				u = function(e) {
-					if(Array.isArray(e)) {
+					if (Array.isArray(e)) {
 						return e.join(", ")
 					}
 				},
@@ -5769,8 +5769,8 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				l = function(e, t) {
 					var n = !(arguments.length > 2 && void 0 !== arguments[2]) || arguments[2],
 						r = arguments.length > 3 && void 0 !== arguments[3] ? arguments[3] : document;
-					if(n && -1 !== c(r.querySelectorAll(t)).indexOf(e)) return e;
-					for(;
+					if (n && -1 !== c(r.querySelectorAll(t)).indexOf(e)) return e;
+					for (;
 						(e = e.parentElement) && -1 === c(r.querySelectorAll(t)).indexOf(e););
 					return e
 				},
@@ -5779,33 +5779,33 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					return -1 !== c(n.querySelectorAll(t)).indexOf(e)
 				},
 				f = function(e) {
-					if(e) {
+					if (e) {
 						return "hidden" === getComputedStyle(e).overflow
 					}
 				},
 				p = function(e) {
-					if(e) {
-						if(f(e)) return !0;
+					if (e) {
+						if (f(e)) return !0;
 						return e.scrollTop <= 0
 					}
 				},
 				h = function(e) {
-					if(e) {
-						if(f(e)) return !0;
+					if (e) {
+						if (f(e)) return !0;
 						var t = e.scrollTop,
 							n = e.scrollHeight;
 						return t + e.offsetHeight >= n
 					}
 				},
 				v = function(e) {
-					if(e) {
-						if(f(e)) return !0;
+					if (e) {
+						if (f(e)) return !0;
 						return e.scrollLeft <= 0
 					}
 				},
 				g = function(e) {
-					if(e) {
-						if(f(e)) return !0;
+					if (e) {
+						if (f(e)) return !0;
 						var t = e.scrollLeft,
 							n = e.scrollWidth;
 						return t + e.offsetWidth >= n
@@ -5883,7 +5883,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				},
 				S = function(e) {
 					var t = arguments.length > 1 && void 0 !== arguments[1] && arguments[1];
-					if(i(e)) {
+					if (i(e)) {
 						var n = e.style.overflowY;
 						t ? C() || (e.style.overflowY = e.dataset.scrollLockSavedOverflowYProperty) : e.style.overflowY = "scroll";
 						var r = P(e);
@@ -5892,8 +5892,8 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					return 0
 				},
 				P = function(e) {
-					if(i(e)) {
-						if(e === document.body) {
+					if (i(e)) {
+						if (e === document.body) {
 							var t = document.documentElement.clientWidth;
 							return window.innerWidth - t
 						}
@@ -5913,7 +5913,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					return P(document.body)
 				},
 				E = function(e) {
-					if(e) {
+					if (e) {
 						o(e).map(function(e) {
 							s(e, function(e) {
 								i(e) ? e.dataset.scrollLockScrollable = "" : '"'.concat(e, '" is not a Element.')
@@ -5922,7 +5922,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					}
 				},
 				L = function(e) {
-					if(e) {
+					if (e) {
 						o(e).map(function(e) {
 							s(e, function(e) {
 								i(e) ? delete e.dataset.scrollLockScrollable : '"'.concat(e, '" is not a Element.')
@@ -5931,14 +5931,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					}
 				},
 				A = function(e) {
-					if(e) {
+					if (e) {
 						o(e).map(function(e) {
 							b.scrollableSelectors.push(e)
 						})
 					}
 				},
 				V = function(e) {
-					if(e) {
+					if (e) {
 						o(e).map(function(e) {
 							b.scrollableSelectors = b.scrollableSelectors.filter(function(t) {
 								return t !== e
@@ -5947,7 +5947,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					}
 				},
 				j = function(e) {
-					if(e) {
+					if (e) {
 						o(e).map(function(e) {
 							s(e, function(e) {
 								i(e) ? e.dataset.scrollLockLockable = "" : '"'.concat(e, '" is not a Element.')
@@ -5956,22 +5956,22 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					}
 				},
 				x = function(e) {
-					if(e) {
+					if (e) {
 						o(e).map(function(e) {
 							b.lockableSelectors.push(e)
 						}), C() || B(), F(e)
 					}
 				},
 				I = function(e) {
-					if(e)
-						if(-1 !== y.indexOf(e)) b.fillGapMethod = e, G();
+					if (e)
+						if (-1 !== y.indexOf(e)) b.fillGapMethod = e, G();
 						else {
 							var t = y.join(", ");
 							'"'.concat(e, '" method is not available!\nAvailable fill gap methods: ').concat(t, ".")
 						}
 				},
 				N = function(e) {
-					if(e) {
+					if (e) {
 						o(e).map(function(e) {
 							s(e, function(e) {
 								i(e) ? (e.dataset.scrollLockFillGap = "", b.scroll || Y(e)) : '"'.concat(e, '" is not a Element.')
@@ -5980,7 +5980,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					}
 				},
 				R = function(e) {
-					if(e) {
+					if (e) {
 						o(e).map(function(e) {
 							s(e, function(e) {
 								i(e) ? (delete e.dataset.scrollLockFillGap, b.scroll || Q(e)) : '"'.concat(e, '" is not a Element.')
@@ -5989,14 +5989,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					}
 				},
 				F = function(e) {
-					if(e) {
+					if (e) {
 						o(e).map(function(e) {
 							b.fillGapSelectors.push(e), b.scroll || W(e)
 						})
 					}
 				},
 				D = function(e) {
-					if(e) {
+					if (e) {
 						o(e).map(function(e) {
 							b.fillGapSelectors = b.fillGapSelectors.filter(function(t) {
 								return t !== e
@@ -6028,7 +6028,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					})
 				},
 				H = function(e) {
-					if(i(e) && "true" !== e.dataset.scrollLockLocked) {
+					if (i(e) && "true" !== e.dataset.scrollLockLocked) {
 						var t = window.getComputedStyle(e);
 						e.dataset.scrollLockSavedOverflowYProperty = t.overflowY, e.dataset.scrollLockSavedInlineOverflowProperty = e.style.overflow, e.dataset.scrollLockSavedInlineOverflowYProperty = e.style.overflowY, e.style.overflow = "hidden", e.dataset.scrollLockLocked = "true"
 					}
@@ -6055,21 +6055,21 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				},
 				Y = function(e) {
 					var t = arguments.length > 1 && void 0 !== arguments[1] && arguments[1];
-					if(i(e)) {
+					if (i(e)) {
 						var n;
-						if("" === e.dataset.scrollLockLockable || t) n = S(e, !0);
+						if ("" === e.dataset.scrollLockLockable || t) n = S(e, !0);
 						else {
 							var r = l(e, u(b.lockableSelectors));
 							n = S(r, !0)
 						}
 						"true" === e.dataset.scrollLockFilledGap && Q(e);
 						var o = window.getComputedStyle(e);
-						if(e.dataset.scrollLockFilledGap = "true", e.dataset.scrollLockCurrentFillGapMethod = b.fillGapMethod, "margin" === b.fillGapMethod) {
+						if (e.dataset.scrollLockFilledGap = "true", e.dataset.scrollLockCurrentFillGapMethod = b.fillGapMethod, "margin" === b.fillGapMethod) {
 							var a = parseFloat(o.marginRight);
 							e.style.marginRight = "".concat(a + n, "px")
-						} else if("width" === b.fillGapMethod) e.style.width = "calc(100% - ".concat(n, "px)");
-						else if("max-width" === b.fillGapMethod) e.style.maxWidth = "calc(100% - ".concat(n, "px)");
-						else if("padding" === b.fillGapMethod) {
+						} else if ("width" === b.fillGapMethod) e.style.width = "calc(100% - ".concat(n, "px)");
+						else if ("max-width" === b.fillGapMethod) e.style.maxWidth = "calc(100% - ".concat(n, "px)");
+						else if ("padding" === b.fillGapMethod) {
 							var s = parseFloat(o.paddingRight);
 							e.style.paddingRight = "".concat(s + n, "px")
 						}
@@ -6082,7 +6082,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					})
 				},
 				Q = function(e) {
-					if(i(e) && "true" === e.dataset.scrollLockFilledGap) {
+					if (i(e) && "true" === e.dataset.scrollLockFilledGap) {
 						var t = e.dataset.scrollLockCurrentFillGapMethod;
 						delete e.dataset.scrollLockFilledGap, delete e.dataset.scrollLockCurrentFillGapMethod, "margin" === t ? e.style.marginRight = "" : "width" === t ? e.style.width = "" : "max-width" === t ? e.style.maxWidth = "" : "padding" === t && (e.style.paddingRight = "")
 					}
@@ -6094,12 +6094,12 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					b.scroll || (b.startTouchY = e.touches[0].clientY, b.startTouchX = e.touches[0].clientX)
 				},
 				te = function(e) {
-					if(!b.scroll) {
+					if (!b.scroll) {
 						var t = b.startTouchY,
 							n = b.startTouchX,
 							r = e.touches[0].clientY,
 							o = e.touches[0].clientX;
-						if(e.touches.length < 2) {
+						if (e.touches.length < 2) {
 							var i = u(b.scrollableSelectors),
 								a = {
 									up: t < r,
@@ -6115,10 +6115,10 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 								};
 							! function t(n) {
 								var r = arguments.length > 1 && void 0 !== arguments[1] && arguments[1];
-								if(n) {
+								if (n) {
 									var o = l(n, i, !1);
-									if(_(n)) return !1;
-									if(r || m(n) && l(n, i) || d(n, i)) {
+									if (_(n)) return !1;
+									if (r || m(n) && l(n, i) || d(n, i)) {
 										var u = !1;
 										v(n) && g(n) ? (a.up && p(n) || a.down && h(n)) && (u = !0) : p(n) && h(n) ? (a.left && v(n) || a.right && g(n)) && (u = !0) : (s.up && p(n) || s.down && h(n) || s.left && v(n) || s.right && g(n)) && (u = !0), u && (o ? t(o, !0) : e.preventDefault())
 									} else t(o)
@@ -6166,7 +6166,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					}
 				},
 				oe = function(e) {
-					for(var t = 1; t < arguments.length; t++) {
+					for (var t = 1; t < arguments.length; t++) {
 						var n = null != arguments[t] ? arguments[t] : {},
 							o = Object.keys(n);
 						"function" == typeof Object.getOwnPropertySymbols && (o = o.concat(Object.getOwnPropertySymbols(n).filter(function(e) {
@@ -6212,16 +6212,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}
 
 	function o(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function i(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function a(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -6236,7 +6236,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}), t.ConfirmationBody = void 0;
 	var s = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -6321,11 +6321,11 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		},
 		bin: {
 			stringToBytes: function(e) {
-				for(var t = [], n = 0; n < e.length; n++) t.push(255 & e.charCodeAt(n));
+				for (var t = [], n = 0; n < e.length; n++) t.push(255 & e.charCodeAt(n));
 				return t
 			},
 			bytesToString: function(e) {
-				for(var t = [], n = 0; n < e.length; n++) t.push(String.fromCharCode(e[n]));
+				for (var t = [], n = 0; n < e.length; n++) t.push(String.fromCharCode(e[n]));
 				return t.join("")
 			}
 		}
@@ -6396,8 +6396,8 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e) {
-		if(Array.isArray(e)) {
-			for(var t = 0, n = Array(e.length); t < e.length; t++) n[t] = e[t];
+		if (Array.isArray(e)) {
+			for (var t = 0, n = Array(e.length); t < e.length; t++) n[t] = e[t];
 			return n
 		}
 		return Array.from(e)
@@ -6408,7 +6408,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	var o = n(1),
 		i = n(73),
 		a = function() {
-			return(0, i.pipeFunc)((0, i.createMapById)("vendorList.byId", "location_event"), function(e) {
+			return (0, i.pipeFunc)((0, i.createMapById)("vendorList.byId", "location_event"), function(e) {
 				return e.filter(function(e) {
 					return null !== e.type
 				})
@@ -6424,7 +6424,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			return [].concat(r(new Set(n))).join(",")
 		},
 		c = function(e) {
-			return(0, i.pipeFunc)(a(), function(t) {
+			return (0, i.pipeFunc)(a(), function(t) {
 				return u(t, e)
 			})
 		};
@@ -6509,9 +6509,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		g = r(v),
 		m = function(e, t) {
 			var n = {};
-			for(var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
-			if(null != e && "function" == typeof Object.getOwnPropertySymbols)
-				for(var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
+			for (var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
+			if (null != e && "function" == typeof Object.getOwnPropertySymbols)
+				for (var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
 			return n
 		};
 	t.mountTwoFactorAuthentication = function(e, t, n, r) {
@@ -6607,7 +6607,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			},
 			idAttribute: "vendor_id",
 			initialize: function(e, t) {
-				if(r.bindAll(this), this.products = new a.default, this.invalid_products = new a.default, this.invalid_toppings = [], this.timeoutReference = null, this._cart = t.cart, this.appConfig = t.cart.appConfig, this.timezone = t.vendorTimezone || this.appConfig.timeZone, this.isGroupOrderSplitEnabled = (0, l.default)(), this.isReactCartEnabled = (0, p.get)(this.appConfig.features.flags, "react-cart", !0), this.isNewCartAPI = (0, p.get)(this.appConfig.features.flags, "cartapi", !0), this.groupOrderCalculator = new u.default(2, VOLO.customer.get("id"), VOLO.isVatIncludedInProductPrice), this.appConfig && this.appConfig.apiKey === VOLO.configuration.apiKeyCorporate) {
+				if (r.bindAll(this), this.products = new a.default, this.invalid_products = new a.default, this.invalid_toppings = [], this.timeoutReference = null, this._cart = t.cart, this.appConfig = t.cart.appConfig, this.timezone = t.vendorTimezone || this.appConfig.timeZone, this.isGroupOrderSplitEnabled = (0, l.default)(), this.isReactCartEnabled = (0, p.get)(this.appConfig.features.flags, "react-cart", !0), this.isNewCartAPI = (0, p.get)(this.appConfig.features.flags, "cartapi", !0), this.groupOrderCalculator = new u.default(2, VOLO.customer.get("id"), VOLO.isVatIncludedInProductPrice), this.appConfig && this.appConfig.apiKey === VOLO.configuration.apiKeyCorporate) {
 					var n = $(".vendor-section").data("vendor") ? $(".vendor-section").data("vendor").ddt : r.get(this.collection.dataStore.load(), "ddt", null);
 					this.set("ddt", n)
 				}
@@ -6624,13 +6624,12 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				this.set("loyalty", e), this.trigger("cart:calculate")
 			},
 			removeParticipant: function(e) {
-				if(!this.isNewGroupOrderFlow()) {
-					for(var t = this.get("participants"), n = 0; n < t.length; n++)
-						if(t[n].apiId === e) {
+				if (!this.isNewGroupOrderFlow()) {
+					for (var t = this.get("participants"), n = 0; n < t.length; n++)
+						if (t[n].apiId === e) {
 							t.splice(n, 1);
 							break
-						}
-					this.pruneProducts(), this.trigger("cart:calculate")
+						} this.pruneProducts(), this.trigger("cart:calculate")
 				}
 			},
 			pruneProducts: function() {
@@ -6661,7 +6660,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			},
 			getParticipantsWithCurrentUser: function() {
 				var e = arguments.length > 0 && void 0 !== arguments[0] && arguments[0];
-				if(this.appConfig.apiKey === VOLO.configuration.apiKeyVolo) return [{
+				if (this.appConfig.apiKey === VOLO.configuration.apiKeyVolo) return [{
 					isCurrentUser: !0,
 					apiId: "user",
 					allowance: 0,
@@ -6746,7 +6745,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				return "pickup" === this.get("expedition_type") && this.appConfig.pickupEnabled
 			},
 			validate: function() {
-				if(!this.get("isDeliverable")) return "location_not_set"
+				if (!this.get("isDeliverable")) return "location_not_set"
 			},
 			setIsDeliverableInfo: function(e, t) {
 				this.set("isDeliverable", e), t && this.trigger("cart:render-toggle")
@@ -6759,12 +6758,12 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			_update: function(e) {
 				var t = this,
 					n = arguments.length > 1 && void 0 !== arguments[1] && arguments[1];
-				if(r.isObject(this.collection.cart.defaultCartValues)) {
+				if (r.isObject(this.collection.cart.defaultCartValues)) {
 					var o = r.get(e, "vendor_cart[0].products");
 					this.collection.cart.defaultCartValues.vendor_id = r.get(e, "vendor_cart.[0].vendor_id"), this.collection.cart.defaultCartValues.products_count = r.sum(r.map(o, "quantity"))
 				}
 				var i = this._restoreUpsellAndProductMasterCategoryIds(e);
-				if(this.appConfig && this.appConfig.apiKey === VOLO.configuration.apiKeyCorporate) {
+				if (this.appConfig && this.appConfig.apiKey === VOLO.configuration.apiKeyCorporate) {
 					var a = $(".vendor-section").data("vendor") ? $(".vendor-section").data("vendor").ddt : r.get(this.collection.dataStore.load(), "ddt", null);
 					i.ddt = a, this.set("ddt", a)
 				}
@@ -6772,7 +6771,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					e.products = e.products ? t._removeInvalidProducts(e.products) : []
 				}), "percentage" === e.rider_tip_type && (i.rider_tip_percentage = parseInt(e.rider_tip, 10)), this.collection.dataStore.save(i);
 				var s = [];
-				if(this.invalid_products && this.invalid_products.length > 0 && (s = s.concat(this.invalid_products)), this.invalid_toppings && this.invalid_toppings.length > 0 && (s = s.concat(this.invalid_toppings)), s && s.length > 0) {
+				if (this.invalid_products && this.invalid_products.length > 0 && (s = s.concat(this.invalid_products)), this.invalid_toppings && this.invalid_toppings.length > 0 && (s = s.concat(this.invalid_toppings)), s && s.length > 0) {
 					var u = {
 						ProductInvalidForVendor: !0,
 						invalidProducts: s
@@ -6871,13 +6870,13 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			getProductVariationFromMenu: function(e) {
 				var t = {},
 					n = $(".menu__list-wrapper").data("vendorMenus");
-				if(n) {
+				if (n) {
 					var r = n[0].menu_categories || [];
-					e: for(var o = 0; o < r.length; o++) {
+					e: for (var o = 0; o < r.length; o++) {
 						var i = r[o];
-						if(i.products && i.products.length > 0) {
+						if (i.products && i.products.length > 0) {
 							var a = this.getVariationFromProduct(i.products, e);
-							if(a) {
+							if (a) {
 								t = a;
 								break e
 							}
@@ -6888,12 +6887,12 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			},
 			getVariationFromProduct: function(e, t) {
 				var n = void 0;
-				e: for(var r = 0; r < e.length; r++) {
+				e: for (var r = 0; r < e.length; r++) {
 					var o = e[r];
-					if(o.product_variations && o.product_variations.length > 0)
-						for(var i = 0; i < o.product_variations.length; i++) {
+					if (o.product_variations && o.product_variations.length > 0)
+						for (var i = 0; i < o.product_variations.length; i++) {
 							var a = o.product_variations[i];
-							if(a.id === t) {
+							if (a.id === t) {
 								n = a;
 								break e
 							}
@@ -6934,25 +6933,27 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				var o = t.clone();
 				o.transformToppingsToServerFormat(), this.isNewGroupOrderFlow() || o.set("group_order_user_id", n);
 				var i = this.findSimilarProduct(o);
-				if(e.get("group_order_user_id") === n)
-					if(0 === r) this.removeItem(e);
-					else if(void 0 !== i)
-					if(i.isSimilar(e)) i.set("quantity", r), i.set("sold_out_option", e.get("sold_out_option")), i.set("sold_out_option_updated", e.get("sold_out_option_updated")), i.set("sold_out_options", e.get("sold_out_options")), i.set("special_instructions", e.get("special_instructions"));
+				if (e.get("group_order_user_id") === n)
+					if (0 === r) this.removeItem(e);
+					else if (void 0 !== i)
+					if (i.isSimilar(e)) i.set("quantity", r), i.set("sold_out_option", e.get("sold_out_option")), i.set("sold_out_option_updated", e.get("sold_out_option_updated")), i.set("sold_out_options", e.get("sold_out_options")), i.set("special_instructions", e.get("special_instructions"));
 					else {
 						i.set("quantity", i.get("quantity") + r), i.set("sold_out_option", e.get("sold_out_option")), i.set("sold_out_options", e.get("sold_out_options")), i.set("sold_out_option_updated", e.get("sold_out_option_updated"));
 						var a = this.findSimilarProduct(e);
 						a && this.removeItem(a, !0)
-					} else f.isCartLibAvailable && this.isReactCartEnabled && this.isNewCartAPI && !d.isCheckoutPage ? (i = this.products.at(e.get("productIndex")), i.toppings.set(o.toppings.toJSON()), i.set("special_instructions", t.get("special_instructions")), i.set("product_variation_id", t.get("product_variation_id")), i.set("sold_out_option", e.get("sold_out_option")), i.set("sold_out_options", e.get("sold_out_options")), i.set("sold_out_option_updated", e.get("sold_out_option_updated")), i.set("variation_name", t.get("variation_name")), i.set("quantity", r)) : (e.toppings.set(t.getSelectedToppings()), e.set("special_instructions", t.get("special_instructions")), e.set("sold_out_option", t.get("sold_out_option")), e.set("sold_out_option_updated", t.get("sold_out_option_updated")), e.set("sold_out_options", t.get("sold_out_options")), e.set("product_variation_id", t.get("product_variation_id")), e.set("quantity", r));
-				else if(r > 0)
-					if(void 0 !== i)
-						if(i.isSimilar(e)) i.set("quantity", r), i.set("sold_out_option", e.get("sold_out_option")), i.set("sold_out_options", e.get("sold_out_options")), i.set("sold_out_option_updated", e.get("sold_out_option_updated"));
+					}
+				else f.isCartLibAvailable && this.isReactCartEnabled && this.isNewCartAPI && !d.isCheckoutPage ? (i = this.products.at(e.get("productIndex")), i.toppings.set(o.toppings.toJSON()), i.set("special_instructions", t.get("special_instructions")), i.set("product_variation_id", t.get("product_variation_id")), i.set("sold_out_option", e.get("sold_out_option")), i.set("sold_out_options", e.get("sold_out_options")), i.set("sold_out_option_updated", e.get("sold_out_option_updated")), i.set("variation_name", t.get("variation_name")), i.set("quantity", r)) : (e.toppings.set(t.getSelectedToppings()), e.set("special_instructions", t.get("special_instructions")), e.set("sold_out_option", t.get("sold_out_option")), e.set("sold_out_option_updated", t.get("sold_out_option_updated")), e.set("sold_out_options", t.get("sold_out_options")), e.set("product_variation_id", t.get("product_variation_id")), e.set("quantity", r));
+				else if (r > 0)
+					if (void 0 !== i)
+						if (i.isSimilar(e)) i.set("quantity", r), i.set("sold_out_option", e.get("sold_out_option")), i.set("sold_out_options", e.get("sold_out_options")), i.set("sold_out_option_updated", e.get("sold_out_option_updated"));
 						else {
 							i.set("quantity", i.get("quantity") + r), i.set("sold_out_option", e.get("sold_out_option")), i.set("sold_out_options", e.get("sold_out_options")), i.set("sold_out_option_updated", e.get("sold_out_option_updated"));
 							var s = e.clone();
 							s.transformToppingsToServerFormat(), s.set("group_order_user_id", n);
 							var u = this.findSimilarProduct(s);
 							u && this.removeItem(u, !0)
-						} else f.isCartLibAvailable && this.isReactCartEnabled && this.isNewCartAPI && !d.isCheckoutPage ? (i = this.products.at(e.get("productIndex")), i.toppings.set(t.getSelectedToppings()), i.set("special_instructions", t.get("special_instructions")), i.set("sold_out_option", t.get("sold_out_option")), i.set("sold_out_options", t.get("sold_out_options")), i.set("sold_out_option_updated", t.get("sold_out_option_updated")), i.set("product_variation_id", t.get("product_variation_id")), i.set("variation_name", t.get("variation_name")), i.set("quantity", r)) : this._addItem(t, n, r)
+						}
+				else f.isCartLibAvailable && this.isReactCartEnabled && this.isNewCartAPI && !d.isCheckoutPage ? (i = this.products.at(e.get("productIndex")), i.toppings.set(t.getSelectedToppings()), i.set("special_instructions", t.get("special_instructions")), i.set("sold_out_option", t.get("sold_out_option")), i.set("sold_out_options", t.get("sold_out_options")), i.set("sold_out_option_updated", t.get("sold_out_option_updated")), i.set("product_variation_id", t.get("product_variation_id")), i.set("variation_name", t.get("variation_name")), i.set("quantity", r)) : this._addItem(t, n, r)
 			},
 			removeItem: function(e) {
 				var t = arguments.length > 1 && void 0 !== arguments[1] && arguments[1];
@@ -7101,13 +7102,13 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		};
 	t.onLoad = function() {
 		$(".button:not(.js-ripple), .button-ghost:not(.js-ripple), [data-ripple]").each(function(e, t) {
-			return(0, r.addRipple)(t)
+			return (0, r.addRipple)(t)
 		}), $("body").on("focus blur keyup change propertychange", ".input-box input, .select-box select", o.handleChangedEvent), $(".input-box input, .select-box select").each(function(e, t) {
 			return $(t).change()
 		}), $(".modal").on("shown.bs.modal", a), $(".modal").on("hide.bs.modal", s), (0, i.handleCuisineOverflow)()
 	}, t.onBeforeUnload = function() {
 		$(".button.js-ripple").each(function(e, t) {
-			return(0, r.removeRipple)(t)
+			return (0, r.removeRipple)(t)
 		}), $("body").on("focus blur keyup change propertychange", ".input-box input, .select-box select", o.handleChangedEvent), $(".modal").off("shown.bs.modal", a), $(".modal").off("hide.bs.modal", s)
 	}
 }, function(e, t, n) {
@@ -7159,7 +7160,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		var t = e.target,
 			n = s(t),
 			u = $(t).val();
-		if(!r() && !o() && !i(t) && !a(t) || 8 === e.keyCode) return !1;
+		if (!r() && !o() && !i(t) && !a(t) || 8 === e.keyCode) return !1;
 		"focusin" === e.type ? n.addClass("focused") : u ? n.addClass("changed") : n.removeClass("focused changed")
 	}
 }, function(e, t, n) {
@@ -7187,10 +7188,10 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e) {
-		if(e && e.__esModule) return e;
+		if (e && e.__esModule) return e;
 		var t = {};
-		if(null != e)
-			for(var n in e) Object.prototype.hasOwnProperty.call(e, n) && (t[n] = e[n]);
+		if (null != e)
+			for (var n in e) Object.prototype.hasOwnProperty.call(e, n) && (t[n] = e[n]);
 		return t.default = e, t
 	}
 	Object.defineProperty(t, "__esModule", {
@@ -7227,7 +7228,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						type: "normal",
 						arg: e.call(t, n)
 					}
-				} catch(e) {
+				} catch (e) {
 					return {
 						type: "throw",
 						arg: e
@@ -7252,7 +7253,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			function u(e) {
 				function n(t, o, i, a) {
 					var s = r(e[t], e, o);
-					if("throw" !== s.type) {
+					if ("throw" !== s.type) {
 						var u = s.arg,
 							c = u.value;
 						return c && "object" == typeof c && _.call(c, "__await") ? Promise.resolve(c.__await).then(function(e) {
@@ -7282,29 +7283,29 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			function c(e, t, n) {
 				var o = S;
 				return function(i, a) {
-					if(o === T) throw new Error("Generator is already running");
-					if(o === M) {
-						if("throw" === i) throw a;
+					if (o === T) throw new Error("Generator is already running");
+					if (o === M) {
+						if ("throw" === i) throw a;
 						return v()
 					}
-					for(n.method = i, n.arg = a;;) {
+					for (n.method = i, n.arg = a;;) {
 						var s = n.delegate;
-						if(s) {
+						if (s) {
 							var u = l(s, n);
-							if(u) {
-								if(u === E) continue;
+							if (u) {
+								if (u === E) continue;
 								return u
 							}
 						}
-						if("next" === n.method) n.sent = n._sent = n.arg;
-						else if("throw" === n.method) {
-							if(o === S) throw o = M, n.arg;
+						if ("next" === n.method) n.sent = n._sent = n.arg;
+						else if ("throw" === n.method) {
+							if (o === S) throw o = M, n.arg;
 							n.dispatchException(n.arg)
 						} else "return" === n.method && n.abrupt("return", n.arg);
 						o = T;
 						var c = r(e, t, n);
-						if("normal" === c.type) {
-							if(o = n.done ? M : P, c.arg === E) continue;
+						if ("normal" === c.type) {
+							if (o = n.done ? M : P, c.arg === E) continue;
 							return {
 								value: c.arg,
 								done: n.done
@@ -7317,15 +7318,15 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 
 			function l(e, t) {
 				var n = e.iterator[t.method];
-				if(n === g) {
-					if(t.delegate = null, "throw" === t.method) {
-						if(e.iterator.return && (t.method = "return", t.arg = g, l(e, t), "throw" === t.method)) return E;
+				if (n === g) {
+					if (t.delegate = null, "throw" === t.method) {
+						if (e.iterator.return && (t.method = "return", t.arg = g, l(e, t), "throw" === t.method)) return E;
 						t.method = "throw", t.arg = new TypeError("The iterator does not provide a 'throw' method")
 					}
 					return E
 				}
 				var o = r(n, e.iterator, t.arg);
-				if("throw" === o.type) return t.method = "throw", t.arg = o.arg, t.delegate = null, E;
+				if ("throw" === o.type) return t.method = "throw", t.arg = o.arg, t.delegate = null, E;
 				var i = o.arg;
 				return i ? i.done ? (t[e.resultName] = i.value, t.next = e.nextLoc, "return" !== t.method && (t.method = "next", t.arg = g), t.delegate = null, E) : i : (t.method = "throw", t.arg = new TypeError("iterator result is not an object"), t.delegate = null, E)
 			}
@@ -7349,15 +7350,15 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			}
 
 			function h(e) {
-				if(e) {
+				if (e) {
 					var t = e[b];
-					if(t) return t.call(e);
-					if("function" == typeof e.next) return e;
-					if(!isNaN(e.length)) {
+					if (t) return t.call(e);
+					if ("function" == typeof e.next) return e;
+					if (!isNaN(e.length)) {
 						var n = -1,
 							r = function t() {
-								for(; ++n < e.length;)
-									if(_.call(e, n)) return t.value = e[n], t.done = !1, t;
+								for (; ++n < e.length;)
+									if (_.call(e, n)) return t.value = e[n], t.done = !1, t;
 								return t.value = g, t.done = !0, t
 							};
 						return r.next = r
@@ -7382,7 +7383,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				w = y.toStringTag || "@@toStringTag",
 				C = "object" == typeof e,
 				k = t.regeneratorRuntime;
-			if(k) return void(C && (e.exports = k));
+			if (k) return void(C && (e.exports = k));
 			k = t.regeneratorRuntime = C ? e.exports : {}, k.wrap = n;
 			var S = "suspendedStart",
 				P = "suspendedYield",
@@ -7419,56 +7420,56 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				return "[object Generator]"
 			}, k.keys = function(e) {
 				var t = [];
-				for(var n in e) t.push(n);
+				for (var n in e) t.push(n);
 				return t.reverse(),
 					function n() {
-						for(; t.length;) {
+						for (; t.length;) {
 							var r = t.pop();
-							if(r in e) return n.value = r, n.done = !1, n
+							if (r in e) return n.value = r, n.done = !1, n
 						}
 						return n.done = !0, n
 					}
 			}, k.values = h, p.prototype = {
 				constructor: p,
 				reset: function(e) {
-					if(this.prev = 0, this.next = 0, this.sent = this._sent = g, this.done = !1, this.delegate = null, this.method = "next", this.arg = g, this.tryEntries.forEach(f), !e)
-						for(var t in this) "t" === t.charAt(0) && _.call(this, t) && !isNaN(+t.slice(1)) && (this[t] = g)
+					if (this.prev = 0, this.next = 0, this.sent = this._sent = g, this.done = !1, this.delegate = null, this.method = "next", this.arg = g, this.tryEntries.forEach(f), !e)
+						for (var t in this) "t" === t.charAt(0) && _.call(this, t) && !isNaN(+t.slice(1)) && (this[t] = g)
 				},
 				stop: function() {
 					this.done = !0;
 					var e = this.tryEntries[0],
 						t = e.completion;
-					if("throw" === t.type) throw t.arg;
+					if ("throw" === t.type) throw t.arg;
 					return this.rval
 				},
 				dispatchException: function(e) {
 					function t(t, r) {
 						return i.type = "throw", i.arg = e, n.next = t, r && (n.method = "next", n.arg = g), !!r
 					}
-					if(this.done) throw e;
-					for(var n = this, r = this.tryEntries.length - 1; r >= 0; --r) {
+					if (this.done) throw e;
+					for (var n = this, r = this.tryEntries.length - 1; r >= 0; --r) {
 						var o = this.tryEntries[r],
 							i = o.completion;
-						if("root" === o.tryLoc) return t("end");
-						if(o.tryLoc <= this.prev) {
+						if ("root" === o.tryLoc) return t("end");
+						if (o.tryLoc <= this.prev) {
 							var a = _.call(o, "catchLoc"),
 								s = _.call(o, "finallyLoc");
-							if(a && s) {
-								if(this.prev < o.catchLoc) return t(o.catchLoc, !0);
-								if(this.prev < o.finallyLoc) return t(o.finallyLoc)
-							} else if(a) {
-								if(this.prev < o.catchLoc) return t(o.catchLoc, !0)
+							if (a && s) {
+								if (this.prev < o.catchLoc) return t(o.catchLoc, !0);
+								if (this.prev < o.finallyLoc) return t(o.finallyLoc)
+							} else if (a) {
+								if (this.prev < o.catchLoc) return t(o.catchLoc, !0)
 							} else {
-								if(!s) throw new Error("try statement without catch or finally");
-								if(this.prev < o.finallyLoc) return t(o.finallyLoc)
+								if (!s) throw new Error("try statement without catch or finally");
+								if (this.prev < o.finallyLoc) return t(o.finallyLoc)
 							}
 						}
 					}
 				},
 				abrupt: function(e, t) {
-					for(var n = this.tryEntries.length - 1; n >= 0; --n) {
+					for (var n = this.tryEntries.length - 1; n >= 0; --n) {
 						var r = this.tryEntries[n];
-						if(r.tryLoc <= this.prev && _.call(r, "finallyLoc") && this.prev < r.finallyLoc) {
+						if (r.tryLoc <= this.prev && _.call(r, "finallyLoc") && this.prev < r.finallyLoc) {
 							var o = r;
 							break
 						}
@@ -7478,21 +7479,21 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					return i.type = e, i.arg = t, o ? (this.method = "next", this.next = o.finallyLoc, E) : this.complete(i)
 				},
 				complete: function(e, t) {
-					if("throw" === e.type) throw e.arg;
+					if ("throw" === e.type) throw e.arg;
 					return "break" === e.type || "continue" === e.type ? this.next = e.arg : "return" === e.type ? (this.rval = this.arg = e.arg, this.method = "return", this.next = "end") : "normal" === e.type && t && (this.next = t), E
 				},
 				finish: function(e) {
-					for(var t = this.tryEntries.length - 1; t >= 0; --t) {
+					for (var t = this.tryEntries.length - 1; t >= 0; --t) {
 						var n = this.tryEntries[t];
-						if(n.finallyLoc === e) return this.complete(n.completion, n.afterLoc), f(n), E
+						if (n.finallyLoc === e) return this.complete(n.completion, n.afterLoc), f(n), E
 					}
 				},
 				catch: function(e) {
-					for(var t = this.tryEntries.length - 1; t >= 0; --t) {
+					for (var t = this.tryEntries.length - 1; t >= 0; --t) {
 						var n = this.tryEntries[t];
-						if(n.tryLoc === e) {
+						if (n.tryLoc === e) {
 							var r = n.completion;
-							if("throw" === r.type) {
+							if ("throw" === r.type) {
 								var o = r.arg;
 								f(n)
 							}
@@ -7515,14 +7516,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	});
 	var o = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -7563,7 +7564,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r() {
-		return(0, a.get)(VOLO, "configuration.newAlanUrl")
+		return (0, a.get)(VOLO, "configuration.newAlanUrl")
 	}
 
 	function o(e) {
@@ -7578,7 +7579,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		a = n(1);
 	t.getAlanEndpoint = function(e) {
 		var t = (0, i.getCustomerServiceComponentValue)();
-		if(void 0 === e) throw new Error("The ALAN parameters is undefined.");
+		if (void 0 === e) throw new Error("The ALAN parameters is undefined.");
 		var n = [];
 		return e.app_version = VOLO.configuration.appVersion, t === i.HELP_CENTER_COMPONENTS.PANDACARE && (e.version = i.HELP_CENTER_COMPONENTS.PANDACARE), Object.keys(e).forEach(function(t) {
 			n.push(o(t) + "=" + encodeURIComponent(e[t]))
@@ -7627,10 +7628,10 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		u = r(s),
 		c = n(0),
 		l = function(e) {
-			if(e && e.__esModule) return e;
+			if (e && e.__esModule) return e;
 			var t = {};
-			if(null != e)
-				for(var n in e) Object.prototype.hasOwnProperty.call(e, n) && (t[n] = e[n]);
+			if (null != e)
+				for (var n in e) Object.prototype.hasOwnProperty.call(e, n) && (t[n] = e[n]);
 			return t.default = e, t
 		}(c)
 }, function(e, t, n) {
@@ -7645,9 +7646,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			value: !0
 		}), t.setupBannersView = t.BannersView = void 0;
 		var o = Object.assign || function(e) {
-				for(var t = 1; t < arguments.length; t++) {
+				for (var t = 1; t < arguments.length; t++) {
 					var n = arguments[t];
-					for(var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
+					for (var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
 				}
 				return e
 			},
@@ -7731,7 +7732,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				}, t)
 			},
 			g = function(e) {
-				return(0, l.default)(e, ["locationModel", "appConfig", "expeditionType", "cartModel", "gtmService"]), new h({
+				return (0, l.default)(e, ["locationModel", "appConfig", "expeditionType", "cartModel", "gtmService"]), new h({
 					el: "body",
 					locationModel: e.locationModel,
 					appConfig: e.appConfig,
@@ -7807,9 +7808,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			value: !0
 		});
 		var o = Object.assign || function(e) {
-				for(var t = 1; t < arguments.length; t++) {
+				for (var t = 1; t < arguments.length; t++) {
 					var n = arguments[t];
-					for(var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
+					for (var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
 				}
 				return e
 			},
@@ -7916,9 +7917,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			value: !0
 		}), t.setupCorporateHeaderView = t.CorporateHeaderView = void 0;
 		var o = Object.assign || function(e) {
-				for(var t = 1; t < arguments.length; t++) {
+				for (var t = 1; t < arguments.length; t++) {
 					var n = arguments[t];
-					for(var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
+					for (var r in n) Object.prototype.hasOwnProperty.call(n, r) && (e[r] = n[r])
 				}
 				return e
 			},
@@ -7955,7 +7956,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				}
 			});
 		t.setupCorporateHeaderView = function(e) {
-			return(0, s.validateComponentDependencies)(e, "config", "models.locationModel", "models.customerModel", "models.cartModel", "services.corporateService"), o({}, e, {
+			return (0, s.validateComponentDependencies)(e, "config", "models.locationModel", "models.customerModel", "models.cartModel", "services.corporateService"), o({}, e, {
 				views: o({}, e.views, {
 					corporateHeaderView: new u({
 						el: ".header__company-name",
@@ -7979,16 +7980,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}
 
 	function o(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function i(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function a(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -8007,7 +8008,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	});
 	var u = function() {
 		function e(e, t) {
-			for(var n = 0; n < t.length; n++) {
+			for (var n = 0; n < t.length; n++) {
 				var r = t[n];
 				r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 			}
@@ -8056,16 +8057,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function o(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function i(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -8080,7 +8081,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}), t.setupUserHeaderView = t.UserHeaderView = void 0;
 	var a = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -8139,7 +8140,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			}]), t
 		}(u.View);
 	t.setupUserHeaderView = function(e) {
-		if(0 === $(".header__account").length) return e;
+		if (0 === $(".header__account").length) return e;
 		(0, l.validateComponentDependencies)(e, "models.customerModel", "models.cartModel", "services.facebookService", "services.gtmService", "services.gtmUserProfileTracker", "services.cartDataStore");
 		var t = new p({
 				el: ".header__account",
@@ -8164,16 +8165,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function o(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function i(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -8185,7 +8186,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}
 
 	function a(e) {
-		return(0, c.default)(e, ["cartDataStore", "gtmUserProfileTracker"]), new p({
+		return (0, c.default)(e, ["cartDataStore", "gtmUserProfileTracker"]), new p({
 			el: ".logout-link",
 			cartDataStore: e.cartDataStore,
 			gtmUserProfileTracker: e.gtmUserProfileTracker
@@ -8196,7 +8197,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	});
 	var s = function() {
 		function e(e, t) {
-			for(var n = 0; n < t.length; n++) {
+			for (var n = 0; n < t.length; n++) {
 				var r = t[n];
 				r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 			}
@@ -8393,9 +8394,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		s = r(a),
 		u = function(e, t) {
 			var n = {};
-			for(var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
-			if(null != e && "function" == typeof Object.getOwnPropertySymbols)
-				for(var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
+			for (var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
+			if (null != e && "function" == typeof Object.getOwnPropertySymbols)
+				for (var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
 			return n
 		},
 		c = function(e) {
@@ -8445,9 +8446,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		s = r(a),
 		u = function(e, t) {
 			var n = {};
-			for(var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
-			if(null != e && "function" == typeof Object.getOwnPropertySymbols)
-				for(var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
+			for (var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
+			if (null != e && "function" == typeof Object.getOwnPropertySymbols)
+				for (var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
 			return n
 		},
 		c = function(e) {
@@ -8508,9 +8509,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		l = n(418),
 		d = function(e, t) {
 			var n = {};
-			for(var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
-			if(null != e && "function" == typeof Object.getOwnPropertySymbols)
-				for(var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
+			for (var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
+			if (null != e && "function" == typeof Object.getOwnPropertySymbols)
+				for (var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
 			return n
 		},
 		f = function(e) {
@@ -8552,9 +8553,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		s = r(a),
 		u = function(e, t) {
 			var n = {};
-			for(var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
-			if(null != e && "function" == typeof Object.getOwnPropertySymbols)
-				for(var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
+			for (var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
+			if (null != e && "function" == typeof Object.getOwnPropertySymbols)
+				for (var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
 			return n
 		},
 		c = function(e) {
@@ -8583,9 +8584,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		s = r(a),
 		u = function(e, t) {
 			var n = {};
-			for(var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
-			if(null != e && "function" == typeof Object.getOwnPropertySymbols)
-				for(var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
+			for (var r in e) Object.prototype.hasOwnProperty.call(e, r) && t.indexOf(r) < 0 && (n[r] = e[r]);
+			if (null != e && "function" == typeof Object.getOwnPropertySymbols)
+				for (var o = 0, r = Object.getOwnPropertySymbols(e); o < r.length; o++) t.indexOf(r[o]) < 0 && (n[r[o]] = e[r[o]]);
 			return n
 		},
 		c = function(e) {
@@ -8668,16 +8669,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function o(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function i(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -8692,7 +8693,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	});
 	var a = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -8710,10 +8711,10 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		}(u),
 		l = n(0),
 		d = function(e) {
-			if(e && e.__esModule) return e;
+			if (e && e.__esModule) return e;
 			var t = {};
-			if(null != e)
-				for(var n in e) Object.prototype.hasOwnProperty.call(e, n) && (t[n] = e[n]);
+			if (null != e)
+				for (var n in e) Object.prototype.hasOwnProperty.call(e, n) && (t[n] = e[n]);
 			return t.default = e, t
 		}(l),
 		f = n(29),
@@ -8784,7 +8785,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				key: "renderProductCount",
 				value: function() {
 					var e = this.state.productCount;
-					if(e > 0) return d.createElement("span", {
+					if (e > 0) return d.createElement("span", {
 						className: "products-count"
 					}, Math.min(e, 99))
 				}
@@ -8843,7 +8844,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				},
 				_handleTooltipReorder: function() {
 					var e = $(".tooltip-reorder");
-					if(!this._needsReorderTooltip()) return !1;
+					if (!this._needsReorderTooltip()) return !1;
 					e.tooltip({
 						animation: !0,
 						html: !0,
@@ -8885,14 +8886,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	});
 	var o = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -9084,38 +9085,38 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					return e << 32 - t | e >>> t
 				},
 				endian: function(e) {
-					if(e.constructor == Number) return 16711935 & n.rotl(e, 8) | 4278255360 & n.rotl(e, 24);
-					for(var t = 0; t < e.length; t++) e[t] = n.endian(e[t]);
+					if (e.constructor == Number) return 16711935 & n.rotl(e, 8) | 4278255360 & n.rotl(e, 24);
+					for (var t = 0; t < e.length; t++) e[t] = n.endian(e[t]);
 					return e
 				},
 				randomBytes: function(e) {
-					for(var t = []; e > 0; e--) t.push(Math.floor(256 * Math.random()));
+					for (var t = []; e > 0; e--) t.push(Math.floor(256 * Math.random()));
 					return t
 				},
 				bytesToWords: function(e) {
-					for(var t = [], n = 0, r = 0; n < e.length; n++, r += 8) t[r >>> 5] |= e[n] << 24 - r % 32;
+					for (var t = [], n = 0, r = 0; n < e.length; n++, r += 8) t[r >>> 5] |= e[n] << 24 - r % 32;
 					return t
 				},
 				wordsToBytes: function(e) {
-					for(var t = [], n = 0; n < 32 * e.length; n += 8) t.push(e[n >>> 5] >>> 24 - n % 32 & 255);
+					for (var t = [], n = 0; n < 32 * e.length; n += 8) t.push(e[n >>> 5] >>> 24 - n % 32 & 255);
 					return t
 				},
 				bytesToHex: function(e) {
-					for(var t = [], n = 0; n < e.length; n++) t.push((e[n] >>> 4).toString(16)), t.push((15 & e[n]).toString(16));
+					for (var t = [], n = 0; n < e.length; n++) t.push((e[n] >>> 4).toString(16)), t.push((15 & e[n]).toString(16));
 					return t.join("")
 				},
 				hexToBytes: function(e) {
-					for(var t = [], n = 0; n < e.length; n += 2) t.push(parseInt(e.substr(n, 2), 16));
+					for (var t = [], n = 0; n < e.length; n += 2) t.push(parseInt(e.substr(n, 2), 16));
 					return t
 				},
 				bytesToBase64: function(e) {
-					for(var n = [], r = 0; r < e.length; r += 3)
-						for(var o = e[r] << 16 | e[r + 1] << 8 | e[r + 2], i = 0; i < 4; i++) 8 * r + 6 * i <= 8 * e.length ? n.push(t.charAt(o >>> 6 * (3 - i) & 63)) : n.push("=");
+					for (var n = [], r = 0; r < e.length; r += 3)
+						for (var o = e[r] << 16 | e[r + 1] << 8 | e[r + 2], i = 0; i < 4; i++) 8 * r + 6 * i <= 8 * e.length ? n.push(t.charAt(o >>> 6 * (3 - i) & 63)) : n.push("=");
 					return n.join("")
 				},
 				base64ToBytes: function(e) {
 					e = e.replace(/[^A-Z0-9+\/]/gi, "");
-					for(var n = [], r = 0, o = 0; r < e.length; o = ++r % 4) 0 != o && n.push((t.indexOf(e.charAt(r - 1)) & Math.pow(2, -2 * o + 8) - 1) << 2 * o | t.indexOf(e.charAt(r)) >>> 6 - 2 * o);
+					for (var n = [], r = 0, o = 0; r < e.length; o = ++r % 4) 0 != o && n.push((t.indexOf(e.charAt(r - 1)) & Math.pow(2, -2 * o + 8) - 1) << 2 * o | t.indexOf(e.charAt(r)) >>> 6 - 2 * o);
 					return n
 				}
 			};
@@ -9147,11 +9148,11 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		}
 	};
 	t.vendorCLickOrigin = function(e) {
-		if(e.isEmpty()) return "List";
+		if (e.isEmpty()) return "List";
 		var t = [];
 		return e.isSearchApplied() && t.push("Search"), e.isFilterApplied() && t.push("Filter"), t.join(",")
 	}, t.vendorListTrigger = function(e) {
-		if(e.isEmpty()) return "normal_fetch";
+		if (e.isEmpty()) return "normal_fetch";
 		var t = [];
 		return e.isSearchApplied() && t.push("search"), e.isFilterApplied() && t.push("filter_applied"), t.join(",")
 	}
@@ -9163,7 +9164,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	var r = n(2);
 	t.default = function(e) {
 		var t = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "";
-		if(e instanceof r.Model) {
+		if (e instanceof r.Model) {
 			var n = e.get("formattedAddress") || "N/A";
 			return {
 				locationLat: e.get("latitude") || "N/A",
@@ -9243,14 +9244,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}
 
 	function o(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	});
 	var i, a = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -9396,12 +9397,12 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						eventOrigin: a,
 						vendorType: n.vertical
 					});
-				if("remove_cart" === t && (v.productUnitSalePrice = o.product_variations && o.product_variations.length && o.product_variations[0].price_before_discount || null), "add_cart" === t) {
+				if ("remove_cart" === t && (v.productUnitSalePrice = o.product_variations && o.product_variations.length && o.product_variations[0].price_before_discount || null), "add_cart" === t) {
 					h.count[i.MANDATORY] && (v.productMandatoryChoiceQuantitySelected = h.count[i.MANDATORY]), h.count[i.OPTIONAL] && (v.productOptionalChoiceQuantitySelected = h.count[i.OPTIONAL]);
 					var g = (0, d.getDpsTrackingParam)();
 					g && (v.dpsSessionId = g.dpsSessionId), v.isPopular = s, v.productHasImage = !!o.image || !!o.logo_path
 				}
-				if(h.ids[i.MANDATORY] && (v.productMandatoryChoiceSelectedIds = h.ids[i.MANDATORY]), h.ids[i.OPTIONAL] && (v.productOptionalChoiceSelectedIds = h.ids[i.OPTIONAL]), (0, l.getGroupOrderId)()) {
+				if (h.ids[i.MANDATORY] && (v.productMandatoryChoiceSelectedIds = h.ids[i.MANDATORY]), h.ids[i.OPTIONAL] && (v.productOptionalChoiceSelectedIds = h.ids[i.OPTIONAL]), (0, l.getGroupOrderId)()) {
 					var m = VOLO.customer && VOLO.customer.get("code"),
 						_ = (0, l.isHost)(m);
 					v.pageUrlPath = window.location.href, v.pageType = this.gtmService.tagManager.pageType, v.groupOrderUserType = _ ? "host" : "guest", _ && (v.groupOrderUserCount = (0, l.getGroupOrderParticipantsCountFromView)("cart"))
@@ -9510,7 +9511,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			key: "getReferrerParams",
 			value: function() {
 				var e = document.referrer;
-				if(e.includes("/campaigns")) {
+				if (e.includes("/campaigns")) {
 					return {
 						vendorClickOrigin: "channel",
 						channelIndex: ";" + new URL(e).searchParams.get("url_key") + ";"
@@ -9527,13 +9528,13 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		}, {
 			key: "getProductPrice",
 			value: function(e) {
-				if(e.product_variations && e.product_variations.length > 0) {
+				if (e.product_variations && e.product_variations.length > 0) {
 					var t = e.product_variations[0];
-					if(e.product_variation_id && (t = e.product_variations.find(function(t) {
+					if (e.product_variation_id && (t = e.product_variations.find(function(t) {
 							return t.id === e.product_variation_id
 						})), t) return t.price
 				}
-				return(e.total_price / e.quantity).toFixed(2)
+				return (e.total_price / e.quantity).toFixed(2)
 			}
 		}, {
 			key: "extractProductData",
@@ -9571,7 +9572,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					u = (t = {}, r(t, i.MANDATORY, ""), r(t, i.OPTIONAL, ""), t);
 				return s.forEach(function(e) {
 					var t = a[e];
-					if(t) {
+					if (t) {
 						var r = t.quantity_minimum > 0 ? i.MANDATORY : i.OPTIONAL;
 						t.options && (u[r] = n.addValueToString(u[r], t.options.length))
 					}
@@ -9594,7 +9595,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 							return t.id === e.id
 						})
 					});
-					if(t) {
+					if (t) {
 						var n = t.quantity_minimum > 0 ? i.MANDATORY : i.OPTIONAL;
 						c.count[n] = o.addValueToString(c.count[n], e.quantity), c.ids[n] = o.addValueToString(c.ids[n], e.id)
 					}
@@ -9612,14 +9613,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	});
 	var o = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -9683,14 +9684,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 	(function(e) {
 		function r(e, t) {
-			if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+			if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 		}
 		Object.defineProperty(t, "__esModule", {
 			value: !0
 		}), t.setupGTMCheckoutTracker = void 0;
 		var o = function() {
 				function e(e, t) {
-					for(var n = 0; n < t.length; n++) {
+					for (var n = 0; n < t.length; n++) {
 						var r = t[n];
 						r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 					}
@@ -9711,7 +9712,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					function a(e) {
 						try {
 							u(r.next(e))
-						} catch(e) {
+						} catch (e) {
 							i(e)
 						}
 					}
@@ -9719,7 +9720,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					function s(e) {
 						try {
 							u(r.throw(e))
-						} catch(e) {
+						} catch (e) {
 							i(e)
 						}
 					}
@@ -9758,7 +9759,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						return f(this, void 0, void 0, e.mark(function t() {
 							var f, m;
 							return e.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
 										return e.next = 2, this.getLocationEvent(c.id, i);
 									case 2:
@@ -9899,7 +9900,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						return f(this, void 0, void 0, e.mark(function t() {
 							var f, _;
 							return e.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
 										return e.next = 2, this.getLocationEvent(r.id, n);
 									case 2:
@@ -9941,7 +9942,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						return f(this, void 0, void 0, e.mark(function t() {
 							var f, g;
 							return e.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
 										return e.next = 2, this.getLocationEvent(r.id, n);
 									case 2:
@@ -9982,7 +9983,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						return f(this, void 0, void 0, e.mark(function t() {
 							var f, g;
 							return e.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
 										return e.next = 2, this.getLocationEvent(r.id, n);
 									case 2:
@@ -10025,7 +10026,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						return f(this, void 0, void 0, e.mark(function t() {
 							var f;
 							return e.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
 										f = Object.assign({
 											event: "checkout_payments.loaded"
@@ -10060,7 +10061,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						return f(this, void 0, void 0, e.mark(function t() {
 							var u;
 							return e.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
 										u = Object.assign({
 											event: "wallet_balance.loaded"
@@ -10315,7 +10316,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 							opening_type: "pickup" === this.appConfig.expeditionType ? "pickup" : "delivery",
 							vertical: (0, i.get)(this, "appConfig.vertical", "restaurants")
 						}, (0, l.getDynamicPricingParam)())).then(function(e) {
-							return(0, i.get)(e, "data.location_event", null)
+							return (0, i.get)(e, "data.location_event", null)
 						}).catch(function(e) {
 							return null
 						}) : Promise.resolve(null)
@@ -10324,7 +10325,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			}();
 		t.default = p;
 		t.setupGTMCheckoutTracker = function(e) {
-			return(0, c.validateComponentDependencies)(e, "config", "services.gtmService"), Object.assign({}, e, {
+			return (0, c.validateComponentDependencies)(e, "config", "services.gtmService"), Object.assign({}, e, {
 				services: Object.assign({}, e.services, {
 					gtmCheckoutTracker: new p({
 						gtmService: e.services.gtmService,
@@ -10339,14 +10340,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	});
 	var o = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -10412,14 +10413,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	}), t.GTMTrackingCardTracker = t.TRACKING_CARD_EVENTS = void 0;
 	var o = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -10511,7 +10512,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		}
 
 		function i(e) {
-			return(0, s.default)(e, ["customerModel", "facebookService", "gtmService", "gtmUserProfileTracker"]), new l({
+			return (0, s.default)(e, ["customerModel", "facebookService", "gtmService", "gtmUserProfileTracker"]), new l({
 				el: ".header__account",
 				customerModel: e.customerModel,
 				facebookService: e.facebookService,
@@ -10577,16 +10578,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}
 
 	function o(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function i(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function a(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -10601,7 +10602,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	});
 	var s = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -10785,7 +10786,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 							VOLO.configuration.features.flags["new-authentication-web"] ? window.location.replace("/login?step=login") : (o.stop(), $(r).removeClass("modal-content--loading"), this.render(), this.$(".modal__success-message__reset-password.hide").removeClass("hide"))
 						}.bind(this),
 						error: function(e) {
-							if((0, k.isPerimeterXEnabled)(e)) return void(0, k.pxCaptchaHandler)({
+							if ((0, k.isPerimeterXEnabled)(e)) return void(0, k.pxCaptchaHandler)({
 								captchaContainerId: "captcha-reset-password",
 								initFn: function() {
 									return t.find("button").prop("disabled", !0)
@@ -10807,7 +10808,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						n = this.address ? this.address.toJSON() : {},
 						r = this._isOrderStatusPage() ? Routing.generate("home") : null,
 						o = void 0;
-					return(0, P.isFeatureEnabled)(k.perimeterXFeatureFlag) ? this._disableLoginButton() : (this._disableForm(), this._enableSpinner()), o = e.login(t, {}, n, r), o.then(this._loginSuccess.bind(this), this._loginFail.bind(this)), !1
+					return (0, P.isFeatureEnabled)(k.perimeterXFeatureFlag) ? this._disableLoginButton() : (this._disableForm(), this._enableSpinner()), o = e.login(t, {}, n, r), o.then(this._loginSuccess.bind(this), this._loginFail.bind(this)), !1
 				}
 			}, {
 				key: "_loginSuccess",
@@ -10821,7 +10822,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				key: "_loginFail",
 				value: function(e) {
 					var t = this;
-					if((0, T.is2FAError)(e)) {
+					if ((0, T.is2FAError)(e)) {
 						var n = new l.default,
 							r = this.$("form").serializeJSON();
 						n.login(r, {
@@ -10829,7 +10830,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						}).then(this._loginSuccess.bind(this), function(e) {
 							(0, T.is2FAError)(e) && t._renderTwoFactorAuthenticationModal((0, T.map2FaErrorHeadersToComponentProps)(e))
 						})
-					} else if((0, k.isPerimeterXEnabled)(e))(0, k.pxCaptchaHandler)({
+					} else if ((0, k.isPerimeterXEnabled)(e))(0, k.pxCaptchaHandler)({
 						captchaContainerId: "captcha-login",
 						response: e,
 						onCaptchaSuccess: this._onLoginCaptchaSuccess.bind(this),
@@ -10852,7 +10853,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				value: function() {
 					var e = this,
 						t = Cookies.get("account_link_hash");
-					if(t) {
+					if (t) {
 						var n = function(e, t) {
 							return new Promise(function(n) {
 								setTimeout(n.bind(null, e), t)
@@ -10928,7 +10929,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						t = this.$("form").serializeJSON(),
 						n = this.address ? this.address.toJSON() : {},
 						r = void 0;
-					return(0, P.isFeatureEnabled)(k.perimeterXFeatureFlag) ? this._disableRegisterButton() : (this._disableForm(), this._enableSpinner()), r = e.register(t, n), r.then(this._registerSuccess.bind(this), this._registerFail.bind(this)), !1
+					return (0, P.isFeatureEnabled)(k.perimeterXFeatureFlag) ? this._disableRegisterButton() : (this._disableForm(), this._enableSpinner()), r = e.register(t, n), r.then(this._registerSuccess.bind(this), this._registerFail.bind(this)), !1
 				}
 			}, {
 				key: "_registerSuccess",
@@ -10942,7 +10943,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				key: "_registerFail",
 				value: function(e) {
 					var t = this;
-					if((0, k.isPerimeterXEnabled)(e))(0, k.pxCaptchaHandler)({
+					if ((0, k.isPerimeterXEnabled)(e))(0, k.pxCaptchaHandler)({
 						captchaContainerId: "captcha-register",
 						response: e,
 						onCaptchaSuccess: this._onRegistrationCaptchaSuccess.bind(this),
@@ -11068,17 +11069,17 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		return void 0 === e
 	}
 	e.exports = n, n.EventEmitter = n, n.prototype._events = void 0, n.prototype._maxListeners = void 0, n.defaultMaxListeners = 10, n.prototype.setMaxListeners = function(e) {
-		if(!o(e) || e < 0 || isNaN(e)) throw TypeError("n must be a positive number");
+		if (!o(e) || e < 0 || isNaN(e)) throw TypeError("n must be a positive number");
 		return this._maxListeners = e, this
 	}, n.prototype.emit = function(e) {
 		var t, n, o, s, u, c;
-		if(this._events || (this._events = {}), "error" === e && (!this._events.error || i(this._events.error) && !this._events.error.length)) {
-			if((t = arguments[1]) instanceof Error) throw t;
+		if (this._events || (this._events = {}), "error" === e && (!this._events.error || i(this._events.error) && !this._events.error.length)) {
+			if ((t = arguments[1]) instanceof Error) throw t;
 			var l = new Error('Uncaught, unspecified "error" event. (' + t + ")");
 			throw l.context = t, l
 		}
-		if(n = this._events[e], a(n)) return !1;
-		if(r(n)) switch(arguments.length) {
+		if (n = this._events[e], a(n)) return !1;
+		if (r(n)) switch (arguments.length) {
 			case 1:
 				n.call(this);
 				break;
@@ -11090,54 +11091,53 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				break;
 			default:
 				s = Array.prototype.slice.call(arguments, 1), n.apply(this, s)
-		} else if(i(n))
-			for(s = Array.prototype.slice.call(arguments, 1), c = n.slice(), o = c.length, u = 0; u < o; u++) c[u].apply(this, s);
+		} else if (i(n))
+			for (s = Array.prototype.slice.call(arguments, 1), c = n.slice(), o = c.length, u = 0; u < o; u++) c[u].apply(this, s);
 		return !0
 	}, n.prototype.addListener = function(e, t) {
 		var o;
-		if(!r(t)) throw TypeError("listener must be a function");
+		if (!r(t)) throw TypeError("listener must be a function");
 		return this._events || (this._events = {}), this._events.newListener && this.emit("newListener", e, r(t.listener) ? t.listener : t), this._events[e] ? i(this._events[e]) ? this._events[e].push(t) : this._events[e] = [this._events[e], t] : this._events[e] = t, i(this._events[e]) && !this._events[e].warned && (o = a(this._maxListeners) ? n.defaultMaxListeners : this._maxListeners) && o > 0 && this._events[e].length > o && (this._events[e].warned = !0, console.trace), this
 	}, n.prototype.on = n.prototype.addListener, n.prototype.once = function(e, t) {
 		function n() {
 			this.removeListener(e, n), o || (o = !0, t.apply(this, arguments))
 		}
-		if(!r(t)) throw TypeError("listener must be a function");
+		if (!r(t)) throw TypeError("listener must be a function");
 		var o = !1;
 		return n.listener = t, this.on(e, n), this
 	}, n.prototype.removeListener = function(e, t) {
 		var n, o, a, s;
-		if(!r(t)) throw TypeError("listener must be a function");
-		if(!this._events || !this._events[e]) return this;
-		if(n = this._events[e], a = n.length, o = -1, n === t || r(n.listener) && n.listener === t) delete this._events[e], this._events.removeListener && this.emit("removeListener", e, t);
-		else if(i(n)) {
-			for(s = a; s-- > 0;)
-				if(n[s] === t || n[s].listener && n[s].listener === t) {
+		if (!r(t)) throw TypeError("listener must be a function");
+		if (!this._events || !this._events[e]) return this;
+		if (n = this._events[e], a = n.length, o = -1, n === t || r(n.listener) && n.listener === t) delete this._events[e], this._events.removeListener && this.emit("removeListener", e, t);
+		else if (i(n)) {
+			for (s = a; s-- > 0;)
+				if (n[s] === t || n[s].listener && n[s].listener === t) {
 					o = s;
 					break
-				}
-			if(o < 0) return this;
+				} if (o < 0) return this;
 			1 === n.length ? (n.length = 0, delete this._events[e]) : n.splice(o, 1), this._events.removeListener && this.emit("removeListener", e, t)
 		}
 		return this
 	}, n.prototype.removeAllListeners = function(e) {
 		var t, n;
-		if(!this._events) return this;
-		if(!this._events.removeListener) return 0 === arguments.length ? this._events = {} : this._events[e] && delete this._events[e], this;
-		if(0 === arguments.length) {
-			for(t in this._events) "removeListener" !== t && this.removeAllListeners(t);
+		if (!this._events) return this;
+		if (!this._events.removeListener) return 0 === arguments.length ? this._events = {} : this._events[e] && delete this._events[e], this;
+		if (0 === arguments.length) {
+			for (t in this._events) "removeListener" !== t && this.removeAllListeners(t);
 			return this.removeAllListeners("removeListener"), this._events = {}, this
 		}
-		if(n = this._events[e], r(n)) this.removeListener(e, n);
-		else if(n)
-			for(; n.length;) this.removeListener(e, n[n.length - 1]);
+		if (n = this._events[e], r(n)) this.removeListener(e, n);
+		else if (n)
+			for (; n.length;) this.removeListener(e, n[n.length - 1]);
 		return delete this._events[e], this
 	}, n.prototype.listeners = function(e) {
 		return this._events && this._events[e] ? r(this._events[e]) ? [this._events[e]] : this._events[e].slice() : []
 	}, n.prototype.listenerCount = function(e) {
-		if(this._events) {
+		if (this._events) {
 			var t = this._events[e];
-			if(r(t)) return 1;
-			if(t) return t.length
+			if (r(t)) return 1;
+			if (t) return t.length
 		}
 		return 0
 	}, n.listenerCount = function(e, t) {
@@ -11147,14 +11147,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 	(function(e) {
 		function n(e, t) {
-			if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+			if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 		}
 		Object.defineProperty(t, "__esModule", {
 			value: !0
 		});
 		var r = function() {
 				function e(e, t) {
-					for(var n = 0; n < t.length; n++) {
+					for (var n = 0; n < t.length; n++) {
 						var r = t[n];
 						r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 					}
@@ -11168,7 +11168,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					function a(e) {
 						try {
 							u(r.next(e))
-						} catch(e) {
+						} catch (e) {
 							i(e)
 						}
 					}
@@ -11176,7 +11176,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					function s(e) {
 						try {
 							u(r.throw(e))
-						} catch(e) {
+						} catch (e) {
 							i(e)
 						}
 					}
@@ -11209,9 +11209,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						return o(this, void 0, void 0, e.mark(function r() {
 							var o, i;
 							return e.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
-										return this.setMobileCountryCode(t), this.setMobileNumber(n), e.abrupt("return", Promise.resolve({"status_code":200,"data":{"mobile_number":this.mobileNumber,"mobile_country_code":this.mobileCountryCode,"result":"confirmation-sent"}}));
+										return this.setMobileCountryCode(t), this.setMobileNumber(n), e.abrupt("return", Promise.resolve({
+											"status_code": 200,
+											"data": {
+												"mobile_number": this.mobileNumber,
+												"mobile_country_code": this.mobileCountryCode,
+												"result": "confirmation-sent"
+											}
+										}));
 										return this.setMobileCountryCode(t), this.setMobileNumber(n), e.prev = 2, e.next = 5, this.xhrService.fetch(this.xhrService.createAPIUrl("customers/phone/update"), {
 											method: "POST",
 											headers: {
@@ -11227,7 +11234,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 									case 5:
 										return o = e.sent, e.next = 8, o.json();
 									case 8:
-										if(i = e.sent, !o.ok) {
+										if (i = e.sent, !o.ok) {
 											e.next = 13;
 											break
 										}
@@ -11254,9 +11261,9 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						return o(this, void 0, void 0, e.mark(function n() {
 							var r, o;
 							return e.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
-										return e.abrupt("return", Promise.resolve(o));
+										//return e.abrupt("return", Promise.resolve(o));
 										return e.prev = 0, e.next = 3, this.xhrService.fetch(this.xhrService.createAPIUrl("customers/phone/verify"), {
 											method: "POST",
 											headers: {
@@ -11273,7 +11280,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 									case 3:
 										return r = e.sent, e.next = 6, r.json();
 									case 6:
-										if(o = e.sent, !r.ok) {
+										if (o = e.sent, !r.ok) {
 											e.next = 11;
 											break
 										}
@@ -11307,16 +11314,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function o(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function i(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -11331,7 +11338,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}), t.createInstantMobileVerificationView = t.InstantMobileVerificationView = void 0;
 	var a = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -11363,7 +11370,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					return {
 						confirmation_code: "wrong_code",
 						ApiConfirmationVerificationAttemptsExceededException: "rate_limited"
-					}[e] || "general"
+					} [e] || "general"
 				}, e
 			}
 			return i(t, e), a(t, [{
@@ -11414,9 +11421,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					var e = this.$(".modal-verify-sms__verification-code-input").val();
 					var z = document.querySelector('[class="modal-verify-sms__text"]');
 					z = z.innerHTML.split(' ');
-					console.log(z[z.length-2])
-					console.log(z[z.length-1])
-					return e && !this.$(".modal-verify-sms__submit").hasClass("button--disabled") && (this.disableDialog(), this.$(".sms-error-message").addClass("hide"), this.$(".modal-verify-sms__verification-code-input").removeClass("invalid"), this._sendTrackingEvent("mobile_verification.clicked"), this.verifySuccess({'data':{'status_code':200, 'mobile_number': z[z.length-1], 'mobile_country_code': z[z.length-2].toString().replace("+", "")}})), !1
+					console.log(z[z.length - 2])
+					console.log(z[z.length - 1])
+					return e && !this.$(".modal-verify-sms__submit").hasClass("button--disabled") && (this.disableDialog(), this.$(".sms-error-message").addClass("hide"), this.$(".modal-verify-sms__verification-code-input").removeClass("invalid"), this._sendTrackingEvent("mobile_verification.clicked"), this.verifySuccess({
+						'data': {
+							'status_code': 200,
+							'mobile_number': z[z.length - 1],
+							'mobile_country_code': z[z.length - 2].toString().replace("+", "")
+						}
+					})), !1
+					return e && !this.$(".modal-verify-sms__submit").hasClass("button--disabled") && (this.disableDialog(), this.$(".sms-error-message").addClass("hide"), this.$(".modal-verify-sms__verification-code-input").removeClass("invalid"), this._sendTrackingEvent("mobile_verification.clicked"), this.verificationService.verifyPhoneNumber(e).then(this.verifySuccess, this.handleVerifySmsErrors)), !1
 				}
 			}, {
 				key: "disableDialog",
@@ -11512,16 +11526,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}
 
 	function o(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function i(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function a(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -11536,7 +11550,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	});
 	var s = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -11593,16 +11607,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		}
 
 		function o(e, t) {
-			if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+			if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 		}
 
 		function i(e, t) {
-			if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+			if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 			return !t || "object" != typeof t && "function" != typeof t ? e : t
 		}
 
 		function a(e, t) {
-			if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+			if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 			e.prototype = Object.create(t && t.prototype, {
 				constructor: {
 					value: e,
@@ -11617,7 +11631,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 		}), t.TWO_FA_CSS_CLASSNAME = void 0;
 		var s = function() {
 				function e(e, t) {
-					for(var n = 0; n < t.length; n++) {
+					for (var n = 0; n < t.length; n++) {
 						var r = t[n];
 						r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 					}
@@ -11640,7 +11654,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					function a(e) {
 						try {
 							u(r.next(e))
-						} catch(e) {
+						} catch (e) {
 							i(e)
 						}
 					}
@@ -11648,7 +11662,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					function s(e) {
 						try {
 							u(r.throw(e))
-						} catch(e) {
+						} catch (e) {
 							i(e)
 						}
 					}
@@ -11782,7 +11796,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						return m(this, void 0, void 0, e.mark(function n() {
 							var r, o, i, a, s, u, c = this;
 							return e.wrap(function(e) {
-								for(;;) switch(e.prev = e.next) {
+								for (;;) switch (e.prev = e.next) {
 									case 0:
 										r = this.state, o = r.isRequesting, i = r.canRequestNewCode, a = r.authenticationType, !o && i && (s = t.currentTarget.getAttribute("data-method"), u = s !== a, this.setState({
 											isRequesting: !0,
@@ -11854,16 +11868,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function o(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function i(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -11878,7 +11892,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	});
 	var a = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -11957,16 +11971,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function o(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function i(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -11981,7 +11995,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	});
 	var a = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -12020,16 +12034,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function o(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function i(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -12044,7 +12058,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	});
 	var a = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -12076,16 +12090,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function o(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function i(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -12100,7 +12114,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	});
 	var a = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -12132,16 +12146,16 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 
 	function o(e, t) {
-		if(!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+		if (!e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
 		return !t || "object" != typeof t && "function" != typeof t ? e : t
 	}
 
 	function i(e, t) {
-		if("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
+		if ("function" != typeof t && null !== t) throw new TypeError("Super expression must either be null or a function, not " + typeof t);
 		e.prototype = Object.create(t && t.prototype, {
 			constructor: {
 				value: e,
@@ -12156,7 +12170,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	});
 	var a = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -12239,14 +12253,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}
 
 	function o(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	});
 	var i = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -12278,7 +12292,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						}).mapValues(function(e) {
 							return +t.getProductsTotal(e, n).toFixed(t.decimalPoint)
 						}).value();
-					return(0, a.assign)(r, o)
+					return (0, a.assign)(r, o)
 				}
 			}, {
 				key: "calculatePCartTotal",
@@ -12308,7 +12322,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				value: function(e, t) {
 					var n = this,
 						r = this.calculatePCartRemainingAllowance(e, t);
-					return(0, a.reduce)(r, function(e, t, r) {
+					return (0, a.reduce)(r, function(e, t, r) {
 						var o = (0, a.find)(n.participants, function(e) {
 							return e.apiId + "" === r
 						});
@@ -12333,7 +12347,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				value: function(e, t) {
 					var n = this,
 						r = this.calculatePCartRemainingAllowance(e, t);
-					return(0, a.reduce)(r, function(e, t, r) {
+					return (0, a.reduce)(r, function(e, t, r) {
 						var o = (0, a.find)(n.participants, function(e) {
 							return e.apiId + "" === r
 						});
@@ -12345,7 +12359,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				value: function(e, t) {
 					var n = this,
 						r = this.calculatePCartTotal(e, t);
-					return(0, a.reduce)(r, function(e, t, r) {
+					return (0, a.reduce)(r, function(e, t, r) {
 						var o = (0, a.find)(n.participants, function(e) {
 							return e.apiId + "" === r
 						});
@@ -12358,7 +12372,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 					var t = this,
 						n = !(arguments.length > 1 && void 0 !== arguments[1]) || arguments[1];
 					return e.reduce(function(e, r) {
-						return(n ? t.getProductPriceWithVAT(r) : r.total_price_before_discount) + e
+						return (n ? t.getProductPriceWithVAT(r) : r.total_price_before_discount) + e
 					}, 0)
 				}
 			}, {
@@ -12379,14 +12393,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	}
 
 	function o(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	});
 	var i = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -12412,7 +12426,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						targetSelector: ".restaurants__tool-box, .header",
 						className: "restaurants__tool-box--sticking",
 						isActiveGetter: function() {
-							return(0, s.default)(".restaurants__list").length && (0, s.default)(".header").length && !(0, s.default)("body").hasClass("restaurants--no-address")
+							return (0, s.default)(".restaurants__list").length && (0, s.default)(".header").length && !(0, s.default)("body").hasClass("restaurants--no-address")
 						},
 						startingPointGetter: function() {
 							var e = (0, s.default)(".restaurants__list").offset().top - (0, s.default)(".header").height() + (0, s.default)(".restaurants__search-filter-wrapper").height();
@@ -12427,14 +12441,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	});
 	var o = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -12485,14 +12499,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	});
 	var o = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -12518,14 +12532,14 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 	"use strict";
 
 	function r(e, t) {
-		if(!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
+		if (!(e instanceof t)) throw new TypeError("Cannot call a class as a function")
 	}
 	Object.defineProperty(t, "__esModule", {
 		value: !0
 	});
 	var o = function() {
 			function e(e, t) {
-				for(var n = 0; n < t.length; n++) {
+				for (var n = 0; n < t.length; n++) {
 					var r = t[n];
 					r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(e, r.key, r)
 				}
@@ -12577,7 +12591,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			value: !0
 		}), t.default = function(t) {
 			return new e.Promise(function(e, n) {
-				if(!t) return n("Email validation failed because null");
+				if (!t) return n("Email validation failed because null");
 				$.ajax({
 					url: Routing.generate("_customer_email_check"),
 					method: "POST",
@@ -12610,7 +12624,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			appConfig: VOLO.configuration
 		});
 		return new s.default.Promise(function(n, r) {
-			if(!e) return r("Mobile number validation failed because null");
+			if (!e) return r("Mobile number validation failed because null");
 			u && u.abort(), u = t.send({
 				url: Routing.generate("_customer_validate_phone_number", {
 					phoneNumber: e
