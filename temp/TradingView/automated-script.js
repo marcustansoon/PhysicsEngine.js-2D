@@ -42,7 +42,7 @@
 			    'method': 'PUT',
 			    'body': JSON.stringify({
 				    'message': `Create ${fileName} - automated`,
-				    'content': btoa(encodeURIComponent(modifiedSourceCode))
+				    'content': btoa(unescape(encodeURIComponent(modifiedSourceCode)))
 	    		}),
 		  		'headers': {
 		    		'Authorization': `token ${token}`
