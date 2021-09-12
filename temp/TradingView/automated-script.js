@@ -1,4 +1,4 @@
-// Similar functionality as Octokit.JS (https://octokit.github.io/rest.js/v18/)
+	// Similar functionality as Octokit.JS (https://octokit.github.io/rest.js/v18/)
 	function mfetch (url, replacer, header) {
 		let GETparams = {}
 		for (const property in replacer) {
@@ -11,22 +11,42 @@
 		url = url + '?' + (new URLSearchParams(GETparams)).toString()
 		return fetch(url, header)
 	}
+	
+	String.prototype.replaceArray = function(find, replace) {
+		var replaceString = this;
+		for (var i = 0; i < find.length; i++) {
+    			replaceString = replaceString.replace(find[i], replace[i]);
+  		}
+  		return replaceString;
+	}
 
+	// Return modified source code
 	async function getModifiedSourceCode () {
-		const MODIFIED_CONTENT_TO_BE_REPLACED = `prompt("Please enter your name", "" ) || MODIFIED_JSON_DATA`
+		const searchTerms = [], replacementTerms = []
+		
 		// Get script elem
 		let elem = [...document.querySelectorAll('script')].find(elem => elem.src.includes('static/bundles/main_chart.') && elem.src.includes('.js')),
+		    
 		// Get script raw source code
 		sourceCode = await fetch(elem.src).then(response => response.text()),
+		    
 		// Search for index
 		firstIndex = sourceCode.indexOf(`'{"free":{"CHART_STORAGE":{"limit":1}`),
 		secondIndex = sourceCode.indexOf(`{}}}'`, firstIndex) + 1 + 4,
-		originalContentToBeReplaced = sourceCode.substring(firstIndex, secondIndex),
+		    
+		// Define search terms
+		searchTerms.push(sourceCode.substring(firstIndex, secondIndex))
+		
+		// Define replacement terms
+		replacementTerms.push(`prompt("Please enter your name", "" ) || MODIFIED_JSON_DATA`)
+		    
 		// Replacement of original source code
-		modifiedSourceCode = sourceCode.replace(originalContentToBeReplaced, MODIFIED_CONTENT_TO_BE_REPLACED)
+		modifiedSourceCode = sourceCode.replaceArray(searchTerms, replacementTerms)
+		
 		return modifiedSourceCode
 	}
 
+	// Push new file to repo
 	async function mRun (_token) {
 		if(!localStorage.getItem("token")) localStorage.setItem("token", _token || prompt("Please enter your token", ""));
 		const token = localStorage.getItem("token")
