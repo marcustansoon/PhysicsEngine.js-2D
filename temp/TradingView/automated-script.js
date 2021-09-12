@@ -32,7 +32,7 @@
 		    
 		// Search for index
 		firstIndex = sourceCode.indexOf(`'{"free":{"CHART_STORAGE":{"limit":1}`),
-		secondIndex = sourceCode.indexOf(`{}}}'`, firstIndex) + 1 + 4,
+		secondIndex = sourceCode.indexOf(`{}}}'`, firstIndex) + 1 + 4
 		    
 		// Define search terms
 		searchTerms.push(sourceCode.substring(firstIndex, secondIndex))
