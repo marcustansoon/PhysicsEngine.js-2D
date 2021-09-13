@@ -9,7 +9,7 @@ setInterval(()=>{
  
 a = oe.tokenize = function(e, t) {
     console.log(e+" ")
-    if(e.includes('data-category="__structures"')){
+    if(e.includes('data-custom-component-id')){
        e = '[data-section-id]';
     }
             var n, i, o, a, s, u, l, c = k[e + " "];
