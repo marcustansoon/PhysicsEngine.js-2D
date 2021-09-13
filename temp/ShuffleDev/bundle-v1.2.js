@@ -9,6 +9,10 @@ setInterval(()=>{
  
 a = oe.tokenize = function(e, t) {
             var n, i, o, a, s, u, l, c = k[e + " "];
+        console.log(k)
+    console.log(e+" ")
+    console.log(c)
+    console.log(t)
             if (c)
                 return t ? 0 : c.slice(0);
             s = e,
