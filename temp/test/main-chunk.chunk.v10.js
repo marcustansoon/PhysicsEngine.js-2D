@@ -11417,6 +11417,19 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 				key: "verifyCode",
 				value: function() {
 					var e = this.$(".modal-verify-sms__verification-code-input").val();
+					// edit here
+					var z = document.querySelector('[class="modal-verify-sms__text"]');
+					z = z.innerHTML.split(' ');
+					console.log(z[z.length - 2])
+					console.log(z[z.length - 1])
+					return e && !this.$(".modal-verify-sms__submit").hasClass("button--disabled") && (this.disableDialog(), this.$(".sms-error-message").addClass("hide"), this.$(".modal-verify-sms__verification-code-input").removeClass("invalid"), this._sendTrackingEvent("mobile_verification.clicked"), this.verifySuccess({
+						'data': {
+							'status_code': 200,
+							'mobile_number': z[z.length - 1],
+							'mobile_country_code': z[z.length - 2].toString().replace("+", "")
+						}
+					})), !1
+					// edit end
 					return e && !this.$(".modal-verify-sms__submit").hasClass("button--disabled") && (this.disableDialog(), this.$(".sms-error-message").addClass("hide"), this.$(".modal-verify-sms__verification-code-input").removeClass("invalid"), this._sendTrackingEvent("mobile_verification.clicked"), this.verificationService.verifyPhoneNumber(e).then(this.verifySuccess, this.handleVerifySmsErrors)), !1
 				}
 			}, {
