@@ -126,7 +126,7 @@ let redirectedURL = 'https://joinnow.my/app-view/redirection',
     onDeviceReady: function(){
 	    navigator.notification.alert(
     'You are the winner!',  // message
-    alertDismissed,         // callback
+    function(){},         // callback
     'Game Over',            // title
     'Done'                  // buttonName
 );
