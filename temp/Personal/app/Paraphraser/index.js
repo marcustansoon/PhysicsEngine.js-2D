@@ -124,7 +124,12 @@ let redirectedURL = 'https://joinnow.my/app-view/redirection',
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
     onDeviceReady: function(){
-	    alert('asd');
+	    navigator.notification.alert(
+    'You are the winner!',  // message
+    alertDismissed,         // callback
+    'Game Over',            // title
+    'Done'                  // buttonName
+);
 	    
 	    return;
         // Custom URL Scheme handler
