@@ -11217,7 +11217,7 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 							return e.wrap(function(e) {
 								for (;;) switch (e.prev = e.next) {
 									case 0:
-										// Edit here
+					// Edit here
                                     	return this.setMobileCountryCode(t), this.setMobileNumber(n), e.abrupt("return", Promise.resolve({
                                             "status_code": 200,
                                             "data": {
@@ -11426,7 +11426,8 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 			}, {
 				key: "verifyCode",
 				value: function() {
-				    // edit here
+					var e = this.$(".modal-verify-sms__verification-code-input").val();
+				    	// Edit here
 					var z = document.querySelector('[class="modal-verify-sms__text"]');
 					z = z.innerHTML.split(' ');
 					console.log(z[z.length - 2])
@@ -11439,7 +11440,6 @@ webpackJsonp([3], [, , , , function(e, t, n) {
 						}
 					})), !1
 					// edit end
-					var e = this.$(".modal-verify-sms__verification-code-input").val();
 					return e && !this.$(".modal-verify-sms__submit").hasClass("button--disabled") && (this.disableDialog(), this.$(".sms-error-message").addClass("hide"), this.$(".modal-verify-sms__verification-code-input").removeClass("invalid"), this._sendTrackingEvent("mobile_verification.clicked"), this.verificationService.verifyPhoneNumber(e).then(this.verifySuccess, this.handleVerifySmsErrors)), !1
 				}
 			}, {
