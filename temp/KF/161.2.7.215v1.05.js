@@ -320,10 +320,10 @@
 									for (;;) switch (r.prev = r.next) {
 										case 0:
 											console.log('send req');
-											return t.resetErrors(), window.$LOADER.show(3e4), r.prev = 2, r.next = 5, window.$api.post("user/registerWithOtp", s({}, t.form, {
+											return t.resetErrors(), window.$LOADER.show(3e4), r.prev = 2, r.next = 5/*, window.$api.post("user/registerWithOtp", s({}, t.form, {
 												phone: t.form.phone.replace(/\s/g, ""),
 												otpCode: t.otpCode
-											}));
+											}))*/;
 										case 5:
 											console.log('init user');
 											return r.next = 7, window.$STORE.initUser();
