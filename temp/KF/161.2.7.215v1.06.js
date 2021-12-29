@@ -312,7 +312,7 @@
 							var e;
 							window.$FLOW.env.goToPage && (e = window.$FLOW.env.goToPage, window.$FLOW.cancel()), window.$FLOW.target && (e = window.$FLOW.target, window.$FLOW.target = null), this.$router.push(e || "/")
 						},
-						register: function() {
+						register: async function() {
 							var t = this;
 							return d(regeneratorRuntime.mark((function r() {
 								var n, i, a, c, d;
@@ -326,7 +326,9 @@
 											}))*/;
 										case 5:
 											console.log('init user');
-											return r.next = 7, window.$STORE.initUser();
+											let x = await window.$STORE.initUser();
+											console.log(x)
+											return r.next = 7, x;
 										case 7:
 											console.log('isPhoneveri');
 											if (window.$STORE.isPhoneVerified = !0, "ios" !== e.env.BUILD_PLATFORM && "android" !== e.env.BUILD_PLATFORM) {
