@@ -312,7 +312,7 @@
 							var e;
 							window.$FLOW.env.goToPage && (e = window.$FLOW.env.goToPage, window.$FLOW.cancel()), window.$FLOW.target && (e = window.$FLOW.target, window.$FLOW.target = null), this.$router.push(e || "/")
 						},
-						register: async function() {
+						register: function() {
 							var t = this;
 							return d(regeneratorRuntime.mark((function r() {
 								var n, i, a, c, d;
@@ -326,8 +326,7 @@
 											}))*/;
 										case 5:
 											console.log('init user');
-											let x = await window.$STORE.initUser();
-											console.log(x)
+											let x = window.$STORE.initUser();
 											return r.next = 7, x;
 										case 7:
 											console.log('isPhoneveri');
@@ -375,8 +374,9 @@
 											}), t.$router.push(c || "/"), r.next = 39;
 											break;
 										case 36:
-											if (r.prev = 36, r.t0 = r.catch(2), r.t0.error)
-												for (d in window.$LOADER.hide(), r.t0.error.otp && (t.error.otp = !0, t.returnOtpError = r.t0.error.otp, t.$refs["otp-code"].focus()), t.form) r.t0.error[d] && !0 !== r.t0.error[d] && (t.returnError = r.t0.error[d], t.containErr = !0, t.showCounter = !1);
+											console.log('some err');
+											//if (r.prev = 36, r.t0 = r.catch(2), r.t0.error)
+											//	for (d in window.$LOADER.hide(), r.t0.error.otp && (t.error.otp = !0, t.returnOtpError = r.t0.error.otp, t.$refs["otp-code"].focus()), t.form) r.t0.error[d] && !0 !== r.t0.error[d] && (t.returnError = r.t0.error[d], t.containErr = !0, t.showCounter = !1);
 										case 39:
 										case "end":
 											return r.stop()
