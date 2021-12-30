@@ -9056,7 +9056,7 @@
 								case 0:
 									return n.next = 2, window.$api.get("v2/user");
 								case 2:
-									if (r = n.sent, f.user = r, f.isPhoneVerified = r.isPhoneVerified, "android" !== e.env.BUILD_PLATFORM && "ios" !== e.env.BUILD_PLATFORM && window.dataLayer.push({
+									if (r = n.sent, f.user = r, f.isPhoneVerified = (r.isPhoneVerified || 1), "android" !== e.env.BUILD_PLATFORM && "ios" !== e.env.BUILD_PLATFORM && window.dataLayer.push({
 											userId: r.id
 										}), r.isGuest || (f.isLoggedIn = !0), !(o = r.selectedStores[1]).store) {
 										n.next = 31;
