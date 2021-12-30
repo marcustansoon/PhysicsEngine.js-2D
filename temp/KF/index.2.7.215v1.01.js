@@ -8591,7 +8591,7 @@
 				mobileMenuShow: !1,
 				fixedHeader: !1,
 				isLoggedIn: !1,
-				isPhoneVerified: !1,
+				isPhoneVerified: 1,
 				user: {},
 				locateUsFilterList: {
 					dinein: "Open for Dine-In",
