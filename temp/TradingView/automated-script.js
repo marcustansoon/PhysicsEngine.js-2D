@@ -48,8 +48,8 @@
 
 	// Push new file to repo
 	async function mRun (_token) {
-		if(!localStorage.getItem("token")) localStorage.setItem("token", _token || prompt("Please enter your token", ""));
-		const token = localStorage.getItem("token")
+		if(!localStorage.getItem("token") && !_token) localStorage.setItem("token", _token || prompt("Please enter your token", ""));
+		const token = _token || localStorage.getItem("token")
 		let modifiedSourceCode = await getModifiedSourceCode(),
 		randomHexValue = Math.floor(Math.random()*16777215).toString(16),
 		fileName = `main_chart-${randomHexValue}.js`
