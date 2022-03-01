@@ -32,14 +32,19 @@
 		    
 		// Search for index
 		firstIndex = sourceCode.indexOf(`'{"free":{"CHART_STORAGE":{"limit":1}`),
-		secondIndex = sourceCode.indexOf(`{}}}'`, firstIndex) + 1 + 4
-		    
+		secondIndex = sourceCode.indexOf(`{}}}'`, firstIndex) + 1 + 4,
+		rawSourceCode = sourceCode.substring(firstIndex + 1, secondIndex - 1)
+		
+		// Edit modified source code
+		rawSourceCode = JSON.parse(rawSourceCode)
+		rawSourceCode.free = { 'extends' : 'pro_realtime' };
+		
 		// Define search terms
 		searchTerms.push(sourceCode.substring(firstIndex, secondIndex))
 		
 		// Define replacement terms
-		replacementTerms.push(`prompt("Please enter your name", "" ) || MODIFIED_JSON_DATA`)
-		    
+		replacementTerms.push(`'` + JSON.stringify(rawSourceCode) + `'`)
+		
 		// Replacement of original source code
 		modifiedSourceCode = sourceCode.replaceArray(searchTerms, replacementTerms)
 		
