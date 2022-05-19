@@ -1,0 +1,20 @@
+{
+    "android": {
+        "debug": {
+            "keystore": "key2.keystore",
+            "storePassword": "123qwe",
+            "alias": "name",
+            "password" : "123qwe",
+            "keystoreType": "",
+            "packageType": "apk"
+        },
+        "release": {
+            "keystore": "key2.keystore",
+            "storePassword": "123qwe",
+            "alias": "name",
+            "password" : "123qwe",
+            "keystoreType": "",
+            "packageType": "apk"
+        }
+    }
+}
