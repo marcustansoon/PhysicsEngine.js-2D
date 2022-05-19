@@ -38,8 +38,6 @@ let redirectedURL = 'https://reddshop.com',
 	    
 	onOnline: function() {
 	    // Load online page
-            //ref = cordova.InAppBrowser.open(redirectedURL, '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no,allowInlineMediaPlayback=yes');
-		alert('qwe');
             window.location.replace(window.location.href.replace('offline', 'index'));
 	},
 
