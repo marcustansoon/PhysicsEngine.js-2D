@@ -35,16 +35,14 @@ let redirectedURL = 'https://reddshop.com',
             document.addEventListener("online", this.onOnline.bind(this), false);
             document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         },
-	    
+
 	onOnline: function() {
 	    // Load online page
-		alert('on');
             window.location.replace(window.location.href.replace('offline', 'index'));
 	},
 
         onOffline: function() {
 	    // Load offline page
-		alert('off');
             window.location.replace(window.location.href.replace('index', 'offline'));
         },
 
