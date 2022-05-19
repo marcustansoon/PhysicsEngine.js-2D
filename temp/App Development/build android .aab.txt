@@ -1,1 +1,1 @@
-cordova build android --prod --release -- --packageType=bundle
+cordova build android --prod --release --packageType=bundle
