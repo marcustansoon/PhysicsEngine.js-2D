@@ -38,11 +38,13 @@ let redirectedURL = 'https://reddshop.com',
 	    
 	onOnline: function() {
 	    // Load online page
+		alert('on');
             window.location.replace(window.location.href.replace('offline', 'index'));
 	},
 
         onOffline: function() {
 	    // Load offline page
+		alert('off');
             window.location.replace(window.location.href.replace('index', 'offline'));
         },
 
