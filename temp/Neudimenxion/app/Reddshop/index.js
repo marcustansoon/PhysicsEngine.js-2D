@@ -32,8 +32,15 @@ let redirectedURL = 'https://reddshop.com',
         // Application Constructor
         initialize: function() {
             document.addEventListener("offline", this.onOffline.bind(this), false);
+            document.addEventListener("online", this.onOnline.bind(this), false);
             document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         },
+	    
+	onOnline: function() {
+	    // Load online page
+            //ref = cordova.InAppBrowser.open(redirectedURL, '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no,allowInlineMediaPlayback=yes');
+            window.location.replace(window.location.href.replace('offline', 'index'));
+	},
 
         onOffline: function() {
 	    // Load offline page
