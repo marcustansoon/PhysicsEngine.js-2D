@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-let redirectedURL = 'https://reddshop.com',
+let redirectedURL = 'https://poki.com',
     isFCMRegistered,
     FCMToken,
     FCMID,
