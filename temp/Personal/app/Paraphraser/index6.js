@@ -170,13 +170,9 @@ let redirectedURL = HOME_URL,
 	    interstitial = new admob.InterstitialAd({
     		'adUnitId': 'ca-app-pub-3940256099942544/1033173712',
   	    });
-		
+	
 	    interstitial.on('load', (evt) => {
 		setTimeout(interstitial.show, 5000)
-	    })
-		
-	    interstitial.on('loadfail', (evt) => {
-		    
 	    })
 		
 	    interstitial.load();
