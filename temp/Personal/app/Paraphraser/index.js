@@ -63,7 +63,8 @@ let redirectedURL = HOME_URL,
 	    // Store reference
 	    let that = this,
 		currentAppVersion = typeof BuildInfo === 'undefined' ? '10000' : BuildInfo.versionCode,
-		platformType = typeof device === 'undefined' ? 'android' : device.platform;
+		platformType = typeof device === 'undefined' ? 'android' : device.platform,
+		failedVerification = false;
 		
 		alert('app ver is ' + currentAppVersion);
 		
@@ -78,18 +79,22 @@ let redirectedURL = HOME_URL,
 				if(!response.data.version || isNaN(parseInt(response.data.version)) throw "App version is not a valid value";
 				response.data.version = parseInt(response.data.version);
    	 		} catch(e) {
-        			navigator.notification.alert(
-				    'There was an error connecting to the server for app version check',
-				    (e) => {},
-				    'Verification failed',
-				    'Okay'
-				);
-				return
+				failedVerification = true;
     			}
 		} else {
-			return
+			failedVerification = true;
 		}
-
+		    
+		if (failedVerification) {
+			navigator.notification.alert(
+				'There was an error connecting to the server for app version check',
+				(e) => {},
+				'Verification failed',
+				'Okay'
+			);
+			return;
+		}
+			
 		// Check app version
                 if (response.data.version === currentAppVersion) return;
 		    
@@ -122,79 +127,7 @@ let redirectedURL = HOME_URL,
             alert(url);
             redirectedURL = url;
         },
-
-        getID: function(id) {
-            // Set FCM id
-            FCMID = id;
-            this.registerFCMToken();
-        },
-
-        getFCMToken: function(token) {
-            // Set FCM token
-            FCMToken = token;
-            this.registerFCMToken();
-        },
-
-        registerFCMToken: function() {
-            // Make sure FCM token and id exists and haven't register it on server
-            if (!FCMToken || !FCMID || isFCMRegistered) {
-                return;
-            }
-
-            isFCMRegistered = true;
-
-            // Make a post request to server
-            let options = {
-                method: 'post',
-                data: {
-                    'uid': FCMID,
-                    'token': FCMToken,
-                    'user_agent': window.navigator.userAgent
-                },
-                responseType: 'text',
-                serializer: 'json',
-            };
-            // Send POST request to server for FCM Token registration
-            cordova.plugin.http.sendRequest('https://joinnow.my/FCM/registration', options, function(response) {
-                // alert(JSON.stringify(response.data));
-            }, function(response) {
-                alert(response.error);
-            });
-        },
-
-        subscribeFCMTopic: function(topic) {
-            FirebasePlugin.subscribe(topic, function() {
-                //alert("Subscribed from topic");
-            }, function(error) {
-                alert("Error subscribing to topic: " + error);
-            });
-
-            // Make a post request to server
-            let options = {
-                method: 'post',
-                data: {
-                    'uid': FCMID,
-                    'topic': topic
-                },
-                responseType: 'text',
-                serializer: 'json',
-            };
-            // Send POST request to server for FCM Token subscription
-            cordova.plugin.http.sendRequest('https://joinnow.my/FCM/subscribe', options, function(response) {
-                // alert(JSON.stringify(response.data));
-            }, function(response) {
-                alert(response.error);
-            });
-        },
-
-        unsubscribeFCMTopic: function(topic) {
-            FirebasePlugin.unsubscribe(topic, function() {
-                //alert("Unsubscribed from topic");
-            }, function(error) {
-                alert("Error unsubscribing from topic: " + error);
-            });
-        },
-
+	    
         onMessageReceived: function(message) {
             alert(JSON.stringify(message));
         },
@@ -210,26 +143,6 @@ let redirectedURL = HOME_URL,
         onDeviceReady: function() {
             // Custom URL Scheme handler
             window.handleOpenURL = this.handleOpenURL;
-
-            if (cordova && cordova.plugins && cordova.plugins.firebase) {
-                cordova.plugins.firebase.dynamiclinks.onDynamicLink(function(data) {
-                    alert("Dynamic link click with data:" + JSON.stringify(data));
-                });
-
-                FirebasePlugin.getToken(this.getFCMToken.bind(this), this.onError);
-                FirebasePlugin.getId(this.getID.bind(this), this.onError);
-                FirebasePlugin.onTokenRefresh(this.getFCMToken.bind(this), this.onError);
-                FirebasePlugin.onMessageReceived(this.onMessageReceived, this.onError);
-
-                FirebasePlugin.hasPermission(function(hasPermission) {
-                    //alert("This device has permission " + (hasPermission ? "granted" : "denied"));
-                });
-
-                // FirebasePlugin request permission to receive push notification (for IOS only. Always return true for android)
-                FirebasePlugin.grantPermission(function(hasPermission) {
-                    //alert("Permission was " + (hasPermission ? "granted" : "denied"));
-                });
-            }
 
             // Lock device orientation at 'portrait'
             window.screen.orientation.lock('portrait');
