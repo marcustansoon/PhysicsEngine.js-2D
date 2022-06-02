@@ -173,11 +173,11 @@ let redirectedURL = HOME_URL,
 	
 	    interstitial.on('load', (evt) => {
 		setTimeout(() => {
-			interstitial.show()
-		}, 5000)
+			interstitial.show();
+		}, 5000);
 	    })
-		
-	    interstitial.load();
+	
+	    navigator.connection.type !== Connection.NONE && interstitial.load();
         },
 
         init: function() {
