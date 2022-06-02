@@ -172,7 +172,9 @@ let redirectedURL = HOME_URL,
   	    });
 	
 	    interstitial.on('load', (evt) => {
-		setTimeout(interstitial.show, 5000)
+		setTimeout(() => {
+			interstitial.show()
+		}, 5000)
 	    })
 		
 	    interstitial.load();
