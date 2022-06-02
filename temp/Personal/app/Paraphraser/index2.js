@@ -76,7 +76,7 @@ let redirectedURL = HOME_URL,
 		if (response.data) {
 			try {
         			response.data = JSON.parse(response.data); // eg. {"version":10033, "force": 1}
-				if(!response.data.version || isNaN(parseInt(response.data.version)) throw "App version is not a valid value";
+				if(!response.data.version || isNaN(parseInt(response.data.version))) throw "App version is not a valid value";
 				response.data.version = parseInt(response.data.version);
    	 		} catch(e) {
 				failedVerification = true;
