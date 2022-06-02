@@ -166,21 +166,20 @@ let redirectedURL = HOME_URL,
                 this.addIABEventListener();
             }, 5500);
 		
+	    // Google Admob setup
 	    interstitial = new admob.InterstitialAd({
     		'adUnitId': 'ca-app-pub-3940256099942544/1033173712',
   	    });
 		
 	    interstitial.on('load', (evt) => {
-		    alert(JSON.stringify(evt));
-		    interstitial.show();
+		setTimeout(interstitial.show, 5000)
 	    })
 		
 	    interstitial.on('loadfail', (evt) => {
-		alert('failed');
-		    alert(JSON.stringify(evt));
+		    
 	    })
-		alert('d');
-	    interstitial.load().then(interstitial.show);
+		
+	    interstitial.load();
         },
 
         init: function() {
