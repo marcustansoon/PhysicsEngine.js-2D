@@ -48,6 +48,8 @@ let redirectedURL = HOME_URL,
         },
 
         checkAppVersion: function() {
+		alert(device.uuid);
+		
             // Exit version check if in offline mode
             if (navigator.connection.type === Connection.NONE) {
                 return;
