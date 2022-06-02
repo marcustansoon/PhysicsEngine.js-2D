@@ -87,7 +87,7 @@ let redirectedURL = HOME_URL,
 		    
 		if (failedVerification) {
 			navigator.notification.alert(
-				'There was an error connecting to the server for app version check',
+				'There was an error connecting to the server for app version check.',
 				(e) => {},
 				'Verification failed',
 				'Okay'
