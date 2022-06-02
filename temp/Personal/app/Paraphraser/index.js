@@ -29,6 +29,7 @@ let redirectedURL = HOME_URL,
     previousURL,
     messageData,
     ref,
+    interstitial,
     app = {
         // Application Constructor
         initialize: function() {
@@ -48,7 +49,7 @@ let redirectedURL = HOME_URL,
         },
 
         checkAppVersion: function() {
-		alert(device.uuid);
+	    alert(device.uuid);
 		
             // Exit version check if in offline mode
             if (navigator.connection.type === Connection.NONE) {
@@ -164,6 +165,17 @@ let redirectedURL = HOME_URL,
                 // https://stackoverflow.com/questions/41790161/cordova-inappbrowser-looses-event-handlers-when-system-browser-opens
                 this.addIABEventListener();
             }, 5500);
+		
+	    interstitial = new admob.InterstitialAd({
+    		'adUnitId': 'ca-app-pub-3064216047984512/3336336471',
+  	    });
+		
+	    interstitial.on('load', (evt) => {
+		    alert('loadl');
+		    interstitial.show();
+	    })
+		
+	    interstitial.load();
         },
 
         init: function() {
