@@ -53,7 +53,7 @@ let redirectedURL = HOME_URL,
                 return;
             }
 
-            // Make a post request to server
+            // Set GET request parameters
             let options = {
                 method: 'GET',
                 responseType: 'text',
@@ -62,14 +62,19 @@ let redirectedURL = HOME_URL,
 	    
 	    // Store reference
 	    let that = this,
-		currentAppVersion = typeof BuildInfo === 'undefined' ? '1.0.1' : BuildInfo.versionCode,
+		currentAppVersion = typeof BuildInfo === 'undefined' ? '1.2.0' : BuildInfo.versionCode,
 		platformType = typeof device === 'undefined' ? 'android' : device.platform;
 		
+		alert('app ver is ' + currentAppVersion);
+		alert('app ver is ' + typeof currentAppVersion);
 		
-            // Send POST request to server for FCM Token registration
-            cordova.plugin.http.sendRequest('https://reddshop.com/app-version?v=' + currentAppVersion + '&platform=' + platformType, options, function(response) {
-                // 'response.data' -> app store URL
-                if (!response.data) return;
+            // Send GET request to server for FCM Token registration
+            cordova.plugin.http.sendRequest('https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/app-version', options, function(response) {
+		alert('response google app ver is ' + response.data);
+		    
+                // Where 'response.data' -> latest app version on Google playstore, eg. 1.0.1
+                if (response.data && response.data === currentAppVersion) return;
+		    
 		// Prompt user to update app
                 navigator.notification.confirm(
                     'Please update your app to the latest version.', // message
@@ -77,7 +82,7 @@ let redirectedURL = HOME_URL,
 			// Exit if 'cancel' button is pressed
 			if(pressedButtonIndex === 2) return;
 			// Open app store URL
-                        ref = cordova.InAppBrowser.open(response.data, '_system', '');
+                        ref = cordova.InAppBrowser.open('google.com', '_system', '');
                         that.addIABEventListener();
                     }, // callback to invoke with index of button pressed
                     'New version is available', // title
