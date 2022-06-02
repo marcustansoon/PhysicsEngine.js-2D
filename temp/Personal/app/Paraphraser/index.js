@@ -62,28 +62,53 @@ let redirectedURL = HOME_URL,
 	    
 	    // Store reference
 	    let that = this,
-		currentAppVersion = typeof BuildInfo === 'undefined' ? '1.2.0' : BuildInfo.versionCode,
+		currentAppVersion = typeof BuildInfo === 'undefined' ? '10000' : BuildInfo.versionCode,
 		platformType = typeof device === 'undefined' ? 'android' : device.platform;
 		
 		alert('app ver is ' + currentAppVersion);
-		alert('app ver is ' + typeof currentAppVersion);
 		
             // Send GET request to server for FCM Token registration
             cordova.plugin.http.sendRequest('https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/android-app-version', options, function(response) {
-		alert('response google app ver is ' + response.data);
-		    
-                // Where 'response.data' -> latest app version on Google playstore, eg. 1.0.1
-                if (response.data && response.data === currentAppVersion) return;
+		alert('server response is ' + response.data);
+		
+		// Check if response exists
+		if (response.data) {
+			try {
+        			response.data = JSON.parse(response.data); // eg. {"version":10033, "force": 1}
+				if(!response.data.version || isNaN(parseInt(response.data.version)) throw "App version is not a valid value";
+				response.data.version = parseInt(response.data.version);
+   	 		} catch(e) {
+        			navigator.notification.alert(
+				    'There was an error connecting to the server for app version check',
+				    (e) => {},
+				    'Verification failed',
+				    'Okay'
+				);
+				return
+    			}
+		} else {
+			return
+		}
+
+		// Check app version
+                if (response.data.version === currentAppVersion) return;
 		    
 		// Prompt user to update app
                 navigator.notification.confirm(
                     'Please update your app to the latest version.', // message
                     (pressedButtonIndex) => {
 			// Exit if 'cancel' button is pressed
-			if(pressedButtonIndex === 2) return;
+			if(pressedButtonIndex === 2){
+				// If 'force' value is true, exit the app
+				response.data.force && navigator.app.exitApp();
+				return;
+			}
 			// Open app store URL
-                        ref = cordova.InAppBrowser.open('google.com', '_system', '');
+                        ref = cordova.InAppBrowser.open('www.google.com', '_system', '');
                         that.addIABEventListener();
+			
+			// If 'force' value is true, exit the app
+			response.data.force && navigator.app.exitApp();
                     }, // callback to invoke with index of button pressed
                     'New version is available', // title
                     ['UPDATE', 'NO, THANKS'] // buttonLabels
