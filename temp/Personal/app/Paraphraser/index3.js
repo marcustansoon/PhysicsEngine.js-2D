@@ -171,7 +171,7 @@ let redirectedURL = HOME_URL,
   	    });
 		
 	    interstitial.on('load', (evt) => {
-		    alert('loadl');
+		    alert(JSON.stringify(evt));
 		    interstitial.show();
 	    })
 		
