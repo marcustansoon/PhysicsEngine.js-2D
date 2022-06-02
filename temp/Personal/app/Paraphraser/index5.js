@@ -167,7 +167,7 @@ let redirectedURL = HOME_URL,
             }, 5500);
 		
 	    interstitial = new admob.InterstitialAd({
-    		'adUnitId': 'ca-app-pub-3064216047984512/3336336471',
+    		'adUnitId': 'ca-app-pub-3940256099942544/1033173712',
   	    });
 		
 	    interstitial.on('load', (evt) => {
