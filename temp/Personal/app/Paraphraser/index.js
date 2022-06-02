@@ -166,7 +166,7 @@ let redirectedURL = HOME_URL,
                 this.addIABEventListener();
             }, 5500);
 		
-	    // Google Admob setup
+	    // Init Google Admob setup
 	    interstitial = new admob.InterstitialAd({
     		'adUnitId': 'ca-app-pub-3940256099942544/1033173712',
   	    });
@@ -174,9 +174,12 @@ let redirectedURL = HOME_URL,
 	    interstitial.on('load', (evt) => {
 		setTimeout(() => {
 			interstitial.show();
-		}, 5000);
+		}, 8000);
 	    })
-	
+		
+		alert(navigator.userAgent);
+		
+	    // Load Admob 
 	    navigator.connection.type !== Connection.NONE && interstitial.load();
         },
 
