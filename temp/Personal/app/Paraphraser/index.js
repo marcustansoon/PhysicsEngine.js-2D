@@ -69,7 +69,7 @@ let redirectedURL = HOME_URL,
 		alert('app ver is ' + typeof currentAppVersion);
 		
             // Send GET request to server for FCM Token registration
-            cordova.plugin.http.sendRequest('https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/app-version', options, function(response) {
+            cordova.plugin.http.sendRequest('https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/android-app-version', options, function(response) {
 		alert('response google app ver is ' + response.data);
 		    
                 // Where 'response.data' -> latest app version on Google playstore, eg. 1.0.1
