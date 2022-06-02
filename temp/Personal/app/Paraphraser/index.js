@@ -66,12 +66,8 @@ let redirectedURL = HOME_URL,
 		platformType = typeof device === 'undefined' ? 'android' : device.platform,
 		failedVerification = false;
 		
-		alert('app ver is ' + currentAppVersion);
-		
             // Send GET request to server for FCM Token registration
             cordova.plugin.http.sendRequest('https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/android-app-version', options, function(response) {
-		alert('server response is ' + response.data);
-		
 		// Check if response exists
 		if (response.data) {
 			try {
