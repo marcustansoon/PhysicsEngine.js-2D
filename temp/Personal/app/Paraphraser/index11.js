@@ -63,11 +63,12 @@ let redirectedURL = HOME_URL,
 	    
 	    // Store reference
 	    let that = this,
-		currentAppVersion = typeof BuildInfo === 'undefined' ? '10000' : BuildInfo.versionCode,
+		currentAppVersion = typeof BuildInfo === 'undefined' ? '10000' : device.version,
 		platformType = typeof device === 'undefined' ? 'android' : device.platform,
 		failedAppVersionVerification = false;
 		alert('app ver is ');
 		alert(currentAppVersion);
+		alert(typeof currentAppVersion);
             // Send GET request to server for FCM Token registration
             cordova.plugin.http.sendRequest('https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/android-app-version', options, function(response) {
 		// Check if response exists
