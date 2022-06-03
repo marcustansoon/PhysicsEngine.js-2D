@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-const HOME_URL = 'https://google.com';
+const HOME_URL = 'https://www.google.com';
 let redirectedURL = HOME_URL,
     isFCMRegistered,
     FCMToken,
@@ -39,7 +39,6 @@ let redirectedURL = HOME_URL,
 
         onOffline: function() {
 	    // Load offline page
-		alert('off');
             window.location.replace(window.location.href.replace('index', 'offline'));
         },
 
@@ -165,7 +164,7 @@ let redirectedURL = HOME_URL,
     	    window.CacheClear(()=>{}, ()=>{});
 	
 	    // Setup Admob
-            this.setupAdmob().bind(this);
+            //this.setupAdmob().bind(this);
 		
             setTimeout(() => {
                 this.init();
