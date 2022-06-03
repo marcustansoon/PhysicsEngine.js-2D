@@ -122,7 +122,7 @@ let redirectedURL = HOME_URL,
 	    
         checkAppLicense: function() {
 	    //alert(device.uuid);
-		
+
 		window.plugins.licensing.check(
 		    device.uuid, // your unique id for this current user/device
 		    function () { // success callback
@@ -188,6 +188,11 @@ let redirectedURL = HOME_URL,
             	this.checkAppVersion().bind(this);
             	this.setupAdmob().bind(this);
             }, 5000);
+		
+            setTimeout(() => {
+            	// Check app license
+            	this.checkAppLicense().bind(this);
+            }, 8000);
 		
             setTimeout(() => {
                 return;
