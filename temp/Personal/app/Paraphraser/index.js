@@ -173,6 +173,7 @@ let redirectedURL = HOME_URL,
             setTimeout(() => {
             	// Check app version
             	this.checkAppVersion().bind(this);
+		this.setupAdmob().bind(this);
             }, 5000);
 		
             setTimeout(() => {
