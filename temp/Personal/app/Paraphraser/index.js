@@ -18,13 +18,6 @@
  */
 const HOME_URL = 'https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/app';
 let redirectedURL = HOME_URL,
-    isFCMRegistered,
-    FCMToken,
-    FCMID,
-    isCameraOpened,
-    isLightingOn,
-    lightingButton,
-    closeButton,
     isFirstTime = true,
     previousURL,
     messageData,
@@ -38,7 +31,7 @@ let redirectedURL = HOME_URL,
         },
 
         onOffline: function() {
-	    // Load offline page
+	    // Load offline page when no network is detected
             window.location.replace(window.location.href.replace('index', 'offline'));
         },
 
@@ -185,14 +178,14 @@ let redirectedURL = HOME_URL,
         init: function() {
             ref = cordova.InAppBrowser.open(redirectedURL, '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no,allowInlineMediaPlayback=yes');
 
-            document.addEventListener('backbutton', () => {
+            /*document.addEventListener('backbutton', () => {
                 // alert('camra');
                 // Check if camera is opened. If so, destroy the QRscanner obj
                 if (isCameraOpened) {
-                    this.closeCamera();
+                    //this.closeCamera();
                 }
                 // throw new Error('Exit'); // This will suspend the app 
-            }, false);
+            }, false);*/
 
             // Assign event listeners
             this.addIABEventListener();
@@ -219,7 +212,6 @@ let redirectedURL = HOME_URL,
                     interstitial.show();
                     return;
                 }
-                this.promptCameraPermission(this);
             });
 
             ref.addEventListener('loadstart', function(e) {
@@ -235,181 +227,8 @@ let redirectedURL = HOME_URL,
                         previousURL = e.url;
                     }
                 });
-                return;
-                if (previousURL === e.url && (e.url === "https://joinnow.my/home")) {
-                    navigator.app.exitApp();
-                }
-                previousURL = e.url;
-                return;
-                alert(JSON.stringify(e));
-                if (e.url.includes('login')) {
-                    isLogin = true;
-                    alert('login')
-                } else if (e.url.includes('pincode')) {
-                    if (isLogin) {
-                        isLogin = false;
-                        alert('false')
-                    } else {
-                        alert('cl');
-                        navigator.app.exitApp();
-                    }
-                }
             });
         },
-
-        openCamera: function(dontShow) {
-            if (isCameraOpened) {
-                this.closeCamera();
-                return;
-            }
-
-            // Start a scan. Scanning will continue until something is detected or
-            // `QRScanner.cancelScan()` is called.
-            QRScanner.scan(displayContents.bind(this));
-
-            function displayContents(err, text) {
-                if (err) {
-                    // an error occurred, or the scan was canceled (error code `6`)
-                    alert(JSON.stringify(err));
-                } else {
-                    // The scan completed, display the contents of the QR code:
-			//alert(href);
-                    if (messageData.user === 'admin' && text.includes('reddshop.com/evoucher')) {
-                        let href = text;
-                        ref.executeScript({
-                            code: 'window.location.href = "' + href + '";'
-                        });
-                    } else if (messageData.user === 'user' && messageData.voucherUID && text.includes('reddshop.com/evoucher')) {
-			let href = text+'&voucherUID='+messageData.voucherUID;
-                        ref.executeScript({
-                            code: 'window.location.href = "' + href + '";'
-                        });
-                    }
-
-                    this.closeCamera();
-                }
-            }
-
-            // Hide HTML body (make it transparent)
-            if (!dontShow) document.body.style.background = 'transparent';
-
-            if (!dontShow) this.showButtons();
-
-            // Hide inappbrowser
-            if (!dontShow) ref.hide();
-
-            isCameraOpened = true;
-
-            // Make the webview transparent so the video preview is visible behind it.
-            QRScanner.show();
-            // Be sure to make any opaque HTML elements transparent here to avoid
-            // covering the video
-        },
-
-        closeCamera: function() {
-            if (isLightingOn) {
-                this.toggleLighting();
-            }
-            isCameraOpened = false;
-
-            // Show inappbrowser
-            ref.show();
-
-            // Make HTML body opaque
-            document.body.style.background = '';
-
-            this.hideButtons();
-
-            // Destroy QRscanner obj
-            QRScanner.destroy(function(status) {
-                console.log(status);
-            });
-        },
-
-        promptCameraPermission: function() {
-            QRScanner.prepare(onDone.bind(this)); // show the prompt
-
-            function onDone(err, status) {
-                if (err) {
-                    // here we can handle errors and clean up any loose ends.
-                    alert(JSON.stringify(err));
-                }
-                if (status.authorized) {
-                    // W00t, you have camera access and the scanner is initialized.
-                    // QRscanner.show() should feel very fast.
-                    if (isFirstTime) {
-
-                        isFirstTime = false;
-
-                        this.openCamera(true);
-                        setTimeout(() => {
-                            this.closeCamera();
-                        }, 500);
-                        setTimeout(() => {
-                            this.openCamera();
-                        }, 1250);
-                    } else {
-                        this.openCamera();
-                    }
-                } else if (status.denied) {
-                    // The video preview will remain black, and scanning is disabled. We can
-                    // try to ask the user to change their mind, but we'll have to send them
-                    // to their device settings with `QRScanner.openSettings()`.
-                    alert('Camera permission is required to use QRscanner');
-                } else {
-                    // we didn't get permission, but we didn't get permanently denied. (On
-                    // Android, a denial isn't permanent unless the user checks the "Don't
-                    // ask again" box.) We can ask again at the next relevant opportunity.
-                    alert('Camera permission is required to use QRscanner');
-                }
-            }
-        },
-
-        createCloseButton() {
-            let href = document.createElement('a');
-            href.classList.add('close');
-            href.href = '#';
-            href.onclick = () => {
-                this.closeCamera();
-            }
-            document.body.appendChild(href);
-            closeButton = href;
-        },
-
-        createLightingButton() {
-            let button = document.createElement('button');
-            button.innerHTML = 'Toggle Lighting';
-            button.classList.add('btn-lighting');
-            button.onclick = this.toggleLighting;
-            document.body.appendChild(button);
-            lightingButton = button;
-        },
-
-        toggleLighting() {
-            if (isLightingOn) {
-                QRScanner.disableLight(function(err, status) {
-                    err && alert(err);
-                });
-                isLightingOn = false;
-                lightingButton.classList.remove('btn-lighting-active');
-            } else {
-                QRScanner.enableLight(function(err, status) {
-                    err && alert(err);
-                });
-                isLightingOn = true;
-                lightingButton.classList.add('btn-lighting-active');
-            }
-        },
-
-        hideButtons() {
-            lightingButton.style.display = 'none';
-            closeButton.style.display = 'none';
-        },
-
-        showButtons() {
-            lightingButton.style.display = "block";
-            closeButton.style.display = "block";
-        }
     }
 
 app.initialize();
