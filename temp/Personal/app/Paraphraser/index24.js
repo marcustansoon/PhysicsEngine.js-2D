@@ -33,17 +33,19 @@ let redirectedURL = HOME_URL,
     app = {
         // Application Constructor
         initialize: function() {
-            //document.addEventListener("offline", this.onOffline.bind(this), false);
-            //document.addEventListener("online", this.onOnline.bind(this), false);
+            document.addEventListener("offline", this.onOffline.bind(this), false);
+            document.addEventListener("online", this.onOnline.bind(this), false);
             document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         },
 
 	onOnline: function() {
+		alert('on');
 	    // Load online page
             window.location.replace(window.location.href.replace('offline', 'index'));
 	},
 
         onOffline: function() {
+		alert('off');
 	    // Load offline page
             window.location.replace(window.location.href.replace('index', 'offline'));
         },
