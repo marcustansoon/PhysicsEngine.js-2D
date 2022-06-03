@@ -63,7 +63,7 @@ let redirectedURL = HOME_URL,
 	    
 	    // Store reference
 	    let that = this,
-		currentAppVersion = typeof device === 'undefined' ? '10000' : device.version,
+		currentAppVersion = typeof BuildInfo === 'undefined' ? '10000' : BuildInfo.versionCode,
 		platformType = typeof device === 'undefined' ? 'android' : device.platform,
 		failedAppVersionVerification = false;
 		alert('app ver is ');
