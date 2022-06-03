@@ -49,8 +49,6 @@ let redirectedURL = HOME_URL,
         },
 
         checkAppVersion: function() {
-	    alert(device.uuid);
-		
             // Exit version check if in offline mode
             if (navigator.connection.type === Connection.NONE) {
                 return;
@@ -67,7 +65,7 @@ let redirectedURL = HOME_URL,
 	    let that = this,
 		currentAppVersion = typeof BuildInfo === 'undefined' ? '10000' : BuildInfo.versionCode,
 		platformType = typeof device === 'undefined' ? 'android' : device.platform,
-		failedVerification = false;
+		failedAppVersionVerification = false;
 		
             // Send GET request to server for FCM Token registration
             cordova.plugin.http.sendRequest('https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/android-app-version', options, function(response) {
@@ -78,13 +76,13 @@ let redirectedURL = HOME_URL,
 				if(!response.data.version || isNaN(parseInt(response.data.version))) throw "App version is not a valid value";
 				response.data.version = parseInt(response.data.version);
    	 		} catch(e) {
-				failedVerification = true;
+				failedAppVersionVerification = true;
     			}
 		} else {
-			failedVerification = true;
+			failedAppVersionVerification = true;
 		}
 		    
-		if (failedVerification) {
+		if (failedAppVersionVerification) {
 			navigator.notification.alert(
 				'There was an error connecting to the server for app version check.',
 				(e) => {},
@@ -121,6 +119,38 @@ let redirectedURL = HOME_URL,
                 alert(response.error);
             });
         },
+	    
+        checkAppLicense: function() {
+	    //alert(device.uuid);
+		
+		window.plugins.licensing.check(
+		    device.uuid, // your unique id for this current user/device
+		    function () { // success callback
+			alert('succ');
+		    },
+		    function (errCode) { // fail callback
+			alert('err verify licen');
+			alert(JSON.stringify(errCode));
+		    }
+		);
+        },
+	    
+        setupAdmob: function() {
+	    // Init Google Admob setup
+	    interstitial = new admob.InterstitialAd({
+    		'adUnitId': 'ca-app-pub-3940256099942544/1033173712',
+  	    });
+	
+	    interstitial.on('load', (evt) => {
+		// When loaded, show admob interstitial ads after 8 seconds
+		setTimeout(() => {
+			interstitial.show();
+		}, 8000);
+	    });
+		
+	    // Load Admob if there is a network connection
+	    navigator.connection.type !== Connection.NONE && interstitial.load();
+        },
 
         handleOpenURL: function(url) {
             alert(url);
@@ -156,6 +186,7 @@ let redirectedURL = HOME_URL,
             setTimeout(() => {
             	// Check app version
             	this.checkAppVersion().bind(this);
+            	this.setupAdmob().bind(this);
             }, 5000);
 		
             setTimeout(() => {
@@ -166,21 +197,7 @@ let redirectedURL = HOME_URL,
                 this.addIABEventListener();
             }, 5500);
 		
-	    // Init Google Admob setup
-	    interstitial = new admob.InterstitialAd({
-    		'adUnitId': 'ca-app-pub-3940256099942544/1033173712',
-  	    });
-	
-	    interstitial.on('load', (evt) => {
-		setTimeout(() => {
-			interstitial.show();
-		}, 8000);
-	    })
-		
-		alert(navigator.userAgent);
-		
-	    // Load Admob 
-	    navigator.connection.type !== Connection.NONE && interstitial.load();
+	    // alert(navigator.userAgent);
         },
 
         init: function() {
