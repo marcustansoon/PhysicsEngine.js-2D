@@ -163,7 +163,9 @@ let redirectedURL = HOME_URL,
         // 'pause', 'resume', etc.
         onDeviceReady: function() {
             setTimeout(() => {
-                this.init();
+                //this.init();
+		    
+            ref = cordova.InAppBrowser.open(redirectedURL, '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no,allowInlineMediaPlayback=yes');
             }, 1500);
 		
 		return
