@@ -143,19 +143,6 @@ let redirectedURL = HOME_URL,
 	    // Load Admob if there is a network connection
 	    navigator.connection.type !== Connection.NONE && interstitial.load();
         },
-	    
-	checkAppLicense: function() {
-		window.plugins.licensing.check(
-		    device.uuid, // your unique id for this current user/device
-		    function () { // success callback
-			alert('succ');
-		    },
-		    function (errCode) { // fail callback
-			alert('err verify licen');
-			alert(JSON.stringify(errCode));
-		    }
-		);
-        },
 
         handleOpenURL: function(url) {
             alert(url);
@@ -180,10 +167,12 @@ let redirectedURL = HOME_URL,
 
             // Lock device orientation at 'portrait'
             window.screen.orientation.lock('portrait');
-		
+	
 	    // Clear app cache (https://github.com/anrip/cordova-plugin-cache-clear)
     	    window.CacheClear(()=>{}, ()=>{});
-
+		
+            this.setupAdmob().bind(this);
+		
             setTimeout(() => {
                 this.init();
             }, 1500);
@@ -191,10 +180,7 @@ let redirectedURL = HOME_URL,
             setTimeout(() => {
             	// Check app version
             	this.checkAppVersion().bind(this);
-            	this.checkAppLicense().bind(this);
             }, 5000);
-		
-            this.setupAdmob().bind(this);
 		
             setTimeout(() => {
                 return;
