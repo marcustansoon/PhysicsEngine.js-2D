@@ -66,7 +66,7 @@ let redirectedURL = HOME_URL,
 		currentAppVersion = typeof BuildInfo === 'undefined' ? '10000' : BuildInfo.versionCode,
 		platformType = typeof device === 'undefined' ? 'android' : device.platform,
 		failedAppVersionVerification = false;
-		
+		alert(currentAppVersion);
             // Send GET request to server for FCM Token registration
             cordova.plugin.http.sendRequest('https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/android-app-version', options, function(response) {
 		// Check if response exists
@@ -121,8 +121,6 @@ let redirectedURL = HOME_URL,
         },
 	    
         checkAppLicense: function() {
-	    //alert(device.uuid);
-
 		window.plugins.licensing.check(
 		    device.uuid, // your unique id for this current user/device
 		    function () { // success callback
@@ -188,11 +186,6 @@ let redirectedURL = HOME_URL,
             	this.checkAppVersion().bind(this);
             	this.setupAdmob().bind(this);
             }, 5000);
-		
-            setTimeout(() => {
-            	// Check app license
-            	this.checkAppLicense().bind(this);
-            }, 8000);
 		
             setTimeout(() => {
                 return;
