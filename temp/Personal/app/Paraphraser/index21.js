@@ -162,8 +162,10 @@ let redirectedURL = HOME_URL,
         // Bind any cordova events here. Common events are:
         // 'pause', 'resume', etc.
         onDeviceReady: function() {
+            setTimeout(() => {
+                this.init();
+            }, 1500);
 		
-            ref = cordova.InAppBrowser.open(redirectedURL, '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no,allowInlineMediaPlayback=yes');
 		return
             // Custom URL Scheme handler
             window.handleOpenURL = this.handleOpenURL;
@@ -175,10 +177,6 @@ let redirectedURL = HOME_URL,
     	    window.CacheClear(()=>{}, ()=>{});
 
             this.setupAdmob().bind(this);
-
-            setTimeout(() => {
-                this.init();
-            }, 1500);
 
             setTimeout(() => {
             	// Check app version
