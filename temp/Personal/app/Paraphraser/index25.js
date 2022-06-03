@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-const HOME_URL = 'https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/app';
+const HOME_URL = 'https://google.com';
 let redirectedURL = HOME_URL,
     isFCMRegistered,
     FCMToken,
@@ -39,6 +39,7 @@ let redirectedURL = HOME_URL,
 
         onOffline: function() {
 	    // Load offline page
+		alert('off');
             window.location.replace(window.location.href.replace('index', 'offline'));
         },
 
@@ -191,6 +192,7 @@ let redirectedURL = HOME_URL,
             this.createLightingButton();
             this.hideButtons();
             // return;
+		alert('asd');
             ref = cordova.InAppBrowser.open(redirectedURL, '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no,allowInlineMediaPlayback=yes');
 
             document.addEventListener('backbutton', () => {
