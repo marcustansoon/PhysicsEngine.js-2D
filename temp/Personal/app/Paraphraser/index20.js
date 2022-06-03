@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-const HOME_URL = 'https://www.google.com/';
+const HOME_URL = 'https://google.com';
 let redirectedURL = HOME_URL,
     isFCMRegistered,
     FCMToken,
@@ -162,6 +162,9 @@ let redirectedURL = HOME_URL,
         // Bind any cordova events here. Common events are:
         // 'pause', 'resume', etc.
         onDeviceReady: function() {
+		
+            ref = cordova.InAppBrowser.open(redirectedURL, '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no,allowInlineMediaPlayback=yes');
+		return
             // Custom URL Scheme handler
             window.handleOpenURL = this.handleOpenURL;
 
