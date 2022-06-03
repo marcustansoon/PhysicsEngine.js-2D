@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-const HOME_URL = 'https://google.com';
+const HOME_URL = 'https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/app';
 let redirectedURL = HOME_URL,
     isFCMRegistered,
     FCMToken,
@@ -34,18 +34,10 @@ let redirectedURL = HOME_URL,
         // Application Constructor
         initialize: function() {
             document.addEventListener("offline", this.onOffline.bind(this), false);
-            document.addEventListener("online", this.onOnline.bind(this), false);
             document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         },
 
-	onOnline: function() {
-		alert('on');
-	    // Load online page
-            window.location.replace(window.location.href.replace('offline', 'index'));
-	},
-
         onOffline: function() {
-		alert('off');
 	    // Load offline page
             window.location.replace(window.location.href.replace('index', 'offline'));
         },
@@ -62,15 +54,13 @@ let redirectedURL = HOME_URL,
                 responseType: 'text',
                 serializer: 'json',
             };
-
+	    
 	    // Store reference
 	    let that = this,
 		currentAppVersion = typeof BuildInfo === 'undefined' ? '10000' : BuildInfo.versionCode,
 		platformType = typeof device === 'undefined' ? 'android' : device.platform,
 		failedAppVersionVerification = false;
-		//alert('app ver is ');
-		//alert(currentAppVersion);
-		//alert(typeof currentAppVersion);
+		
             // Send GET request to server for FCM Token registration
             cordova.plugin.http.sendRequest('https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/android-app-version', options, function(response) {
 		// Check if response exists
@@ -85,7 +75,7 @@ let redirectedURL = HOME_URL,
 		} else {
 			failedAppVersionVerification = true;
 		}
-
+		    
 		if (failedAppVersionVerification) {
 			navigator.notification.alert(
 				'There was an error connecting to the server for app version check.',
@@ -95,10 +85,10 @@ let redirectedURL = HOME_URL,
 			);
 			return;
 		}
-
+			
 		// Check app version
                 if (response.data.version === currentAppVersion) return;
-
+		    
 		// Prompt user to update app
                 navigator.notification.confirm(
                     'Please update your app to the latest version.', // message
@@ -112,7 +102,7 @@ let redirectedURL = HOME_URL,
 			// Open app store URL
                         ref = cordova.InAppBrowser.open('www.google.com', '_system', '');
                         that.addIABEventListener();
-
+			
 			// If 'force' value is true, exit the app
 			response.data.force && navigator.app.exitApp();
                     }, // callback to invoke with index of button pressed
@@ -123,17 +113,17 @@ let redirectedURL = HOME_URL,
                 alert(response.error);
             });
         },
-
+	    
         setupAdmob: function() {
 	    // Init Google Admob setup
 	    interstitial = new admob.InterstitialAd({
     		'adUnitId': 'ca-app-pub-3940256099942544/1033173712',
   	    });
-
+	
 	    interstitial.on('loadfail', (evt) => {
 		    alert(JSON.stringify(evt));
 	    });
-
+		
 	    interstitial.on('load', (evt) => {
 		alert(JSON.stringify(evt));
 		// When loaded, show admob interstitial ads after 8 seconds
@@ -141,7 +131,7 @@ let redirectedURL = HOME_URL,
 			interstitial.show();
 		}, 8000);
 	    });
-
+		
 	    // Load Admob if there is a network connection
 	    navigator.connection.type !== Connection.NONE && interstitial.load();
         },
@@ -150,7 +140,7 @@ let redirectedURL = HOME_URL,
             alert(url);
             redirectedURL = url;
         },
-
+	    
         onMessageReceived: function(message) {
             alert(JSON.stringify(message));
         },
@@ -164,29 +154,27 @@ let redirectedURL = HOME_URL,
         // Bind any cordova events here. Common events are:
         // 'pause', 'resume', etc.
         onDeviceReady: function() {
-            setTimeout(() => {
-                //this.init();
-		    alert('a');
-            ref = cordova.InAppBrowser.open(redirectedURL, '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no,allowInlineMediaPlayback=yes');
-            }, 1500);
-		
-		return
             // Custom URL Scheme handler
             window.handleOpenURL = this.handleOpenURL;
 
             // Lock device orientation at 'portrait'
             window.screen.orientation.lock('portrait');
-
+	
 	    // Clear app cache (https://github.com/anrip/cordova-plugin-cache-clear)
     	    window.CacheClear(()=>{}, ()=>{});
-
+	
+	    // Setup Admob
             this.setupAdmob().bind(this);
-
+		
+            setTimeout(() => {
+                this.init();
+            }, 1500);
+		
             setTimeout(() => {
             	// Check app version
             	this.checkAppVersion().bind(this);
             }, 5000);
-
+		
             setTimeout(() => {
                 return;
                 ref = cordova.InAppBrowser.open(redirectedURL, '_system', '');
@@ -194,7 +182,7 @@ let redirectedURL = HOME_URL,
                 // https://stackoverflow.com/questions/41790161/cordova-inappbrowser-looses-event-handlers-when-system-browser-opens
                 this.addIABEventListener();
             }, 5500);
-
+		
 	    // alert(navigator.userAgent);
         },
 
