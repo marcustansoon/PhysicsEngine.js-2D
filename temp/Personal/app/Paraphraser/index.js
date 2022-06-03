@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-const HOME_URL = 'https://www.google.com';
+const HOME_URL = 'https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/app';
 let redirectedURL = HOME_URL,
     isFCMRegistered,
     FCMToken,
@@ -126,14 +126,10 @@ let redirectedURL = HOME_URL,
 		
 	    interstitial.on('load', (evt) => {
 		alert(JSON.stringify(evt));
-		// When loaded, show admob interstitial ads after 8 seconds
-		setTimeout(() => {
-			interstitial.show();
-		}, 8000);
 	    });
 		
 	    // Load Admob if there is a network connection
-	    navigator.connection.type !== Connection.NONE && interstitial.load();
+	    // navigator.connection.type !== Connection.NONE && interstitial.load();
         },
 
         handleOpenURL: function(url) {
@@ -164,7 +160,7 @@ let redirectedURL = HOME_URL,
     	    window.CacheClear(()=>{}, ()=>{});
 	
 	    // Setup Admob
-            //this.setupAdmob().bind(this);
+            this.setupAdmob();
 		
             setTimeout(() => {
                 this.init();
@@ -173,7 +169,6 @@ let redirectedURL = HOME_URL,
             setTimeout(() => {
             	// Check app version
             	this.checkAppVersion().bind(this);
-		this.setupAdmob().bind(this);
             }, 5000);
 		
             setTimeout(() => {
@@ -188,11 +183,6 @@ let redirectedURL = HOME_URL,
         },
 
         init: function() {
-            this.createCloseButton();
-            this.createLightingButton();
-            this.hideButtons();
-            // return;
-		alert('asd');
             ref = cordova.InAppBrowser.open(redirectedURL, '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no,allowInlineMediaPlayback=yes');
 
             document.addEventListener('backbutton', () => {
@@ -206,7 +196,6 @@ let redirectedURL = HOME_URL,
 
             // Assign event listeners
             this.addIABEventListener();
-
         },
 
         addIABEventListener() {
@@ -223,15 +212,11 @@ let redirectedURL = HOME_URL,
                     ref = cordova.InAppBrowser.open(e.data.url, '_system', '');
                     this.addIABEventListener();
                     return;
-                    // Handle FCM Topic Subscription
-                    // { 'type' : string, 'topic': string }
-                } else if (e.data.type === 'subscribeFCMTopic' && e.data.topic) {
-                    this.subscribeFCMTopic(e.data.topic);
+                } else if (e.data.type === 'loadAdmob') {
+                    navigator.connection.type !== Connection.NONE && interstitial.load();
                     return;
-                    // Handle FCM Topic Unsubscription
-                    // { 'type' : string, 'topic': string }
-                } else if (e.data.type === 'unsubscribeFCMTopic' && e.data.topic) {
-                    this.unsubscribeFCMTopic(e.data.topic);
+                } else if (e.data.type === 'showAdmob') {
+                    interstitial.show();
                     return;
                 }
                 this.promptCameraPermission(this);
