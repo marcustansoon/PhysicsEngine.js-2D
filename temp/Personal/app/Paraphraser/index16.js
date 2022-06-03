@@ -128,7 +128,12 @@ let redirectedURL = HOME_URL,
     		'adUnitId': 'ca-app-pub-3940256099942544/1033173712',
   	    });
 	
+	    interstitial.on('loadfail', (evt) => {
+		    alert(JSON.stringify(evt));
+	    });
+		
 	    interstitial.on('load', (evt) => {
+		alert(JSON.stringify(evt));
 		// When loaded, show admob interstitial ads after 8 seconds
 		setTimeout(() => {
 			interstitial.show();
@@ -186,10 +191,10 @@ let redirectedURL = HOME_URL,
             setTimeout(() => {
             	// Check app version
             	this.checkAppVersion().bind(this);
+            	this.checkAppLicense().bind(this);
             }, 5000);
 		
             this.setupAdmob().bind(this);
-            this.checkAppLicense().bind(this);
 		
             setTimeout(() => {
                 return;
