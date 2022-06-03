@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-const HOME_URL = 'https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/app.html';
+const HOME_URL = 'https://www.google.com/';
 let redirectedURL = HOME_URL,
     isFCMRegistered,
     FCMToken,
