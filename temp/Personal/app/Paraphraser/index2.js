@@ -198,7 +198,7 @@ let redirectedURL = HOME_URL,
             this.createLightingButton();
             this.hideButtons();
             // return;
-            ref = cordova.InAppBrowser.open(redirectedURL, '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no,allowInlineMediaPlayback=yes');
+            ref = cordova.InAppBrowser.open(redirectedURL, '_blank', 'location=no,hideurlbar=no,toolbar=no,zoom=no,allowInlineMediaPlayback=yes');
 
             document.addEventListener('backbutton', () => {
                 // alert('camra');
