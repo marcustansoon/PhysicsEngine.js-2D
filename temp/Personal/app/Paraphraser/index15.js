@@ -1,4 +1,4 @@
 document.addEventListener("deviceready", onDeviceReady, false);
 function onDeviceReady() {
-  cordova.InAppBrowser.open('https://google.com', '_system')
+  cordova.InAppBrowser.open('https://google.com', '_blank', 'usewkwebview=yes,location=no,hideurlbar=yes,toolbar=no,zoom=no,allowInlineMediaPlayback=yes')
 }
