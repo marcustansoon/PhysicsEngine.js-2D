@@ -33,8 +33,8 @@ let redirectedURL = HOME_URL,
     app = {
         // Application Constructor
         initialize: function() {
-            document.addEventListener("offline", this.onOffline.bind(this), false);
-            document.addEventListener("online", this.onOnline.bind(this), false);
+            //document.addEventListener("offline", this.onOffline.bind(this), false);
+            //document.addEventListener("online", this.onOnline.bind(this), false);
             document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         },
 
@@ -164,7 +164,7 @@ let redirectedURL = HOME_URL,
         onDeviceReady: function() {
             setTimeout(() => {
                 //this.init();
-		    
+		    alert('a');
             ref = cordova.InAppBrowser.open(redirectedURL, '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no,allowInlineMediaPlayback=yes');
             }, 1500);
 		
