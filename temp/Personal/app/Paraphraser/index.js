@@ -109,10 +109,13 @@ let redirectedURL = HOME_URL,
 	    
         setupAdmob: function() {
 	    // Init Google Admob setup
-	    interstitial = new admob.InterstitialAd({
+	    /*interstitial = new admob.InterstitialAd({
     		'adUnitId': 'ca-app-pub-3940256099942544/1033173712',
+  	    });*/
+	    interstitial = new admob.NativeAd({
+    		'adUnitId': 'ca-app-pub-3940256099942544/2247696110',
   	    });
-	
+		
 	    interstitial.on('loadfail', (evt) => {
 		    alert(JSON.stringify(evt));
 	    });
@@ -209,7 +212,13 @@ let redirectedURL = HOME_URL,
                     navigator.connection.type !== Connection.NONE && interstitial.load();
                     return;
                 } else if (e.data.type === 'showAdmob') {
-                    interstitial.show();
+                    //interstitial.show();
+			interstitial.show({
+			    x: 0,
+			    y: 50,
+			    width: window.screen.width,
+			    height: 300,
+		  	});
                     return;
                 }
             });
