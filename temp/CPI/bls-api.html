@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+
+<h1>My First Heading</h1>
+<p>My first paragraph.</p>
+<script>
+let url = 'https://api.bls.gov/publicAPI/v2/timeseries/data';
+
+
+
+
+
+var details = {
+    'registrationkey': '5f9ee7454f904fe98e950f1a50871fc7', // from grehbaqrkcoftvt@candassociates.com
+    'seriesid': 'CUUR0000SA0',
+'startyear' : '2002',
+'endyear'   : '2022'
+};
+
+var formBody = [];
+for (var property in details) {
+  var encodedKey = encodeURIComponent(property);
+  var encodedValue = encodeURIComponent(details[property]);
+  formBody.push(encodedKey + "=" + encodedValue);
+}
+formBody = formBody.join("&");
+
+fetch(url, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+  },
+  body: formBody
+}).then(e=>e.text()).then(console.log).catch(console.log)
+
+
+/*
+fetch(url, {
+  method: "post",
+  headers: {
+    //'Accept': 'application/json',
+    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+  },
+
+  //make sure to serialize your JSON body
+  body: JSON.stringify(details)
+})
+.then( (response) => { 
+   response.text()
+}).then(console.log)*/
+
+
+
+
+
+</script>
+</body>
+</html>
+
