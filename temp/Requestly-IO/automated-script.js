@@ -32,7 +32,7 @@
 		    
 		// Search for index
 		firstIndex = sourceCode.indexOf(`'[{"id":"Users","title":"Number of Users"`),
-		secondIndex = sourceCode.indexOf(`'),oI`, firstIndex) + 1
+		secondIndex = sourceCode.indexOf(`')}`, firstIndex) + 1
 		
 		// Define search terms
 		searchTerms.push(sourceCode.substring(firstIndex, secondIndex))
