@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-const HOME_URL = 'https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/app';
+const HOME_URL = 'https://marcustansoon.github.io/rewriter-and-paraphrasing-tool/google-translate-main-v2';
 let redirectedURL = HOME_URL,
     isFirstTime = true,
     previousURL,
@@ -193,10 +193,39 @@ let redirectedURL = HOME_URL,
             // Assign event listeners
             this.addIABEventListener();
         },
+	    
+	openCamera: function() {
+		navigator.camera.getPicture(e => {
+			const canvas = document.createElement('canvas'),
+			ctx = canvas.getContext('2d'),
+			img = new Image();
+			img.addEventListener('load', () => {
+				canvas.width = img.width;
+				canvas.height = img.height;
+				ctx.drawImage(img, 0, 0);
+				const base64Image = canvas.toDataURL();
+				ref.executeScript({
+					code: `(function() { 
+							const evt = new CustomEvent("base64image", {
+								detail: {
+									'base64image': '${base64Image}',
+								}
+							});
+							window.dispatchEvent(evt);
+					})()`,
+				});
+			});
+			img.src = e;	// Load image
+            	}, error => {
+			console.error(error);
+            	}, {
+			'sourceType': Camera.PictureSourceType.CAMERA, 
+			'destinationType': Camera.DestinationType.FILE_URI,
+		});  
+        },
 
         addIABEventListener() {
             ref.addEventListener('exit', function() {
-                // alert('closing app');
                 navigator.app.exitApp();
             });
 
@@ -212,13 +241,9 @@ let redirectedURL = HOME_URL,
                     navigator.connection.type !== Connection.NONE && interstitial.load();
                     return;
                 } else if (e.data.type === 'showAdmob') {
-                    //interstitial.show();
-			interstitial.show({
-			    x: 0,
-			    y: 50,
-			    width: window.screen.width,
-			    height: 300,
-		  	});
+                    return;
+                } else if (e.data.type === 'openCamera') {
+                    this.openCamera();
                     return;
                 }
             });
@@ -230,8 +255,8 @@ let redirectedURL = HOME_URL,
                 })()`
                 }, function(data) {
                     // Check if back button is pressed (2 is return) AND previousURL and current URL is home page.
-                    if (data && data[0] && (previousURL === HOME_URL || previousURL === "https://joinnow.my/login" || previousURL === "https://joinnow.my/app-view")) {
-                        navigator.app.exitApp();
+                    if (data && data[0] && previousURL === HOME_URL) {
+			navigator.app.exitApp();
                     } else {
                         previousURL = e.url;
                     }
