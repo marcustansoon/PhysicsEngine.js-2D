@@ -97,7 +97,7 @@
 	var J = "application/json",
 		O = (e, o = {}, {
 			method: n = "GET"
-		} = {}) => Promise.resolve('{"status":"OK"}');
+		} = {}) => Promise.resolve('{"status":"OK"}');	// Edit here
 	var K = (e, o) => {
 		if (o === "html" || e.matches(o)) return !0;
 		let a = document.querySelector(o);
