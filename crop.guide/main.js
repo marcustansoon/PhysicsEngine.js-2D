@@ -286,7 +286,7 @@
 	})(window, document, {
 		hookId: "$cropguide",
 		apiURL: "https://app.crop.guide/api",
-		localeURL: "https://cdn.crop.guide/locale",
-		clientURL: "https://cdn.crop.guide/client/l.js"
+		localeURL: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/crop.guide/locale",//"https://cdn.crop.guide/locale",
+		clientURL: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/crop.guide/l.js",//"https://cdn.crop.guide/client/l.js"
 	});
 })();
