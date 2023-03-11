@@ -113,6 +113,6 @@ section {
 }
 
 .fullscreen-icon {
-  width: max(8%, 40px);
+  width: max(5%, 30px);
   cursor: pointer;
 }
