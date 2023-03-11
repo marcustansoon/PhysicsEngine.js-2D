@@ -27,5 +27,6 @@ function openFullscreen() {
     elem.msRequestFullscreen();
   }
 }
-
+setTimeout(()=> {
 confirm('Go fullscreen ?') && openFullscreen();
+}, 2000)
