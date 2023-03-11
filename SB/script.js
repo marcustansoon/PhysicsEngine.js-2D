@@ -16,17 +16,23 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll('.body').forEach(elem => observer.observe(elem));
 
 function openFullscreen() {
-  let elem = document.body;
-	if (elem.requestFullscreen) {
-    elem.requestFullscreen();
-  } else if (elem.webkitRequestFullscreen) {
-    /* Safari */
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) {
-    /* IE11 */
-    elem.msRequestFullscreen();
+  let docElm = document.documentElement;
+  if (docElm.requestFullscreen) {
+    docElm.requestFullscreen();
+  } else if (docElm.msRequestFullscreen) {
+    docElm.msRequestFullscreen();
+  } else if (docElm.mozRequestFullScreen) {
+    docElm.mozRequestFullScreen();
+  } else if (docElm.webkitRequestFullScreen) {
+    docElm.webkitRequestFullScreen();
   }
+
 }
-setTimeout(()=> {
-confirm('Go fullscreen ?') && openFullscreen();
-}, 2000)
+
+document.querySelector(".fullscreen-icon").addEventListener("click", ev => {
+  openFullscreen();
+})
+
+document.documentElement.addEventListener("fullscreenchange", e => {
+  document.querySelector(".fullscreen-icon").hidden = !!document.fullscreenElement;
+})
