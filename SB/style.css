@@ -1,0 +1,105 @@
+/* latin */
+@font-face {
+  font-family: 'Indie Flower';
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  src: url(https://fonts.gstatic.com/s/indieflower/v17/m8JVjfNVeKWVnh3QMuKkFcZVaUuH.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: sans-serif;
+  scroll-snap-type: mandatory;
+  scroll-snap-points-y: repeat(100vh);
+  scroll-snap-type: y mandatory;
+  background-color: black;
+}
+
+h1 {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+  width: 100%;
+  left: 0;
+}
+
+section {
+  border-bottom: 1px solid white;
+  height: 100vh;
+  scroll-snap-align: start;
+  text-align: center;
+  position: relative;
+}
+
+.slide-animation {
+  -webkit-animation: ease-in-out;
+  -webkit-animation-name: slide-animation;
+  -webkit-animation-duration: 6s;
+  animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes slide-animation {
+  0% {
+    transform: scale(1.25, 1.25);
+  }
+
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+.image {
+  width: 100%;
+  position: relative;
+  margin: auto;
+  transform: scale(1.25, 1.25);
+}
+
+.main {
+  overflow: clip;
+  height: 100vh;
+  display: flex;
+}
+
+.body {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  left: 0;
+}
+
+.arrow-main {
+  position: fixed;
+  bottom: 0px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.arrow-left {
+  width: 15%;
+  transform: scaleX(-1);
+  cursor: pointer;
+}
+
+.arrow-right {
+  width: 15%;
+  cursor: pointer;
+}
+
+.subtitle {
+  text-align: center;
+  align-self: center;
+  color: white;
+  font-family: "Indie Flower";
+  font-size: 25px;
+  background-color: black;
+  width: 100%;
+  padding: 5px;
+}
