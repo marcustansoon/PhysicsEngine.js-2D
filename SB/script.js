@@ -36,11 +36,11 @@ document.querySelector(".fullscreen-icon").addEventListener("click", ev => {
 
 // Exit fullscreen handler
 document.addEventListener("fullscreenchange", e => {
-	alert(document.fullscreenElement);
+	//alert(document.fullscreenElement);
   document.querySelector(".fullscreen-icon").hidden = !!document.fullscreenElement;
 })
 document.addEventListener("webkitendfullscreen", e => {
-	alert(document.fullscreenElement);
+	//alert(document.fullscreenElement);
   document.querySelector(".fullscreen-icon").hidden = false;
 })
 
@@ -111,6 +111,7 @@ document.querySelector(".arrow-right").addEventListener("click", ev => {
 	if(currentView !== subtitleSequences[currentSubtitleIndex][0]){
 		currentView = subtitleSequences[currentSubtitleIndex][0];
 		//document.querySelector("." + currentView).scrollIntoView();
+		alert(document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 		window.scroll(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 	}
 });
@@ -120,6 +121,7 @@ document.querySelector(".arrow-left").addEventListener("click", ev => {
 	if(currentView !== subtitleSequences[currentSubtitleIndex][0]){
 		currentView = subtitleSequences[currentSubtitleIndex][0];
 		//document.querySelector("." + currentView).scrollIntoView();
+		alert(document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 		window.scroll(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 	}
 });
