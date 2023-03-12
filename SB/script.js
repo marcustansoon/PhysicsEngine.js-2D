@@ -34,10 +34,9 @@ document.querySelector(".fullscreen-icon").addEventListener("click", ev => {
   openFullscreen();
 })
 
-setInterval(()=>{alert(document.fullscreenElement)}, 5000);
-
 // Exit fullscreen handler
-document.documentElement.addEventListener("fullscreenchange", e => {
+document.addEventListener("fullscreenchange", e => {
+	alert(document.fullscreenElement);
   document.querySelector(".fullscreen-icon").hidden = !!document.fullscreenElement;
 })
 document.addEventListener("webkitendfullscreen", e => {
@@ -112,7 +111,7 @@ document.querySelector(".arrow-right").addEventListener("click", ev => {
 	if(currentView !== subtitleSequences[currentSubtitleIndex][0]){
 		currentView = subtitleSequences[currentSubtitleIndex][0];
 		//document.querySelector("." + currentView).scrollIntoView();
-		scrollTo(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
+		window.scroll(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 	}
 });
 document.querySelector(".arrow-left").addEventListener("click", ev => {
@@ -121,7 +120,7 @@ document.querySelector(".arrow-left").addEventListener("click", ev => {
 	if(currentView !== subtitleSequences[currentSubtitleIndex][0]){
 		currentView = subtitleSequences[currentSubtitleIndex][0];
 		//document.querySelector("." + currentView).scrollIntoView();
-		scrollTo(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
+		window.scroll(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 	}
 });
 
