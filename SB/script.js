@@ -3,12 +3,12 @@ const observer = new IntersectionObserver(entries => {
     const square = entry.target.parentNode.querySelector('.image');
 
     if (entry.isIntersecting) {
-      square.classList.add('slide-animation');
+      square.classList.add('slide-animation1');
       return; // if we added the class, exit the function
     }
 
     // We're not intersecting, so remove the class!
-    square.classList.remove('slide-animation');
+    square.classList.remove('slide-animation1');
   });
 });
 
@@ -107,7 +107,6 @@ document.querySelector(".arrow-right").addEventListener("click", ev => {
 	if(currentView !== subtitleSequences[currentSubtitleIndex][0]){
     		document.querySelector("." + subtitleSequences[prevSubtitleIndex][0]).classList.remove('slide-animation');
 		currentView = subtitleSequences[currentSubtitleIndex][0];
-		//document.querySelector("." + currentView).scrollIntoView();
 		window.scrollTo(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 	}
 });
@@ -118,7 +117,6 @@ document.querySelector(".arrow-left").addEventListener("click", ev => {
 	if(currentView !== subtitleSequences[currentSubtitleIndex][0]){
     		document.querySelector("." + subtitleSequences[prevSubtitleIndex][0]).classList.remove('slide-animation');
 		currentView = subtitleSequences[currentSubtitleIndex][0];
-		//document.querySelector("." + currentView).scrollIntoView();
 		window.scrollTo(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 	}
 });
