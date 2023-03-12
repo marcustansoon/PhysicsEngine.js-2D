@@ -126,7 +126,7 @@ section {
   width: 100%;
   padding: 10px 20px;
 	
-    background-image: url(https://github.com/marcustansoon/PhysicsEngine.js-2D/blob/master/SB/subtitle-bg.png?raw=true);
+    background-image: url(https://raw.githubusercontent.com/marcustansoon/PhysicsEngine.js-2D/master/SB/subtitle-bg.png?raw=true);
     background-repeat: no-repeat;
     /* background-attachment: unset; */
     background-position: center;
