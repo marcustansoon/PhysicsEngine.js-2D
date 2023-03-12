@@ -110,7 +110,8 @@ document.querySelector(".arrow-right").addEventListener("click", ev => {
 	document.querySelector(".subtitle").innerHTML = subtitleSequences[currentSubtitleIndex][1];
 	if(currentView !== subtitleSequences[currentSubtitleIndex][0]){
 		currentView = subtitleSequences[currentSubtitleIndex][0];
-		document.querySelector("." + currentView).scrollIntoView();
+		//document.querySelector("." + currentView).scrollIntoView();
+		scrollTo(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 	}
 });
 document.querySelector(".arrow-left").addEventListener("click", ev => {
@@ -118,7 +119,8 @@ document.querySelector(".arrow-left").addEventListener("click", ev => {
 	document.querySelector(".subtitle").innerHTML = subtitleSequences[currentSubtitleIndex][1];
 	if(currentView !== subtitleSequences[currentSubtitleIndex][0]){
 		currentView = subtitleSequences[currentSubtitleIndex][0];
-		document.querySelector("." + currentView).scrollIntoView();
+		//document.querySelector("." + currentView).scrollIntoView();
+		scrollTo(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 	}
 });
 
