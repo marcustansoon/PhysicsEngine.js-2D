@@ -26,6 +26,10 @@
   font-family: "LittleMonster";
   src: url("https://github.com/marcustansoon/PhysicsEngine.js-2D/blob/master/SB/fonts/Little Monster DEMO.otf?raw=true");
 }
+@font-face {
+  font-family: 'IndieFlower';
+  src: url(https://fonts.gstatic.com/s/indieflower/v17/m8JVjfNVeKWVnh3QMuKkFcZVaUuH.woff2) format('woff2');
+}
 
 * {
   box-sizing: border-box;
