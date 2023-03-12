@@ -103,25 +103,27 @@ let subtitleSequences = [
 	["no-9", "And in that way, Lily's simple act of kindness had changed the world, one flower at a time"],
 	// Image #10
 	["no-10", "...END..."],
-], currentSubtitleIndex = 0, currentView = "no-1";
+], currentSubtitleIndex = 0, currentView = "no-1", prevSubtitleIndex = "";
 
 document.querySelector(".arrow-right").addEventListener("click", ev => {
+	prevSubtitleIndex = currentSubtitleIndex;
 	currentSubtitleIndex = (currentSubtitleIndex + 1) % subtitleSequences.length;
 	document.querySelector(".subtitle").innerHTML = subtitleSequences[currentSubtitleIndex][1];
 	if(currentView !== subtitleSequences[currentSubtitleIndex][0]){
+    		document.querySelector("." + subtitleSequences[prevSubtitleIndex][0]).classList.remove('slide-animation');
 		currentView = subtitleSequences[currentSubtitleIndex][0];
 		//document.querySelector("." + currentView).scrollIntoView();
-		alert(document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 		window.scrollTo(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 	}
 });
 document.querySelector(".arrow-left").addEventListener("click", ev => {
+	prevSubtitleIndex = currentSubtitleIndex;
 	currentSubtitleIndex = (currentSubtitleIndex - 1) < 0 ? subtitleSequences.length - 1 : (currentSubtitleIndex - 1);
 	document.querySelector(".subtitle").innerHTML = subtitleSequences[currentSubtitleIndex][1];
 	if(currentView !== subtitleSequences[currentSubtitleIndex][0]){
+    		document.querySelector("." + subtitleSequences[prevSubtitleIndex][0]).classList.remove('slide-animation');
 		currentView = subtitleSequences[currentSubtitleIndex][0];
 		//document.querySelector("." + currentView).scrollIntoView();
-		alert(document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 		window.scrollTo(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 	}
 });
