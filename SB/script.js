@@ -36,6 +36,7 @@ document.querySelector(".fullscreen-icon").addEventListener("click", ev => {
 
 // Exit fullscreen handler
 document.documentElement.addEventListener("fullscreenchange", e => {
+	alert(document.fullscreenElement);
   document.querySelector(".fullscreen-icon").hidden = !!document.fullscreenElement;
 })
 
