@@ -1,7 +1,7 @@
 /* latin */
 @font-face {
   font-family: "FF";
-  src: url("https://github.com/marcustansoon/PhysicsEngine.js-2D/blob/master/SB/one_trick_pony_tt.ttf?raw=true") format("truetype");
+  src: url("https://raw.githubusercontent.com/marcustansoon/PhysicsEngine.js-2D/master/SB/one_trick_pony_tt.ttf?raw=true") format("truetype");
 }
 
 * {
