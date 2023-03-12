@@ -1,30 +1,30 @@
 @font-face {
   font-family: "OneTrickPony";
-  src: url("https://raw.githubusercontent.com/marcustansoon/PhysicsEngine.js-2D/master/SB/one_trick_pony_tt.ttf?raw=true") format("truetype");
+  src: url("https://raw.githubusercontent.com/marcustansoon/PhysicsEngine.js-2D/master/SB/fonts/one_trick_pony_tt.ttf?raw=true") format("truetype");
 }
 @font-face {
   font-family: "AppetizersRDemoRegular";
-  src: url("https://github.com/marcustansoon/PhysicsEngine.js-2D/blob/master/SB/fonts/AppetizersRDemoRegular.ttf?raw=true") format("truetype");
+  src: url("https://raw.githubusercontent.com/marcustansoon/PhysicsEngine.js-2D/master/SB/fonts/AppetizersRDemoRegular.ttf?raw=true") format("truetype");
 }
 @font-face {
   font-family: "HelloWoof";
-  src: url("https://github.com/marcustansoon/PhysicsEngine.js-2D/blob/master/SB/fonts/HelloWoof.ttf?raw=true") format("truetype");
+  src: url("https://raw.githubusercontent.com/marcustansoon/PhysicsEngine.js-2D/master/SB/fonts/HelloWoof.ttf?raw=true") format("truetype");
 }
 @font-face {
   font-family: "OrangeLeafy";
-  src: url("https://github.com/marcustansoon/PhysicsEngine.js-2D/blob/master/SB/fonts/Orange Leafy - Display.ttf?raw=true") format("truetype");
+  src: url("https://raw.githubusercontent.com/marcustansoon/PhysicsEngine.js-2D/master/SB/fonts/Orange Leafy - Display.ttf?raw=true") format("truetype");
 }
 @font-face {
   font-family: "JungleRoar";
-  src: url("https://github.com/marcustansoon/PhysicsEngine.js-2D/blob/master/SB/fonts/jungle roar demo.ttf?raw=true") format("truetype");
+  src: url("https://raw.githubusercontent.com/marcustansoon/PhysicsEngine.js-2D/master/SB/fonts/jungle roar demo.ttf?raw=true") format("truetype");
 }
 @font-face {
   font-family: "GrinchedRegular";
-  src: url("https://github.com/marcustansoon/PhysicsEngine.js-2D/blob/master/SB/fonts/GrinchedRegular.otf?raw=true");
+  src: url("https://raw.githubusercontent.com/marcustansoon/PhysicsEngine.js-2D/master/SB/fonts/GrinchedRegular.otf?raw=true");
 }
 @font-face {
   font-family: "LittleMonster";
-  src: url("https://github.com/marcustansoon/PhysicsEngine.js-2D/blob/master/SB/fonts/Little Monster DEMO.otf?raw=true");
+  src: url("https://raw.githubusercontent.com/marcustansoon/PhysicsEngine.js-2D/master/SB/fonts/Little Monster DEMO.otf?raw=true");
 }
 @font-face {
   font-family: 'IndieFlower';
