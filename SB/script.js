@@ -36,12 +36,7 @@ document.querySelector(".fullscreen-icon").addEventListener("click", ev => {
 
 // Exit fullscreen handler
 document.addEventListener("fullscreenchange", e => {
-	//alert(document.fullscreenElement);
   document.querySelector(".fullscreen-icon").hidden = !!document.fullscreenElement;
-})
-document.addEventListener("webkitendfullscreen", e => {
-	//alert(document.fullscreenElement);
-  document.querySelector(".fullscreen-icon").hidden = false;
 })
 
 // Subtitle
