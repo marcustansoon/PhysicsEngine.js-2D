@@ -3,12 +3,12 @@ const observer = new IntersectionObserver(entries => {
     const square = entry.target.parentNode.querySelector('.image');
 
     if (entry.isIntersecting) {
-      square.classList.add('slide-animation1');
+      square.classList.add('slide-animation');
       return; // if we added the class, exit the function
     }
 
     // We're not intersecting, so remove the class!
-    square.classList.remove('slide-animation1');
+    square.classList.remove('slide-animation');
   });
 });
 
