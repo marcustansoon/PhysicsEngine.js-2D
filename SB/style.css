@@ -40,7 +40,7 @@ section {
 .slide-animation {
   -webkit-animation: ease-in-out;
   -webkit-animation-name: slide-animation;
-  -webkit-animation-duration: 12s;
+  -webkit-animation-duration: 15s;
   animation-fill-mode: forwards;
 }
 
