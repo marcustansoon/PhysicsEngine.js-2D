@@ -1,5 +1,4 @@
 const observer = new IntersectionObserver(entries => {
-  //console.log(entries)
   entries.forEach(entry => {
     const square = entry.target.parentNode.querySelector('.image');
 
@@ -27,7 +26,7 @@ function openFullscreen() {
   } else if (docElm.webkitRequestFullScreen) {
     docElm.webkitRequestFullScreen();
   }
-	document.querySelector(".fullscreen-icon").hidden = true;
+  document.querySelector(".fullscreen-icon").hidden = true;
 }
 
 // Enter fullscreen handler
@@ -35,13 +34,15 @@ document.querySelector(".fullscreen-icon").addEventListener("click", ev => {
   openFullscreen();
 })
 
+setInterval(()=>{alert(document.fullscreenElement)}, 5000);
+
 // Exit fullscreen handler
 document.documentElement.addEventListener("fullscreenchange", e => {
   document.querySelector(".fullscreen-icon").hidden = !!document.fullscreenElement;
 })
-document.documentElement.addEventListener("webkitendfullscreen", e => {
+document.addEventListener("webkitendfullscreen", e => {
 	alert(document.fullscreenElement);
-  document.querySelector(".fullscreen-icon").hidden = true;
+  document.querySelector(".fullscreen-icon").hidden = false;
 })
 
 // Subtitle
