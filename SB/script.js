@@ -112,7 +112,7 @@ document.querySelector(".arrow-right").addEventListener("click", ev => {
 		currentView = subtitleSequences[currentSubtitleIndex][0];
 		//document.querySelector("." + currentView).scrollIntoView();
 		alert(document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
-		window.scroll(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
+		window.scrollTo(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 	}
 });
 document.querySelector(".arrow-left").addEventListener("click", ev => {
@@ -122,7 +122,7 @@ document.querySelector(".arrow-left").addEventListener("click", ev => {
 		currentView = subtitleSequences[currentSubtitleIndex][0];
 		//document.querySelector("." + currentView).scrollIntoView();
 		alert(document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
-		window.scroll(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
+		window.scrollTo(0, document.querySelector("." + currentView).parentElement.parentElement.offsetTop)
 	}
 });
 
