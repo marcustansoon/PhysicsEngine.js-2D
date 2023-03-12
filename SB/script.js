@@ -105,6 +105,8 @@ document.querySelector(".arrow-right").addEventListener("click", ev => {
 	document.querySelector(".subtitle").innerHTML = subtitleSequences[currentSubtitleIndex][1];
 	if(currentView !== subtitleSequences[currentSubtitleIndex][0]){
 		currentView = subtitleSequences[currentSubtitleIndex][0];
+		alert(document.querySelector("." + currentView));
+		alert(document.querySelector("." + currentView).scrollIntoView);
 		document.querySelector("." + currentView).scrollIntoView();
 	}
 });
@@ -113,6 +115,8 @@ document.querySelector(".arrow-left").addEventListener("click", ev => {
 	document.querySelector(".subtitle").innerHTML = subtitleSequences[currentSubtitleIndex][1];
 	if(currentView !== subtitleSequences[currentSubtitleIndex][0]){
 		currentView = subtitleSequences[currentSubtitleIndex][0];
+		alert(document.querySelector("." + currentView));
+		alert(document.querySelector("." + currentView).scrollIntoView);
 		document.querySelector("." + currentView).scrollIntoView();
 	}
 });
