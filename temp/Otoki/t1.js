@@ -7933,7 +7933,7 @@
 					return function() {
 						r.feedsManager && (r.feedsManager.stop(), r.feedsManager.disconnectAll())
 					}
-				}), []), (0, x.useEffect)((function() {
+				}), []), (0, x.useEffect)((function() {console.log('asd');
 					return M.coinConfig = d, (0, Q.j)("page/app", {
 							market: m,
 							variation: "Beta X",
@@ -8132,6 +8132,7 @@
 						isTradesShown: M.uiConfig.lens("showTradesAndLiquidations")
 					}),
 					orderBooks: (0, $.jsx)(Qo, {
+						console.log('asd');
 						api: r,
 						snapshotConfig: M.snapshotConfig,
 						snapshots: M._lazySnapshots,
