@@ -7938,7 +7938,7 @@
 							market: m,
 							variation: "Beta X",
 							isAnonymous: !o,
-							plan: o ? o.get().plan : "free"
+							plan: "pro"//o ? o.get().plan : "free"
 						}),
 						function() {
 							return M.removeListeners()
@@ -7981,7 +7981,7 @@
 							priceColor: "#5252ff"
 						}
 					}, o, !0);
-				r.feedsManager.start(M.configState.get(), M.coinConfig, M.snapshotConfig.get(), M.feedsConfig.get(), M.uiConfig.get(), M.onMessage, !o || "free" === o.get().plan, k, (function(e, t) {
+				r.feedsManager.start(M.configState.get(), M.coinConfig, M.snapshotConfig.get(), M.feedsConfig.get(), M.uiConfig.get(), M.onMessage, !o || "free" === false/*(o.get().plan*/, k, (function(e, t) {
 					return M.connectionState.lens(e).set(t)
 				})), M.configState.subscribe(r.feedsManager.handleConfigChange), M.snapshotConfig.subscribe(r.feedsManager.snapshotConfigUpdate), M.feedsConfig.subscribe(r.feedsManager.feedsConfigUpdate), M.uiConfig.subscribe(r.feedsManager.uiConfigUpdate), M.online.pipe((0, b.T)(1)).subscribe((function() {
 					!!navigator.onLine ? r.feedsManager.online() : r.feedsManager.offline()
@@ -8132,8 +8132,6 @@
 						isTradesShown: M.uiConfig.lens("showTradesAndLiquidations")
 					}),
 					orderBooks: (0, $.jsx)(Qo, {
-						xx:confirm(o.get().plan),
-						x2x:confirm(o),
 						api: r,
 						snapshotConfig: M.snapshotConfig,
 						snapshots: M._lazySnapshots,
@@ -8144,7 +8142,7 @@
 						levelVolumeRenderingMode: M.uiConfig.lens("levelVolumeRenderingMode"),
 						heatmapMode: M.uiConfig.lens("heatmapMode"),
 						customThemes: M.uiConfig.lens("customTheme"),
-						isFreeUser: !o || "free" === o.get().plan,
+						isFreeUser: false,//!o || "free" === o.get().plan,
 						scrolled: _,
 						scrollbox: B,
 						showVolumeHistogram: M.uiConfig.lens("showVolumeHistogram"),
@@ -8209,7 +8207,7 @@
 						return D.coinConfig = f, (0, Q.j)("page/app", {
 								market: C,
 								isAnonymous: !o,
-								plan: o ? o.get().plan : "free"
+								plan: "pro"//o ? o.get().plan : "free"
 							}),
 							function() {
 								return D.removeListeners()
@@ -8252,7 +8250,7 @@
 								priceColor: "#5252ff"
 							}
 						}, o, !1);
-					r.feedsManager.start(D.configState.get(), D.coinConfig, D.snapshotConfig.get(), D.feedsConfig.get(), D.uiConfig.get(), D.onMessage, !o || "free" === o.get().plan, P, (function(e, t) {
+					r.feedsManager.start(D.configState.get(), D.coinConfig, D.snapshotConfig.get(), D.feedsConfig.get(), D.uiConfig.get(), D.onMessage, !o || "free" === "pro"/*o.get().plan*/, P, (function(e, t) {
 						return D.connectionState.lens(e).set(t)
 					})), D.configState.subscribe(r.feedsManager.handleConfigChange), D.snapshotConfig.subscribe(r.feedsManager.snapshotConfigUpdate), D.feedsConfig.subscribe(r.feedsManager.feedsConfigUpdate), D.uiConfig.subscribe(r.feedsManager.uiConfigUpdate), D.online.pipe((0, b.T)(1)).subscribe((function() {
 						!!navigator.onLine ? r.feedsManager.online() : r.feedsManager.offline()
@@ -8381,7 +8379,7 @@
 												levelVolumeRenderingMode: D.uiConfig.lens("levelVolumeRenderingMode"),
 												heatmapMode: D.uiConfig.lens("heatmapMode"),
 												customThemes: D.uiConfig.lens("customTheme"),
-												isFreeUser: !o || "free" === o.get().plan,
+												isFreeUser: !o || "free" === "pro"/*o.get().plan*/,
 												scrolled: k
 											}) : null
 										}))
