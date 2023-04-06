@@ -8132,7 +8132,8 @@
 						isTradesShown: M.uiConfig.lens("showTradesAndLiquidations")
 					}),
 					orderBooks: (0, $.jsx)(Qo, {
-						console.log('asd');
+						xx:console.log(o.get().plan),
+						x2x:console.log(o),
 						api: r,
 						snapshotConfig: M.snapshotConfig,
 						snapshots: M._lazySnapshots,
