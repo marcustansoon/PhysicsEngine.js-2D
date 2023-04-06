@@ -63,11 +63,11 @@
 						r = e.onManageSubscription,
 						o = e.theme,
 						i = e.popup,
-						s = t.plan,
+						s = "pro",//t.plan,
 						a = t.paidWithCrypto,
 						l = t.lifetimePro,
 						d = t.isReferral,
-						f = s === g.mr.free;
+						f = false;//s === g.mr.free;
                     
                     console.log(e);
                     console.log(t);
@@ -78,7 +78,7 @@
 						(0, p.j)("profileMenu/opened")
 					}), []), (0, y.jsxs)("div", {
 						className: k.wrap,
-						children: [(0, y.jsxs)("div", w(w({}, (0, c.Sh)(k.header, f ? k.free : k.pro)), {}, {
+						children: [(0, y.jsxs)("div", w(w({}, (0, c.Sh)(k.header, /*f*/false ? k.free : k.pro)), {}, {
 							children: [(0, y.jsx)("b", {
 								children: t.name
 							}), (0, y.jsx)("div", {
