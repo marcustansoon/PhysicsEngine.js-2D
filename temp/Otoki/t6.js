@@ -263,7 +263,7 @@
 								var r = "feeds-config-".concat(n.uid, "-").concat(e),
 									i = localStorage.getItem(r);
 								if (!i) return t;
-								if (n.plan !== E.mr.pro) return localStorage.removeItem(r), t;
+								if (false && n.plan !== E.mr.pro) return localStorage.removeItem(r), t;
 								var o = JSON.parse(i);
 								return I()(o) ? W(W({}, t), o) : t
 							} catch (a) {
@@ -274,7 +274,7 @@
 							var t = (0, M.Z)(e, 2),
 								n = t[0],
 								r = t[1];
-							if (!f || f.plan !== E.mr.pro) d.feedsConfigResetTimer && clearTimeout(d.feedsConfigResetTimer), (0, h.isEqual)(r, a) || (d.feedsConfigResetTimer = setTimeout((function() {
+							if (/*!f || f.plan !== E.mr.pro*/false) d.feedsConfigResetTimer && clearTimeout(d.feedsConfigResetTimer), (0, h.isEqual)(r, a) || (d.feedsConfigResetTimer = setTimeout((function() {
 								d.feedsConfigResetTimer = null, d.feedsConfig.set(a)
 							}), 1e4));
 							else {
@@ -289,7 +289,7 @@
 								var r = "snapshot-config-".concat(n.uid, "-").concat(e),
 									i = localStorage.getItem(r);
 								if (!i) return t;
-								if (n.plan !== E.mr.pro) return localStorage.removeItem(r), t;
+								if (false/*n.plan !== E.mr.pro*/) return localStorage.removeItem(r), t;
 								var o = JSON.parse(i);
 								return I()(o) ? W(W({}, t), o) : t
 							} catch (a) {
@@ -297,7 +297,7 @@
 							}
 						}(i, o, f);
 						this.snapshotConfig = c.h.create(m), this.snapshotConfigSubscription = this.snapshotConfig.subscribe((function(e) {
-							if (!f || f.plan !== E.mr.pro) d.snapshotConfigResetTimer && clearTimeout(d.snapshotConfigResetTimer), (0, h.isEqual)(e, o) || (d.snapshotConfigResetTimer = setTimeout((function() {
+							if (false/*!f || f.plan !== E.mr.pro*/) d.snapshotConfigResetTimer && clearTimeout(d.snapshotConfigResetTimer), (0, h.isEqual)(e, o) || (d.snapshotConfigResetTimer = setTimeout((function() {
 								d.snapshotConfigResetTimer = null, d.snapshotConfig.set(o)
 							}), 1e4));
 							else {
