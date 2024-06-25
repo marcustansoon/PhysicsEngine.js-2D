@@ -13,7 +13,8 @@
     document.body.appendChild(app.canvas);
 
     // Create a new loader
-    let resourcesToBeLoad = [{
+    const resourcesToBeLoad = [
+        {
             "alias": 'bbq-stick',
             "src": "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/bbq-stick.png"
         },
@@ -22,20 +23,52 @@
             "src": "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/cucumber-slice.png"
         },
         {
+            "alias": 'cucumber',
+            "src": "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/cucumber.png"
+        },
+        {
             "alias": 'meat',
             "src": "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/meat.png"
+        },
+        {
+            "alias": 'chicken-wing',
+            "src": "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/chicken-wing.png"
         },
         {
             "alias": 'prawn',
             "src": "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/prawn.png"
         },
+        {
+            "alias": 'lobster',
+            "src": "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/lobster.png"
+        },
+        {
+            "alias": 'eggplant',
+            "src": "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/eggplant.png"
+        },
+        {
+            "alias": 'eggplant-slice',
+            "src": "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/eggplant-slice.png"
+        },
+        {
+            "alias": 'sausage',
+            "src": "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/sausage.png"
+        },
+        {
+            "alias": 'mini-sausage',
+            "src": "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/mini-sausage.png"
+        },
+        {
+            "alias": 'salmon',
+            "src": "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/salmon.png"
+        },
+        {
+            "alias": 'salmon-slice',
+            "src": "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/salmon-slice.png"
+        },
     ];
-
-
-
-    // Add multiple textures to the loader
-    await PIXI.Assets.load(resourcesToBeLoad, callback)
-    /*const soundManifest = [{
+    const soundManifest = [
+        {
             alias: 'bird',
             src: 'https://pixijs.io/sound/examples/resources/bird.mp3'
         },
@@ -51,7 +84,20 @@
             alias: 'down',
             src: 'https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/poink-retrace.mp3'
         },
-    ]
+        {
+            alias: 'level-entry',
+            src: 'https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/entry-level.mp3'
+        },
+        {
+            alias: 'level-completion',
+            src: 'https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/completion-level.wav'
+        },
+    ];
+
+
+
+    // Add multiple textures to the loader
+    await PIXI.Assets.load(resourcesToBeLoad, callback)
     let songResources;
     PIXI.Assets.addBundle('demo', soundManifest);
     PIXI.Assets.loadBundle('demo').then((resources) => {
@@ -74,7 +120,7 @@
             });
         }, 50);
 
-    })*/
+    })
 
     // Declaration
     class Stick {
@@ -149,7 +195,7 @@
                 break;
             case "PRE-UP":
                 let type = null
-                //songResources['up'].play()
+                songResources['up'].play()
                 for (let index = this.content.length - 1; index >= 0; index--) {
                     if (!type) {
                         type = this.content[index].type
@@ -186,7 +232,7 @@
                 break;
             case "PRE-DOWN":
                 let type2 = null;
-                //songResources['down'].play()
+                songResources['down'].play()
                 for (let index = this.content.length - 1; index >= 0; index--) {
                     if (!type2) {
                         type2 = this.content[index].type
