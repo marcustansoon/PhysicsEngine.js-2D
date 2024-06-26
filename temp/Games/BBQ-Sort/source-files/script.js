@@ -11,6 +11,8 @@
 
     // Append the application canvas to the document body
     document.body.appendChild(app.canvas);
+    
+    const gameContainer = new PIXI.Container();
 
     // Create a new loader for sprite images
     const resourcesToBeLoad = [
@@ -75,7 +77,11 @@
         },
         {
             alias: 'background-music',
-            src: 'https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/Nintendo%20Wii%20-%20Mii%20Channel%20Theme%20-%20Jazz%20Cover.mp3'
+            src: 'https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/audioblocks-cinematic-night-jazz-club-background-music.mp3'
+        },
+        {
+            alias: 'error',
+            src: 'https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/error.mp3'
         },
         {
             alias: 'up',
@@ -93,6 +99,10 @@
             alias: 'level-completion',
             src: 'https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/completion-level.wav'
         },
+        {
+            alias: 'single-completion',
+            src: 'https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/audioblocks-happy-happy-award-achievement.mp3'
+        },
     ];
 
     // Add multiple textures to the loader
@@ -100,7 +110,6 @@
     let songResources;
     PIXI.Assets.addBundle('sound', soundManifest);
     PIXI.Assets.loadBundle('sound').then((resources) => {
-        console.log(resources)
         songResources = resources
         // Play background music
         let bgSound = resources['background-music']
@@ -119,7 +128,7 @@
                 ],
             });
         }, 50);
-
+        gameContainer.visible = 1
     })
 
     class BBQ_Sprite {
@@ -154,14 +163,7 @@
             rect.buttonMode = true;
             rect.alpha = 0.1
             rect.cursor = 'pointer';
-            rect.on('pointerdown', () => {
-                this.isSelected = !this.isSelected;
-                if (this.isSelected) {
-                    this.playUpAnimation()
-                } else {
-                    this.playDownAnimation()
-                }
-            });
+            rect.on('pointerdown', () => this.onClick());
             this.rect = {'obj': rect, 'type': 'rect'}
             this.container.addChild(rect)
 
@@ -178,9 +180,21 @@
             this.filter = this.createGlowFilter();
             this.isSelected = false;
         }
-
+		
+		onClick() {
+            this.isSelected = !this.isSelected;
+            if (this.isSelected) {
+				this.selectionTimestamp = Date.now()
+            	this.playUpAnimation()
+            } else {
+				this.selectionTimestamp = null
+            	this.playDownAnimation()
+            }
+		}
         createSprite(type) {
             let sprite = super.createSprite(type)
+			sprite.x = -500
+			sprite.y = -500
             this.content.push({'obj': sprite, 'type': type})
             this.scaleTo(this.stick.obj.scale.x)
             this.container.addChild(sprite)
@@ -197,7 +211,36 @@
             filter.saturate(1.1, false); // Increase saturation
             return filter;
         }
-        
+		getTopSpriteInfo () {
+			let type = this.content.length ? this.content[this.content.length - 1].type : null
+			let length = 0
+			for (let index = this.content.length - 1; index >= 0; index--) {
+				if(type !== this.content[index].type) break;
+				length++;
+			}
+			return {'type': type, 'length': length};
+		}
+		
+		unloadTopSprites () {
+			let temp = this.getTopSpriteInfo()
+			for(let index = 0; index < temp.length; index++){
+				let sprite = this.content.pop();
+				this.container.removeChild(sprite.obj)
+    			//sprite.destroy();
+			}
+			if(temp.length && this.isSelected){
+				this.isSelected = false
+				this.selectionTimestamp = null
+			}
+		}
+        loadTopSprites (type, length) {
+			for(let temp = 0; temp < length; temp++){
+				this.createSprite(type)
+			}
+			this.isSelected = false;
+			this.selectionTimestamp = null
+			this.playPlacementAnimation(length);
+		}
         getDefaultYCoordinate(index) {
             return this.stick.obj.y + Math.floor((60 - index * 60) * this.stick.obj.scale.x / 0.4 * 100) / 100
         }
@@ -238,6 +281,16 @@
                 'speed': Math.floor(6 * this.stick.obj.scale.x / 0.4 * 10) / 10,
             }
         }
+		playPlacementAnimation(count) {
+            this.animation = "PLACEMENT";
+            this.selectionCurrentState = "WAIT";
+            this.selectionNextState = "WAIT";
+            this.selectionAnimation = {
+                'maxDownDistance': Math.floor(50 * this.stick.obj.scale.x / 0.4 * 10) / 10,
+                'speed': Math.floor(6 * this.stick.obj.scale.x / 0.4 * 10) / 10,
+				'count': count,
+            }
+		}
         update() {
             let type = null;
             switch (this.selectionCurrentState) {
@@ -249,9 +302,44 @@
                         this.selectionNextState = "PRE-UP"
                     else if (this.animation === "DOWN")
                         this.selectionNextState = "PRE-DOWN"
+                    else if (this.animation === "PLACEMENT")
+                        this.selectionNextState = "PRE-PLACEMENT"
                     else
                         this.selectionNextState = "WAIT"
                     break;
+				case "PRE-PLACEMENT":
+					let temp1 = this.content.length - this.selectionAnimation.count;
+                    for (let index = this.content.length - 1; index >= 0; index--) {
+						if(index >= temp1){
+							let startingPos = this.getDefaultYCoordinate(index) - this.selectionAnimation.maxDownDistance
+                        	this.content[index].obj.y = startingPos
+                        this.content[index].obj.x = this.stick.obj.x
+						}else{
+							this.content[index].obj.y = this.getDefaultYCoordinate(index)
+							this.content[index].obj.x = this.stick.obj.x
+						}
+                        // Remove filter
+                        this.content[index].obj.filters = null;
+                    }
+                    this.selectionNextState = "PLACEMENT"
+					break;
+				case "PLACEMENT":
+					let temp2 = this.content.length - this.selectionAnimation.count;
+                    for (let index = this.content.length - 1; index >= 0; index--) {
+						if(index < temp2){
+							break;
+						}
+                        let startPos = this.getDefaultYCoordinate(index) - this.selectionAnimation.maxDownDistance
+                        if (Math.abs(startPos - this.content[index].obj.y) >= this.selectionAnimation.maxDownDistance) {
+                            this.selectionNextState = "WAIT"
+                            this.animation = null;
+                            this.content[index].obj.y = this.getDefaultYCoordinate(index)
+                        } else {
+                            this.content[index].obj.y = this.content[index].obj.y + this.selectionAnimation.speed;
+                            this.selectionNextState = "PLACEMENT"
+                        }
+					}
+					break;
                 case "PRE-UP":
                     songResources['up'].play()
                     let skipFilter = false
@@ -334,19 +422,37 @@
             this.selectionCurrentState = this.selectionNextState;
         }
     }
-
-    const container = new PIXI.Container();
-
+    
+	let sticksGroup = []
+	
     let cStick = new Stick()
     cStick.createSprite('meat')
     cStick.createSprite('prawn')
-    cStick.createSprite('prawn')
     cStick.createSprite('meat')
-    cStick.moveTo(150, 250)
-    container.addChild(cStick.container)
+    cStick.createSprite('meat')
+    cStick.moveTo(250, 250)
+    gameContainer.addChild(cStick.container)
+	sticksGroup.push(cStick)
+	
+    let cStick2 = new Stick()
+    //cStick2.createSprite('prawn')
+   	//cStick2.createSprite('meat')
+    //cStick2.createSprite('prawn')
+    //cStick2.createSprite('meat')
+    cStick2.moveTo(250+150, 250)
+    gameContainer.addChild(cStick2.container)
+	sticksGroup.push(cStick2)
+	
+    let cStick3 = new Stick()
+    //cStick2.createSprite('prawn')
+   	//cStick2.createSprite('meat')
+    //cStick2.createSprite('prawn')
+    cStick3.createSprite('cucumber-slice')
+    cStick3.moveTo(250+150+150, 250)
+    gameContainer.addChild(cStick3.container)
+	sticksGroup.push(cStick3)
 
-
-    app.stage.addChild(container)
+    app.stage.addChild(gameContainer)
 
     function callback(progress) {
         //console.log(progress)
@@ -354,7 +460,63 @@
 
     // Listen for animate update
     app.ticker.add((time) => {
-        cStick.update()
+		
+		for(let indexM = 0; indexM < sticksGroup.length; indexM++){
+			let elem = sticksGroup[indexM]
+			// Update elem animation
+			elem.update()
+            
+			if(elem.isSelected){
+                // Filter stick sprites where selected = true and not self
+				let group = sticksGroup.filter((elem, index) => elem.isSelected && indexM !== index)
+                // Check if no other selection is detected and the only selected stick sprite has empty content
+				if(!group.length && !elem.content.length){
+					// Unselect stick
+					console.log('empty')
+					elem.onClick()
+					continue;
+				}
+				for(let index = 0; index < group.length; index++){
+                    // Identify the first selected and second selected sprites
+					let originStick, targetStick
+					if(elem.selectionTimestamp <= group[index].selectionTimestamp){
+						originSprite = elem 
+						targetSprite = group[index]
+					}else{
+						originSprite = group[index] 
+						targetSprite = elem
+					}
+					
+					let originTopSpriteInfo = originSprite.getTopSpriteInfo(), targetTopSpriteInfo = targetSprite.getTopSpriteInfo()
+				
+					// Check if target and origin sprite are of different type
+					if(targetTopSpriteInfo.length && originTopSpriteInfo.type !== targetTopSpriteInfo.type){
+						// Unselect both object
+						originSprite.onClick()
+						targetSprite.onClick()
+						songResources['error'].play()
+						console.log('err')
+						break;
+					}
+                    
+					// Check if target length is enough to accommodate new objects
+					if(targetSprite.content.length + originTopSpriteInfo.length > 4){
+						// Unselect both object
+						originSprite.onClick()
+						targetSprite.onClick()
+						songResources['error'].play()
+						console.log('err2')
+						break;
+					}
+                    
+                    // Successful puzzle
+					songResources['single-completion'].play()
+					originSprite.unloadTopSprites();
+					targetSprite.loadTopSprites(originTopSpriteInfo.type, originTopSpriteInfo.length)
+					break;
+				}
+			}
+		}
     });
 
 })();
