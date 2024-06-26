@@ -429,7 +429,7 @@
     cStick.createSprite('meat')
     cStick.createSprite('mini-sausage')
     cStick.createSprite('meat')
-    cStick.createSprite('eggplant-slice')
+    //cStick.createSprite('eggplant-slice')
     cStick.moveTo(250, 250)
     gameContainer.addChild(cStick.container)
 	sticksGroup.push(cStick)
