@@ -184,6 +184,7 @@
         }
 		
 		onClick() {
+			if(this.completedSprite) return;
             this.isSelected = !this.isSelected;
             if (this.isSelected) {
 				this.selectionTimestamp = Date.now()
@@ -198,6 +199,14 @@
 			sprite.x = -500
 			sprite.y = -500
             this.content.push({'obj': sprite, 'type': type})
+            this.scaleTo(this.stick.obj.scale.x)
+            this.container.addChild(sprite)
+        }
+        createCompletionSprite(type) {
+            let sprite = super.createSprite(type)
+			sprite.x = this.stick.obj.x
+			sprite.y = this.stick.obj.y
+            this.completedSprite = {'obj': sprite, 'type': type}
             this.scaleTo(this.stick.obj.scale.x)
             this.container.addChild(sprite)
         }
@@ -221,6 +230,17 @@
 				length++;
 			}
 			return {'type': type, 'length': length};
+		}
+		
+		setCompletion () {
+			let temp = this.getTopSpriteInfo()
+			if(temp.length !== 4) return;
+			for(let index = 0; index < temp.length; index++){
+				let sprite = this.content.pop();
+				this.container.removeChild(sprite.obj)
+			}
+			this.isSolved = true;
+			this.createCompletionSprite(temp.type)
 		}
 		
 		unloadTopSprites () {
@@ -264,6 +284,9 @@
             this.content.forEach((elem, index) => {
                 elem.obj.scale.set(Math.floor(scale / 0.4 * 0.5 * 10) / 10);
             });
+			if(this.completedSprite){
+				this.completedSprite.obj.scale.set(Math.floor(scale / 0.4 * 0.8 * 10) / 10);
+			}
         }
         playUpAnimation() {
             this.animation = "UP";
@@ -425,13 +448,13 @@
         }
     }
     
-	let sticksGroup = []
+	let sticksGroup = [], completedSticksGroup = []
 	
     let cStick = new Stick()
     cStick.createSprite('meat')
     cStick.createSprite('mini-sausage')
     cStick.createSprite('meat')
-    //cStick.createSprite('eggplant-slice')
+    cStick.createSprite('meat')
     cStick.moveTo(250, 250)
     gameContainer.addChild(cStick.container)
 	sticksGroup.push(cStick)
@@ -444,11 +467,23 @@
     let cStick3 = new Stick()
 	cStick3.createSprite('meat')
     cStick3.createSprite('mini-sausage')
+    cStick3.createSprite('mini-sausage')
+    cStick3.createSprite('mini-sausage')
     cStick3.moveTo(250+150+150, 250)
     gameContainer.addChild(cStick3.container)
 	sticksGroup.push(cStick3)
-
+	
+	let sprite = new PIXI.Sprite(PIXI.Texture.from('lobster'))
+	sprite.anchor.set(0.5)
+	sprite.scale.set(0.8)
+    sprite.x = 250
+    sprite.y = 200
+	
+	let x = new PIXI.Container()
+	//x.addChild(sprite)
+	
     app.stage.addChild(gameContainer)
+    app.stage.addChild(x)
 
     function callback(progress) {
         //console.log(progress)
@@ -509,6 +544,9 @@
 					songResources['single-completion'].play()
 					originSprite.unloadTopSprites();
 					targetSprite.loadTopSprites(originTopSpriteInfo.type, originTopSpriteInfo.length)
+					if(targetSprite.getTopSpriteInfo().length === 4){
+						targetSprite.setCompletion()
+					}
 					break;
 				}
 			}
