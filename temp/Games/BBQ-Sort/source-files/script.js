@@ -445,9 +445,9 @@
 	
     let cStick3 = new Stick()
     //cStick2.createSprite('prawn')
-   	//cStick2.createSprite('meat')
+	cStick2.createSprite('meat')
     //cStick2.createSprite('prawn')
-    cStick3.createSprite('cucumber-slice')
+    cStick3.createSprite('prawn')
     cStick3.moveTo(250+150+150, 250)
     gameContainer.addChild(cStick3.container)
 	sticksGroup.push(cStick3)
