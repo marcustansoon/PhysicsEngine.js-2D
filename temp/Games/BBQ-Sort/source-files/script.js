@@ -12,7 +12,7 @@
     // Append the application canvas to the document body
     document.body.appendChild(app.canvas);
 
-    // Create a new loader
+    // Create a new loader for sprite images
     const resourcesToBeLoad = [
         {
             "alias": 'bbq-stick',
@@ -67,6 +67,7 @@
             "src": "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/salmon-slice.png"
         },
     ];
+    // Create a loader for sound assets
     const soundManifest = [
         {
             alias: 'bird',
@@ -94,15 +95,14 @@
         },
     ];
 
-
-
     // Add multiple textures to the loader
     await PIXI.Assets.load(resourcesToBeLoad, callback)
     let songResources;
-    PIXI.Assets.addBundle('demo', soundManifest);
-    PIXI.Assets.loadBundle('demo').then((resources) => {
+    PIXI.Assets.addBundle('sound', soundManifest);
+    PIXI.Assets.loadBundle('sound').then((resources) => {
         console.log(resources)
         songResources = resources
+        // Play background music
         let bgSound = resources['background-music']
         bgSound.play({
             volume: 0.01,
@@ -122,285 +122,231 @@
 
     })
 
-    // Declaration
-    class Stick {
-        constructor(height, width) {
-            this.height = height;
-            this.width = width;
+    class BBQ_Sprite {
+        constructor() {
+            
+        }
+
+        createSprite(type) {
+            let sprite = new PIXI.Sprite(PIXI.Texture.from(type));
+            sprite.anchor.set(0.5)
+            return sprite;
+        }
+
+        createRectGraphic(x, y, width, height, color) {
+            return new PIXI.Graphics()
+            .rect(x, y, width, height)
+            .fill(color);
         }
     }
-
-    let group1 = {
-        'stick': null,
-        'rect': null,
-        'content': []
-    };
     
-    group1.scaleTo = function(scale){
-        this.stick.obj.scale.set(scale)
-        this.content.forEach((elem, index) => {
-            elem.obj.scale.set(Math.floor(scale / 0.4 * 0.5 * 10) / 10);
-        });
-    }
+    class Stick extends BBQ_Sprite {
+        constructor() {
+            super();
+            this.content = []
+            this.container = new PIXI.Container()
+            
+            // Create rect
+            let rect = super.createRectGraphic(-120 * 0.5, -350 * 0.5, 120, 350, '#0f0');
+            
+            // Enable interaction for rect
+            rect.interactive = true;
+            rect.buttonMode = true;
+            rect.alpha = 0.1
+            rect.cursor = 'pointer';
+            rect.on('pointerdown', () => {
+                this.isSelected = !this.isSelected;
+                if (this.isSelected) {
+                    this.playUpAnimation()
+                } else {
+                    this.playDownAnimation()
+                }
+            });
+            this.rect = {'obj': rect, 'type': 'rect'}
+            this.container.addChild(rect)
 
-    group1.getDefaultYCoordinate = function(index){
-        return this.stick.obj.y + Math.floor((60 - index * 60) * this.stick.obj.scale.x / 0.4 * 100) / 100
-    }
+            // Create stick
+            let stick = super.createSprite('bbq-stick')
+            this.stick = {
+                'type': 'bbq-stick',
+                'obj': stick
+            };
+            this.scaleTo(0.4)
+            this.container.addChild(stick)
 
-    group1.moveTo = function(x, y) {
-        this.stick.obj.x = x
-        this.stick.obj.y = y
-        this.content.forEach((elem, index) => {
-            elem.obj.y = this.getDefaultYCoordinate(index)
-            elem.obj.x = this.stick.obj.x
-        })
-    }
-
-    group1.playUpAnimation = function() {
-        this.animation = "UP";
-        this.selectionCurrentState = "WAIT";
-        this.selectionNextState = "WAIT";
-        this.selectionAnimation = {
-            'maxUpDistance': Math.floor(50 * this.stick.obj.scale.x / 0.4 * 10) / 10,
-            'speed': Math.floor(6 * this.stick.obj.scale.x / 0.4 * 10) / 10,
+            // Setup filter
+            this.filter = this.createGlowFilter();
+            this.isSelected = false;
         }
-    }
-    group1.playDownAnimation = function() {
-        this.animation = "DOWN";
-        this.selectionCurrentState = "WAIT";
-        this.selectionNextState = "WAIT";
-        this.selectionAnimation = {
-            'maxDownDistance': Math.floor(50 * this.stick.obj.scale.x / 0.4 * 10) / 10,
-            'speed': Math.floor(6 * this.stick.obj.scale.x / 0.4 * 10) / 10,
+
+        createSprite(type) {
+            let sprite = super.createSprite(type)
+            this.content.push({'obj': sprite, 'type': type})
+            this.scaleTo(this.stick.obj.scale.x)
+            this.container.addChild(sprite)
         }
-    }
 
-    group1.playJumpToAnimation = function(x, y){
+        createGlowFilter() {
+            // Create a color matrix filter
+            let filter = new PIXI.ColorMatrixFilter();
 
-    }
-
-
-    group1.update = function() {
-        switch (this.selectionCurrentState) {
-            case "IDLE":
-                this.selectionNextState = "WAIT"
-                break;
-            case "WAIT":
-                if (this.animation === "UP")
-                    this.selectionNextState = "PRE-UP"
-                else if (this.animation === "DOWN")
-                    this.selectionNextState = "PRE-DOWN"
-                else
+            // Set the filter to enhance the brightness and color for a glow effect
+            filter.brightness(1.1, false); // Adjust brightness (1.5 for 50% more brightness)
+            filter.contrast(1.1, false); // Increase contrast
+            filter.hue(100, false); // Adjust hue to give it a glowing effect
+            filter.saturate(1.1, false); // Increase saturation
+            return filter;
+        }
+        
+        getDefaultYCoordinate(index) {
+            return this.stick.obj.y + Math.floor((60 - index * 60) * this.stick.obj.scale.x / 0.4 * 100) / 100
+        }
+        moveTo(x, y) {
+            // Update stick position
+            this.stick.obj.x = x
+            this.stick.obj.y = y
+            // Update rect position
+            this.rect.obj.x = this.stick.obj.x
+            this.rect.obj.y = this.stick.obj.y
+            // Update children position accordingly
+            this.content.forEach((elem, index) => {
+                elem.obj.y = this.getDefaultYCoordinate(index)
+                elem.obj.x = this.stick.obj.x
+            })
+        }
+        scaleTo(scale) {
+            this.stick.obj.scale.set(scale)
+            this.content.forEach((elem, index) => {
+                elem.obj.scale.set(Math.floor(scale / 0.4 * 0.5 * 10) / 10);
+            });
+        }
+        playUpAnimation() {
+            this.animation = "UP";
+            this.selectionCurrentState = "WAIT";
+            this.selectionNextState = "WAIT";
+            this.selectionAnimation = {
+                'maxUpDistance': Math.floor(50 * this.stick.obj.scale.x / 0.4 * 10) / 10,
+                'speed': Math.floor(6 * this.stick.obj.scale.x / 0.4 * 10) / 10,
+            }
+        }
+        playDownAnimation() {
+            this.animation = "DOWN";
+            this.selectionCurrentState = "WAIT";
+            this.selectionNextState = "WAIT";
+            this.selectionAnimation = {
+                'maxDownDistance': Math.floor(50 * this.stick.obj.scale.x / 0.4 * 10) / 10,
+                'speed': Math.floor(6 * this.stick.obj.scale.x / 0.4 * 10) / 10,
+            }
+        }
+        update() {
+            let type = null;
+            switch (this.selectionCurrentState) {
+                case "IDLE":
                     this.selectionNextState = "WAIT"
-                break;
-            case "PRE-UP":
-                let type = null
-                songResources['up'].play()
-                for (let index = this.content.length - 1; index >= 0; index--) {
-                    if (!type) {
-                        type = this.content[index].type
-                    }
-                    if (type === this.content[index].type) {
-                        // Apply filter
-                        this.content[index].obj.filters = isSelected ? [filter] : null;
-                    }
-                    this.content[index].obj.y = this.getDefaultYCoordinate(index)
-                    this.content[index].obj.x = this.stick.obj.x
-                }
-                this.selectionNextState = "UP"
-                break;
-            case "UP":
-                let type1 = null;
-                for (let index = this.content.length - 1; index >= 0; index--) {
-                    if (!type1) {
-                        type1 = this.content[index].type
-                    }
-                    if (type1 !== this.content[index].type) {
-                        break;
-                    }
-
-                    let startingPos = this.getDefaultYCoordinate(index)
-                    if (Math.abs(startingPos - this.content[index].obj.y) >= this.selectionAnimation.maxUpDistance) {
+                    break;
+                case "WAIT":
+                    if (this.animation === "UP")
+                        this.selectionNextState = "PRE-UP"
+                    else if (this.animation === "DOWN")
+                        this.selectionNextState = "PRE-DOWN"
+                    else
                         this.selectionNextState = "WAIT"
-                        this.animation = null
-                        this.content[index].obj.y = startingPos - this.selectionAnimation.maxUpDistance
-                    } else {
-                        this.content[index].obj.y = this.content[index].obj.y - this.selectionAnimation.speed;
-                        this.selectionNextState = "UP"
-                    }
-                }
-                break;
-            case "PRE-DOWN":
-                let type2 = null;
-                songResources['down'].play()
-                for (let index = this.content.length - 1; index >= 0; index--) {
-                    if (!type2) {
-                        type2 = this.content[index].type
-                    }
-                    if (type2 !== this.content[index].type) {
-                        break;
-                    }
-                    // Remove filter
-                    this.content[index].obj.filters = null;
-
-                    let startingPos = this.getDefaultYCoordinate(index) - this.selectionAnimation.maxDownDistance
-                    this.content[index].obj.y = startingPos
-                    this.content[index].obj.x = this.stick.obj.x
-                }
-                this.selectionNextState = "DOWN"
-                break;
-            case "DOWN":
-                let type3 = null;
-                for (let index = this.content.length - 1; index >= 0; index--) {
-                    if (!type3) {
-                        type3 = this.content[index].type
-                    }
-                    if (type3 !== this.content[index].type) {
-                        break;
-                    }
-                    let startPos = this.getDefaultYCoordinate(index) - this.selectionAnimation.maxDownDistance
-                    if (Math.abs(startPos - this.content[index].obj.y) >= this.selectionAnimation.maxDownDistance) {
-                        this.selectionNextState = "WAIT"
-                        this.animation = null;
+                    break;
+                case "PRE-UP":
+                    songResources['up'].play()
+                    let skipFilter = false
+                    for (let index = this.content.length - 1; index >= 0; index--) {
                         this.content[index].obj.y = this.getDefaultYCoordinate(index)
-                    } else {
-                        this.content[index].obj.y = this.content[index].obj.y + this.selectionAnimation.speed;
-                        this.selectionNextState = "DOWN"
+                        this.content[index].obj.x = this.stick.obj.x
+                        if (!type) {
+                            type = this.content[index].type
+                        }
+                        if (type !== this.content[index].type || skipFilter) {
+                            skipFilter = true
+                            continue;
+                        }
+                        // Apply filter
+                        this.content[index].obj.filters = [this.filter];
                     }
-                }
-                break;
-            default:
-                this.selectionNextState = "IDLE"
-                break;
-
+                    this.selectionNextState = "UP"
+                    break;
+                case "UP":
+                    for (let index = this.content.length - 1; index >= 0; index--) {
+                        if (!type) {
+                            type = this.content[index].type
+                        }
+                        if (type !== this.content[index].type) {
+                            break;
+                        }
+    
+                        let startingPos = this.getDefaultYCoordinate(index)
+                        if (Math.abs(startingPos - this.content[index].obj.y) >= this.selectionAnimation.maxUpDistance) {
+                            this.selectionNextState = "WAIT"
+                            this.animation = null
+                            this.content[index].obj.y = startingPos - this.selectionAnimation.maxUpDistance
+                        } else {
+                            this.content[index].obj.y = this.content[index].obj.y - this.selectionAnimation.speed;
+                            this.selectionNextState = "UP"
+                        }
+                    }
+                    break;
+                case "PRE-DOWN":
+                    songResources['down'].play()
+                    for (let index = this.content.length - 1; index >= 0; index--) {
+                        if (!type) {
+                            type = this.content[index].type
+                        }
+                        if (type !== this.content[index].type) {
+                            break;
+                        }
+                        // Remove filter
+                        this.content[index].obj.filters = null;
+    
+                        let startingPos = this.getDefaultYCoordinate(index) - this.selectionAnimation.maxDownDistance
+                        this.content[index].obj.y = startingPos
+                        this.content[index].obj.x = this.stick.obj.x
+                    }
+                    this.selectionNextState = "DOWN"
+                    break;
+                case "DOWN":
+                    for (let index = this.content.length - 1; index >= 0; index--) {
+                        if (!type) {
+                            type = this.content[index].type
+                        }
+                        if (type !== this.content[index].type) {
+                            break;
+                        }
+                        let startPos = this.getDefaultYCoordinate(index) - this.selectionAnimation.maxDownDistance
+                        if (Math.abs(startPos - this.content[index].obj.y) >= this.selectionAnimation.maxDownDistance) {
+                            this.selectionNextState = "WAIT"
+                            this.animation = null;
+                            this.content[index].obj.y = this.getDefaultYCoordinate(index)
+                        } else {
+                            this.content[index].obj.y = this.content[index].obj.y + this.selectionAnimation.speed;
+                            this.selectionNextState = "DOWN"
+                        }
+                    }
+                    break;
+                default:
+                    this.selectionNextState = "IDLE"
+                    break;
+            }
+            this.selectionCurrentState = this.selectionNextState;
         }
-
-        this.selectionCurrentState = this.selectionNextState;
-
     }
-
-
-
-
-    const prawnTexture = PIXI.Texture.from('prawn');
-    const meatTexture = PIXI.Texture.from('meat');
-    const stickTexture = PIXI.Texture.from('bbq-stick');
 
     const container = new PIXI.Container();
 
-    app.stage.addChild(container);
+    let cStick = new Stick()
+    cStick.createSprite('meat')
+    cStick.createSprite('prawn')
+    cStick.createSprite('prawn')
+    cStick.createSprite('meat')
+    cStick.moveTo(150, 250)
+    container.addChild(cStick.container)
 
-    // Create a Graphics object, draw a rectangle and fill it
-    let rect = new PIXI.Graphics()
-        .rect(-120 * 0.5, -350 * 0.5, 120, 350)
-        .fill(0xff0000);
 
-    // Enable interaction
-    rect.interactive = true;
-    rect.buttonMode = true;
-    rect.alpha = 0
-    rect.x = app.screen.width / 2
-    rect.y = app.screen.height / 2
-    rect.cursor = 'pointer';
-
-    group1.rect = {
-        'type': 'rect',
-        'obj': rect,
-    };
-
-    // Add it to the stage to render
-    container.addChild(rect);
-
-    // Create stick
-    let stick = new PIXI.Sprite(stickTexture);
-    stick.anchor.set(0.5);
-    stick.scale.set(0.4);
-    // Move the sprite to the center of the screen
-    stick.x = app.screen.width / 2;
-    stick.y = app.screen.height / 2;
-    group1.stick = {
-        'type': 'stick',
-        'obj': stick
-    };
-
-    container.addChild(stick);
-
-    // Create prawn
-    let prawn = new PIXI.Sprite(prawnTexture);
-    prawn.anchor.set(0.5);
-    prawn.scale.set(0.5);
-    // Move the sprite to the center of the screen
-    prawn.x = app.screen.width / 2;
-    prawn.y = app.screen.height / 2 + 75;
-    container.addChild(prawn);
-    group1.content.push({
-        'type': 'prawn',
-        'obj': prawn
-    })
-
-    // Create prawn
-    let prawn2 = new PIXI.Sprite(prawnTexture);
-    prawn2.anchor.set(0.5);
-    prawn2.scale.set(0.5);
-    // Move the sprite to the center of the screen
-    //prawn2.x = app.screen.width / 2;
-    //prawn2.y = app.screen.height / 2 + 0;
-    container.addChild(prawn2);
-    group1.content.push({
-        'type': 'prawn',
-        'obj': prawn2
-    })
-
-    // Create meat
-    let meat = new PIXI.Sprite(meatTexture);
-    meat.anchor.set(0.5);
-    meat.scale.set(0.5);
-    container.addChild(meat);
-    group1.content.push({
-        'type': 'meat',
-        'obj': meat
-    })
-
-    // Create meat
-    let meat2 = new PIXI.Sprite(meatTexture);
-    meat2.anchor.set(0.5);
-    meat2.scale.set(0.5);
-    container.addChild(meat2);
-    group1.content.push({
-        'type': 'meat',
-        'obj': meat2
-    })
-
-    
-    // Create a color matrix filter
-    const filter = new PIXI.ColorMatrixFilter();
-
-    // Function to apply the glow effect
-    function applyGlowFilter(filter) {
-        // Set the filter to enhance the brightness and color for a glow effect
-        filter.brightness(1.1, false); // Adjust brightness (1.5 for 50% more brightness)
-        filter.contrast(1.1, false); // Increase contrast
-        filter.hue(100, false); // Adjust hue to give it a glowing effect
-        filter.saturate(1.1, false); // Increase saturation
-    }
-
-    // Apply the glow effect
-    applyGlowFilter(filter);
-
-    let isSelected = false;
-
-    rect.on('pointerdown', () => {
-        isSelected = !isSelected;
-        if (isSelected) {
-            group1.playUpAnimation()
-        } else {
-            group1.playDownAnimation()
-        }
-    });
-
-    group1.scaleTo(0.4)
-    group1.moveTo(app.screen.width / 2, app.screen.height / 2)
-
+    app.stage.addChild(container)
 
     function callback(progress) {
         //console.log(progress)
@@ -408,10 +354,7 @@
 
     // Listen for animate update
     app.ticker.add((time) => {
-        // Continuously rotate the container!
-        // * use delta to create frame-independent transform *
-        group1.update()
+        cStick.update()
     });
-
 
 })();
