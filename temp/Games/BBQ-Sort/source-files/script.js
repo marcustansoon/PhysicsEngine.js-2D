@@ -128,7 +128,9 @@
                 ],
             });
         }, 50);
-        gameContainer.visible = 1
+		setTimeout(()=>{
+	        gameContainer.visible = 1
+		}, 1000)
     })
 
     class BBQ_Sprite {
