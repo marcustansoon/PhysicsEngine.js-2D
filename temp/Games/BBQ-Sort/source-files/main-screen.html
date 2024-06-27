@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PixiJS Playground</title>
+    <meta charset="UTF-8" />
+    <!-- Load PixiJS library -->
+    <script src="https://cdn.jsdelivr.net/npm/pixi.js@8.x/dist/pixi.min.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+  </head>
+  <body>
+    <script>
+		(async () => {
+		    // Create a new application
+		    const app = new PIXI.Application();
+		
+		    // Initialize the application
+		    await app.init({
+		        background: "#000",
+		        resizeTo: window
+		    });
+		
+		    // Append the application canvas to the document body
+		    document.body.appendChild(app.canvas);
+		
+		    // Load the bunny texture
+		    const bgTextTexture = await PIXI.Assets.load(
+		        "https://i.ibb.co/9TG3N7Z/text-bg.png"
+		    );
+		    const bgMainMenuTexture = await PIXI.Assets.load(
+		        "https://i.ibb.co/WpDVn7w/main-2.png"
+		    );
+		
+		    // Create Sprites
+		    const bgText = new PIXI.Sprite(bgTextTexture);
+		    const bgText2 = new PIXI.Sprite(bgTextTexture);
+		    const bgText3 = new PIXI.Sprite(bgTextTexture);
+		    const bgMainMenu = new PIXI.Sprite(bgMainMenuTexture);
+		
+		    // Center the sprite's anchor point
+		    bgText.anchor.set(0.5);
+		    bgMainMenu.anchor.set(0.5);
+		    bgText2.anchor.set(0.5);
+		    bgText3.anchor.set(0.5);
+		
+		    // Move the sprite to the center of the screen
+		    bgMainMenu.x = app.screen.width / 2;
+		    bgMainMenu.y = app.screen.height / 2;
+		    bgText.x = app.screen.width / 2;
+		    bgText.y = app.screen.height / 2;
+		    bgText2.x = app.screen.width / 2;
+		    bgText2.y = app.screen.height / 2;
+		    bgText3.x = app.screen.width / 2;
+		    bgText3.y = app.screen.height / 2;
+		
+		    let scaleX = app.renderer.width / bgMainMenu.texture.width;
+		    let scaleY = app.renderer.height / bgMainMenu.texture.height;
+		
+		    // Create text with custom style
+		    let style = new PIXI.TextStyle({
+		        fontFamily: "Verdana, sans-serif",
+		        fontSize: 24,
+		        fill: "#000", // Gradient
+		        dropShadow: false,
+		        fontWeight: "bold",
+		        wordWrap: true,
+		        wordWrapWidth: 440,
+		        letterSpacing: 2,
+		        lineJoin: "round"
+		    });
+		
+		    if (scaleX > scaleY) {
+		        bgMainMenu.scale.set(scaleX);
+		        bgText.scale.set((scaleX / 0.8) * 0.5);
+		        bgText2.scale.set((scaleX / 0.8) * 0.5);
+		        bgText3.scale.set((scaleX / 0.8) * 0.5);
+		        style.fontSize = Math.round((scaleX / 0.8) * 24 * 10) / 10;
+		        bgText.y -= (scaleX / 0.8) * 55;
+		        bgText2.y = bgText2.y;
+		        bgText3.y += (scaleX / 0.8) * 55;
+		    } else {
+		        bgMainMenu.scale.set(scaleY);
+		        bgText.scale.set((scaleY / 0.8) * 0.5);
+		        bgText2.scale.set((scaleY / 0.8) * 0.5);
+		        bgText3.scale.set((scaleY / 0.8) * 0.5);
+		        style.fontSize = Math.round((scaleY / 0.8) * 24 * 10) / 10;
+		        bgText.y -= (scaleY / 0.8) * 55;
+		        bgText2.y = bgText2.y;
+		        bgText3.y += (scaleY / 0.8) * 55;
+		    }
+		
+		    app.stage.addChild(bgMainMenu);
+		    app.stage.addChild(bgText);
+		    app.stage.addChild(bgText2);
+		    app.stage.addChild(bgText3);
+		
+		    document.body.appendChild(app.view);
+		
+		    let playText = new PIXI.Text("PLAY", style);
+		    let settingText = new PIXI.Text("SETTING", style);
+		    let quitText = new PIXI.Text("QUIT", style);
+		
+		    playText.anchor.set(0.5);
+		    settingText.anchor.set(0.5);
+		    quitText.anchor.set(0.5);
+		    // Center the text
+		    playText.x = bgText.x;
+		    playText.y = bgText.y;
+		    settingText.x = bgText2.x;
+		    settingText.y = bgText2.y;
+		    quitText.x = bgText3.x;
+		    quitText.y = bgText3.y;
+		
+		    // Add the text to the stage
+		    app.stage.addChild(playText);
+		    app.stage.addChild(settingText);
+		    app.stage.addChild(quitText);
+		
+		    // Listen for animate update
+		    app.ticker.add((time) => {});
+		})();
+
+      
+    </script>
+  </body>
+</html>
