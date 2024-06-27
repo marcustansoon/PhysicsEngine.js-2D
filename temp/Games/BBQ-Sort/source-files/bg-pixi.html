@@ -27,12 +27,12 @@
         document.body.appendChild(app.canvas);
       
         // Load the bunny texture
-        const button = await Assets.load("https://i.ibb.co/9TG3N7Z/text-bg.png");
-        const bgTexture = await Assets.load("https://i.ibb.co/WpDVn7w/main-2.png");
+        const button = await PIXI.Assets.load("https://i.ibb.co/9TG3N7Z/text-bg.png");
+        const bgTexture = await PIXI.Assets.load("https://i.ibb.co/WpDVn7w/main-2.png");
       
         // Create a bunny Sprite
-        const bunny = new Sprite(button);
-        const bg = new Sprite(bgTexture);
+        const bunny = new PIXI.Sprite(button);
+        const bg = new PIXI.Sprite(bgTexture);
       
         // Center the sprite's anchor point
         bunny.anchor.set(0.5);
