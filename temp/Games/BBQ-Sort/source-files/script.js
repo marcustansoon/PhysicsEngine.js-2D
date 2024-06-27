@@ -13,6 +13,7 @@
     document.body.appendChild(app.canvas);
     
     const gameContainer = new PIXI.Container();
+	gameContainer.visible = 0
 
     // Create a new loader for sprite images
     const resourcesToBeLoad = [
