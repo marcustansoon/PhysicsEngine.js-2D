@@ -79,22 +79,24 @@
 		
 		    if (scaleX > scaleY) {
 		        bgMainMenu.scale.set(scaleX);
-		        bgText.scale.set((scaleX / 0.8) * 0.5);
-		        bgText2.scale.set((scaleX / 0.8) * 0.5);
-		        bgText3.scale.set((scaleX / 0.8) * 0.5);
-		        style.fontSize = Math.round((scaleX / 0.8) * 24 * 10) / 10;
-		        bgText.y -= (scaleX / 0.8) * 55;
+		        bgText.scale.set((scaleX / 0.3) * 0.5);
+		        bgText2.scale.set((scaleX / 0.3) * 0.5);
+		        bgText3.scale.set((scaleX / 0.3) * 0.5);
+		        style.fontSize = Math.round((scaleX / 0.3) * 24 * 10) / 10;
+		        bgText.y -= (scaleX / 0.3) * 55;
 		        bgText2.y = bgText2.y;
-		        bgText3.y += (scaleX / 0.8) * 55;
+		        bgText3.y += (scaleX / 0.3) * 55;
+			console.log(scaleX)
 		    } else {
 		        bgMainMenu.scale.set(scaleY);
-		        bgText.scale.set((scaleY / 0.8) * 0.5);
-		        bgText2.scale.set((scaleY / 0.8) * 0.5);
-		        bgText3.scale.set((scaleY / 0.8) * 0.5);
-		        style.fontSize = Math.round((scaleY / 0.8) * 24 * 10) / 10;
-		        bgText.y -= (scaleY / 0.8) * 55;
+		        bgText.scale.set((scaleY / 0.3) * 0.5);
+		        bgText2.scale.set((scaleY / 0.3) * 0.5);
+		        bgText3.scale.set((scaleY / 0.3) * 0.5);
+		        style.fontSize = Math.round((scaleY / 0.3) * 24 * 10) / 10;
+		        bgText.y -= (scaleY / 0.3) * 55;
 		        bgText2.y = bgText2.y;
-		        bgText3.y += (scaleY / 0.8) * 55;
+		        bgText3.y += (scaleY / 0.3) * 55;
+			console.log(scaleY)
 		    }
 		
 		    app.stage.addChild(bgMainMenu);
