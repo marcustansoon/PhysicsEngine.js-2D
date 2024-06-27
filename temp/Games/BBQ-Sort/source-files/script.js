@@ -128,19 +128,18 @@
                 ],
             });
         }, 50);
-		setTimeout(()=>{
-	        gameContainer.visible = 1
+        setTimeout(()=>{
+        	gameContainer.visible = 1
 		}, 1000)
     })
 
-    class BBQ_Sprite {
+	class PIXI_Simplified {
         constructor() {
             
         }
 
-        createSprite(type) {
-            let sprite = new PIXI.Sprite(PIXI.Texture.from(type));
-            sprite.anchor.set(0.5)
+        createSprite(textureName) {
+            let sprite = new PIXI.Sprite(PIXI.Texture.from(textureName));
             return sprite;
         }
 
@@ -149,67 +148,10 @@
             .rect(x, y, width, height)
             .fill(color);
         }
-    }
-    
-    class Stick extends BBQ_Sprite {
-        constructor() {
-            super();
-            this.content = []
-            this.container = new PIXI.Container()
-            
-            // Create rect
-            let rect = super.createRectGraphic(-120 * 0.5, -350 * 0.5, 120, 350, '#0f0');
-            
-            // Enable interaction for rect
-            rect.interactive = true;
-            rect.buttonMode = true;
-            rect.alpha = 0.1
-            rect.cursor = 'pointer';
-            rect.on('pointerdown', () => this.onClick());
-            this.rect = {'obj': rect, 'type': 'rect'}
-            this.container.addChild(rect)
 
-            // Create stick
-            let stick = super.createSprite('bbq-stick')
-            this.stick = {
-                'type': 'bbq-stick',
-                'obj': stick
-            };
-            this.scaleTo(0.4)
-            this.container.addChild(stick)
-
-            // Setup filter
-            this.filter = this.createGlowFilter();
-            this.isSelected = false;
-        }
-		
-		onClick() {
-			if(this.completedSprite) return;
-            this.isSelected = !this.isSelected;
-            if (this.isSelected) {
-				this.selectionTimestamp = Date.now()
-            	this.playUpAnimation()
-            } else {
-				this.selectionTimestamp = null
-            	this.playDownAnimation()
-            }
+		createContainer() {
+			return new PIXI.Container()
 		}
-        createSprite(type) {
-            let sprite = super.createSprite(type)
-			sprite.x = -500
-			sprite.y = -500
-            this.content.push({'obj': sprite, 'type': type})
-            this.scaleTo(this.stick.obj.scale.x)
-            this.container.addChild(sprite)
-        }
-        createCompletionSprite(type) {
-            let sprite = super.createSprite(type)
-			sprite.x = this.stick.obj.x
-			sprite.y = this.stick.obj.y
-            this.completedSprite = {'obj': sprite, 'type': type}
-            this.scaleTo(this.stick.obj.scale.x)
-            this.container.addChild(sprite)
-        }
 
         createGlowFilter() {
             // Create a color matrix filter
@@ -222,6 +164,99 @@
             filter.saturate(1.1, false); // Increase saturation
             return filter;
         }
+	}
+	
+    class BBQ_Sprite extends PIXI_Simplified {
+        constructor() {
+            super()
+		}
+		
+		getParentSpriteNameByChildName(childName) {
+			switch(childName){
+				case "eggplant-slice":
+					return "eggplant"
+					break;
+				case "prawn":
+					return "lobster"
+					break;
+				case "mini-sausage":
+					return "sausage"
+					break;
+				case "salmon-slice":
+					return "salmon"
+					break;
+				case "meat":
+					return "chicken-wing"
+					break;
+			}
+		}
+    }
+    
+    class Stick extends BBQ_Sprite {
+        constructor() {
+            super();
+            this.content = []
+            this.container = super.createContainer()
+            
+            // Create rect
+            let rect = this.createInteractiveRect();
+
+            // Create stick
+            let stick = this.createStick()
+
+            // Setup filter
+            this.filter = super.createGlowFilter();
+            this.isSelected = false;
+        }
+
+		createStick () {
+			let stick = super.createSprite('bbq-stick')
+            stick.anchor.set(0.5)
+            stick.scale.set(0.4)
+            this.stick = {'type': 'bbq-stick', 'obj': stick};
+            this.container.addChild(stick)
+		}
+
+		createInteractiveRect () {
+            let rect = super.createRectGraphic(-120 * 0.5, -350 * 0.5, 120, 350, '#0f0')
+            // Enable interaction for rect
+            rect.interactive = true;
+            rect.buttonMode = true;
+            rect.alpha = 0.1;
+            rect.cursor = 'pointer';
+            rect.on('pointerdown', () => this.onClick())
+            this.rect = {'obj': rect, 'type': 'rect'}
+            this.container.addChild(rect)
+		}
+		onClick() {
+			if(this.completedSprite) return;
+            this.isSelected = !this.isSelected;
+            if (this.isSelected) {
+				this.selectionTimestamp = Date.now()
+            	this.playUpAnimation()
+            } else {
+				this.selectionTimestamp = null
+            	this.playDownAnimation()
+            }
+		}
+        createChildSprite(childName) {
+            let sprite = super.createSprite(childName)
+            sprite.anchor.set(0.5)
+			sprite.x = -500
+			sprite.y = -500
+            this.content.push({'obj': sprite, 'type': childName})
+            this.scaleTo(this.stick.obj.scale.x)
+            this.container.addChild(sprite)
+        }
+        createParentSprite(childName) {
+            let sprite = super.createSprite(super.getParentSpriteNameByChildName(childName))
+            sprite.anchor.set(0.5)
+			sprite.x = this.stick.obj.x
+			sprite.y = this.stick.obj.y
+            this.completedSprite = {'obj': sprite, 'type': childName}
+            this.scaleTo(this.stick.obj.scale.x)
+            this.container.addChild(sprite)
+        }
 		getTopSpriteInfo () {
 			let type = this.content.length ? this.content[this.content.length - 1].type : null
 			let length = 0
@@ -231,24 +266,22 @@
 			}
 			return {'type': type, 'length': length};
 		}
-		
 		setCompletion () {
 			let temp = this.getTopSpriteInfo()
 			if(temp.length !== 4) return;
 			for(let index = 0; index < temp.length; index++){
 				let sprite = this.content.pop();
 				this.container.removeChild(sprite.obj)
+				sprite.obj.destroy()
 			}
-			this.isSolved = true;
-			this.createCompletionSprite(temp.type)
+			this.createParentSprite(temp.type)
 		}
-		
 		unloadTopSprites () {
 			let temp = this.getTopSpriteInfo()
 			for(let index = 0; index < temp.length; index++){
 				let sprite = this.content.pop();
 				this.container.removeChild(sprite.obj)
-    			//sprite.destroy();
+    			sprite.obj.destroy();
 			}
 			if(temp.length && this.isSelected){
 				this.isSelected = false
@@ -257,7 +290,7 @@
 		}
         loadTopSprites (type, length) {
 			for(let temp = 0; temp < length; temp++){
-				this.createSprite(type)
+				this.createChildSprite(type)
 			}
 			this.isSelected = false;
 			this.selectionTimestamp = null
@@ -448,13 +481,13 @@
         }
     }
     
-	let sticksGroup = [], completedSticksGroup = []
+	let sticksGroup = []
 	
     let cStick = new Stick()
-    cStick.createSprite('meat')
-    cStick.createSprite('mini-sausage')
-    cStick.createSprite('meat')
-    cStick.createSprite('meat')
+    cStick.createChildSprite('meat')
+    cStick.createChildSprite('mini-sausage')
+    cStick.createChildSprite('meat')
+    cStick.createChildSprite('meat')
     cStick.moveTo(250, 250)
     gameContainer.addChild(cStick.container)
 	sticksGroup.push(cStick)
@@ -465,25 +498,15 @@
 	sticksGroup.push(cStick2)
 	
     let cStick3 = new Stick()
-	cStick3.createSprite('meat')
-    cStick3.createSprite('mini-sausage')
-    cStick3.createSprite('mini-sausage')
-    cStick3.createSprite('mini-sausage')
+	cStick3.createChildSprite('meat')
+    cStick3.createChildSprite('mini-sausage')
+    cStick3.createChildSprite('mini-sausage')
+    cStick3.createChildSprite('mini-sausage')
     cStick3.moveTo(250+150+150, 250)
     gameContainer.addChild(cStick3.container)
 	sticksGroup.push(cStick3)
 	
-	let sprite = new PIXI.Sprite(PIXI.Texture.from('lobster'))
-	sprite.anchor.set(0.5)
-	sprite.scale.set(0.8)
-    sprite.x = 250
-    sprite.y = 200
-	
-	let x = new PIXI.Container()
-	//x.addChild(sprite)
-	
     app.stage.addChild(gameContainer)
-    app.stage.addChild(x)
 
     function callback(progress) {
         //console.log(progress)
@@ -494,7 +517,7 @@
 		
 		for(let indexM = 0; indexM < sticksGroup.length; indexM++){
 			let elem = sticksGroup[indexM]
-			// Update elem animation
+			// Update animation
 			elem.update()
             
 			if(elem.isSelected){
@@ -530,7 +553,7 @@
 						break;
 					}
                     
-					// Check if target length is enough to accommodate new objects
+					// Check if target length is enough to accommodate origin objects
 					if(targetSprite.content.length + originTopSpriteInfo.length > 4){
 						// Unselect both object
 						originSprite.onClick()
@@ -540,10 +563,12 @@
 						break;
 					}
                     
-                    // Successful puzzle
+                    // Successful moving objects from origin to target stick
 					songResources['single-completion'].play()
 					originSprite.unloadTopSprites();
 					targetSprite.loadTopSprites(originTopSpriteInfo.type, originTopSpriteInfo.length)
+					
+					// Check if target stick puzzle is completed
 					if(targetSprite.getTopSpriteInfo().length === 4){
 						targetSprite.setCompletion()
 					}
