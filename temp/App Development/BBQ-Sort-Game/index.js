@@ -1,8 +1,26 @@
-let ref;
-document.addEventListener("deviceready", onDeviceReady, false);
-function onDeviceReady() {
-    alert(/*cordova.file*/'1');
-    setTimeout(()=>{
-        ref = cordova.InAppBrowser.open("https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/Games/BBQ-Sort/source-files/main-screen.html", '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no');
-    }, 2000);
-}
+let ref,
+    app = {
+        // Application Constructor
+    	initialize: function(){
+            document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+        },
+	    onDeviceReady: function(){ 
+			setTimeout(()=>{
+        		ref = cordova.InAppBrowser.open("https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/Games/BBQ-Sort/source-files/main-screen.html", '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no');
+	    		this.addIABEventListener();
+	    	}, 2000);
+		},
+		addIABEventListener: function(){
+	        ref.addEventListener('exit', function () {
+	            navigator.app.exitApp();
+	        });
+			ref.addEventListener('message', (e) => {
+				if(e.data.type === 'play'){
+					alert('play')
+				}
+			})
+		}
+    };
+
+
+app.initialize();
