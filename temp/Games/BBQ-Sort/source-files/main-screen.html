@@ -153,11 +153,21 @@
 		
 		function play() {
 		    if(!window['webkit']){
-			return;
+				return;
 		    }
 		    window['webkit'].messageHandlers['cordova_iab'].postMessage(JSON.stringify({
-			'type': 'play',
-			'data' : null,
+				'type': 'play',
+				'data' : null,
+			}));
+		}
+		
+		function quit() {
+		    if(!window['webkit']){
+				return;
+		    }
+		    window['webkit'].messageHandlers['cordova_iab'].postMessage(JSON.stringify({
+				'type': 'quit',
+				'data' : null,
 		    }));
 		}
 	})();
