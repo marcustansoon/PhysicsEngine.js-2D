@@ -106,7 +106,7 @@
 	    makeInteractive(bgTextPlay)
 	    makeInteractive(bgTextSetting)
 	    makeInteractive(bgTextQuit)
-	    bgTextPlay.on('pointerdown', () => alert('play'))
+	    bgTextPlay.on('pointerdown', () => play())
 	    bgTextSetting.on('pointerdown', () => alert('setting'))
 	    bgTextQuit.on('pointerdown', () => alert('quit'))
 	
@@ -132,15 +132,15 @@
 			obj.cursor = 'pointer';
 		}
 
-		function exitApp() 
-	        if(!window['webkit']){
-	            return;
-	        }
-	
-	        window['webkit'].messageHandlers['cordova_iab'].postMessage(JSON.stringify({
-	            'type': 'exit',
-	            'data' : null,
-	        }));
+		function play() {
+		    if(!window['webkit']){
+		    	return;
+		    }
+		
+		    window['webkit'].messageHandlers['cordova_iab'].postMessage(JSON.stringify({
+		        'type': 'play',
+		        'data' : null,
+		    }));
 		}
 	})();
 	
