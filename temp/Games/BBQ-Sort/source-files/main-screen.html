@@ -60,6 +60,23 @@
 	        lineJoin: "round"
 	    });
 	
+	    // Create a graphic rectangle
+	    const rect = new PIXI.Graphics();
+	    rect.beginFill(0xF); // Black color
+	    rect.alpha = .6
+	    rect.drawRect(
+	        Math.round(-scale / 0.4 * 200),
+	        Math.round(-scale / 0.4 * 150),
+	        Math.round(scale / 0.4 * 400),
+	        Math.round(scale / 0.4 * 300)
+	    );
+	    rect.endFill();
+	
+	    // Apply the blur filter
+	    const blurFilter = new PIXI.BlurFilter();
+	    blurFilter.blur = 20; // Adjust the blur amount
+	    rect.filters = [blurFilter];
+	
 	    // Create BG Sprites
 	    const bgTextPlay = new PIXI.Sprite(bgTextTexture);
 	    const bgTextSetting = new PIXI.Sprite(bgTextTexture);
@@ -88,6 +105,7 @@
 	
 	    // Move the sprite to the center of the screen
 	    bgMainMenu.position.set(app.screen.width / 2, app.screen.height / 2)
+	    rect.position.set(app.screen.width / 2, app.screen.height / 2)
 	    bgTextPlay.position.set(app.screen.width / 2, app.screen.height / 2)
 	    bgTextSetting.position.set(app.screen.width / 2, app.screen.height / 2)
 	    bgTextQuit.position.set(app.screen.width / 2, app.screen.height / 2)
@@ -112,6 +130,7 @@
 	
 	    // Add sprites to the stage
 	    app.stage.addChild(bgMainMenu);
+	    app.stage.addChild(rect);
 	    app.stage.addChild(bgTextPlay);
 	    app.stage.addChild(bgTextSetting);
 	    app.stage.addChild(bgTextQuit);
@@ -125,24 +144,24 @@
 	    function floor(value, precision) {
 	        return Math.floor(value * Math.pow(10, precision)) / Math.pow(10, precision)
 	    }
+	
+	    function makeInteractive(obj) {
+	        obj.interactive = true;
+	        obj.buttonMode = true;
+	        obj.cursor = 'pointer';
+	    }
 		
-		function makeInteractive(obj) {
-			obj.interactive = true;
-			obj.buttonMode = true;
-			obj.cursor = 'pointer';
-		}
-
 		function play() {
 		    if(!window['webkit']){
-		    	return;
+			return;
 		    }
-		
 		    window['webkit'].messageHandlers['cordova_iab'].postMessage(JSON.stringify({
-		        'type': 'play',
-		        'data' : null,
+			'type': 'play',
+			'data' : null,
 		    }));
 		}
 	})();
+
 	
 	
 
