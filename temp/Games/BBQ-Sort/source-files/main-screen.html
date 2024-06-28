@@ -131,8 +131,19 @@
 			obj.buttonMode = true;
 			obj.cursor = 'pointer';
 		}
-	})();
 
+		function exitApp() 
+	        if(!window['webkit']){
+	            return;
+	        }
+	
+	        window['webkit'].messageHandlers['cordova_iab'].postMessage(JSON.stringify({
+	            'type': 'exit',
+	            'data' : null,
+	        }));
+		}
+	})();
+	
 	
 
       
