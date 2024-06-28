@@ -17,6 +17,8 @@ let ref,
 			ref.addEventListener('message', (e) => {
 				if (e.data.type === 'play') {
 					alert('play')
+				}else if (e.data.type === 'quit') {
+					navigator.app.exitApp();
 				}
 			})
 		}
