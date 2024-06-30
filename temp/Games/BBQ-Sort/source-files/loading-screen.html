@@ -1,0 +1,138 @@
+(async () => {
+    // Create a new application
+    const app = new PIXI.Application();
+
+    // Initialize the application
+    await app.init({
+        background: "#000",
+        resizeTo: window
+    });
+
+    // Append the application canvas to the document body
+    document.body.appendChild(app.canvas);
+
+    // Load the background texture
+    const bgTextTexture = await PIXI.Assets.load(
+        "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/text-bg-transparent.png"
+    );
+    const bgMainMenuTexture = await PIXI.Assets.load(
+        "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/main-menu-expanded.png"
+    );
+
+    // Get canvas size ratio
+    let scaleX = app.renderer.width / bgMainMenuTexture.width;
+    let scaleY = app.renderer.height / bgMainMenuTexture.height;
+    let scale = scaleX > scaleY ? scaleX : scaleY;
+
+    // Calculate font size
+    let fontSize = Math.round((scale / 0.3) * 24 * 10) / 10;
+
+    // Create text with custom style
+    let style = new PIXI.TextStyle({
+        fontFamily: "Trebuchet MS, sans-serif",
+        fontSize: fontSize,
+        fill: "#fff", // Gradient
+        dropShadow: false,
+        fontWeight: "bold",
+        wordWrap: true,
+        wordWrapWidth: 440,
+        letterSpacing: 2,
+        lineJoin: "round"
+    });
+
+    // Create a graphic rectangle
+    const rect = new PIXI.Graphics();
+    rect.beginFill(0xF); // Black color
+    rect.alpha = .2
+    rect.drawRect(
+        Math.round(-scale / 0.4 * app.renderer.width / 2),
+        Math.round(-scale / 0.4 * app.renderer.height / 2),
+        Math.round(scale / 0.4 * app.renderer.width),
+        Math.round(scale / 0.4 * app.renderer.height)
+    );
+    rect.endFill();
+
+    // Apply the blur filter
+    const blurFilter = new PIXI.BlurFilter();
+    blurFilter.blur = 5; // Adjust the blur amount
+    rect.filters = [blurFilter];
+	
+
+    // Create BG Sprites
+    const bgTextPlay = new PIXI.Sprite(bgTextTexture);
+    const bgTextSetting = new PIXI.Sprite(bgTextTexture);
+    const bgTextQuit = new PIXI.Sprite(bgTextTexture);
+    const bgMainMenu = new PIXI.Sprite(bgMainMenuTexture);
+	
+	bgMainMenu.filters = [blurFilter];
+
+    // Create text sprite
+    let playText = new PIXI.Text("PLAY", style);
+    let settingText = new PIXI.Text("Loading ...", style);
+    let quitText = new PIXI.Text("QUIT", style);
+	// Update the percentage text
+	settingText.text = `Loading: ${56}%`;
+
+    // Center the sprite's anchor point
+    bgTextPlay.anchor.set(0.5);
+    bgTextSetting.anchor.set(0.5);
+    bgTextQuit.anchor.set(0.5);
+    bgMainMenu.anchor.set(0.5);
+    playText.anchor.set(0.5);
+    settingText.anchor.set(0.5);
+    quitText.anchor.set(0.5);
+
+    // Set scale
+    bgMainMenu.scale.set(floor(scale, 2));
+    bgTextPlay.scale.set(floor(scale / 0.3 * 0.5, 2));
+    bgTextSetting.scale.set(floor(scale / 0.3 * 0.5, 2));
+    bgTextQuit.scale.set(floor(scale / 0.3 * 0.5, 2));
+
+    // Move the sprite to the center of the screen
+    bgMainMenu.position.set(app.screen.width / 2, app.screen.height / 2)
+    rect.position.set(app.screen.width / 2, app.screen.height / 2)
+    bgTextPlay.position.set(app.screen.width / 2, app.screen.height / 2)
+    bgTextSetting.position.set(app.screen.width / 2, app.screen.height / 2)
+    bgTextQuit.position.set(app.screen.width / 2, app.screen.height / 2)
+
+    // Readjust text bg position
+    bgTextPlay.y -= (scale / 0.3) * 55;
+    bgTextSetting.y = bgTextSetting.y;
+    bgTextQuit.y += (scale / 0.3) * 55;
+
+    // Set text position
+    playText.position.set(bgTextPlay.x, bgTextPlay.y)
+    settingText.position.set(bgTextSetting.x, bgTextSetting.y)
+    quitText.position.set(bgTextSetting.x, bgTextQuit.y)
+
+    // Add interactivity to button and callback
+    makeInteractive(bgTextPlay)
+    makeInteractive(bgTextSetting)
+    makeInteractive(bgTextQuit)
+    bgTextPlay.on('pointerdown', () => alert('play'))
+    bgTextSetting.on('pointerdown', () => alert('setting'))
+    bgTextQuit.on('pointerdown', () => alert('quit'))
+
+    // Add sprites to the stage
+    app.stage.addChild(bgMainMenu);
+    app.stage.addChild(rect);
+    //app.stage.addChild(bgTextPlay);
+    //app.stage.addChild(bgTextSetting);
+    //app.stage.addChild(bgTextQuit);
+    //app.stage.addChild(playText);
+    app.stage.addChild(settingText);
+    //app.stage.addChild(quitText);
+
+    // Listen for animate update
+    app.ticker.add((time) => {});
+
+    function floor(value, precision) {
+        return Math.floor(value * Math.pow(10, precision)) / Math.pow(10, precision)
+    }
+
+    function makeInteractive(obj) {
+        obj.interactive = true;
+        obj.buttonMode = true;
+        obj.cursor = 'pointer';
+    }
+})();
