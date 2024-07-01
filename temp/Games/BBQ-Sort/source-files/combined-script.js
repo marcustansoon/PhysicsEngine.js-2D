@@ -4,6 +4,13 @@
       Math.floor(value * Math.pow(10, precision)) / Math.pow(10, precision)
     );
   }
+
+  function makeInteractive(obj) {
+    obj.interactive = true;
+    obj.buttonMode = true;
+    obj.cursor = "pointer";
+  }
+
   // Class for loading scene
   class LoadingScene {
     constructor(app) {
@@ -23,6 +30,21 @@
           alias: "bg-main-menu-button",
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/text-bg-transparent.png"
+        },
+        {
+          alias: "level-selection-box",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/box-square.png"
+        },
+        {
+          alias: "star",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/star.png"
+        },
+        {
+          alias: "bg-level-selection",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/level-selection-bg.jpg"
         },
         // Object images
         {
@@ -129,6 +151,11 @@
           alias: "single-completion",
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/audioblocks-happy-happy-award-achievement.mp3"
+        },
+        {
+          alias: "button-click",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/button-click.mp3"
         }
       ];
 
@@ -290,7 +317,7 @@
       // Create a graphic rectangle
       const rect = new PIXI.Graphics();
       rect.beginFill(0xf); // Black color
-      rect.alpha = 0.5;
+      rect.alpha = 0.15;
       rect.drawRect(
         Math.round((-scale / 0.4) * 200),
         Math.round((-scale / 0.4) * 150),
@@ -314,6 +341,11 @@
         this.app.screen.height / 2
       );
       bgTextPlay.y -= (scale / 0.3) * 55;
+      makeInteractive(bgTextPlay);
+      bgTextPlay.on("pointerdown", () => {
+        PIXI.Assets.get("button-click").play();
+        this.switchToPlayScene = true;
+      });
       this.objects.push(bgTextPlay);
       this.container.addChild(bgTextPlay);
 
@@ -334,6 +366,10 @@
         this.app.screen.width / 2,
         this.app.screen.height / 2
       );
+      makeInteractive(bgTextSetting);
+      bgTextSetting.on("pointerdown", () => {
+        PIXI.Assets.get("button-click").play();
+      });
       this.objects.push(bgTextSetting);
       this.container.addChild(bgTextSetting);
 
@@ -354,6 +390,7 @@
         this.app.screen.width / 2,
         this.app.screen.height / 2
       );
+      makeInteractive(bgTextQuit);
       bgTextQuit.y += (scale / 0.3) * 55;
       this.objects.push(bgTextQuit);
       this.container.addChild(bgTextQuit);
@@ -365,8 +402,9 @@
       this.objects.push(quitText);
       this.container.addChild(quitText);
 
-      this.bgMusic = PIXI.Assets.get("background-music");
-      this.bgMusic.play({
+      // Play background music
+      backgroundMusic = PIXI.Assets.get("background-music");
+      backgroundMusic.play({
         volume: 0.2,
         loop: 1
       });
@@ -402,6 +440,74 @@
       this.isDestroyed = false;
       this.createScene();
     }
+
+    createScene() {
+      // Get bg main menu
+      const bgMainMenuTexture = PIXI.Assets.get("bg-level-selection");
+
+      // Get canvas size ratio
+      let scaleX = this.app.renderer.width / bgMainMenuTexture.width;
+      let scaleY = this.app.renderer.height / bgMainMenuTexture.height;
+      let scale = scaleX > scaleY ? scaleX : scaleY;
+
+      // Create bg main menu image
+      const mainMenu = new PIXI.Sprite(PIXI.Assets.get("bg-level-selection"));
+      mainMenu.anchor.set(0.5);
+      mainMenu.scale.set(floor(scale, 2));
+      mainMenu.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2
+      );
+      this.objects.push(mainMenu);
+      this.container.addChild(mainMenu);
+
+      let levelSelectionBoxTexture = PIXI.Assets.get("level-selection-box");
+      let scaleBoxX =
+          this.app.renderer.width / 6 / levelSelectionBoxTexture.width,
+        scaleBoxY =
+          this.app.renderer.height / 6 / levelSelectionBoxTexture.height,
+        scaleBox = scaleBoxX < scaleBoxY ? scaleBoxX : scaleBoxY;
+
+      let startPositionY = -2;
+      let startPositionX = -2;
+      for (let temp = 0; temp < 12; temp++) {
+        let incrementY = startPositionY + Math.floor(temp / 4) * 1.3,
+          incrementX = startPositionX + (temp % 4) * 1.3;
+
+        let box = new PIXI.Sprite(levelSelectionBoxTexture);
+        box.anchor.set(0.5);
+        box.scale.set(floor(scaleBox, 2));
+        box.position.set(
+          this.app.screen.width / 2 + incrementX * floor(box.width, 2),
+          this.app.screen.height / 2 + incrementY * floor(box.height, 2)
+        );
+        makeInteractive(box);
+        box.on("pointerdown", () => {
+          PIXI.Assets.get("button-click").play();
+        });
+        this.objects.push(box);
+        this.container.addChild(box);
+      }
+    }
+
+    show() {
+      this.app.stage.addChild(this.container);
+    }
+
+    hide() {
+      this.app.stage.removeChild(this.container);
+    }
+
+    destroy() {
+      this.objects.forEach((obj) => {
+        this.container.removeChild(obj);
+        obj.destroy();
+      });
+      this.objects = [];
+      this.isDestroyed = true;
+    }
+
+    update() {}
   }
 
   // Create a new application
@@ -416,10 +522,11 @@
   // Append the application canvas to the document body
   document.body.appendChild(app.canvas);
 
+  let backgroundMusic;
   let activeScene;
   let loadingScene = new LoadingScene(app);
   loadingScene.show();
-  let mainMenuScene;
+  let mainMenuScene, levelSelectionScene;
   activeScene = loadingScene;
 
   // Listen for animate update
@@ -430,11 +537,18 @@
       !activeScene.isDestroyed &&
       activeScene.type === "loading-scene"
     ) {
+      // Switch to main menu scene
       mainMenuScene = new MainMenuScene(app);
       mainMenuScene.show();
       activeScene.hide();
       activeScene.destroy();
       activeScene = mainMenuScene;
+    } else if (activeScene.switchToPlayScene) {
+      activeScene.switchToPlayScene = false;
+      activeScene.hide();
+      if (!levelSelectionScene)
+        levelSelectionScene = new LevelSelectionScene(app);
+      levelSelectionScene.show();
     }
   });
 })();
