@@ -461,6 +461,7 @@
       this.container = new PIXI.Container();
       this.objects = [];
       this.isDestroyed = false;
+      this.currentSelectedPage = 0;
       this.createScene();
     }
 
@@ -521,11 +522,19 @@
           this.app.renderer.height / 6 / levelSelectionBoxTexture.height,
         scaleBox = scaleBoxX < scaleBoxY ? scaleBoxX : scaleBoxY;
 
+      this.levelSelectionPages = [[]];
       let startPositionY = -2;
       let startPositionX = -2;
-      for (let temp = 0; temp < 12; temp++) {
-        let incrementY = startPositionY + Math.floor(temp / 4) * 1.3,
-          incrementX = startPositionX + (temp % 4) * 1.3;
+      let currentPageDisplayCount = 0;
+      for (let level = 0; level < 50; level++) {
+        // Only display a maximum of 12 levels on a page
+        if (currentPageDisplayCount >= 12) {
+          currentPageDisplayCount = 0;
+          this.levelSelectionPages.push([]);
+        }
+        let incrementY =
+            startPositionY + Math.floor(currentPageDisplayCount / 4) * 1.3,
+          incrementX = startPositionX + (currentPageDisplayCount % 4) * 1.3;
 
         // Create level selection box
         let box = new PIXI.Sprite(levelSelectionBoxTexture);
@@ -535,6 +544,10 @@
           this.app.screen.width / 2 + incrementX * floor(box.width, 2),
           this.app.screen.height / 2 + incrementY * floor(box.height, 2)
         );
+        box.level = level;
+        if (level > 4) {
+          box.tint = "#3d3d3d";
+        }
         makeInteractive(box);
         box.on("pointerdown", () => {
           PIXI.Assets.get("button-click").play();
@@ -543,11 +556,18 @@
         this.container.addChild(box);
 
         // Create text inside the box
-        let text = new PIXI.Text(temp + 1, style);
+        let text = new PIXI.Text(level + 1, style);
         text.anchor.set(0.5);
         text.position.set(box.x, box.y + (box.height / 2) * 1.1);
         this.objects.push(text);
         this.container.addChild(text);
+
+        this.levelSelectionPages[this.levelSelectionPages.length - 1].push({
+          levelSprite: box,
+          textSprite: text
+        });
+
+        currentPageDisplayCount++;
       }
 
       // Create left and right button
@@ -562,6 +582,8 @@
       makeInteractive(leftArrow);
       leftArrow.on("pointerdown", () => {
         PIXI.Assets.get("button-click").play();
+        if (this.currentSelectedPage) this.currentSelectedPage--;
+        else this.currentSelectedPage = this.levelSelectionPages.length - 1;
       });
       this.objects.push(leftArrow);
       this.container.addChild(leftArrow);
@@ -577,6 +599,8 @@
       makeInteractive(rightArrow);
       rightArrow.on("pointerdown", () => {
         PIXI.Assets.get("button-click").play();
+        this.currentSelectedPage =
+          (this.currentSelectedPage + 1) % this.levelSelectionPages.length;
       });
       this.objects.push(rightArrow);
       this.container.addChild(rightArrow);
@@ -607,6 +631,7 @@
     }
 
     destroy() {
+      this.levelSelectionPages = null;
       this.objects.forEach((obj) => {
         this.container.removeChild(obj);
         obj.destroy();
@@ -615,7 +640,24 @@
       this.isDestroyed = true;
     }
 
-    update() {}
+    update() {
+      for (let page = 0; page < this.levelSelectionPages.length; page++) {
+        this.levelSelectionPages[page].forEach((elem) => {
+          if (this.currentSelectedPage === page) {
+            elem.textSprite.visible = true;
+            elem.levelSprite.visible = true;
+          } else {
+            elem.textSprite.visible = false;
+            elem.levelSprite.visible = false;
+          }
+          if (elem.levelSprite.level <= 4) {
+            elem.levelSprite.tint = "#ffffff";
+          } else {
+            elem.levelSprite.tint = "#3d3d3d";
+          }
+        });
+      }
+    }
   }
 
   // Class for setting scene
