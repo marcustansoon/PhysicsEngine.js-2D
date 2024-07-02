@@ -414,6 +414,18 @@
         this.app.screen.height / 2
       );
       makeInteractive(bgTextQuit);
+      bgTextQuit.on("pointerdown", () => {
+        PIXI.Assets.get("button-click").play();
+        if (!window || !window["webkit"]) {
+          return;
+        }
+        window["webkit"].messageHandlers["cordova_iab"].postMessage(
+          JSON.stringify({
+            type: "quit",
+            data: null
+          })
+        );
+      });
       bgTextQuit.y += (scale / 0.3) * 55;
       this.objects.push(bgTextQuit);
       this.container.addChild(bgTextQuit);
@@ -490,16 +502,16 @@
         lineJoin: "round"
       });
 
-      // Create bg main menu image
-      const mainMenu = new PIXI.Sprite(levelSelectionTexture);
-      mainMenu.anchor.set(0.5);
-      mainMenu.scale.set(floor(scale, 2));
-      mainMenu.position.set(
+      // Create bg level selection image
+      const levelSelection = new PIXI.Sprite(levelSelectionTexture);
+      levelSelection.anchor.set(0.5);
+      levelSelection.scale.set(floor(scale, 2));
+      levelSelection.position.set(
         this.app.screen.width / 2,
         this.app.screen.height / 2
       );
-      this.objects.push(mainMenu);
-      this.container.addChild(mainMenu);
+      this.objects.push(levelSelection);
+      this.container.addChild(levelSelection);
 
       // Create banner button (filled 90% of the width)
       let bannerTexture = PIXI.Assets.get("banner"),
@@ -545,7 +557,7 @@
           this.app.screen.height / 2 + incrementY * floor(box.height, 2)
         );
         box.level = level;
-        if (level > 4) {
+        if (level > userCompletedLevel) {
           box.tint = "#3d3d3d";
         }
         makeInteractive(box);
@@ -650,7 +662,7 @@
             elem.textSprite.visible = false;
             elem.levelSprite.visible = false;
           }
-          if (elem.levelSprite.level <= 4) {
+          if (elem.levelSprite.level <= userCompletedLevel) {
             elem.levelSprite.tint = "#ffffff";
           } else {
             elem.levelSprite.tint = "#3d3d3d";
@@ -758,6 +770,55 @@
     update() {}
   }
 
+  // Class for setting scene
+  class GamePlayScene {
+    constructor(app) {
+      this.app = app;
+      this.type = "gameplay-scene";
+      this.container = new PIXI.Container();
+      this.objects = [];
+      this.isDestroyed = false;
+      this.createScene();
+    }
+
+    createScene() {
+      // Get bg main menu
+      const levelSelectionTexture = PIXI.Assets.get("bg-main-menu");
+
+      // Get canvas size ratio
+      let scaleX = this.app.renderer.width / levelSelectionTexture.width;
+      let scaleY = this.app.renderer.height / levelSelectionTexture.height;
+      let scale = scaleX > scaleY ? scaleX : scaleY;
+
+      // Calculate font size
+      let fontSize = Math.round((scale / 0.3) * 24 * 10) / 10;
+
+      // Create text with custom style
+      let style = new PIXI.TextStyle({
+        fontFamily: "Chunkfive Regular",
+        fontSize: fontSize,
+        fill: "#000000",
+        dropShadow: false,
+        fontWeight: "normal",
+        wordWrap: true,
+        wordWrapWidth: 440,
+        letterSpacing: 2,
+        lineJoin: "round"
+      });
+
+      // Create bg main menu image
+      const mainMenu = new PIXI.Sprite(levelSelectionTexture);
+      mainMenu.anchor.set(0.5);
+      mainMenu.scale.set(floor(scale, 2));
+      mainMenu.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2
+      );
+      this.objects.push(mainMenu);
+      this.container.addChild(mainMenu);
+    }
+  }
+
   // Create a new application
   const app = new PIXI.Application();
 
@@ -776,6 +837,8 @@
   loadingScene.show();
   let mainMenuScene, levelSelectionScene, settingScene;
   activeScene = loadingScene;
+
+  let userCompletedLevel = 4;
 
   // Listen for animate update
   app.ticker.add((time) => {
@@ -809,6 +872,12 @@
       if (!settingScene) settingScene = new SettingScene(app);
       settingScene.show();
       activeScene = settingScene;
+    } else if (activeScene.switchToGameScene) {
+      activeScene.switchToGameScene = false;
+      activeScene.hide();
+      if (!gameScene) gameScene = new GamePlayScene(app);
+      gameScene.show();
+      activeScene = gameScene;
     }
   });
 })();
