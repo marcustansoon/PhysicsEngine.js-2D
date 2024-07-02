@@ -25,7 +25,7 @@
     async createScene() {
       // Create a new loader for sprite images
       const resourcesToBeLoad = [
-        // Background images
+        // Scene related images
         {
           alias: "bg-main-menu-button",
           src:
@@ -46,7 +46,22 @@
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/level-selection-bg.jpg"
         },
-        // Object images
+        {
+          alias: "left-arrow",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/left-arrow.png"
+        },
+        {
+          alias: "right-arrow",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/right-arrow.png"
+        },
+        {
+          alias: "back-button",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/back-button.png"
+        },
+        // In game related images
         {
           alias: "bbq-stick",
           src:
@@ -112,7 +127,7 @@
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/salmon-slice.png"
         },
-        // Sounds
+        // Sound & music resources
         {
           alias: "bird",
           src: "https://pixijs.io/sound/examples/resources/bird.mp3"
@@ -156,6 +171,12 @@
           alias: "button-click",
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/button-click.mp3"
+        },
+        // Font styles
+        {
+          alias: "ChunkFive",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/ChunkFive-Regular.otf"
         }
       ];
 
@@ -208,7 +229,7 @@
       let style = new PIXI.TextStyle({
         fontFamily: "Trebuchet MS, sans-serif",
         fontSize: fontSize,
-        fill: "#fff", // Gradient
+        fill: "#FFFFFF",
         dropShadow: false,
         fontWeight: "bold",
         wordWrap: true,
@@ -288,11 +309,11 @@
 
       // Create text with custom style
       let style = new PIXI.TextStyle({
-        fontFamily: "Trebuchet MS, sans-serif",
+        fontFamily: "Chunkfive Regular",
         fontSize: fontSize,
-        fill: "#000", // Gradient
+        fill: "#000000",
         dropShadow: false,
-        fontWeight: "bold",
+        fontWeight: "normal",
         wordWrap: true,
         wordWrapWidth: 440,
         letterSpacing: 2,
@@ -316,8 +337,8 @@
 
       // Create a graphic rectangle
       const rect = new PIXI.Graphics();
-      rect.beginFill(0xf); // Black color
-      rect.alpha = 0.15;
+      rect.beginFill("#000000"); // Black color
+      rect.alpha = 0.2;
       rect.drawRect(
         Math.round((-scale / 0.4) * 200),
         Math.round((-scale / 0.4) * 150),
@@ -434,7 +455,7 @@
   class LevelSelectionScene {
     constructor(app) {
       this.app = app;
-      this.type = "main-menu-scene";
+      this.type = "level-selection-scene";
       this.container = new PIXI.Container();
       this.objects = [];
       this.isDestroyed = false;
@@ -449,6 +470,22 @@
       let scaleX = this.app.renderer.width / bgMainMenuTexture.width;
       let scaleY = this.app.renderer.height / bgMainMenuTexture.height;
       let scale = scaleX > scaleY ? scaleX : scaleY;
+
+      // Calculate font size
+      let fontSize = Math.round((scale / 0.3) * 24 * 10) / 10;
+
+      // Create text with custom style
+      let style = new PIXI.TextStyle({
+        fontFamily: "Chunkfive Regular",
+        fontSize: fontSize,
+        fill: "#FFF700",
+        dropShadow: false,
+        fontWeight: "normal",
+        wordWrap: true,
+        wordWrapWidth: 440,
+        letterSpacing: 2,
+        lineJoin: "round"
+      });
 
       // Create bg main menu image
       const mainMenu = new PIXI.Sprite(PIXI.Assets.get("bg-level-selection"));
@@ -474,6 +511,7 @@
         let incrementY = startPositionY + Math.floor(temp / 4) * 1.3,
           incrementX = startPositionX + (temp % 4) * 1.3;
 
+        // Create level selection box
         let box = new PIXI.Sprite(levelSelectionBoxTexture);
         box.anchor.set(0.5);
         box.scale.set(floor(scaleBox, 2));
@@ -487,7 +525,62 @@
         });
         this.objects.push(box);
         this.container.addChild(box);
+
+        // Create text inside the box
+        let text = new PIXI.Text(temp + 1, style);
+        text.anchor.set(0.5);
+        text.position.set(box.x, box.y);
+        this.objects.push(text);
+        this.container.addChild(text);
       }
+
+      // Create left and right button
+      let leftArrow = new PIXI.Sprite(PIXI.Assets.get("left-arrow"));
+      leftArrow.anchor.set(0.5);
+      leftArrow.scale.set(floor(scaleBox, 2));
+      leftArrow.position.set(
+        this.app.screen.width / 5,
+        this.app.screen.height / 2 +
+          2 * floor(levelSelectionBoxTexture.height * scaleBox, 2)
+      );
+      makeInteractive(leftArrow);
+      leftArrow.on("pointerdown", () => {
+        PIXI.Assets.get("button-click").play();
+      });
+      this.objects.push(leftArrow);
+      this.container.addChild(leftArrow);
+
+      let rightArrow = new PIXI.Sprite(PIXI.Assets.get("right-arrow"));
+      rightArrow.anchor.set(0.5);
+      rightArrow.scale.set(floor(scaleBox, 2));
+      rightArrow.position.set(
+        (this.app.screen.width / 5) * 4,
+        this.app.screen.height / 2 +
+          2 * floor(levelSelectionBoxTexture.height * scaleBox, 2)
+      );
+      makeInteractive(rightArrow);
+      rightArrow.on("pointerdown", () => {
+        PIXI.Assets.get("button-click").play();
+      });
+      this.objects.push(rightArrow);
+      this.container.addChild(rightArrow);
+
+      // Create back button
+      let backButton = new PIXI.Sprite(PIXI.Assets.get("back-button"));
+      backButton.anchor.set(0.5);
+      backButton.scale.set(floor(scaleBox, 2));
+      backButton.position.set(
+        this.app.screen.width / 5,
+        this.app.screen.height / 2 -
+          3 * floor(levelSelectionBoxTexture.height * scaleBox, 2)
+      );
+      makeInteractive(backButton);
+      backButton.on("pointerdown", () => {
+        PIXI.Assets.get("button-click").play();
+        this.switchToMainMenuScene = true;
+      });
+      this.objects.push(backButton);
+      this.container.addChild(backButton);
     }
 
     show() {
@@ -549,6 +642,12 @@
       if (!levelSelectionScene)
         levelSelectionScene = new LevelSelectionScene(app);
       levelSelectionScene.show();
+      activeScene = levelSelectionScene;
+    } else if (activeScene.switchToMainMenuScene) {
+      activeScene.switchToMainMenuScene = false;
+      activeScene.hide();
+      mainMenuScene.show();
+      activeScene = mainMenuScene;
     }
   });
 })();
