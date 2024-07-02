@@ -29,7 +29,7 @@ fetch('https://ai.picsart.com/gw1/text-to-image-middleware/ai-expand/v1/86e0638a
         'Userid':457160171027101,
         'Username':'xexobo3596',
     }}
-    ).then(e=>e.json()).then(d => console.log(d.data[0].url))
+    ).then(e=>e.json()).then(d => console.log(d?.data[0]?.url ))
 
 
 
