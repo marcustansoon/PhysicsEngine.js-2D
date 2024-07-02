@@ -513,9 +513,11 @@
       this.objects.push(levelSelection);
       this.container.addChild(levelSelection);
 
-      // Create banner button (filled 90% of the width)
+      // Create banner image (filled 90% of the width / height)
       let bannerTexture = PIXI.Assets.get("banner"),
-        scaleBanner = (this.app.renderer.width * 0.9) / bannerTexture.width;
+        scaleBannerX = (this.app.renderer.height * 0.9) / bannerTexture.height,
+        scaleBannerY = (this.app.renderer.width * 0.9) / bannerTexture.width,
+        scaleBanner = scaleBannerY > scaleBannerX ? scaleBannerX : scaleBannerY;
 
       let banner = new PIXI.Sprite(bannerTexture);
       banner.anchor.set(0.5);
