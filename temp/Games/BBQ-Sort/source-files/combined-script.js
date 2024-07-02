@@ -34,7 +34,7 @@
         {
           alias: "level-selection-box",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/box-square.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/meat.png"
         },
         {
           alias: "star",
@@ -60,6 +60,11 @@
           alias: "back-button",
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/back-button.png"
+        },
+        {
+          alias: "banner",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/paper-cropped.png"
         },
         // In game related images
         {
@@ -129,10 +134,6 @@
         },
         // Sound & music resources
         {
-          alias: "bird",
-          src: "https://pixijs.io/sound/examples/resources/bird.mp3"
-        },
-        {
           alias: "background-music",
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/audioblocks-cinematic-night-jazz-club-background-music.mp3"
@@ -170,7 +171,7 @@
         {
           alias: "button-click",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/button-click.mp3"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/text-notification.mp3"
         },
         // Font styles
         {
@@ -183,7 +184,7 @@
       const bgMainMenuTexture = await PIXI.Assets.load({
         alias: "bg-main-menu",
         src:
-          "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/main-menu-expanded.png"
+          "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bbq-grill-bg-3-compressed.png"
       });
 
       // Get canvas size ratio
@@ -211,7 +212,7 @@
 
       // Create a graphic rectangle
       const rect = new PIXI.Graphics();
-      rect.beginFill(0xf); // Black color
+      rect.beginFill("#000000"); // Black color
       rect.alpha = 0.5;
       rect.drawRect(
         Math.round(-this.app.renderer.width / 2),
@@ -338,7 +339,7 @@
       // Create a graphic rectangle
       const rect = new PIXI.Graphics();
       rect.beginFill("#000000"); // Black color
-      rect.alpha = 0.2;
+      rect.alpha = 0.1;
       rect.drawRect(
         Math.round((-scale / 0.4) * 200),
         Math.round((-scale / 0.4) * 150),
@@ -390,6 +391,7 @@
       makeInteractive(bgTextSetting);
       bgTextSetting.on("pointerdown", () => {
         PIXI.Assets.get("button-click").play();
+        this.switchToSettingScene = true;
       });
       this.objects.push(bgTextSetting);
       this.container.addChild(bgTextSetting);
@@ -426,7 +428,7 @@
       // Play background music
       backgroundMusic = PIXI.Assets.get("background-music");
       backgroundMusic.play({
-        volume: 0.2,
+        volume: 0.5,
         loop: 1
       });
     }
@@ -464,21 +466,21 @@
 
     createScene() {
       // Get bg main menu
-      const bgMainMenuTexture = PIXI.Assets.get("bg-level-selection");
+      const levelSelectionTexture = PIXI.Assets.get("bg-main-menu");
 
       // Get canvas size ratio
-      let scaleX = this.app.renderer.width / bgMainMenuTexture.width;
-      let scaleY = this.app.renderer.height / bgMainMenuTexture.height;
+      let scaleX = this.app.renderer.width / levelSelectionTexture.width;
+      let scaleY = this.app.renderer.height / levelSelectionTexture.height;
       let scale = scaleX > scaleY ? scaleX : scaleY;
 
       // Calculate font size
-      let fontSize = Math.round((scale / 0.3) * 24 * 10) / 10;
+      let fontSize = Math.round((scale / 0.3) * 18 * 10) / 10;
 
       // Create text with custom style
       let style = new PIXI.TextStyle({
         fontFamily: "Chunkfive Regular",
         fontSize: fontSize,
-        fill: "#FFF700",
+        fill: "#000000",
         dropShadow: false,
         fontWeight: "normal",
         wordWrap: true,
@@ -488,7 +490,7 @@
       });
 
       // Create bg main menu image
-      const mainMenu = new PIXI.Sprite(PIXI.Assets.get("bg-level-selection"));
+      const mainMenu = new PIXI.Sprite(levelSelectionTexture);
       mainMenu.anchor.set(0.5);
       mainMenu.scale.set(floor(scale, 2));
       mainMenu.position.set(
@@ -497,6 +499,20 @@
       );
       this.objects.push(mainMenu);
       this.container.addChild(mainMenu);
+
+      // Create banner button (filled 90% of the width)
+      let bannerTexture = PIXI.Assets.get("banner"),
+        scaleBanner = (this.app.renderer.width * 0.9) / bannerTexture.width;
+
+      let banner = new PIXI.Sprite(bannerTexture);
+      banner.anchor.set(0.5);
+      banner.scale.set(scaleBanner);
+      banner.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2
+      );
+      this.objects.push(banner);
+      this.container.addChild(banner);
 
       let levelSelectionBoxTexture = PIXI.Assets.get("level-selection-box");
       let scaleBoxX =
@@ -529,7 +545,7 @@
         // Create text inside the box
         let text = new PIXI.Text(temp + 1, style);
         text.anchor.set(0.5);
-        text.position.set(box.x, box.y);
+        text.position.set(box.x, box.y + (box.height / 2) * 1.1);
         this.objects.push(text);
         this.container.addChild(text);
       }
@@ -568,11 +584,108 @@
       // Create back button
       let backButton = new PIXI.Sprite(PIXI.Assets.get("back-button"));
       backButton.anchor.set(0.5);
-      backButton.scale.set(floor(scaleBox, 2));
+      backButton.scale.set(floor((scale / 0.34) * 0.2, 2));
       backButton.position.set(
         this.app.screen.width / 5,
-        this.app.screen.height / 2 -
-          3 * floor(levelSelectionBoxTexture.height * scaleBox, 2)
+        banner.y - floor(banner.height * 0.5, 2)
+      );
+      makeInteractive(backButton);
+      backButton.on("pointerdown", () => {
+        PIXI.Assets.get("button-click").play();
+        this.switchToMainMenuScene = true;
+      });
+      this.objects.push(backButton);
+      this.container.addChild(backButton);
+    }
+
+    show() {
+      this.app.stage.addChild(this.container);
+    }
+
+    hide() {
+      this.app.stage.removeChild(this.container);
+    }
+
+    destroy() {
+      this.objects.forEach((obj) => {
+        this.container.removeChild(obj);
+        obj.destroy();
+      });
+      this.objects = [];
+      this.isDestroyed = true;
+    }
+
+    update() {}
+  }
+
+  // Class for setting scene
+  class SettingScene {
+    constructor(app) {
+      this.app = app;
+      this.type = "setting-scene";
+      this.container = new PIXI.Container();
+      this.objects = [];
+      this.isDestroyed = false;
+      this.createScene();
+    }
+
+    createScene() {
+      // Get bg main menu
+      const levelSelectionTexture = PIXI.Assets.get("bg-main-menu");
+
+      // Get canvas size ratio
+      let scaleX = this.app.renderer.width / levelSelectionTexture.width;
+      let scaleY = this.app.renderer.height / levelSelectionTexture.height;
+      let scale = scaleX > scaleY ? scaleX : scaleY;
+
+      // Calculate font size
+      let fontSize = Math.round((scale / 0.3) * 24 * 10) / 10;
+
+      // Create text with custom style
+      let style = new PIXI.TextStyle({
+        fontFamily: "Chunkfive Regular",
+        fontSize: fontSize,
+        fill: "#000000",
+        dropShadow: false,
+        fontWeight: "normal",
+        wordWrap: true,
+        wordWrapWidth: 440,
+        letterSpacing: 2,
+        lineJoin: "round"
+      });
+
+      // Create bg main menu image
+      const mainMenu = new PIXI.Sprite(levelSelectionTexture);
+      mainMenu.anchor.set(0.5);
+      mainMenu.scale.set(floor(scale, 2));
+      mainMenu.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2
+      );
+      this.objects.push(mainMenu);
+      this.container.addChild(mainMenu);
+
+      // Create banner button (filled 90% of the width)
+      let bannerTexture = PIXI.Assets.get("banner"),
+        scaleBanner = (this.app.renderer.width * 0.9) / bannerTexture.width;
+
+      let banner = new PIXI.Sprite(bannerTexture);
+      banner.anchor.set(0.5);
+      banner.scale.set(scaleBanner);
+      banner.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2
+      );
+      this.objects.push(banner);
+      this.container.addChild(banner);
+
+      // Create back button
+      let backButton = new PIXI.Sprite(PIXI.Assets.get("back-button"));
+      backButton.anchor.set(0.5);
+      backButton.scale.set(floor((scale / 0.34) * 0.2, 2));
+      backButton.position.set(
+        this.app.screen.width / 5,
+        banner.y - floor(banner.height * 0.5, 2)
       );
       makeInteractive(backButton);
       backButton.on("pointerdown", () => {
@@ -619,7 +732,7 @@
   let activeScene;
   let loadingScene = new LoadingScene(app);
   loadingScene.show();
-  let mainMenuScene, levelSelectionScene;
+  let mainMenuScene, levelSelectionScene, settingScene;
   activeScene = loadingScene;
 
   // Listen for animate update
@@ -648,6 +761,12 @@
       activeScene.hide();
       mainMenuScene.show();
       activeScene = mainMenuScene;
+    } else if (activeScene.switchToSettingScene) {
+      activeScene.switchToSettingScene = false;
+      activeScene.hide();
+      if (!settingScene) settingScene = new SettingScene(app);
+      settingScene.show();
+      activeScene = settingScene;
     }
   });
 })();
