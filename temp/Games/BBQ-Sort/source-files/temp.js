@@ -382,6 +382,20 @@
         count: count
       };
     }
+
+    destroy() {
+      this.container.removeChild(this.stick.obj);
+      this.container.removeChild(this.rect.obj);
+      this.content.forEach((elem) => {
+        this.container.removeChild(elem.obj);
+        elem.obj.destroy();
+      });
+      this.content = [];
+      this.isDestroyed = true;
+      this.container.destroy();
+      this.container = null;
+    }
+
     update() {
       let type = null;
       switch (this.selectionCurrentState) {
@@ -539,7 +553,6 @@
       this.level = level;
       this.type = "gameplay-scene";
       this.container = new PIXI.Container();
-      this.objects = [];
       this.sticksGroup = [];
       this.isDestroyed = false;
       this.isPuzzleCompleted = false;
@@ -633,12 +646,14 @@
     }
 
     destroy() {
-      this.objects.forEach((obj) => {
-        this.container.removeChild(obj);
+      this.sticksGroup.forEach((obj) => {
+        this.container.removeChild(obj.container);
         obj.destroy();
       });
-      this.objects = [];
+      this.sticksGroup = [];
       this.isDestroyed = true;
+      this.container.destroy();
+      this.container = null;
     }
 
     update() {
@@ -748,110 +763,14 @@
     }
   }
 
-  /*let sticksGroup = [];
-
-  // Get canvas size ratio
-  let numberOfRows = 2,
-    numberOfColumns = 8,
-    maxWidthPerSprite = 220,
-    maxHeightPerSprite = 150;
-  let scaleX = app.renderer.width / maxWidthPerSprite / numberOfColumns;
-  let scaleY = app.renderer.height / numberOfRows / (maxHeightPerSprite * 8);
-  let scale = Math.min(scaleX, scaleY);
-*/
-  /*
-  let stick = new PIXI.Sprite(PIXI.Assets.get("bbq-stick"));
-  stick.anchor.set(0.5);
-  stick.scale.set(scale);
-  stick.position.set(app.renderer.width / 2, app.renderer.height / 2);
-  gameContainer.addChild(stick);
-
-  let rect = new PIXI.Graphics()
-    .rect(
-      -maxWidthPerSprite * 0.5 * scale,
-      -stick.height * 0.5,
-      maxWidthPerSprite * scale,
-      stick.height
-    )
-    .fill("#000000");
-  rect.position.set(app.renderer.width / 2, app.renderer.height / 2);
-  gameContainer.addChild(rect);
-
-  let prawn = new PIXI.Sprite(PIXI.Assets.get("prawn"));
-  prawn.anchor.set(0.5);
-  prawn.scale.set(scale);
-  prawn.position.set(
-    app.renderer.width / 2,
-    app.renderer.height / 2 - 3 * prawn.height
-  );
-  gameContainer.addChild(prawn);
-
-  let prawn2 = new PIXI.Sprite(PIXI.Assets.get("prawn"));
-  prawn2.anchor.set(0.5);
-  prawn2.scale.set(scale);
-  prawn2.position.set(
-    app.renderer.width / 2,
-    app.renderer.height / 2 - 2 * prawn.height
-  );
-  gameContainer.addChild(prawn2);
-
-  let prawn3 = new PIXI.Sprite(PIXI.Assets.get("prawn"));
-  prawn3.anchor.set(0.5);
-  prawn3.scale.set(scale);
-  prawn3.position.set(
-    app.renderer.width / 2,
-    app.renderer.height / 2 - 1 * prawn.height
-  );
-  gameContainer.addChild(prawn3);
-
-  let prawn4 = new PIXI.Sprite(PIXI.Assets.get("prawn"));
-  prawn4.anchor.set(0.5);
-  prawn4.scale.set(scale);
-  prawn4.position.set(
-    app.renderer.width / 2,
-    app.renderer.height / 2 + 0 * prawn.height
-  );
-  gameContainer.addChild(prawn4);
-*/
-  /*
-  let cStick = new Stick(scale);
-  cStick.createChildSprite("cucumber-slice");
-  cStick.createChildSprite("mini-sausage");
-  cStick.createChildSprite("meat");
-  cStick.createChildSprite("meat");
-  //cStick.scaleTo(scale);
-  cStick.moveTo(app.renderer.width / 2 - cStick.rect.obj.width, 250);
-  gameContainer.addChild(cStick.container);
-  sticksGroup.push(cStick);
-  console.log(cStick.rect.obj.width);
-  console.log("asd");
-
-  let cStick2 = new Stick(scale);
-  cStick2.createChildSprite("meat");
-  //cStick2.scaleTo(scale);
-  cStick2.moveTo(app.renderer.width / 2, 250);
-  gameContainer.addChild(cStick2.container);
-  sticksGroup.push(cStick2);
-
-  let cStick3 = new Stick(scale);
-  cStick3.createChildSprite("meat");
-  cStick3.moveTo(app.renderer.width / 2 + cStick3.rect.obj.width, 250);
-  gameContainer.addChild(cStick3.container);
-  sticksGroup.push(cStick3);
-
-  let cStick4 = new Stick(scale);
-  cStick4.createChildSprite("meat");
-  cStick4.createChildSprite("mini-sausage");
-  cStick4.createChildSprite("mini-sausage");
-  cStick4.createChildSprite("mini-sausage");
-  //cStick4.scaleTo(scale);
-  cStick4.moveTo(app.renderer.width / 2 + 2 * cStick4.rect.obj.width, 250);
-  gameContainer.addChild(cStick4.container);
-  sticksGroup.push(cStick4);*/
-
   let gameLogic = new GameLogic(app, 0);
   gameLogic.show();
   app.stage.addChild(gameContainer);
+
+  setTimeout(() => {
+    gameLogic.hide();
+    gameLogic.destroy();
+  }, 5000);
 
   function callback(progress) {
     //console.log(progress)
