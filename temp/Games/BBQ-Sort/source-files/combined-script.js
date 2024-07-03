@@ -66,6 +66,11 @@
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/paper-cropped.png"
         },
+        {
+          alias: "bg-gameplay-1",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bbq-grill-bg-5.jpg"
+        },
         // In game related images
         {
           alias: "bbq-stick",
@@ -540,7 +545,7 @@
       let startPositionY = -2;
       let startPositionX = -2;
       let currentPageDisplayCount = 0;
-      for (let level = 0; level < 50; level++) {
+      for (let level = 0; level < 100; level++) {
         // Only display a maximum of 12 levels on a page
         if (currentPageDisplayCount >= 12) {
           currentPageDisplayCount = 0;
@@ -565,6 +570,10 @@
         makeInteractive(box);
         box.on("pointerdown", () => {
           PIXI.Assets.get("button-click").play();
+          if (box.level > userCompletedLevel) return;
+          this.selectedGameLevel = box.level;
+          this.switchToGameScene = true;
+          console.log("proceed");
         });
         this.objects.push(box);
         this.container.addChild(box);
@@ -721,9 +730,11 @@
       this.objects.push(mainMenu);
       this.container.addChild(mainMenu);
 
-      // Create banner button (filled 90% of the width)
+      // Create banner image (filled 90% of the width / height)
       let bannerTexture = PIXI.Assets.get("banner"),
-        scaleBanner = (this.app.renderer.width * 0.9) / bannerTexture.width;
+        scaleBannerX = (this.app.renderer.height * 0.9) / bannerTexture.height,
+        scaleBannerY = (this.app.renderer.width * 0.9) / bannerTexture.width,
+        scaleBanner = scaleBannerY > scaleBannerX ? scaleBannerX : scaleBannerY;
 
       let banner = new PIXI.Sprite(bannerTexture);
       banner.anchor.set(0.5);
@@ -774,7 +785,7 @@
 
   // Class for setting scene
   class GamePlayScene {
-    constructor(app) {
+    constructor(app, gameLevel) {
       this.app = app;
       this.type = "gameplay-scene";
       this.container = new PIXI.Container();
@@ -785,11 +796,11 @@
 
     createScene() {
       // Get bg main menu
-      const levelSelectionTexture = PIXI.Assets.get("bg-main-menu");
+      const gamePlayTexture = PIXI.Assets.get("bg-gameplay-1");
 
       // Get canvas size ratio
-      let scaleX = this.app.renderer.width / levelSelectionTexture.width;
-      let scaleY = this.app.renderer.height / levelSelectionTexture.height;
+      let scaleX = this.app.renderer.width / gamePlayTexture.width;
+      let scaleY = this.app.renderer.height / gamePlayTexture.height;
       let scale = scaleX > scaleY ? scaleX : scaleY;
 
       // Calculate font size
@@ -808,17 +819,50 @@
         lineJoin: "round"
       });
 
+      // Create blur filter
+      const blurFilter = new PIXI.BlurFilter();
+      blurFilter.blur = 2; // Adjust the blur amount
+
       // Create bg main menu image
-      const mainMenu = new PIXI.Sprite(levelSelectionTexture);
-      mainMenu.anchor.set(0.5);
-      mainMenu.scale.set(floor(scale, 2));
-      mainMenu.position.set(
+      const gamePlayBG = new PIXI.Sprite(gamePlayTexture);
+      gamePlayBG.anchor.set(0.5);
+      gamePlayBG.scale.set(floor(scale, 2));
+      gamePlayBG.position.set(
         this.app.screen.width / 2,
         this.app.screen.height / 2
       );
-      this.objects.push(mainMenu);
-      this.container.addChild(mainMenu);
+      gamePlayBG.filters = [blurFilter];
+      this.objects.push(gamePlayBG);
+      this.container.addChild(gamePlayBG);
+
+      this.createStick();
     }
+
+    createRectGraphic(x, y, width, height, color) {
+      return new PIXI.Graphics().rect(x, y, width, height).fill(color);
+    }
+
+    createStick() {}
+
+    show() {
+      this.app.stage.addChild(this.container);
+    }
+
+    hide() {
+      this.app.stage.removeChild(this.container);
+    }
+
+    destroy() {
+      this.objects.forEach((obj) => {
+        this.container.removeChild(obj);
+        obj.destroy();
+      });
+      this.container.destroy();
+      this.objects = null;
+      this.isDestroyed = true;
+    }
+
+    update() {}
   }
 
   // Create a new application
@@ -837,10 +881,10 @@
   let activeScene;
   let loadingScene = new LoadingScene(app);
   loadingScene.show();
-  let mainMenuScene, levelSelectionScene, settingScene;
+  let mainMenuScene, levelSelectionScene, settingScene, gameScene;
   activeScene = loadingScene;
 
-  let userCompletedLevel = 4;
+  let userCompletedLevel = window.localStorage.getItem("level") ?? 0;
 
   // Listen for animate update
   app.ticker.add((time) => {
@@ -877,7 +921,7 @@
     } else if (activeScene.switchToGameScene) {
       activeScene.switchToGameScene = false;
       activeScene.hide();
-      if (!gameScene) gameScene = new GamePlayScene(app);
+      gameScene = new GamePlayScene(app, activeScene.selectedGameLevel);
       gameScene.show();
       activeScene = gameScene;
     }
