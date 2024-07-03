@@ -169,6 +169,11 @@
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/completion-level.wav"
         },
         {
+          alias: "level-failure",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/brass-fail.mp3"
+        },
+        {
           alias: "single-completion",
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/audioblocks-happy-happy-award-achievement.mp3"
@@ -445,7 +450,7 @@
       // Play background music
       backgroundMusic = PIXI.Assets.get("background-music");
       backgroundMusic.play({
-        volume: 0.5,
+        volume: 0.35,
         loop: 1
       });
     }
@@ -517,6 +522,26 @@
       );
       this.objects.push(levelSelection);
       this.container.addChild(levelSelection);
+
+      // Create blur filter
+      const blurFilter = new PIXI.BlurFilter();
+      blurFilter.blur = 5; // Adjust the blur amount
+
+      // Create a graphic rectangle
+      const rect = new PIXI.Graphics();
+      rect.beginFill("#000000"); // Black color
+      rect.alpha = 0.5;
+      rect.drawRect(
+        Math.round(-this.app.renderer.width / 2),
+        Math.round(-this.app.renderer.height / 2),
+        Math.round(this.app.renderer.width),
+        Math.round(this.app.renderer.height)
+      );
+      rect.endFill();
+      rect.position.set(this.app.screen.width / 2, this.app.screen.height / 2);
+      rect.filters = [blurFilter];
+      this.objects.push(rect);
+      this.container.addChild(rect);
 
       // Create banner image (filled 90% of the width / height)
       let bannerTexture = PIXI.Assets.get("banner"),
@@ -1014,6 +1039,24 @@
         count: count
       };
     }
+    destroy() {
+      this.container.removeChild(this.stick.obj);
+      this.stick.obj.destroy();
+      this.stick = null;
+      this.container.removeChild(this.rect.obj);
+      this.rect.obj.destroy();
+      this.rect = null;
+      this.content.forEach((elem) => {
+        this.container.removeChild(elem.obj);
+        elem.obj.destroy();
+      });
+      this.content = [];
+      this.container.destroy();
+      this.container = null;
+      this.filter.destroy();
+      this.filter = null;
+      this.isDestroyed = true;
+    }
     update() {
       let type = null;
       switch (this.selectionCurrentState) {
@@ -1165,7 +1208,7 @@
     }
   }
 
-  // Class for setting scene
+  // Class for gameplay scene
   class GamePlayScene {
     constructor(app, level) {
       this.app = app;
@@ -1176,6 +1219,7 @@
       this.sticksGroup = [];
       this.isDestroyed = false;
       this.isPuzzleCompleted = false;
+      this.isPuzzleFailed = false;
       this.createScene();
     }
 
@@ -1205,8 +1249,8 @@
       });
 
       // Create blur filter
-      const blurFilter = new PIXI.BlurFilter();
-      blurFilter.blur = 10; // Adjust the blur amount
+      this.blurFilter = new PIXI.BlurFilter();
+      this.blurFilter.blur = 5; // Adjust the blur amount
 
       // Create bg main menu image
       const gamePlayBG = new PIXI.Sprite(gamePlayTexture);
@@ -1216,10 +1260,26 @@
         this.app.screen.width / 2,
         this.app.screen.height / 2
       );
-      gamePlayBG.filters = [blurFilter];
+      gamePlayBG.filters = [this.blurFilter];
       this.objects.push(gamePlayBG);
       this.container.addChild(gamePlayBG);
 
+      // Create a graphic rectangle
+      const rect = new PIXI.Graphics();
+      rect.beginFill("#000000"); // Black color
+      rect.alpha = 0.4;
+      rect.drawRect(
+        Math.round(-this.app.renderer.width / 2),
+        Math.round(-this.app.renderer.height / 2),
+        Math.round(this.app.renderer.width),
+        Math.round(this.app.renderer.height)
+      );
+      rect.endFill();
+      rect.position.set(this.app.screen.width / 2, this.app.screen.height / 2);
+      this.objects.push(rect);
+      this.container.addChild(rect);
+
+      // Game logic
       let numberOfRows,
         numberOfColumns,
         numberOfSticks,
@@ -1289,6 +1349,8 @@
         this.container.addChild(cStick.container);
         this.sticksGroup.push(cStick);
       }
+
+      this.maxFoodPerStick = maxFoodPerStick;
     }
 
     shuffle(array) {
@@ -1307,12 +1369,19 @@
     }
 
     destroy() {
+      this.blurFilter.destroy();
+      this.blurFilter = null;
       this.objects.forEach((obj) => {
         this.container.removeChild(obj);
         obj.destroy();
       });
+      this.sticksGroup.forEach((obj) => {
+        this.container.removeChild(obj.container);
+        obj.destroy();
+      });
+      this.sticksGroup = [];
       this.container.destroy();
-      this.objects = null;
+      this.container = null;
       this.isDestroyed = true;
     }
 
@@ -1339,7 +1408,7 @@
             otherSticksGroup[temp].content.length === 0 ||
             (topInfo.type === currentTopInfo.type &&
               otherSticksGroup[temp].content.length + currentTopInfo.length <=
-                4)
+                this.maxFoodPerStick)
           ) {
             isPuzzleFailed = false;
             break;
@@ -1389,7 +1458,10 @@
             }
 
             // Check if target length is enough to accommodate origin objects
-            if (targetSprite.content.length + originTopSpriteInfo.length > 4) {
+            if (
+              targetSprite.content.length + originTopSpriteInfo.length >
+              this.maxFoodPerStick
+            ) {
               // Unselect both object
               originSprite.onClick();
               targetSprite.onClick();
@@ -1407,7 +1479,9 @@
             );
 
             // Check if target stick puzzle is completed
-            if (targetSprite.getTopSpriteInfo().length === 4) {
+            if (
+              targetSprite.getTopSpriteInfo().length === this.maxFoodPerStick
+            ) {
               targetSprite.setCompletion();
             }
             break;
@@ -1416,9 +1490,15 @@
       }
       if (isPuzzleCompleted) {
         this.isPuzzleCompleted = true;
+        PIXI.Assets.get("level-completion").play({
+          volume: 2
+        });
       }
       if (isPuzzleFailed) {
         this.isPuzzleFailed = true;
+        PIXI.Assets.get("level-failure").play({
+          volume: 2
+        });
       }
     }
   }
@@ -1482,6 +1562,21 @@
       gameScene = new GamePlayScene(app, activeScene.selectedGameLevel);
       gameScene.show();
       activeScene = gameScene;
+    } else if (activeScene.isPuzzleCompleted) {
+      console.log("win");
+      window.localStorage.setItem("level", ++userCompletedLevel);
+      gameScene.hide();
+      gameScene.destroy();
+      gameScene = null;
+      levelSelectionScene.show();
+      activeScene = levelSelectionScene;
+    } else if (activeScene.isPuzzleFailed) {
+      console.log("f");
+      gameScene.hide();
+      gameScene.destroy();
+      gameScene = null;
+      levelSelectionScene.show();
+      activeScene = levelSelectionScene;
     }
   });
 })();
