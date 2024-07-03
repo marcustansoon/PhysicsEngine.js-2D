@@ -135,7 +135,7 @@
       gameContainer.visible = 1;
     }, 1000);
     // Play background music
-    return;
+    //return;
     let bgSound = resources["background-music"];
     bgSound.play({
       volume: 0.01,
@@ -150,13 +150,8 @@
     }, 50);
   });
 
-  class PIXI_Simplified {
+  class BBQ_Sprite {
     constructor() {}
-
-    createSprite(textureName) {
-      let sprite = new PIXI.Sprite(PIXI.Texture.from(textureName));
-      return sprite;
-    }
 
     createRectGraphic(x, y, width, height, color) {
       return new PIXI.Graphics().rect(x, y, width, height).fill(color);
@@ -172,12 +167,6 @@
       filter.hue(100, false); // Adjust hue to give it a glowing effect
       filter.saturate(1.1, false); // Increase saturation
       return filter;
-    }
-  }
-
-  class BBQ_Sprite extends PIXI_Simplified {
-    constructor() {
-      super();
     }
 
     getParentSpriteNameByChildName(childName) {
@@ -195,6 +184,9 @@
           return "salmon";
           break;
         case "meat":
+          return "chicken-wing";
+          break;
+        default:
           return "chicken-wing";
           break;
       }
@@ -220,7 +212,7 @@
     }
 
     createStick() {
-      let stick = super.createSprite("bbq-stick");
+      let stick = new PIXI.Sprite(PIXI.Assets.get("bbq-stick"));
       stick.anchor.set(0.5);
       stick.scale.set(this.scale);
       this.stick = { type: "bbq-stick", obj: stick };
@@ -244,8 +236,9 @@
       this.rect = { obj: rect, type: "rect" };
       this.container.addChild(rect);
     }
+
     onClick() {
-      if (this.completedSprite) return;
+      if (this.completedPuzzle) return;
       this.isSelected = !this.isSelected;
       if (this.isSelected) {
         this.selectionTimestamp = Date.now();
@@ -255,8 +248,9 @@
         this.playDownAnimation();
       }
     }
+
     createChildSprite(childName) {
-      let sprite = super.createSprite(childName);
+      let sprite = new PIXI.Sprite(PIXI.Assets.get(childName));
       sprite.anchor.set(0.5);
       sprite.x = -500;
       sprite.y = -500;
@@ -264,17 +258,19 @@
       this.scaleTo(this.scale);
       this.container.addChild(sprite);
     }
+
     createParentSprite(childName) {
-      let sprite = super.createSprite(
-        super.getParentSpriteNameByChildName(childName)
+      let sprite = new PIXI.Sprite(
+        PIXI.Assets.get(super.getParentSpriteNameByChildName(childName))
       );
       sprite.anchor.set(0.5);
       sprite.x = this.stick.obj.x;
       sprite.y = this.stick.obj.y;
-      this.completedSprite = { obj: sprite, type: childName };
+      this.completedPuzzle = { obj: sprite, type: childName };
       this.scaleTo(this.stick.obj.scale.x);
       this.container.addChild(sprite);
     }
+
     getTopSpriteInfo() {
       let type = this.content.length
         ? this.content[this.content.length - 1].type
@@ -286,9 +282,9 @@
       }
       return { type: type, length: length };
     }
+
     setCompletion() {
       let temp = this.getTopSpriteInfo();
-      if (temp.length !== 4) return;
       for (let index = 0; index < temp.length; index++) {
         let sprite = this.content.pop();
         this.container.removeChild(sprite.obj);
@@ -296,6 +292,7 @@
       }
       this.createParentSprite(temp.type);
     }
+
     unloadTopSprites() {
       let temp = this.getTopSpriteInfo();
       for (let index = 0; index < temp.length; index++) {
@@ -308,6 +305,7 @@
         this.selectionTimestamp = null;
       }
     }
+
     loadTopSprites(type, length) {
       for (let temp = 0; temp < length; temp++) {
         this.createChildSprite(type);
@@ -316,6 +314,7 @@
       this.selectionTimestamp = null;
       this.playPlacementAnimation(length);
     }
+
     getDefaultYCoordinate(index) {
       return (
         this.stick.obj.y +
@@ -323,6 +322,7 @@
           100
       );
     }
+
     moveTo(x, y) {
       // Update stick position
       this.stick.obj.x = x;
@@ -336,19 +336,21 @@
         elem.obj.x = this.stick.obj.x;
       });
     }
+
     scaleTo(scale) {
       this.scale = scale;
       this.stick.obj.scale.set(scale);
       this.content.forEach((elem, index) => {
         elem.obj.scale.set(scale);
       });
-      if (this.completedSprite) {
-        this.completedSprite.obj.scale.set(
+      if (this.completedPuzzle) {
+        this.completedPuzzle.obj.scale.set(
           Math.floor((scale / 0.4) * 0.8 * 10) / 10
         );
       }
       //this.rect.obj.scale.set(Math.floor((scale / 0.35) * 1 * 10) / 10);
     }
+
     playUpAnimation() {
       this.animation = "UP";
       this.selectionCurrentState = "WAIT";
@@ -436,7 +438,7 @@
           }
           break;
         case "PRE-UP":
-          songResources["up"].play();
+          //songResources["up"].play();
           let skipFilter = false;
           for (let index = this.content.length - 1; index >= 0; index--) {
             this.content[index].obj.y = this.getDefaultYCoordinate(index);
@@ -479,7 +481,7 @@
           }
           break;
         case "PRE-DOWN":
-          songResources["down"].play();
+          //songResources["down"].play();
           for (let index = this.content.length - 1; index >= 0; index--) {
             if (!type) {
               type = this.content[index].type;
@@ -540,38 +542,135 @@
       this.objects = [];
       this.sticksGroup = [];
       this.isDestroyed = false;
+      this.isPuzzleCompleted = false;
       this.createScene();
     }
 
+    shuffle(array) {
+      return array
+        .map((a) => ({ sort: Math.random(), value: a }))
+        .sort((a, b) => a.sort - b.sort)
+        .map((a) => a.value);
+    }
+
     createScene() {
+      let numberOfRows,
+        numberOfColumns,
+        numberOfSticks,
+        maxFoodPerStick,
+        foodNames;
+
+      if (this.level == 0) {
+        numberOfRows = 1 + 1;
+        numberOfColumns = 3 + 1;
+        numberOfSticks = 3;
+        maxFoodPerStick = 4;
+        foodNames = ["meat", "mini-sausage"];
+      } else if (this.level == 1) {
+        numberOfRows = 1 + 1;
+        numberOfColumns = 3 + 1;
+        numberOfSticks = 3;
+        maxFoodPerStick = 4;
+        foodNames = ["meat", "mini-sausage"];
+      } else {
+        numberOfRows = 1 + 1;
+        numberOfColumns = 3 + 1;
+        numberOfSticks = 3;
+        maxFoodPerStick = 4;
+        foodNames = ["meat", "mini-sausage"];
+      }
+
       // Get canvas size ratio
-      let numberOfRows = 2,
-        numberOfColumns = 8,
-        maxWidthPerSprite = 220,
+      let maxWidthPerSprite = 220,
         maxHeightPerSprite = 150;
       let scaleX = app.renderer.width / maxWidthPerSprite / numberOfColumns;
       let scaleY =
         app.renderer.height / numberOfRows / (maxHeightPerSprite * 8);
       let scale = Math.min(scaleX, scaleY);
 
-      let cStick = new Stick(scale);
-      cStick.createChildSprite("cucumber-slice");
-      cStick.createChildSprite("mini-sausage");
-      cStick.createChildSprite("meat");
-      cStick.createChildSprite("meat");
-      //cStick.scaleTo(scale);
-      cStick.moveTo(app.renderer.width / 2 - cStick.rect.obj.width, 250);
-      this.container.addChild(cStick.container);
-      this.sticksGroup.push(cStick);
+      let allFoodNames = [];
+      foodNames.forEach((name) => {
+        let repeat = maxFoodPerStick;
+        while (repeat--) allFoodNames.push(name);
+      });
+      allFoodNames = this.shuffle(allFoodNames);
+
+      let startPositionX = 0,
+        positionXCount = 0,
+        startPositionY = 0;
+      for (let stickCount = 0; stickCount < numberOfSticks; stickCount++) {
+        let cStick = new Stick(scale);
+        for (let foodCount = 0; foodCount < maxFoodPerStick; foodCount++) {
+          let foodName = allFoodNames.pop();
+          if (!foodName) break;
+          cStick.createChildSprite(foodName);
+        }
+        cStick.scaleTo(scale);
+
+        // Positioning
+        positionXCount++;
+        startPositionX += app.renderer.width / numberOfColumns;
+        if (!stickCount) {
+          startPositionY = app.renderer.height / numberOfRows;
+        }
+        if (positionXCount % numberOfColumns === 0) {
+          positionXCount = 1;
+          startPositionX = app.renderer.width / numberOfColumns;
+          startPositionY += app.renderer.height / numberOfRows;
+        }
+        cStick.moveTo(startPositionX, startPositionY);
+        this.container.addChild(cStick.container);
+        this.sticksGroup.push(cStick);
+      }
     }
 
     show() {
       this.app.stage.addChild(this.container);
     }
 
+    hide() {
+      this.app.stage.removeChild(this.container);
+    }
+
+    destroy() {
+      this.objects.forEach((obj) => {
+        this.container.removeChild(obj);
+        obj.destroy();
+      });
+      this.objects = [];
+      this.isDestroyed = true;
+    }
+
     update() {
+      let isPuzzleCompleted = true,
+        isPuzzleFailed = true;
       for (let indexM = 0; indexM < this.sticksGroup.length; indexM++) {
         let elem = this.sticksGroup[indexM];
+
+        // Check for level completion
+        if (!elem.completedPuzzle && elem.content.length !== 0) {
+          isPuzzleCompleted = false;
+        }
+
+        // Check for failure
+        let currentTopInfo = elem.getTopSpriteInfo();
+        // Filter stick sprites where not self
+        let otherSticksGroup = this.sticksGroup.filter(
+          (elem, index) => indexM !== index
+        );
+        for (let temp = 0; temp < otherSticksGroup.length; temp++) {
+          let topInfo = otherSticksGroup[temp].getTopSpriteInfo();
+          if (
+            otherSticksGroup[temp].content.length === 0 ||
+            (topInfo.type === currentTopInfo.type &&
+              otherSticksGroup[temp].content.length + currentTopInfo.length <=
+                4)
+          ) {
+            isPuzzleFailed = false;
+            break;
+          }
+        }
+
         // Update animation
         elem.update();
 
@@ -589,7 +688,7 @@
           }
           for (let index = 0; index < group.length; index++) {
             // Identify the first selected and second selected sprites
-            let originStick, targetStick;
+            let originSprite, targetSprite;
             if (elem.selectionTimestamp <= group[index].selectionTimestamp) {
               originSprite = elem;
               targetSprite = group[index];
@@ -609,7 +708,7 @@
               // Unselect both object
               originSprite.onClick();
               targetSprite.onClick();
-              songResources["error"].play();
+              //songResources["error"].play();
               console.log("err");
               break;
             }
@@ -619,13 +718,13 @@
               // Unselect both object
               originSprite.onClick();
               targetSprite.onClick();
-              songResources["error"].play();
+              //songResources["error"].play();
               console.log("err2");
               break;
             }
 
             // Successful moving objects from origin to target stick
-            songResources["single-completion"].play();
+            //songResources["single-completion"].play();
             originSprite.unloadTopSprites();
             targetSprite.loadTopSprites(
               originTopSpriteInfo.type,
@@ -639,6 +738,12 @@
             break;
           }
         }
+      }
+      if (isPuzzleCompleted) {
+        this.isPuzzleCompleted = true;
+      }
+      if (isPuzzleFailed) {
+        this.isPuzzleFailed = true;
       }
     }
   }
