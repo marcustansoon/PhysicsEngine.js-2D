@@ -31,7 +31,7 @@ fetch('https://ai.picsart.com/gw1/text-to-image-middleware/ai-expand/v1/86e0638a
     }}
     ).then(e=>e.json()).then(d => console.log(d?.data[0]?.url ))
 
-
+generate game buttons on 2d paper banner UI (#F1ECCE color), cartoon style , dark yellow
 
 https://goart.fotor.com/
 hiwotih681@nolanzip.com
