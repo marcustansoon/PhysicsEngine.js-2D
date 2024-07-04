@@ -32,9 +32,9 @@
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/text-bg-transparent.png"
         },
         {
-          alias: "level-selection-box",
+          alias: "patty-running",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/meat.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/patty-run.png"
         },
         {
           alias: "star",
@@ -47,9 +47,9 @@
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/level-selection-bg.jpg"
         },
         {
-          alias: "left-arrow",
+          alias: "left-button",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/left-arrow.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/left-button.png"
         },
         {
           alias: "right-arrow",
@@ -57,14 +57,14 @@
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/right-arrow.png"
         },
         {
-          alias: "back-button",
+          alias: "close-button",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/back-button.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/close-button-3.png"
         },
         {
           alias: "banner",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/paper-cropped.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/paper-cropped-2-brighter.png"
         },
         {
           alias: "bg-gameplay-1",
@@ -512,6 +512,10 @@
         lineJoin: "round"
       });
 
+      // Create blur filter
+      const blurFilter = new PIXI.BlurFilter();
+      blurFilter.blur = 5; // Adjust the blur amount
+
       // Create bg level selection image
       const levelSelection = new PIXI.Sprite(levelSelectionTexture);
       levelSelection.anchor.set(0.5);
@@ -520,12 +524,9 @@
         this.app.screen.width / 2,
         this.app.screen.height / 2
       );
+      levelSelection.filters = [blurFilter];
       this.objects.push(levelSelection);
       this.container.addChild(levelSelection);
-
-      // Create blur filter
-      const blurFilter = new PIXI.BlurFilter();
-      blurFilter.blur = 5; // Adjust the blur amount
 
       // Create a graphic rectangle
       const rect = new PIXI.Graphics();
@@ -539,7 +540,6 @@
       );
       rect.endFill();
       rect.position.set(this.app.screen.width / 2, this.app.screen.height / 2);
-      rect.filters = [blurFilter];
       this.objects.push(rect);
       this.container.addChild(rect);
 
@@ -559,26 +559,26 @@
       this.objects.push(banner);
       this.container.addChild(banner);
 
-      let levelSelectionBoxTexture = PIXI.Assets.get("level-selection-box");
+      let levelSelectionBoxTexture = PIXI.Assets.get("patty-running");
       let scaleBoxX =
-          this.app.renderer.width / 6 / levelSelectionBoxTexture.width,
+          this.app.renderer.width / 5 / levelSelectionBoxTexture.width,
         scaleBoxY =
-          this.app.renderer.height / 6 / levelSelectionBoxTexture.height,
+          this.app.renderer.height / 5 / levelSelectionBoxTexture.height,
         scaleBox = scaleBoxX < scaleBoxY ? scaleBoxX : scaleBoxY;
 
       this.levelSelectionPages = [[]];
-      let startPositionY = -2;
-      let startPositionX = -2;
+      let startPositionY = -1.3;
+      let startPositionX = -1.3;
       let currentPageDisplayCount = 0;
-      for (let level = 0; level < 100; level++) {
+      for (let level = 0; level < 50; level++) {
         // Only display a maximum of 12 levels on a page
-        if (currentPageDisplayCount >= 12) {
+        if (currentPageDisplayCount >= 9) {
           currentPageDisplayCount = 0;
           this.levelSelectionPages.push([]);
         }
         let incrementY =
-            startPositionY + Math.floor(currentPageDisplayCount / 4) * 1.3,
-          incrementX = startPositionX + (currentPageDisplayCount % 4) * 1.3;
+            startPositionY + Math.floor(currentPageDisplayCount / 3) * 1.3,
+          incrementX = startPositionX + (currentPageDisplayCount % 3) * 1.3;
 
         // Create level selection box
         let box = new PIXI.Sprite(levelSelectionBoxTexture);
@@ -618,13 +618,13 @@
       }
 
       // Create left and right button
-      let leftArrow = new PIXI.Sprite(PIXI.Assets.get("left-arrow"));
+      let leftArrow = new PIXI.Sprite(PIXI.Assets.get("left-button"));
       leftArrow.anchor.set(0.5);
-      leftArrow.scale.set(floor(scaleBox, 2));
+      leftArrow.scale.set(floor((scaleBanner / 0.67) * 0.25, 2));
+      leftArrow.scale.x *= -1; // Flip image
       leftArrow.position.set(
         this.app.screen.width / 5,
-        this.app.screen.height / 2 +
-          2 * floor(levelSelectionBoxTexture.height * scaleBox, 2)
+        banner.y + floor(banner.height * 0.5, 2)
       );
       makeInteractive(leftArrow);
       leftArrow.on("pointerdown", () => {
@@ -635,13 +635,12 @@
       this.objects.push(leftArrow);
       this.container.addChild(leftArrow);
 
-      let rightArrow = new PIXI.Sprite(PIXI.Assets.get("right-arrow"));
+      let rightArrow = new PIXI.Sprite(PIXI.Assets.get("left-button"));
       rightArrow.anchor.set(0.5);
-      rightArrow.scale.set(floor(scaleBox, 2));
+      rightArrow.scale.set(floor((scaleBanner / 0.67) * 0.25, 2));
       rightArrow.position.set(
         (this.app.screen.width / 5) * 4,
-        this.app.screen.height / 2 +
-          2 * floor(levelSelectionBoxTexture.height * scaleBox, 2)
+        banner.y + floor(banner.height * 0.5, 2)
       );
       makeInteractive(rightArrow);
       rightArrow.on("pointerdown", () => {
@@ -653,11 +652,11 @@
       this.container.addChild(rightArrow);
 
       // Create back button
-      let backButton = new PIXI.Sprite(PIXI.Assets.get("back-button"));
+      let backButton = new PIXI.Sprite(PIXI.Assets.get("close-button"));
       backButton.anchor.set(0.5);
-      backButton.scale.set(floor((scale / 0.34) * 0.2, 2));
+      backButton.scale.set(floor((scaleBanner / 0.67) * 0.25, 2));
       backButton.position.set(
-        this.app.screen.width / 5,
+        (this.app.screen.width / 6) * 5,
         banner.y - floor(banner.height * 0.5, 2)
       );
       makeInteractive(backButton);
@@ -720,11 +719,11 @@
 
     createScene() {
       // Get bg main menu
-      const levelSelectionTexture = PIXI.Assets.get("bg-main-menu");
+      const settingTexture = PIXI.Assets.get("bg-main-menu");
 
       // Get canvas size ratio
-      let scaleX = this.app.renderer.width / levelSelectionTexture.width;
-      let scaleY = this.app.renderer.height / levelSelectionTexture.height;
+      let scaleX = this.app.renderer.width / settingTexture.width;
+      let scaleY = this.app.renderer.height / settingTexture.height;
       let scale = scaleX > scaleY ? scaleX : scaleY;
 
       // Calculate font size
@@ -743,16 +742,36 @@
         lineJoin: "round"
       });
 
+      // Create blur filter
+      const blurFilter = new PIXI.BlurFilter();
+      blurFilter.blur = 5; // Adjust the blur amount
+
       // Create bg main menu image
-      const mainMenu = new PIXI.Sprite(levelSelectionTexture);
-      mainMenu.anchor.set(0.5);
-      mainMenu.scale.set(floor(scale, 2));
-      mainMenu.position.set(
+      const setting = new PIXI.Sprite(settingTexture);
+      setting.anchor.set(0.5);
+      setting.scale.set(floor(scale, 2));
+      setting.position.set(
         this.app.screen.width / 2,
         this.app.screen.height / 2
       );
-      this.objects.push(mainMenu);
-      this.container.addChild(mainMenu);
+      setting.filters = [blurFilter];
+      this.objects.push(setting);
+      this.container.addChild(setting);
+
+      // Create a graphic rectangle
+      const rect = new PIXI.Graphics();
+      rect.beginFill("#000000"); // Black color
+      rect.alpha = 0.5;
+      rect.drawRect(
+        Math.round(-this.app.renderer.width / 2),
+        Math.round(-this.app.renderer.height / 2),
+        Math.round(this.app.renderer.width),
+        Math.round(this.app.renderer.height)
+      );
+      rect.endFill();
+      rect.position.set(this.app.screen.width / 2, this.app.screen.height / 2);
+      this.objects.push(rect);
+      this.container.addChild(rect);
 
       // Create banner image (filled 90% of the width / height)
       let bannerTexture = PIXI.Assets.get("banner"),
@@ -771,11 +790,11 @@
       this.container.addChild(banner);
 
       // Create back button
-      let backButton = new PIXI.Sprite(PIXI.Assets.get("back-button"));
+      let backButton = new PIXI.Sprite(PIXI.Assets.get("close-button"));
       backButton.anchor.set(0.5);
-      backButton.scale.set(floor((scale / 0.34) * 0.2, 2));
+      backButton.scale.set(floor((scaleBanner / 0.67) * 0.25, 2));
       backButton.position.set(
-        this.app.screen.width / 5,
+        (this.app.screen.width / 6) * 5,
         banner.y - floor(banner.height * 0.5, 2)
       );
       makeInteractive(backButton);
