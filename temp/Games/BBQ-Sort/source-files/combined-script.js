@@ -1564,7 +1564,12 @@
       activeScene = gameScene;
     } else if (activeScene.isPuzzleCompleted) {
       console.log("win");
-      window.localStorage.setItem("level", ++userCompletedLevel);
+      window.localStorage.setItem(
+        "level",
+        gameScene.level === userCompletedLevel
+          ? ++userCompletedLevel
+          : userCompletedLevel
+      );
       gameScene.hide();
       gameScene.destroy();
       gameScene = null;
