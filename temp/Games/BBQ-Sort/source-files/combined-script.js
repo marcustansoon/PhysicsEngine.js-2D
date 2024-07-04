@@ -727,7 +727,7 @@
       let scale = scaleX > scaleY ? scaleX : scaleY;
 
       // Calculate font size
-      let fontSize = Math.round((scale / 0.3) * 24 * 10) / 10;
+      let fontSize = Math.round((scale / 0.18) * 12 * 10) / 10;
 
       // Create text with custom style
       let style = new PIXI.TextStyle({
@@ -777,7 +777,7 @@
       let bannerTexture = PIXI.Assets.get("banner"),
         scaleBannerX = (this.app.renderer.height * 0.9) / bannerTexture.height,
         scaleBannerY = (this.app.renderer.width * 0.9) / bannerTexture.width,
-        scaleBanner = scaleBannerY > scaleBannerX ? scaleBannerX : scaleBannerY;
+        scaleBanner = Math.min(scaleBannerX, scaleBannerY);
 
       let banner = new PIXI.Sprite(bannerTexture);
       banner.anchor.set(0.5);
@@ -788,6 +788,65 @@
       );
       this.objects.push(banner);
       this.container.addChild(banner);
+
+      // Create text
+      let soundEffectText = new PIXI.Text("SOUND EFFECT", style);
+      soundEffectText.anchor.set(0.5);
+      // Create tick
+      let tickSoundEffect = new PIXI.Sprite(PIXI.Assets.get("tick"));
+      tickSoundEffect.anchor.set(0.5);
+      tickSoundEffect.scale.set((scaleBanner / 0.5) * 0.15);
+
+      soundEffectText.position.set(
+        this.app.renderer.width / 2 -
+          (soundEffectText.width + tickSoundEffect.width) / 2 +
+          soundEffectText.width / 2,
+        this.app.renderer.height / 2 - banner.height / 4
+      );
+      this.objects.push(soundEffectText);
+      this.container.addChild(soundEffectText);
+
+      tickSoundEffect.position.set(
+        this.app.screen.width / 2 +
+          (soundEffectText.width + tickSoundEffect.width) / 2,
+        this.app.renderer.height / 2 - banner.height / 4
+      );
+      this.objects.push(tickSoundEffect);
+      this.container.addChild(tickSoundEffect);
+
+      // Create text
+      let musicText = new PIXI.Text("MUSIC", style);
+      musicText.anchor.set(0.5);
+      musicText.position.set(soundEffectText.x, this.app.renderer.height / 2);
+      this.objects.push(musicText);
+      this.container.addChild(musicText);
+      // Create tick
+      let tickMusic = new PIXI.Sprite(PIXI.Assets.get("tick"));
+      tickMusic.anchor.set(0.5);
+      tickMusic.scale.set((scaleBanner / 0.5) * 0.15);
+      tickMusic.position.set(tickSoundEffect.x, this.app.renderer.height / 2);
+      this.objects.push(tickMusic);
+      this.container.addChild(tickMusic);
+
+      // Create text
+      let vibrationText = new PIXI.Text("VIBRATION", style);
+      vibrationText.anchor.set(0.5);
+      vibrationText.position.set(
+        soundEffectText.x,
+        this.app.renderer.height / 2 + banner.height / 4
+      );
+      this.objects.push(vibrationText);
+      this.container.addChild(vibrationText);
+      // Create tick
+      let tickVibration = new PIXI.Sprite(PIXI.Assets.get("tick"));
+      tickVibration.anchor.set(0.5);
+      tickVibration.scale.set((scaleBanner / 0.5) * 0.15);
+      tickVibration.position.set(
+        tickSoundEffect.x,
+        this.app.renderer.height / 2 + banner.height / 4
+      );
+      this.objects.push(tickVibration);
+      this.container.addChild(tickVibration);
 
       // Create back button
       let backButton = new PIXI.Sprite(PIXI.Assets.get("close-button"));
