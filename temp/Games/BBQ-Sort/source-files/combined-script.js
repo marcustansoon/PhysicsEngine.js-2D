@@ -71,6 +71,16 @@
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bbq-grill-bg-5.jpg"
         },
+        {
+          alias: "tick",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/tick.png"
+        },
+        {
+          alias: "untick",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/untick.png"
+        },
         // In game related images
         {
           alias: "bbq-stick",
@@ -182,6 +192,16 @@
           alias: "button-click",
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/text-notification.mp3"
+        },
+        {
+          alias: "tick-checkbox",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/tick.mp3"
+        },
+        {
+          alias: "button-close-sound",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/analog-appliance-button-7.mp3"
         },
         // Font styles
         {
@@ -661,7 +681,7 @@
       );
       makeInteractive(backButton);
       backButton.on("pointerdown", () => {
-        PIXI.Assets.get("button-click").play();
+        PIXI.Assets.get("button-close-sound").play();
         this.switchToMainMenuScene = true;
       });
       this.objects.push(backButton);
@@ -724,10 +744,10 @@
       // Get canvas size ratio
       let scaleX = this.app.renderer.width / settingTexture.width;
       let scaleY = this.app.renderer.height / settingTexture.height;
-      let scale = scaleX > scaleY ? scaleX : scaleY;
+      let scale = Math.max(scaleX, scaleY);
 
       // Calculate font size
-      let fontSize = Math.round((scale / 0.18) * 12 * 10) / 10;
+      let fontSize = Math.round((scale / 0.18) * 11 * 10) / 10;
 
       // Create text with custom style
       let style = new PIXI.TextStyle({
@@ -793,13 +813,24 @@
       let soundEffectText = new PIXI.Text("SOUND EFFECT", style);
       soundEffectText.anchor.set(0.5);
       // Create tick
-      let tickSoundEffect = new PIXI.Sprite(PIXI.Assets.get("tick"));
+      let tickSoundEffect = new PIXI.Sprite(
+        soundEffect ? PIXI.Assets.get("tick") : PIXI.Assets.get("untick")
+      );
       tickSoundEffect.anchor.set(0.5);
       tickSoundEffect.scale.set((scaleBanner / 0.5) * 0.15);
+      makeInteractive(tickSoundEffect);
+      tickSoundEffect.on("pointerdown", () => {
+        soundEffect = !soundEffect;
+        window.localStorage.setItem("sound-effect", soundEffect ? 1 : 0);
+        tickSoundEffect.texture = soundEffect
+          ? PIXI.Assets.get("tick")
+          : PIXI.Assets.get("untick");
+        PIXI.Assets.get("tick-checkbox").play();
+      });
 
       soundEffectText.position.set(
         this.app.renderer.width / 2 -
-          (soundEffectText.width + tickSoundEffect.width) / 2 +
+          (soundEffectText.width + tickSoundEffect.width * 2) / 2 +
           soundEffectText.width / 2,
         this.app.renderer.height / 2 - banner.height / 4
       );
@@ -808,7 +839,8 @@
 
       tickSoundEffect.position.set(
         this.app.screen.width / 2 +
-          (soundEffectText.width + tickSoundEffect.width) / 2,
+          (soundEffectText.width + tickSoundEffect.width * 2) / 2 -
+          tickSoundEffect.width / 2,
         this.app.renderer.height / 2 - banner.height / 4
       );
       this.objects.push(tickSoundEffect);
@@ -821,10 +853,21 @@
       this.objects.push(musicText);
       this.container.addChild(musicText);
       // Create tick
-      let tickMusic = new PIXI.Sprite(PIXI.Assets.get("tick"));
+      let tickMusic = new PIXI.Sprite(
+        music ? PIXI.Assets.get("tick") : PIXI.Assets.get("untick")
+      );
       tickMusic.anchor.set(0.5);
       tickMusic.scale.set((scaleBanner / 0.5) * 0.15);
       tickMusic.position.set(tickSoundEffect.x, this.app.renderer.height / 2);
+      makeInteractive(tickMusic);
+      tickMusic.on("pointerdown", () => {
+        music = !music;
+        window.localStorage.setItem("music", music ? 1 : 0);
+        tickMusic.texture = music
+          ? PIXI.Assets.get("tick")
+          : PIXI.Assets.get("untick");
+        PIXI.Assets.get("tick-checkbox").play();
+      });
       this.objects.push(tickMusic);
       this.container.addChild(tickMusic);
 
@@ -838,13 +881,24 @@
       this.objects.push(vibrationText);
       this.container.addChild(vibrationText);
       // Create tick
-      let tickVibration = new PIXI.Sprite(PIXI.Assets.get("tick"));
+      let tickVibration = new PIXI.Sprite(
+        vibration ? PIXI.Assets.get("tick") : PIXI.Assets.get("untick")
+      );
       tickVibration.anchor.set(0.5);
       tickVibration.scale.set((scaleBanner / 0.5) * 0.15);
       tickVibration.position.set(
         tickSoundEffect.x,
         this.app.renderer.height / 2 + banner.height / 4
       );
+      makeInteractive(tickVibration);
+      tickVibration.on("pointerdown", () => {
+        vibration = !vibration;
+        window.localStorage.setItem("vibration", vibration ? 1 : 0);
+        tickVibration.texture = vibration
+          ? PIXI.Assets.get("tick")
+          : PIXI.Assets.get("untick");
+        PIXI.Assets.get("tick-checkbox").play();
+      });
       this.objects.push(tickVibration);
       this.container.addChild(tickVibration);
 
@@ -858,7 +912,7 @@
       );
       makeInteractive(backButton);
       backButton.on("pointerdown", () => {
-        PIXI.Assets.get("button-click").play();
+        PIXI.Assets.get("button-close-sound").play();
         this.switchToMainMenuScene = true;
       });
       this.objects.push(backButton);
@@ -1600,7 +1654,10 @@
   let mainMenuScene, levelSelectionScene, settingScene, gameScene;
   activeScene = loadingScene;
 
-  let userCompletedLevel = window.localStorage.getItem("level") ?? 0;
+  let userCompletedLevel = parseInt(window.localStorage.getItem("level") ?? 0);
+  let soundEffect = parseInt(window.localStorage.getItem("sound-effect") ?? 1),
+    music = parseInt(window.localStorage.getItem("music") ?? 1),
+    vibration = parseInt(window.localStorage.getItem("vibration") ?? 1);
 
   // Listen for animate update
   app.ticker.add((time) => {
