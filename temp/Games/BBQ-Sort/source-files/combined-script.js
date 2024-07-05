@@ -81,6 +81,11 @@
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/untick.png"
         },
+        {
+          alias: "level-completion-bg",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/level-completed-sprite-transparent.png"
+        },
         // In game related images
         {
           alias: "bbq-stick",
@@ -1655,6 +1660,89 @@
     }
   }
 
+  // Class for gameplay scene
+  class GameCompleteScene {
+    constructor(app, level) {
+      this.app = app;
+      this.level = level;
+      this.type = "game-complete-scene";
+      this.container = new PIXI.Container();
+      this.objects = [];
+      this.sticksGroup = [];
+      this.isDestroyed = false;
+      this.isPuzzleCompleted = false;
+      this.isPuzzleFailed = false;
+      this.createScene();
+    }
+
+    createScene() {
+      // Get bg main menu
+      const gamePlayTexture = PIXI.Assets.get("bg-gameplay-1");
+
+      // Get canvas size ratio
+      let scaleX = this.app.renderer.width / gamePlayTexture.width;
+      let scaleY = this.app.renderer.height / gamePlayTexture.height;
+      let scale = scaleX > scaleY ? scaleX : scaleY;
+
+      // Calculate font size
+      let fontSize = Math.round((scale / 0.3) * 24 * 10) / 10;
+
+      // Create text with custom style
+      let style = new PIXI.TextStyle({
+        fontFamily: "Chunkfive Regular",
+        fontSize: fontSize,
+        fill: "#000000",
+        dropShadow: false,
+        fontWeight: "normal",
+        wordWrap: true,
+        wordWrapWidth: 440,
+        letterSpacing: 2,
+        lineJoin: "round"
+      });
+
+      // Create blur filter
+      this.blurFilter = new PIXI.BlurFilter();
+      this.blurFilter.blur = 5; // Adjust the blur amount
+
+      // Create bg main menu image
+      const gamePlayBG = new PIXI.Sprite(gamePlayTexture);
+      gamePlayBG.anchor.set(0.5);
+      gamePlayBG.scale.set(floor(scale, 2));
+      gamePlayBG.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2
+      );
+      gamePlayBG.filters = [this.blurFilter];
+      this.objects.push(gamePlayBG);
+      this.container.addChild(gamePlayBG);
+
+      // Create a graphic rectangle
+      const rect = new PIXI.Graphics();
+      rect.beginFill("#000000"); // Black color
+      rect.alpha = 0.4;
+      rect.drawRect(
+        Math.round(-this.app.renderer.width / 2),
+        Math.round(-this.app.renderer.height / 2),
+        Math.round(this.app.renderer.width),
+        Math.round(this.app.renderer.height)
+      );
+      rect.endFill();
+      rect.position.set(this.app.screen.width / 2, this.app.screen.height / 2);
+      this.objects.push(rect);
+      this.container.addChild(rect);
+    }
+
+    show() {
+      this.app.stage.addChild(this.container);
+    }
+
+    hide() {
+      this.app.stage.removeChild(this.container);
+    }
+
+    update() {}
+  }
+
   // Create a new application
   const app = new PIXI.Application();
 
@@ -1671,7 +1759,11 @@
   let activeScene;
   let loadingScene = new LoadingScene(app);
   loadingScene.show();
-  let mainMenuScene, levelSelectionScene, settingScene, gameScene;
+  let mainMenuScene,
+    levelSelectionScene,
+    settingScene,
+    gameScene,
+    gameCompleteScene;
   activeScene = loadingScene;
 
   let userCompletedLevel = parseInt(window.localStorage.getItem("level") ?? 0);
@@ -1728,8 +1820,9 @@
       gameScene.hide();
       gameScene.destroy();
       gameScene = null;
-      levelSelectionScene.show();
-      activeScene = levelSelectionScene;
+      if (!gameCompleteScene) gameCompleteScene = new GameCompleteScene(app);
+      gameCompleteScene.show();
+      activeScene = gameCompleteScene;
     } else if (activeScene.isPuzzleFailed) {
       console.log("f");
       gameScene.hide();
