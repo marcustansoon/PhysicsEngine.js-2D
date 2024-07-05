@@ -203,6 +203,11 @@
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/analog-appliance-button-7.mp3"
         },
+        {
+          alias: "gameplay-music",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/8bittownthemesong.mp3"
+        },
         // Font styles
         {
           alias: "ChunkFive",
@@ -469,6 +474,7 @@
 
       // Play background music
       backgroundMusic = PIXI.Assets.get("background-music");
+      gamePlayMusic = PIXI.Assets.get("gameplay-music");
       backgroundMusic.play({
         volume: 0.35,
         loop: 1
@@ -1493,10 +1499,24 @@
     }
 
     show() {
+      // Stop bg music
+      backgroundMusic.stop();
+      // Play gameplay music
+      gamePlayMusic.play({
+        volume: 0.5,
+        loop: 1
+      });
       this.app.stage.addChild(this.container);
     }
 
     hide() {
+      // Stop bg music
+      gamePlayMusic.stop();
+      // Play gameplay music
+      backgroundMusic.play({
+        volume: 0.35,
+        loop: 1
+      });
       this.app.stage.removeChild(this.container);
     }
 
@@ -1647,7 +1667,7 @@
   // Append the application canvas to the document body
   document.body.appendChild(app.canvas);
 
-  let backgroundMusic;
+  let backgroundMusic, gamePlayMusic;
   let activeScene;
   let loadingScene = new LoadingScene(app);
   loadingScene.show();
