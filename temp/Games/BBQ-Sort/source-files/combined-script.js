@@ -86,7 +86,20 @@
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/level-completed-sprite-transparent.png"
         },
+        {
+          alias: "level-failed-banner",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/patty-burnt.png"
+        },
         // In game related images
+        {
+          alias: "light-rotate-2",
+          src: "https://pixijs.com/assets/light_rotate_2.png"
+        },
+        {
+          alias: "light-rotate-1",
+          src: "https://pixijs.com/assets/light_rotate_1.png"
+        },
         {
           alias: "bbq-stick",
           src:
@@ -218,6 +231,17 @@
           alias: "ChunkFive",
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/ChunkFive-Regular.otf"
+        },
+        // GIFs
+        {
+          alias: "firework",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/firework-2.gif"
+        },
+        {
+          alias: "raindrop",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/raindrop.gif"
         }
       ];
 
@@ -1504,24 +1528,10 @@
     }
 
     show() {
-      // Stop bg music
-      backgroundMusic.stop();
-      // Play gameplay music
-      gamePlayMusic.play({
-        volume: 0.5,
-        loop: 1
-      });
       this.app.stage.addChild(this.container);
     }
 
     hide() {
-      // Stop bg music
-      gamePlayMusic.stop();
-      // Play gameplay music
-      backgroundMusic.play({
-        volume: 0.35,
-        loop: 1
-      });
       this.app.stage.removeChild(this.container);
     }
 
@@ -1662,16 +1672,13 @@
 
   // Class for gameplay scene
   class GameCompleteScene {
-    constructor(app, level) {
+    constructor(app) {
       this.app = app;
-      this.level = level;
+      this.level = 0;
       this.type = "game-complete-scene";
       this.container = new PIXI.Container();
       this.objects = [];
-      this.sticksGroup = [];
       this.isDestroyed = false;
-      this.isPuzzleCompleted = false;
-      this.isPuzzleFailed = false;
       this.createScene();
     }
 
@@ -1685,7 +1692,7 @@
       let scale = scaleX > scaleY ? scaleX : scaleY;
 
       // Calculate font size
-      let fontSize = Math.round((scale / 0.3) * 24 * 10) / 10;
+      let fontSize = Math.round((scale / 0.46) * 24 * 10) / 10;
 
       // Create text with custom style
       let style = new PIXI.TextStyle({
@@ -1730,17 +1737,444 @@
       rect.position.set(this.app.screen.width / 2, this.app.screen.height / 2);
       this.objects.push(rect);
       this.container.addChild(rect);
+
+      // Get canvas size ratio
+      let bannerTexture = PIXI.Assets.get("level-completion-bg");
+      let scaleBannerX = this.app.renderer.width / bannerTexture.width;
+      let scaleBannerY = this.app.renderer.height / bannerTexture.height;
+      let scaleBanner = Math.min(scaleBannerX, scaleBannerY);
+      this.scaleBanner = scaleBanner;
+
+      // Add lights
+      let light1 = new PIXI.Sprite(PIXI.Assets.get("light-rotate-1"));
+      light1.anchor.set(0.5);
+      light1.alpha = 0;
+      light1.scale.set(floor((scaleBanner / 0.644) * 1, 2));
+      light1.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2
+      );
+      this.light1 = light1;
+      this.objects.push(light1);
+      this.container.addChild(light1);
+
+      let light2 = new PIXI.Sprite(PIXI.Assets.get("light-rotate-2"));
+      light2.anchor.set(0.5);
+      light2.alpha = 0;
+      light2.scale.set(floor((scaleBanner / 0.644) * 1, 2));
+      light2.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2
+      );
+      this.light2 = light2;
+      this.objects.push(light2);
+      this.container.addChild(light2);
+
+      // Create level completion banner
+      let levelCompletionBanner = new PIXI.Sprite(bannerTexture);
+      levelCompletionBanner.anchor.set(0.5);
+      levelCompletionBanner.alpha = 0;
+      levelCompletionBanner.scale.set(floor(scaleBanner, 2));
+      levelCompletionBanner.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2
+      );
+      this.banner = levelCompletionBanner;
+      this.objects.push(levelCompletionBanner);
+      this.container.addChild(levelCompletionBanner);
+
+      // Create bg for text play
+      const bgTextPlay = new PIXI.Sprite(
+        PIXI.Assets.get("bg-main-menu-button")
+      );
+      bgTextPlay.anchor.set(0.5);
+      bgTextPlay.alpha = 0;
+      bgTextPlay.scale.set(floor((scale / 0.46) * 0.5, 2));
+      bgTextPlay.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2 + (levelCompletionBanner.width * 2) / 3
+      );
+      bgTextPlay.y -= (scale / 0.46) * 55;
+      makeInteractive(bgTextPlay);
+      bgTextPlay.on("pointerdown", () => {
+        PIXI.Assets.get("button-click").play();
+        this.switchToNextGameLevelScene = true;
+      });
+      this.bgTextPlay = bgTextPlay;
+      this.objects.push(bgTextPlay);
+      this.container.addChild(bgTextPlay);
+
+      // Create text play
+      let playText = new PIXI.Text("NEXT LEVEL", style);
+      playText.anchor.set(0.5);
+      playText.alpha = 0;
+      playText.position.set(bgTextPlay.x, bgTextPlay.y);
+      this.playText = playText;
+      this.objects.push(playText);
+      this.container.addChild(playText);
+
+      // Create back button
+      let backButton = new PIXI.Sprite(PIXI.Assets.get("close-button"));
+      backButton.anchor.set(0.5);
+      backButton.alpha = 0;
+      backButton.scale.set(floor((scaleBanner / 0.65) * 0.2, 2));
+      backButton.position.set(
+        (this.app.screen.width / 6) * 5,
+        levelCompletionBanner.y - floor(levelCompletionBanner.height * 0.5, 2)
+      );
+      makeInteractive(backButton);
+      backButton.on("pointerdown", () => {
+        PIXI.Assets.get("button-close-sound").play();
+        this.switchToMainMenuScene = true;
+        // Stop bg music
+        gamePlayMusic.stop();
+        // Play gameplay music
+        backgroundMusic.play({
+          volume: 0.35,
+          loop: 1
+        });
+      });
+      this.backButton = backButton;
+      this.objects.push(backButton);
+      this.container.addChild(backButton);
+
+      // Add firework
+      this.container.addChild(PIXI.Assets.get("firework"));
     }
 
     show() {
       this.app.stage.addChild(this.container);
+      PIXI.Assets.get("firework").play();
     }
 
     hide() {
+      PIXI.Assets.get("firework").stop();
       this.app.stage.removeChild(this.container);
     }
 
-    update() {}
+    reset() {
+      this.banner.alpha = 0;
+      this.backButton.alpha = 0;
+      this.bgTextPlay.alpha = 0;
+      this.playText.alpha = 0;
+      this.light1.alpha = 0;
+      this.light2.alpha = 0;
+      this.animation = "PRE-ZOOM-IN-1";
+    }
+
+    destroy() {
+      this.objects.forEach((obj) => {
+        this.container.removeChild(obj);
+        obj.destroy();
+      });
+      this.objects = null;
+      this.container.destroy();
+      this.container = null;
+      this.banner = null;
+      this.backButton = null;
+      this.bgTextPlay = null;
+      this.playText = null;
+      this.light1 = null;
+      this.light2 = null;
+      this.isDestroyed = true;
+    }
+
+    update() {
+      switch (this.animation) {
+        case "PRE-ZOOM-IN-1":
+          this.banner.scale.x = this.scaleBanner * 3;
+          this.banner.scale.y = this.scaleBanner * 3;
+          this.delayFirework = 60;
+          this.count = 0;
+          this.alpha = 0;
+          this.animation = "PRE-ZOOM-IN-2";
+          break;
+        case "PRE-ZOOM-IN-2":
+          this.delayFirework -= 1;
+          if (this.delayFirework <= 0) this.animation = "ZOOM-IN-ACC";
+          break;
+        case "ZOOM-IN-ACC":
+          this.banner.scale.x = this.scaleBanner * 3 + this.count;
+          this.banner.scale.y = this.scaleBanner * 3 + this.count;
+          this.count -= 0.03;
+          this.alpha += 0.005;
+          this.light1.alpha = Math.min(1, this.alpha);
+          this.light2.alpha = Math.min(1, this.alpha);
+          this.banner.alpha = Math.min(1, this.alpha);
+          this.backButton.alpha = Math.min(1, this.alpha);
+          this.bgTextPlay.alpha = Math.min(1, this.alpha);
+          this.playText.alpha = Math.min(1, this.alpha);
+          if (this.banner.scale.x <= this.scaleBanner * 1.5) {
+            this.animation = "ZOOM-IN";
+          }
+          break;
+        case "ZOOM-IN":
+          this.banner.scale.x = this.scaleBanner * 3 + this.count;
+          this.banner.scale.y = this.scaleBanner * 3 + this.count;
+          this.count -= 0.015;
+          this.alpha += 0.01;
+          this.light1.alpha = Math.min(1, this.alpha);
+          this.light2.alpha = Math.min(1, this.alpha);
+          this.banner.alpha = Math.min(1, this.alpha);
+          this.backButton.alpha = Math.min(1, this.alpha);
+          this.bgTextPlay.alpha = Math.min(1, this.alpha);
+          this.playText.alpha = Math.min(1, this.alpha);
+          if (this.banner.scale.x <= this.scaleBanner) {
+            this.animation = "IDLE";
+          }
+          break;
+        case "IDLE":
+          this.banner.scale.x = this.scaleBanner;
+          this.banner.scale.y = this.scaleBanner;
+          this.light1.alpha = 1;
+          this.light2.alpha = 1;
+          this.banner.alpha = 1;
+          this.backButton.alpha = 1;
+          this.bgTextPlay.alpha = 1;
+          this.playText.alpha = 1;
+          break;
+      }
+      this.light2.rotation += 0.01;
+      this.light1.rotation += 0.02;
+      if (this.light2.rotation >= Math.PI * 2) {
+        this.light2.rotation = 0;
+      }
+      if (this.light1.rotation >= Math.PI * 2) {
+        this.light1.rotation = 0;
+      }
+    }
+  }
+
+  // Class for gameplay scene
+  class GameFailScene {
+    constructor(app) {
+      this.app = app;
+      this.level = 0;
+      this.type = "game-fail-scene";
+      this.container = new PIXI.Container();
+      this.objects = [];
+      this.isDestroyed = false;
+      this.createScene();
+    }
+
+    createScene() {
+      // Get bg main menu
+      const gamePlayTexture = PIXI.Assets.get("bg-gameplay-1");
+
+      // Get canvas size ratio
+      let scaleX = this.app.renderer.width / gamePlayTexture.width;
+      let scaleY = this.app.renderer.height / gamePlayTexture.height;
+      let scale = scaleX > scaleY ? scaleX : scaleY;
+
+      // Calculate font size
+      let fontSize = Math.round((scale / 0.46) * 24 * 10) / 10;
+
+      // Create text with custom style
+      let style = new PIXI.TextStyle({
+        fontFamily: "Chunkfive Regular",
+        fontSize: fontSize,
+        fill: "#000000",
+        dropShadow: false,
+        fontWeight: "normal",
+        wordWrap: true,
+        wordWrapWidth: 440,
+        letterSpacing: 2,
+        lineJoin: "round"
+      });
+
+      // Create blur filter
+      this.blurFilter = new PIXI.BlurFilter();
+      this.blurFilter.blur = 5; // Adjust the blur amount
+
+      // Create bg main menu image
+      const gamePlayBG = new PIXI.Sprite(gamePlayTexture);
+      gamePlayBG.anchor.set(0.5);
+      gamePlayBG.scale.set(floor(scale, 2));
+      gamePlayBG.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2
+      );
+      gamePlayBG.filters = [this.blurFilter];
+      this.objects.push(gamePlayBG);
+      this.container.addChild(gamePlayBG);
+
+      // Create a graphic rectangle
+      const rect = new PIXI.Graphics();
+      rect.beginFill("#000000"); // Black color
+      rect.alpha = 0.4;
+      rect.drawRect(
+        Math.round(-this.app.renderer.width / 2),
+        Math.round(-this.app.renderer.height / 2),
+        Math.round(this.app.renderer.width),
+        Math.round(this.app.renderer.height)
+      );
+      rect.endFill();
+      rect.position.set(this.app.screen.width / 2, this.app.screen.height / 2);
+      this.objects.push(rect);
+      this.container.addChild(rect);
+
+      // Get canvas size ratio
+      let bannerTexture = PIXI.Assets.get("level-failed-banner");
+      let scaleBannerX = this.app.renderer.width / bannerTexture.width;
+      let scaleBannerY = this.app.renderer.height / bannerTexture.height;
+      let scaleBanner = Math.min(scaleBannerX, scaleBannerY);
+      this.scaleBanner = scaleBanner;
+
+      // Create level completion banner
+      let levelFailBanner = new PIXI.Sprite(bannerTexture);
+      levelFailBanner.anchor.set(0.5);
+      levelFailBanner.alpha = 0;
+      levelFailBanner.scale.set(floor(scaleBanner, 2));
+      levelFailBanner.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2
+      );
+      this.banner = levelFailBanner;
+      this.objects.push(levelFailBanner);
+      this.container.addChild(levelFailBanner);
+
+      // Create bg for text play
+      const bgTextPlay = new PIXI.Sprite(
+        PIXI.Assets.get("bg-main-menu-button")
+      );
+      bgTextPlay.anchor.set(0.5);
+      bgTextPlay.alpha = 0;
+      bgTextPlay.scale.set(floor((scale / 0.46) * 0.5, 2));
+      bgTextPlay.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2 + (levelFailBanner.width * 2) / 3
+      );
+      bgTextPlay.y -= (scale / 0.46) * 55;
+      makeInteractive(bgTextPlay);
+      bgTextPlay.on("pointerdown", () => {
+        PIXI.Assets.get("button-click").play();
+        this.switchToSameGameLevelScene = true;
+      });
+      this.bgTextPlay = bgTextPlay;
+      this.objects.push(bgTextPlay);
+      this.container.addChild(bgTextPlay);
+
+      // Create text play
+      let playText = new PIXI.Text("RESTART", style);
+      playText.anchor.set(0.5);
+      playText.alpha = 0;
+      playText.position.set(bgTextPlay.x, bgTextPlay.y);
+      this.playText = playText;
+      this.objects.push(playText);
+      this.container.addChild(playText);
+
+      // Create back button
+      let backButton = new PIXI.Sprite(PIXI.Assets.get("close-button"));
+      backButton.anchor.set(0.5);
+      backButton.alpha = 0;
+      backButton.scale.set(floor((scaleBanner / 0.16) * 0.2, 2));
+      backButton.position.set(
+        (this.app.screen.width / 6) * 5,
+        levelFailBanner.y - floor(levelFailBanner.height * 0.5, 2)
+      );
+      makeInteractive(backButton);
+      backButton.on("pointerdown", () => {
+        PIXI.Assets.get("button-close-sound").play();
+        this.switchToMainMenuScene = true;
+        // Stop bg music
+        gamePlayMusic.stop();
+        // Play gameplay music
+        backgroundMusic.play({
+          volume: 0.35,
+          loop: 1
+        });
+      });
+      this.backButton = backButton;
+      this.objects.push(backButton);
+      this.container.addChild(backButton);
+
+      // Add raindrop
+      this.container.addChild(PIXI.Assets.get("raindrop"));
+    }
+
+    show() {
+      this.app.stage.addChild(this.container);
+      PIXI.Assets.get("raindrop").play();
+    }
+
+    hide() {
+      PIXI.Assets.get("raindrop").stop();
+      this.app.stage.removeChild(this.container);
+    }
+
+    reset() {
+      this.banner.alpha = 0;
+      this.backButton.alpha = 0;
+      this.bgTextPlay.alpha = 0;
+      this.playText.alpha = 0;
+      this.animation = "PRE-ZOOM-IN-1";
+    }
+
+    destroy() {
+      this.objects.forEach((obj) => {
+        this.container.removeChild(obj);
+        obj.destroy();
+      });
+      this.objects = null;
+      this.container.destroy();
+      this.container = null;
+      this.banner = null;
+      this.backButton = null;
+      this.bgTextPlay = null;
+      this.playText = null;
+      this.isDestroyed = true;
+    }
+
+    update() {
+      switch (this.animation) {
+        case "PRE-ZOOM-IN-1":
+          this.banner.scale.x = this.scaleBanner * 4;
+          this.banner.scale.y = this.scaleBanner * 4;
+          this.delayFirework = 60;
+          this.count = 0;
+          this.alpha = 0;
+          this.animation = "PRE-ZOOM-IN-2";
+          break;
+        case "PRE-ZOOM-IN-2":
+          this.delayFirework -= 1;
+          if (this.delayFirework <= 0) this.animation = "ZOOM-IN-ACC";
+          break;
+        case "ZOOM-IN-ACC":
+          this.banner.scale.x = this.scaleBanner * 4 + this.count;
+          this.banner.scale.y = this.scaleBanner * 4 + this.count;
+          this.count -= 0.02;
+          this.alpha += 0.005;
+          this.banner.alpha = Math.min(1, this.alpha);
+          this.backButton.alpha = Math.min(1, this.alpha);
+          this.bgTextPlay.alpha = Math.min(1, this.alpha);
+          this.playText.alpha = Math.min(1, this.alpha);
+          if (this.banner.scale.x <= this.scaleBanner * 2) {
+            this.animation = "ZOOM-IN";
+          }
+          break;
+        case "ZOOM-IN":
+          this.banner.scale.x = this.scaleBanner * 4 + this.count;
+          this.banner.scale.y = this.scaleBanner * 4 + this.count;
+          this.count -= 0.01;
+          this.alpha += 0.01;
+          this.banner.alpha = Math.min(1, this.alpha);
+          this.backButton.alpha = Math.min(1, this.alpha);
+          this.bgTextPlay.alpha = Math.min(1, this.alpha);
+          this.playText.alpha = Math.min(1, this.alpha);
+          if (this.banner.scale.x <= this.scaleBanner) {
+            this.animation = "IDLE";
+          }
+          break;
+        case "IDLE":
+          this.banner.scale.x = this.scaleBanner;
+          this.banner.scale.y = this.scaleBanner;
+          this.banner.alpha = 1;
+          this.backButton.alpha = 1;
+          this.bgTextPlay.alpha = 1;
+          this.playText.alpha = 1;
+          break;
+      }
+    }
   }
 
   // Create a new application
@@ -1763,7 +2197,8 @@
     levelSelectionScene,
     settingScene,
     gameScene,
-    gameCompleteScene;
+    gameCompleteScene,
+    gameFailScene;
   activeScene = loadingScene;
 
   let userCompletedLevel = parseInt(window.localStorage.getItem("level") ?? 0);
@@ -1804,13 +2239,21 @@
       settingScene.show();
       activeScene = settingScene;
     } else if (activeScene.switchToGameScene) {
+      // Stop bg music
+      backgroundMusic.stop();
+      gamePlayMusic.stop();
+      // Play gameplay music
+      gamePlayMusic.play({
+        volume: 0.5,
+        loop: 1
+      });
       activeScene.switchToGameScene = false;
       activeScene.hide();
       gameScene = new GamePlayScene(app, activeScene.selectedGameLevel);
       gameScene.show();
       activeScene = gameScene;
     } else if (activeScene.isPuzzleCompleted) {
-      console.log("win");
+      console.log("win " + activeScene.level);
       window.localStorage.setItem(
         "level",
         gameScene.level === userCompletedLevel
@@ -1821,15 +2264,36 @@
       gameScene.destroy();
       gameScene = null;
       if (!gameCompleteScene) gameCompleteScene = new GameCompleteScene(app);
+      gameCompleteScene.level = activeScene.level;
+      gameCompleteScene.reset();
       gameCompleteScene.show();
       activeScene = gameCompleteScene;
     } else if (activeScene.isPuzzleFailed) {
       console.log("f");
+      console.log(activeScene.level);
       gameScene.hide();
       gameScene.destroy();
       gameScene = null;
-      levelSelectionScene.show();
-      activeScene = levelSelectionScene;
+      if (!gameFailScene) gameFailScene = new GameFailScene(app);
+      gameFailScene.level = activeScene.level;
+      console.log("f " + gameFailScene.level);
+      gameFailScene.reset();
+      gameFailScene.show();
+      activeScene = gameFailScene;
+    } else if (activeScene.switchToNextGameLevelScene) {
+      activeScene.switchToNextGameLevelScene = false;
+      activeScene.hide();
+      gameScene = new GamePlayScene(app, ++activeScene.level);
+      console.log("nex lv " + activeScene.level);
+      gameScene.show();
+      activeScene = gameScene;
+    } else if (activeScene.switchToSameGameLevelScene) {
+      activeScene.switchToSameGameLevelScene = false;
+      console.log("res" + activeScene.level);
+      activeScene.hide();
+      gameScene = new GamePlayScene(app, activeScene.level);
+      gameScene.show();
+      activeScene = gameScene;
     }
   });
 })();
