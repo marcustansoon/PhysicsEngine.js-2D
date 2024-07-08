@@ -89,7 +89,12 @@
         {
           alias: "level-failed-banner",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/patty-burnt.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/patty-burnt-2.png"
+        },
+        {
+          alias: "level-failed-bg",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/level-failure-banner.png"
         },
         // In game related images
         {
@@ -2033,6 +2038,20 @@
       this.objects.push(levelFailBanner);
       this.container.addChild(levelFailBanner);
 
+      // Create level completion banner
+      let levelFailBg = new PIXI.Sprite(PIXI.Assets.get("level-failed-bg"));
+      levelFailBg.anchor.set(0.5);
+      levelFailBg.alpha = 0;
+      levelFailBg.rotation = 0.1;
+      levelFailBg.scale.set(floor((scaleBanner / 0.15) * 0.22, 2));
+      levelFailBg.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2
+      );
+      this.bannerBg = levelFailBg;
+      this.objects.push(levelFailBg);
+      this.container.addChild(levelFailBg);
+
       // Create bg for text play
       const bgTextPlay = new PIXI.Sprite(
         PIXI.Assets.get("bg-main-menu-button")
@@ -2104,6 +2123,7 @@
 
     reset() {
       this.banner.alpha = 0;
+      this.bannerBg.alpha = 0;
       this.backButton.alpha = 0;
       this.bgTextPlay.alpha = 0;
       this.playText.alpha = 0;
@@ -2119,6 +2139,7 @@
       this.container.destroy();
       this.container = null;
       this.banner = null;
+      this.bannerBg = null;
       this.backButton = null;
       this.bgTextPlay = null;
       this.playText = null;
@@ -2162,6 +2183,20 @@
           this.bgTextPlay.alpha = Math.min(1, this.alpha);
           this.playText.alpha = Math.min(1, this.alpha);
           if (this.banner.scale.x <= this.scaleBanner) {
+            this.animation = "ZOOM-IN-2";
+            this.alpha = 0;
+          }
+          break;
+        case "ZOOM-IN-2":
+          this.banner.scale.x = this.scaleBanner;
+          this.banner.scale.y = this.scaleBanner;
+          this.banner.alpha = 1;
+          this.backButton.alpha = 1;
+          this.bgTextPlay.alpha = 1;
+          this.playText.alpha = 1;
+          this.bannerBg.alpha = Math.min(1, this.alpha);
+          this.alpha += 0.01;
+          if (this.alpha >= 1) {
             this.animation = "IDLE";
           }
           break;
@@ -2169,6 +2204,7 @@
           this.banner.scale.x = this.scaleBanner;
           this.banner.scale.y = this.scaleBanner;
           this.banner.alpha = 1;
+          this.bannerBg.alpha = 1;
           this.backButton.alpha = 1;
           this.bgTextPlay.alpha = 1;
           this.playText.alpha = 1;
