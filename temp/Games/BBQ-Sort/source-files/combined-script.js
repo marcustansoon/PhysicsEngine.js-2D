@@ -98,6 +98,11 @@
         },
         // In game related images
         {
+          alias: "wooden-banner",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/wooden-banner-2.png"
+        },
+        {
           alias: "light-rotate-2",
           src: "https://pixijs.com/assets/light_rotate_2.png"
         },
@@ -253,7 +258,7 @@
       const bgMainMenuTexture = await PIXI.Assets.load({
         alias: "bg-main-menu",
         src:
-          "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bbq-grill-bg-3-compressed.png"
+          "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bbq-grill-bg-6.jpg"
       });
 
       // Get canvas size ratio
@@ -1411,7 +1416,7 @@
       let style = new PIXI.TextStyle({
         fontFamily: "Chunkfive Regular",
         fontSize: fontSize,
-        fill: "#000000",
+        fill: "#FFFFFF",
         dropShadow: false,
         fontWeight: "normal",
         wordWrap: true,
@@ -1451,6 +1456,24 @@
       this.objects.push(rect);
       this.container.addChild(rect);
 
+      // Level banner
+      const levelBanner = new PIXI.Sprite(PIXI.Assets.get("wooden-banner"));
+      levelBanner.anchor.set(0.5);
+      levelBanner.scale.set(floor((scale / 0.25) * 0.15, 2));
+      levelBanner.position.set(
+        this.app.screen.width / 2,
+        levelBanner.height / 2
+      );
+      this.objects.push(levelBanner);
+      this.container.addChild(levelBanner);
+
+      // Create text
+      let levelText = new PIXI.Text(this.level + 1, style);
+      levelText.anchor.set(0.5);
+      levelText.position.set(levelBanner.x, levelBanner.y);
+      this.objects.push(levelText);
+      this.container.addChild(levelText);
+
       // Game logic
       let numberOfRows,
         numberOfColumns,
@@ -1466,10 +1489,10 @@
         foodNames = ["meat", "mini-sausage"];
       } else if (this.level == 1) {
         numberOfRows = 1 + 1;
-        numberOfColumns = 3 + 1;
-        numberOfSticks = 3;
+        numberOfColumns = 4 + 1;
+        numberOfSticks = 4;
         maxFoodPerStick = 4;
-        foodNames = ["meat", "mini-sausage"];
+        foodNames = ["meat", "mini-sausage", "cucumber-slice"];
       } else {
         numberOfRows = 1 + 1;
         numberOfColumns = 3 + 1;
