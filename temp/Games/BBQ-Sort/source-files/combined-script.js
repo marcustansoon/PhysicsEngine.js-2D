@@ -1884,7 +1884,7 @@
         case "PRE-ZOOM-IN-1":
           this.banner.scale.x = this.scaleBanner * 3;
           this.banner.scale.y = this.scaleBanner * 3;
-          this.delayFirework = 60;
+          this.delayFirework = 30;
           this.count = 0;
           this.alpha = 0;
           this.animation = "PRE-ZOOM-IN-2";
