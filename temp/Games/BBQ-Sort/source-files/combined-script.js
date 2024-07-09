@@ -327,7 +327,14 @@
         resourcesToBeLoad,
         this.loadProgressCallback.bind(this)
       );
-
+      if (window && window["webkit"]) {
+        window["webkit"].messageHandlers["cordova_iab"].postMessage(
+          JSON.stringify({
+            type: "loadDone",
+            data: null
+          })
+        );
+      }
       this.isComplete = true;
     }
 
