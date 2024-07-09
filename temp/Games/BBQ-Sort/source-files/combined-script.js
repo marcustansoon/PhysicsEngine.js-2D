@@ -258,7 +258,7 @@
       const bgMainMenuTexture = await PIXI.Assets.load({
         alias: "bg-main-menu",
         src:
-          "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bbq-grill-bg-6.jpg"
+          "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bbq-grill-bg-6-compressed.jpg"
       });
 
       // Get canvas size ratio
