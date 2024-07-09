@@ -1017,6 +1017,9 @@
         case "salmon-slice":
           return "salmon";
           break;
+        case "cucumber-slice":
+          return "cucumber";
+          break;
         case "meat":
           return "chicken-wing";
           break;
@@ -1481,7 +1484,7 @@
         maxFoodPerStick,
         foodNames;
 
-      if (this.level == 0) {
+      /*if (this.level == 0) {
         numberOfRows = 1 + 1;
         numberOfColumns = 3 + 1;
         numberOfSticks = 3;
@@ -1499,6 +1502,93 @@
         numberOfSticks = 3;
         maxFoodPerStick = 4;
         foodNames = ["meat", "mini-sausage"];
+      }*/
+
+      switch (this.level) {
+        case 0:
+        case 1:
+        case 2:
+          numberOfRows = 1 + 1;
+          numberOfColumns = 3 + 1;
+          numberOfSticks = 3;
+          maxFoodPerStick = 4;
+          foodNames = ["meat", "mini-sausage"];
+          break;
+        case 3:
+        case 4:
+        case 5:
+        case 6:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 4 + 1;
+          numberOfSticks = 5;
+          maxFoodPerStick = 4;
+          foodNames = ["meat", "mini-sausage", "cucumber-slice"];
+          break;
+        case 7:
+        case 8:
+        case 9:
+        case 10:
+        case 11:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 4 + 1;
+          numberOfSticks = 6;
+          maxFoodPerStick = 4;
+          foodNames = [
+            "meat",
+            "mini-sausage",
+            "cucumber-slice",
+            "salmon-slice"
+          ];
+          break;
+        case 12:
+        case 13:
+        case 14:
+        case 15:
+        case 16:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 4 + 1;
+          numberOfSticks = 7;
+          maxFoodPerStick = 4;
+          foodNames = [
+            "meat",
+            "mini-sausage",
+            "cucumber-slice",
+            "salmon-slice",
+            "prawn"
+          ];
+          break;
+        case 17:
+        case 18:
+        case 19:
+        case 20:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 4 + 1;
+          numberOfSticks = 8;
+          maxFoodPerStick = 4;
+          foodNames = [
+            "meat",
+            "mini-sausage",
+            "cucumber-slice",
+            "salmon-slice",
+            "prawn",
+            "eggplant-slice"
+          ];
+          break;
+
+        default:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 4 + 1;
+          numberOfSticks = 8;
+          maxFoodPerStick = 4;
+          foodNames = [
+            "meat",
+            "mini-sausage",
+            "cucumber-slice",
+            "salmon-slice",
+            "prawn",
+            "eggplant-slice"
+          ];
+          break;
       }
 
       // Get canvas size ratio for stick scaling calculation
