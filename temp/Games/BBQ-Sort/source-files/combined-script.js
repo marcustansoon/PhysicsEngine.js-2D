@@ -446,7 +446,7 @@
       bgTextPlay.y -= (scale / 0.3) * 55;
       makeInteractive(bgTextPlay);
       bgTextPlay.on("pointerdown", () => {
-        PIXI.Assets.get("button-click").play();
+        soundEffectPlay("button-click");
         this.switchToPlayScene = true;
       });
       this.objects.push(bgTextPlay);
@@ -471,7 +471,7 @@
       );
       makeInteractive(bgTextSetting);
       bgTextSetting.on("pointerdown", () => {
-        PIXI.Assets.get("button-click").play();
+        soundEffectPlay("button-click");
         this.switchToSettingScene = true;
       });
       this.objects.push(bgTextSetting);
@@ -496,7 +496,7 @@
       );
       makeInteractive(bgTextQuit);
       bgTextQuit.on("pointerdown", () => {
-        PIXI.Assets.get("button-click").play();
+        soundEffectPlay("button-click");
         if (!window || !window["webkit"]) {
           return;
         }
@@ -521,10 +521,7 @@
       // Play background music
       backgroundMusic = PIXI.Assets.get("background-music");
       gamePlayMusic = PIXI.Assets.get("gameplay-music");
-      backgroundMusic.play({
-        volume: 0.35,
-        loop: 1
-      });
+      backgroundMusicPlay();
     }
 
     show() {
@@ -666,7 +663,7 @@
         }
         makeInteractive(box);
         box.on("pointerdown", () => {
-          PIXI.Assets.get("button-click").play();
+          soundEffectPlay("button-click");
           if (box.level > userCompletedLevel) return;
           this.selectedGameLevel = box.level;
           this.switchToGameScene = true;
@@ -700,7 +697,7 @@
       );
       makeInteractive(leftArrow);
       leftArrow.on("pointerdown", () => {
-        PIXI.Assets.get("button-click").play();
+        soundEffectPlay("button-click");
         if (this.currentSelectedPage) this.currentSelectedPage--;
         else this.currentSelectedPage = this.levelSelectionPages.length - 1;
       });
@@ -716,7 +713,7 @@
       );
       makeInteractive(rightArrow);
       rightArrow.on("pointerdown", () => {
-        PIXI.Assets.get("button-click").play();
+        soundEffectPlay("button-click");
         this.currentSelectedPage =
           (this.currentSelectedPage + 1) % this.levelSelectionPages.length;
       });
@@ -733,7 +730,7 @@
       );
       makeInteractive(backButton);
       backButton.on("pointerdown", () => {
-        PIXI.Assets.get("button-close-sound").play();
+        soundEffectPlay("button-close-sound");
         this.switchToMainMenuScene = true;
       });
       this.objects.push(backButton);
@@ -877,7 +874,7 @@
         tickSoundEffect.texture = soundEffect
           ? PIXI.Assets.get("tick")
           : PIXI.Assets.get("untick");
-        PIXI.Assets.get("tick-checkbox").play();
+        soundEffectPlay("tick-checkbox");
       });
 
       soundEffectText.position.set(
@@ -914,11 +911,24 @@
       makeInteractive(tickMusic);
       tickMusic.on("pointerdown", () => {
         music = !music;
+        if (!music) {
+          if (activeMusic === "background-music") {
+            backgroundMusic.stop();
+          } else {
+            gameplayMusic.stop();
+          }
+        } else {
+          if (activeMusic === "background-music") {
+            !backgroundMusic.isPlaying && backgroundMusicPlay();
+          } else {
+            !gameplayMusic.isPlaying && gameplayMusicPlay();
+          }
+        }
         window.localStorage.setItem("music", music ? 1 : 0);
         tickMusic.texture = music
           ? PIXI.Assets.get("tick")
           : PIXI.Assets.get("untick");
-        PIXI.Assets.get("tick-checkbox").play();
+        soundEffectPlay("tick-checkbox");
       });
       this.objects.push(tickMusic);
       this.container.addChild(tickMusic);
@@ -949,7 +959,7 @@
         tickVibration.texture = vibration
           ? PIXI.Assets.get("tick")
           : PIXI.Assets.get("untick");
-        PIXI.Assets.get("tick-checkbox").play();
+        soundEffectPlay("tick-checkbox");
       });
       this.objects.push(tickVibration);
       this.container.addChild(tickVibration);
@@ -964,7 +974,7 @@
       );
       makeInteractive(backButton);
       backButton.on("pointerdown", () => {
-        PIXI.Assets.get("button-close-sound").play();
+        soundEffectPlay("button-close-sound");
         this.switchToMainMenuScene = true;
       });
       this.objects.push(backButton);
@@ -1300,7 +1310,7 @@
           }
           break;
         case "PRE-UP":
-          PIXI.Assets.get("up").play();
+          soundEffectPlay("up");
           let skipFilter = false;
           for (let index = this.content.length - 1; index >= 0; index--) {
             this.content[index].obj.y = this.getDefaultYCoordinate(index);
@@ -1343,7 +1353,7 @@
           }
           break;
         case "PRE-DOWN":
-          PIXI.Assets.get("down").play();
+          soundEffectPlay("down");
           for (let index = this.content.length - 1; index >= 0; index--) {
             if (!type) {
               type = this.content[index].type;
@@ -1744,7 +1754,7 @@
               // Unselect both object
               originSprite.onClick();
               targetSprite.onClick();
-              PIXI.Assets.get("error").play();
+              soundEffectPlay("error");
               console.log("err");
               break;
             }
@@ -1757,13 +1767,13 @@
               // Unselect both object
               originSprite.onClick();
               targetSprite.onClick();
-              PIXI.Assets.get("error").play();
+              soundEffectPlay("error");
               console.log("err2");
               break;
             }
 
             // Successful moving objects from origin to target stick
-            PIXI.Assets.get("single-completion").play();
+            soundEffectPlay("single-completion");
             originSprite.unloadTopSprites();
             targetSprite.loadTopSprites(
               originTopSpriteInfo.type,
@@ -1782,13 +1792,13 @@
       }
       if (isPuzzleCompleted) {
         this.isPuzzleCompleted = true;
-        PIXI.Assets.get("level-completion").play({
+        soundEffectPlay("level-completion", {
           volume: 2
         });
       }
       if (isPuzzleFailed) {
         this.isPuzzleFailed = true;
-        PIXI.Assets.get("level-failure").play({
+        soundEffectPlay("level-failure", {
           volume: 2
         });
       }
@@ -1922,7 +1932,7 @@
       bgTextPlay.y -= (scale / 0.46) * 55;
       makeInteractive(bgTextPlay);
       bgTextPlay.on("pointerdown", () => {
-        PIXI.Assets.get("button-click").play();
+        soundEffectPlay("button-click");
         this.switchToNextGameLevelScene = true;
       });
       this.bgTextPlay = bgTextPlay;
@@ -1949,15 +1959,12 @@
       );
       makeInteractive(backButton);
       backButton.on("pointerdown", () => {
-        PIXI.Assets.get("button-close-sound").play();
+        soundEffectPlay("button-close-sound");
         this.switchToMainMenuScene = true;
         // Stop bg music
         gamePlayMusic.stop();
         // Play gameplay music
-        backgroundMusic.play({
-          volume: 0.35,
-          loop: 1
-        });
+        backgroundMusicPlay();
       });
       this.backButton = backButton;
       this.objects.push(backButton);
@@ -2186,7 +2193,7 @@
       bgTextPlay.y -= (scale / 0.46) * 55;
       makeInteractive(bgTextPlay);
       bgTextPlay.on("pointerdown", () => {
-        PIXI.Assets.get("button-click").play();
+        soundEffectPlay("button-click");
         this.switchToSameGameLevelScene = true;
       });
       this.bgTextPlay = bgTextPlay;
@@ -2213,15 +2220,12 @@
       );
       makeInteractive(backButton);
       backButton.on("pointerdown", () => {
-        PIXI.Assets.get("button-close-sound").play();
+        soundEffectPlay("button-close-sound");
         this.switchToMainMenuScene = true;
         // Stop bg music
         gamePlayMusic.stop();
         // Play gameplay music
-        backgroundMusic.play({
-          volume: 0.35,
-          loop: 1
-        });
+        backgroundMusicPlay();
       });
       this.backButton = backButton;
       this.objects.push(backButton);
@@ -2345,7 +2349,32 @@
   // Append the application canvas to the document body
   document.body.appendChild(app.canvas);
 
-  let backgroundMusic, gamePlayMusic;
+  function backgroundMusicPlay() {
+    activeMusic = "background-music";
+    if (!music) return;
+    backgroundMusic &&
+      backgroundMusic.play({
+        volume: 0.35,
+        loop: 1
+      });
+  }
+
+  function gamePlayMusicPlay() {
+    activeMusic = "gameplay-music";
+    if (!music) return;
+    gamePlayMusic &&
+      gamePlayMusic.play({
+        volume: 0.5,
+        loop: 1
+      });
+  }
+
+  function soundEffectPlay(assetName, option) {
+    if (!soundEffect) return;
+    gamePlayMusic && PIXI.Assets.get(assetName).play(option);
+  }
+
+  let backgroundMusic, gamePlayMusic, activeMusic;
   let activeScene;
   let loadingScene = new LoadingScene(app);
   loadingScene.show();
@@ -2399,10 +2428,7 @@
       backgroundMusic.stop();
       gamePlayMusic.stop();
       // Play gameplay music
-      gamePlayMusic.play({
-        volume: 0.5,
-        loop: 1
-      });
+      gamePlayMusicPlay();
       activeScene.switchToGameScene = false;
       activeScene.hide();
       gameScene = new GamePlayScene(app, activeScene.selectedGameLevel);
