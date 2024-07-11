@@ -420,7 +420,7 @@
       // Create a graphic rectangle
       const rect = new PIXI.Graphics();
       rect.beginFill("#000000"); // Black color
-      rect.alpha = 0.1;
+      rect.alpha = 0;
       rect.drawRect(
         Math.round((-scale / 0.4) * 200),
         Math.round((-scale / 0.4) * 150),
