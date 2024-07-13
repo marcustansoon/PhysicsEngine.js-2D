@@ -98,9 +98,14 @@
         },
         // In game related images
         {
+          alias: "setting-icon",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/setting-icon.png"
+        },
+        {
           alias: "wooden-banner",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/wooden-banner-2.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/wooden-banner-3.png"
         },
         {
           alias: "light-rotate-2",
@@ -1191,8 +1196,9 @@
   }
 
   class Stick extends BBQ_Sprite {
-    constructor(scale) {
+    constructor(scale, maxFoodPerStick) {
       super();
+      this.maxFoodPerStick = maxFoodPerStick;
       this.content = [];
       this.container = new PIXI.Container();
       this.scale = scale;
@@ -1313,9 +1319,23 @@
     }
 
     getDefaultYCoordinate(index) {
+      let temp = this.stick.obj.height / 6;
+
       return (
         this.stick.obj.y +
-        Math.floor((((60 - index * 60) * this.stick.obj.scale.x) / 0.4) * 100) /
+        this.stick.obj.height / 2 -
+        temp * (0.5 + (MAX_FOOD_PER_STICK - this.maxFoodPerStick)) -
+        temp * index
+      );
+      return (
+        this.stick.obj.y +
+        Math.floor(
+          (((150 * this.stick.obj.scale.x * 2 -
+            index * 150 * this.stick.obj.scale.x * 2) *
+            this.stick.obj.scale.x) /
+            0.4) *
+            100
+        ) /
           100
       );
     }
@@ -1342,7 +1362,7 @@
       });
       if (this.completedPuzzleSprite) {
         this.completedPuzzleSprite.obj.scale.set(
-          Math.floor((scale / 0.4) * 0.8 * 10) / 10
+          Math.floor((scale / 0.4) * 0.85 * 10) / 10
         );
       }
       //this.rect.obj.scale.set(Math.floor((scale / 0.35) * 1 * 10) / 10);
@@ -2103,8 +2123,8 @@
         case 113:
         case 114:
         case 115:
-          numberOfRows = 4 + 1;
-          numberOfColumns = 5 + 1;
+          numberOfRows = 3 + 1;
+          numberOfColumns = 6 + 1;
           numberOfSticks = 16;
           maxFoodPerStick = 3;
           foodNames = [
@@ -2129,8 +2149,8 @@
         case 118:
         case 119:
         case 120:
-          numberOfRows = 4 + 1;
-          numberOfColumns = 5 + 1;
+          numberOfRows = 3 + 1;
+          numberOfColumns = 6 + 1;
           numberOfSticks = 16;
           maxFoodPerStick = 4;
           foodNames = [
@@ -2155,8 +2175,8 @@
         case 123:
         case 124:
         case 125:
-          numberOfRows = 4 + 1;
-          numberOfColumns = 5 + 1;
+          numberOfRows = 3 + 1;
+          numberOfColumns = 6 + 1;
           numberOfSticks = 16;
           maxFoodPerStick = 5;
           foodNames = [
@@ -2166,7 +2186,7 @@
             "eggplant-slice",
             "salmon-slice",
             "prawn",
-            "cheese",
+            "cheese-slice",
             "crab-slice",
             "marshmallow-slice",
             "potato-slice",
@@ -2177,8 +2197,8 @@
           ];
           break;
         default:
-          numberOfRows = 4 + 1;
-          numberOfColumns = 5 + 1;
+          numberOfRows = 3 + 1;
+          numberOfColumns = 6 + 1;
           numberOfSticks = 16;
           maxFoodPerStick = 5;
           foodNames = [
@@ -2188,7 +2208,7 @@
             "eggplant-slice",
             "salmon-slice",
             "prawn",
-            "cheese",
+            "cheese-slice",
             "crab-slice",
             "marshmallow-slice",
             "potato-slice",
@@ -2206,8 +2226,10 @@
       let scaleStickX =
         app.renderer.width / maxWidthPerSprite / numberOfColumns;
       let scaleStickY =
-        app.renderer.height / numberOfRows / (maxHeightPerSprite * 8);
-      let scaleStick = Math.min(scaleX, scaleY);
+        app.renderer.height /
+        numberOfRows /
+        (maxHeightPerSprite * MAX_FOOD_PER_STICK);
+      let scaleStick = Math.min(scaleStickX, scaleStickY);
 
       let allFoodNames = [];
       foodNames.forEach((name) => {
@@ -2220,7 +2242,7 @@
         positionXCount = 0,
         startPositionY = 0;
       for (let stickCount = 0; stickCount < numberOfSticks; stickCount++) {
-        let cStick = new Stick(scaleStick);
+        let cStick = new Stick(scaleStick, maxFoodPerStick);
         for (let foodCount = 0; foodCount < maxFoodPerStick; foodCount++) {
           let foodName = allFoodNames.pop();
           if (!foodName) break;
@@ -2966,6 +2988,7 @@
     gamePlayMusic && PIXI.Assets.get(assetName).play(option);
   }
 
+  const MAX_FOOD_PER_STICK = 6;
   let backgroundMusic, gamePlayMusic, activeMusic;
   let activeScene;
   let loadingScene = new LoadingScene(app);
