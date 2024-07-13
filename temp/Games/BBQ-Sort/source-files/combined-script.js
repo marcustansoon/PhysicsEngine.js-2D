@@ -1235,7 +1235,7 @@
     }
 
     onClick() {
-      if (this.completedPuzzle) return;
+      if (this.completedPuzzleSprite) return;
       this.isSelected = !this.isSelected;
       if (this.isSelected) {
         this.selectionTimestamp = Date.now();
@@ -1263,7 +1263,7 @@
       sprite.anchor.set(0.5);
       sprite.x = this.stick.obj.x;
       sprite.y = this.stick.obj.y;
-      this.completedPuzzle = { obj: sprite, type: childName };
+      this.completedPuzzleSprite = { obj: sprite, type: childName };
       this.scaleTo(this.stick.obj.scale.x);
       this.container.addChild(sprite);
     }
@@ -1340,8 +1340,8 @@
       this.content.forEach((elem, index) => {
         elem.obj.scale.set(scale);
       });
-      if (this.completedPuzzle) {
-        this.completedPuzzle.obj.scale.set(
+      if (this.completedPuzzleSprite) {
+        this.completedPuzzleSprite.obj.scale.set(
           Math.floor((scale / 0.4) * 0.8 * 10) / 10
         );
       }
@@ -1386,6 +1386,11 @@
       this.container.removeChild(this.rect.obj);
       this.rect.obj.destroy();
       this.rect = null;
+      if (this.completedPuzzleSprite) {
+        this.container.removeChild(this.completedPuzzleSprite.obj);
+        this.completedPuzzleSprite.obj.destroy();
+        this.completedPuzzleSprite = null;
+      }
       this.content.forEach((elem) => {
         this.container.removeChild(elem.obj);
         elem.obj.destroy();
@@ -1643,26 +1648,6 @@
         numberOfSticks,
         maxFoodPerStick,
         foodNames;
-
-      /*if (this.level == 0) {
-        numberOfRows = 1 + 1;
-        numberOfColumns = 3 + 1;
-        numberOfSticks = 3;
-        maxFoodPerStick = 4;
-        foodNames = ["meat", "mini-sausage"];
-      } else if (this.level == 1) {
-        numberOfRows = 1 + 1;
-        numberOfColumns = 4 + 1;
-        numberOfSticks = 4;
-        maxFoodPerStick = 4;
-        foodNames = ["meat", "mini-sausage", "cucumber-slice"];
-      } else {
-        numberOfRows = 1 + 1;
-        numberOfColumns = 3 + 1;
-        numberOfSticks = 3;
-        maxFoodPerStick = 4;
-        foodNames = ["meat", "mini-sausage"];
-      }*/
 
       switch (this.level) {
         case 0:
@@ -2229,7 +2214,7 @@
         let repeat = maxFoodPerStick;
         while (repeat--) allFoodNames.push(name);
       });
-      allFoodNames = this.shuffle(allFoodNames);
+      allFoodNames = this.shuffle(this.shuffle(allFoodNames));
 
       let startPositionX = 0,
         positionXCount = 0,
@@ -2301,15 +2286,15 @@
         let elem = this.sticksGroup[indexM];
 
         // Check for level completion
-        if (!elem.completedPuzzle && elem.content.length !== 0) {
+        if (!elem.completedPuzzleSprite && elem.content.length !== 0) {
           isPuzzleCompleted = false;
         }
 
         // Check for failure
         let currentTopInfo = elem.getTopSpriteInfo();
-        // Filter stick sprites where not self
+        // Filter stick sprites where not self and not completed
         let otherSticksGroup = this.sticksGroup.filter(
-          (elem, index) => indexM !== index
+          (elem, index) => indexM !== index && !elem.completedPuzzleSprite
         );
         for (let temp = 0; temp < otherSticksGroup.length; temp++) {
           let topInfo = otherSticksGroup[temp].getTopSpriteInfo();
