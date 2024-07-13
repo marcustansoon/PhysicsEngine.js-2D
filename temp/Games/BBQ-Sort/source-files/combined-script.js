@@ -1687,7 +1687,7 @@
         case 7:
         case 8:
         case 9:
-          numberOfRows = 1 + 1;
+          numberOfRows = 2 + 1;
           numberOfColumns = 3 + 1;
           numberOfSticks = 5;
           maxFoodPerStick = 3;
