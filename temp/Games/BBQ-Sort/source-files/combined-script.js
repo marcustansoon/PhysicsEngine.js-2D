@@ -138,42 +138,152 @@
         {
           alias: "prawn",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/prawn.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/miniprawn.png"
         },
         {
           alias: "lobster",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/lobster.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bigprawn.png"
         },
         {
           alias: "eggplant",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/eggplant.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bigeggplant.png"
         },
         {
           alias: "eggplant-slice",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/eggplant-slice.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/minieggplant.png"
         },
         {
           alias: "sausage",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/sausage.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bigsausage.png"
         },
         {
           alias: "mini-sausage",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/mini-sausage.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/minisausage.png"
         },
         {
           alias: "salmon",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/salmon.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bigfish.png"
         },
         {
           alias: "salmon-slice",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/salmon-slice.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/minisalmon.png"
+        },
+        {
+          alias: "carrot",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bigcarrot.png"
+        },
+        {
+          alias: "carrot-slice",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/minicarrot.png"
+        },
+        {
+          alias: "cheese",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bigcheese.png"
+        },
+        {
+          alias: "cheese-slice",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/minicheese.png"
+        },
+        {
+          alias: "crab",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bigcrab.png"
+        },
+        {
+          alias: "crab-slice",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/minicrab.png"
+        },
+        {
+          alias: "drumstick",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bigdrum.png"
+        },
+        {
+          alias: "drumstick-slice",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/minidrum.png"
+        },
+        {
+          alias: "marshmallow",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bigmallow.png"
+        },
+        {
+          alias: "marshmallow-slice",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/minimarsh.png"
+        },
+        {
+          alias: "greenpepper",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bigpepper.png"
+        },
+        {
+          alias: "greenpepper-slice",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/minipepper.png"
+        },
+        {
+          alias: "potato",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bigpotato.png"
+        },
+        {
+          alias: "potato-slice",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/minipotato.png"
+        },
+        {
+          alias: "squid",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bigsquid.png"
+        },
+        {
+          alias: "squid-slice",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/minisquid.png"
+        },
+        {
+          alias: "steak",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bigsteak.png"
+        },
+        {
+          alias: "steak-slice",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/ministeak.png"
+        },
+        {
+          alias: "cabbage",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bigveggie.png"
+        },
+        {
+          alias: "cabbage-slice",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/minicabbage.png"
+        },
+        {
+          alias: "mushroom",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bigmushroom.png"
+        },
+        {
+          alias: "mushroom-slice",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/minimushroom.png"
         },
         // Sound & music resources
         {
@@ -639,7 +749,7 @@
       let startPositionY = -1.3;
       let startPositionX = -1.3;
       let currentPageDisplayCount = 0;
-      for (let level = 0; level < 50; level++) {
+      for (let level = 0; level < 126; level++) {
         // Only display a maximum of 12 levels on a page
         if (currentPageDisplayCount >= 9) {
           currentPageDisplayCount = 0;
@@ -1022,6 +1132,39 @@
 
     getParentSpriteNameByChildName(childName) {
       switch (childName) {
+        case "carrot-slice":
+          return "carrot";
+          break;
+        case "cheese-slice":
+          return "cheese";
+          break;
+        case "crab-slice":
+          return "crab";
+          break;
+        case "drumstick-slice":
+          return "drumstick";
+          break;
+        case "marshmallow-slice":
+          return "marshmallow";
+          break;
+        case "mushroom-slice":
+          return "mushroom";
+          break;
+        case "greenpepper-slice":
+          return "greenpepper";
+          break;
+        case "potato-slice":
+          return "potato";
+          break;
+        case "squid-slice":
+          return "squid";
+          break;
+        case "steak-slice":
+          return "steak";
+          break;
+        case "cabbage-slice":
+          return "cabbage";
+          break;
         case "eggplant-slice":
           return "eggplant";
           break;
@@ -1523,87 +1666,551 @@
 
       switch (this.level) {
         case 0:
+          numberOfRows = 1 + 1;
+          numberOfColumns = 3 + 1;
+          numberOfSticks = 3;
+          maxFoodPerStick = 3;
+          foodNames = ["drumstick-slice", "mini-sausage"];
+          break;
         case 1:
         case 2:
+        case 3:
+        case 4:
           numberOfRows = 1 + 1;
           numberOfColumns = 3 + 1;
           numberOfSticks = 3;
           maxFoodPerStick = 4;
-          foodNames = ["meat", "mini-sausage"];
+          foodNames = ["drumstick-slice", "mini-sausage"];
           break;
-        case 3:
-        case 4:
         case 5:
         case 6:
-          numberOfRows = 2 + 1;
-          numberOfColumns = 4 + 1;
-          numberOfSticks = 5;
-          maxFoodPerStick = 4;
-          foodNames = ["meat", "mini-sausage", "cucumber-slice"];
-          break;
         case 7:
         case 8:
         case 9:
+          numberOfRows = 1 + 1;
+          numberOfColumns = 3 + 1;
+          numberOfSticks = 5;
+          maxFoodPerStick = 3;
+          foodNames = ["drumstick-slice", "mini-sausage", "cabbage-slice"];
+          break;
         case 10:
         case 11:
-          numberOfRows = 2 + 1;
-          numberOfColumns = 4 + 1;
-          numberOfSticks = 6;
-          maxFoodPerStick = 4;
-          foodNames = [
-            "meat",
-            "mini-sausage",
-            "cucumber-slice",
-            "salmon-slice"
-          ];
-          break;
         case 12:
         case 13:
         case 14:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 3 + 1;
+          numberOfSticks = 5;
+          maxFoodPerStick = 5;
+          foodNames = ["drumstick-slice", "mini-sausage", "cabbage-slice"];
+          break;
         case 15:
         case 16:
+        case 17:
+        case 18:
+        case 19:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 3 + 1;
+          numberOfSticks = 6;
+          maxFoodPerStick = 3;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice"
+          ];
+          break;
+        case 20:
+        case 21:
+        case 22:
+        case 23:
+        case 24:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 3 + 1;
+          numberOfSticks = 6;
+          maxFoodPerStick = 4;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice"
+          ];
+          break;
+        case 25:
+        case 26:
+        case 27:
+        case 28:
+        case 29:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 3 + 1;
+          numberOfSticks = 6;
+          maxFoodPerStick = 5;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice"
+          ];
+          break;
+        case 30:
+        case 31:
+        case 32:
+        case 33:
+        case 34:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 4 + 1;
+          numberOfSticks = 7;
+          maxFoodPerStick = 3;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice"
+          ];
+          break;
+        case 35:
+        case 36:
+        case 37:
+        case 38:
+        case 39:
           numberOfRows = 2 + 1;
           numberOfColumns = 4 + 1;
           numberOfSticks = 7;
           maxFoodPerStick = 4;
           foodNames = [
-            "meat",
+            "drumstick-slice",
             "mini-sausage",
-            "cucumber-slice",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice"
+          ];
+          break;
+        case 40:
+        case 41:
+        case 42:
+        case 43:
+        case 44:
+        case 45:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 4 + 1;
+          numberOfSticks = 7;
+          maxFoodPerStick = 5;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice"
+          ];
+          break;
+        case 46:
+        case 47:
+        case 48:
+        case 49:
+        case 50:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 8;
+          maxFoodPerStick = 3;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
             "salmon-slice",
             "prawn"
           ];
           break;
-        case 17:
-        case 18:
-        case 19:
-        case 20:
+        case 51:
+        case 52:
+        case 53:
+        case 54:
+        case 55:
           numberOfRows = 2 + 1;
-          numberOfColumns = 4 + 1;
+          numberOfColumns = 5 + 1;
           numberOfSticks = 8;
           maxFoodPerStick = 4;
           foodNames = [
-            "meat",
+            "drumstick-slice",
             "mini-sausage",
-            "cucumber-slice",
+            "cabbage-slice",
+            "eggplant-slice",
             "salmon-slice",
-            "prawn",
-            "eggplant-slice"
+            "prawn"
           ];
           break;
-
-        default:
+        case 56:
+        case 57:
+        case 58:
+        case 59:
+        case 60:
           numberOfRows = 2 + 1;
-          numberOfColumns = 4 + 1;
+          numberOfColumns = 5 + 1;
           numberOfSticks = 8;
-          maxFoodPerStick = 4;
+          maxFoodPerStick = 5;
           foodNames = [
-            "meat",
+            "drumstick-slice",
             "mini-sausage",
-            "cucumber-slice",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn"
+          ];
+          break;
+        case 61:
+        case 62:
+        case 63:
+        case 64:
+        case 65:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 9;
+          maxFoodPerStick = 3;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
             "salmon-slice",
             "prawn",
-            "eggplant-slice"
+            "cheese-slice"
+          ];
+          break;
+        case 66:
+        case 67:
+        case 68:
+        case 69:
+        case 70:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 9;
+          maxFoodPerStick = 4;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice"
+          ];
+          break;
+        case 71:
+        case 72:
+        case 73:
+        case 74:
+        case 75:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 9;
+          maxFoodPerStick = 5;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice"
+          ];
+          break;
+        case 76:
+        case 77:
+        case 78:
+        case 79:
+        case 80:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 10;
+          maxFoodPerStick = 3;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice",
+            "crab-slice"
+          ];
+          break;
+        case 76:
+        case 77:
+        case 78:
+        case 79:
+        case 80:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 10;
+          maxFoodPerStick = 4;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice",
+            "crab-slice"
+          ];
+          break;
+        case 76:
+        case 77:
+        case 78:
+        case 79:
+        case 80:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 10;
+          maxFoodPerStick = 5;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice",
+            "crab-slice"
+          ];
+          break;
+        case 81:
+        case 82:
+        case 83:
+        case 84:
+        case 85:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 6 + 1;
+          numberOfSticks = 12;
+          maxFoodPerStick = 3;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice",
+            "crab-slice",
+            "marshmallow-slice",
+            "potato-slice"
+          ];
+          break;
+        case 86:
+        case 87:
+        case 88:
+        case 89:
+        case 90:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 6 + 1;
+          numberOfSticks = 12;
+          maxFoodPerStick = 4;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice",
+            "crab-slice",
+            "marshmallow-slice",
+            "potato-slice"
+          ];
+          break;
+        case 91:
+        case 92:
+        case 93:
+        case 94:
+        case 95:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 6 + 1;
+          numberOfSticks = 12;
+          maxFoodPerStick = 5;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice",
+            "crab-slice",
+            "marshmallow-slice",
+            "potato-slice"
+          ];
+          break;
+        case 96:
+        case 97:
+        case 98:
+        case 99:
+        case 100:
+          numberOfRows = 3 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 14;
+          maxFoodPerStick = 3;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice",
+            "crab-slice",
+            "marshmallow-slice",
+            "potato-slice",
+            "carrot-slice",
+            "squid-slice"
+          ];
+          break;
+        case 101:
+        case 102:
+        case 103:
+        case 104:
+        case 105:
+          numberOfRows = 3 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 14;
+          maxFoodPerStick = 4;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice",
+            "crab-slice",
+            "marshmallow-slice",
+            "potato-slice",
+            "carrot-slice",
+            "squid-slice"
+          ];
+          break;
+        case 106:
+        case 107:
+        case 108:
+        case 109:
+        case 110:
+          numberOfRows = 3 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 14;
+          maxFoodPerStick = 5;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice",
+            "crab-slice",
+            "marshmallow-slice",
+            "potato-slice",
+            "carrot-slice",
+            "squid-slice"
+          ];
+          break;
+        case 111:
+        case 112:
+        case 113:
+        case 114:
+        case 115:
+          numberOfRows = 4 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 16;
+          maxFoodPerStick = 3;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice",
+            "crab-slice",
+            "marshmallow-slice",
+            "potato-slice",
+            "carrot-slice",
+            "squid-slice",
+            "steak-slice",
+            "greenpepper-slice"
+          ];
+          break;
+        case 116:
+        case 117:
+        case 118:
+        case 119:
+        case 120:
+          numberOfRows = 4 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 16;
+          maxFoodPerStick = 4;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice",
+            "crab-slice",
+            "marshmallow-slice",
+            "potato-slice",
+            "carrot-slice",
+            "squid-slice",
+            "steak-slice",
+            "greenpepper-slice"
+          ];
+          break;
+        case 121:
+        case 122:
+        case 123:
+        case 124:
+        case 125:
+          numberOfRows = 4 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 16;
+          maxFoodPerStick = 5;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese",
+            "crab-slice",
+            "marshmallow-slice",
+            "potato-slice",
+            "carrot-slice",
+            "squid-slice",
+            "steak-slice",
+            "greenpepper-slice"
+          ];
+          break;
+        default:
+          numberOfRows = 4 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 16;
+          maxFoodPerStick = 5;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese",
+            "crab-slice",
+            "marshmallow-slice",
+            "potato-slice",
+            "carrot-slice",
+            "squid-slice",
+            "steak-slice",
+            "greenpepper-slice"
           ];
           break;
       }
