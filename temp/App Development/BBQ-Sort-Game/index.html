@@ -13,4 +13,11 @@ hello world
 
         alert(window["webkit"].messageHandlers["cordova_iab"].addEventListener)
   }, 5000);
+  setTimeout(()=>{
+    if (!window || !window["webkit"]) {
+          return;
+        }
+
+        alert(window["webkit"].messageHandlers["cordova_iab"].addEventListener)
+  }, 2000);
 </script>
