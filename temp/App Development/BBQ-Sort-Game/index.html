@@ -1,0 +1,16 @@
+hello world
+<script>
+  setTimeout(()=>{
+    if (!window || !window["webkit"]) {
+          return;
+        }
+        window["webkit"].messageHandlers["cordova_iab"].postMessage(
+          JSON.stringify({
+            type: "test",
+            data: "test-message
+          })
+        );
+
+        alert(window["webkit"].messageHandlers["cordova_iab"].addEventListener)
+  }, 5000);
+</script>
