@@ -26,6 +26,13 @@ hellow wlrd22
 
         alert(window["webkit"].addEventListener)
   }, 2000);
+
+  
+  window.addEventListener("message", function(event)
+  {
+    alert('recieved')
+    alert(event.data)
+  });
 </script>
 
 </html>
