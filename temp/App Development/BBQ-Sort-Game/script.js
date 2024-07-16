@@ -65,7 +65,9 @@ let ref,
                 data: JSON.stringify({
                     'uid': 'a',
                     'token': 'a',
-                    'user_agent': 'a'
+                    'user_agent': 'a',
+                    'd': 'ddd',
+                    'a': 'a23',
                 }),
                 responseType: 'text',
                 serializer: 'utf8',
@@ -73,7 +75,12 @@ let ref,
             };
             // Send POST request to server for FCM Token registration
             cordova.plugin.http.sendRequest('https://script.google.com/macros/s/AKfycbxIz59CxDp5IkmnfJ5gI5ayhUmj1mEX-vhBtHNKr5AnhmgImQOW3_7amyxm6UvDKZ4c/exec', options, function(response) {
-                alert(JSON.stringify(response.data));
+                try {
+					response.data = JSON.parse(response.data)
+				} catch(e) {
+					alert('JSON parsing error');
+				}
+				alert(JSON.stringify(response.data));
             }, function(response) {
                 alert(response.error);
             });
