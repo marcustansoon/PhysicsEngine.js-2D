@@ -2236,7 +2236,10 @@
         let repeat = maxFoodPerStick;
         while (repeat--) allFoodNames.push(name);
       });
-      allFoodNames = this.shuffle(this.shuffle(allFoodNames));
+      // Shuffle thrice
+      this.shuffle(allFoodNames);
+      this.shuffle(allFoodNames);
+      this.shuffle(allFoodNames);
 
       let startPositionX = 0,
         positionXCount = 0,
@@ -2270,10 +2273,10 @@
     }
 
     shuffle(array) {
-      return array
-        .map((a) => ({ sort: Math.random(), value: a }))
-        .sort((a, b) => a.sort - b.sort)
-        .map((a) => a.value);
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
     }
 
     show() {
@@ -2457,11 +2460,11 @@
       });
 
       // Create blur filter
-      this.blurFilter = new PIXI.BlurFilter();
-      this.blurFilter.blur = 5; // Adjust the blur amount
+      //this.blurFilter = new PIXI.BlurFilter();
+      //this.blurFilter.blur = 5; // Adjust the blur amount
 
       // Create bg main menu image
-      const gamePlayBG = new PIXI.Sprite(gamePlayTexture);
+      /*const gamePlayBG = new PIXI.Sprite(gamePlayTexture);
       gamePlayBG.anchor.set(0.5);
       gamePlayBG.scale.set(floor(scale, 2));
       gamePlayBG.position.set(
@@ -2471,7 +2474,7 @@
       gamePlayBG.filters = [this.blurFilter];
       gamePlayBG.alpha = 0;
       this.objects.push(gamePlayBG);
-      this.container.addChild(gamePlayBG);
+      this.container.addChild(gamePlayBG);*/
 
       // Create a graphic rectangle
       const rect = new PIXI.Graphics();
@@ -2579,6 +2582,7 @@
         this.switchToMainMenuScene = true;
         // Stop bg music
         gamePlayMusic.stop();
+        backgroundMusic.stop();
         // Play gameplay music
         backgroundMusicPlay();
       });
@@ -2646,7 +2650,7 @@
         case "ZOOM-IN-ACC":
           this.banner.scale.x = this.scaleBanner * 3 + this.count;
           this.banner.scale.y = this.scaleBanner * 3 + this.count;
-          this.count -= 0.01;
+          this.count -= (this.scaleBanner * 3) / 200;
           this.alpha += 0.007;
           this.light1.alpha = Math.min(1, this.alpha);
           this.light2.alpha = Math.min(1, this.alpha);
@@ -2659,7 +2663,7 @@
         case "ZOOM-IN":
           this.banner.scale.x = this.scaleBanner * 3 + this.count;
           this.banner.scale.y = this.scaleBanner * 3 + this.count;
-          this.count -= 0.015;
+          this.count -= ((this.scaleBanner * 3) / 200) * 1.5;
           this.alpha += 0.01;
           this.light1.alpha = Math.min(1, this.alpha);
           this.light2.alpha = Math.min(1, this.alpha);
@@ -2729,11 +2733,11 @@
       });
 
       // Create blur filter
-      this.blurFilter = new PIXI.BlurFilter();
-      this.blurFilter.blur = 5; // Adjust the blur amount
+      //this.blurFilter = new PIXI.BlurFilter();
+      //this.blurFilter.blur = 5; // Adjust the blur amount
 
       // Create bg main menu image
-      const gamePlayBG = new PIXI.Sprite(gamePlayTexture);
+      /*const gamePlayBG = new PIXI.Sprite(gamePlayTexture);
       gamePlayBG.anchor.set(0.5);
       gamePlayBG.scale.set(floor(scale, 2));
       gamePlayBG.position.set(
@@ -2743,7 +2747,7 @@
       gamePlayBG.filters = [this.blurFilter];
       gamePlayBG.alpha = 0;
       this.objects.push(gamePlayBG);
-      this.container.addChild(gamePlayBG);
+      this.container.addChild(gamePlayBG);*/
 
       // Create a graphic rectangle
       const rect = new PIXI.Graphics();
@@ -2838,8 +2842,9 @@
       backButton.on("pointerdown", () => {
         soundEffectPlay("button-close-sound");
         this.switchToMainMenuScene = true;
-        // Stop bg music
+        // Stop music
         gamePlayMusic.stop();
+        backgroundMusic.stop();
         // Play gameplay music
         backgroundMusicPlay();
       });
@@ -2905,7 +2910,7 @@
         case "ZOOM-IN-ACC":
           this.banner.scale.x = this.scaleBanner * 4 + this.count;
           this.banner.scale.y = this.scaleBanner * 4 + this.count;
-          this.count -= 0.007;
+          this.count -= (this.scaleBanner * 4) / 200;
           this.alpha += 0.007;
           this.banner.alpha = Math.min(1, this.alpha);
           this.rect.alpha = Math.min(0.4, this.alpha);
@@ -2916,7 +2921,7 @@
         case "ZOOM-IN":
           this.banner.scale.x = this.scaleBanner * 4 + this.count;
           this.banner.scale.y = this.scaleBanner * 4 + this.count;
-          this.count -= 0.007;
+          this.count -= ((this.scaleBanner * 4) / 200) * 1.5;
           this.alpha += 0.01;
           this.banner.alpha = Math.min(1, this.alpha);
           this.rect.alpha = Math.min(0.4, this.alpha);
@@ -3056,7 +3061,10 @@
       gameScene.show();
       activeScene = gameScene;
     } else if (activeScene.isPuzzleCompleted) {
+      // Disable interactivity in game scene
+      activeScene.container.interactiveChildren = false;
       console.log("win " + activeScene.level);
+      // Update game level in local storage
       window.localStorage.setItem(
         "level",
         gameScene.level === userCompletedLevel
@@ -3078,6 +3086,8 @@
       gameCompleteScene.show();
       activeScene = gameCompleteScene;
     } else if (activeScene.isPuzzleFailed) {
+      // Disable interactivity in game scene
+      activeScene.container.interactiveChildren = false;
       console.log("f");
       console.log(activeScene.level);
       if (!gameFailScene) gameFailScene = new GameFailScene(app);
