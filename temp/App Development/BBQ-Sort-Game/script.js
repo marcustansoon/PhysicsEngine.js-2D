@@ -39,6 +39,8 @@ let ref,
 	isResourcesLoaded,
 	intervalRequestUserData,
 	userData,
+	gameLevelToBeUpdated,
+	intervalGameLevelUpdate,
 	app = {
 		// Application Constructor
 		initialize: function() {
@@ -56,27 +58,11 @@ let ref,
 			this.requestUserData();
 			intervalRequestUserData = setInterval(()=>{
 				this.requestUserData();
-				alert('requesting user data');
-			}, 12000);
+			}, 15000);
 			setTimeout(() => {
 				ref = cordova.InAppBrowser.open("https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/App%20Development/BBQ-Sort-Game/index.html", '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no');
 				this.addIABEventListener();
 			}, 500);
-			setTimeout(() => {
-				//this.IABReply({ "message": "this is message1", })
-			}, 6000);
-			setTimeout(() => {
-				/*this.IABReply({ 
-					"message": "this is message2",
-					"type": "test-type"				
-				})*/
-			}, 10000);
-
-			setTimeout(() => {
-				//this.IABReply({ "message": "this is message1", })
-			}, 14000);
-
-
 		},
 		addIABEventListener: function() {
 			ref.addEventListener('exit', function() {
@@ -84,10 +70,18 @@ let ref,
 			});
 			// Sent from IAB
 			ref.addEventListener('message', (e) => {
-				if (e.data.type === 'test') {
-					alert(e.data.data)
+				if (e.data.type === 'loadDone') {
+					isResourcesLoaded = true;
 				} else if (e.data.type === 'quit') {
 					navigator.app.exitApp();
+				} else if (e.data.type === 'update-game-level') {
+					gameLevelToBeUpdated = e.data.data.gameLevel
+					this.startUpdateGameLevelInterval();
+				} else if (e.data.type === 'get-user-data') {
+					this.IABReply({ 
+						"type": "get-user-data",
+						"data": userData,
+					});
 				}
 			});
 		},
@@ -122,12 +116,18 @@ let ref,
 			};
 			// Send POST request to server for registration
 			cordova.plugin.http.sendRequest('https://script.google.com/macros/s/AKfycbxIz59CxDp5IkmnfJ5gI5ayhUmj1mEX-vhBtHNKr5AnhmgImQOW3_7amyxm6UvDKZ4c/exec', options, (response) => {
-				alert('registered');
+				// After successful registered, go and get user data
 				this.requestUserData();
 			}, function(response) {});
 		},
+		startUpdateGameLevelInterval: function(){
+			if(intervalGameLevelUpdate) return;
+			this.updateGameLevel(gameLevelToBeUpdated);
+			intervalGameLevelUpdate = setInterval(()=>{
+				this.updateGameLevel(gameLevelToBeUpdated)
+			}, 15000);
+		},
 		updateGameLevel: function(gameLevel) {
-			// Update game level
 			// Make a post request
 			let options = {
 				method: 'post',
@@ -145,6 +145,7 @@ let ref,
 			// Send POST request to server
 			cordova.plugin.http.sendRequest('https://script.google.com/macros/s/AKfycbxIz59CxDp5IkmnfJ5gI5ayhUmj1mEX-vhBtHNKr5AnhmgImQOW3_7amyxm6UvDKZ4c/exec', options, function(response) {
 				alert('Updated game level');
+				clearInterval(intervalGameLevelUpdate);
 			}, function(response) {});
 		},
 		requestUserData: function() {
@@ -164,13 +165,12 @@ let ref,
 				try {
 					response.data = JSON.parse(response.data)
 					userData = response.data
-					alert(JSON.stringify(userData))
 					clearInterval(intervalRequestUserData)
 				} catch (e) {
 
 				}
 			}, function(response) {
-				alert(response.error);
+				//alert(response.error);
 			});
 		},
 
