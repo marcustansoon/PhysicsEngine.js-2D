@@ -3057,7 +3057,8 @@
           ? ++userCompletedLevel
           : userCompletedLevel
       );
-      if (userData && userData.uuid && userCompletedLevel > userData.gameLevel) {
+      // Only update game level when a higher level achievement is accomplished
+      if (userCompletedLevel > userData.gameLevel) {
         updateGameLevel(userCompletedLevel);
         userData.gameLevel = userCompletedLevel;
       }
@@ -3113,7 +3114,7 @@
   }
 
   function updateGameLevel(gameLevel) {
-    if (!window || !window["webkit"] || !userData) {
+    if (!window || !window["webkit"] || !userData || !userData.uuid) {
       return;
     }
     window["webkit"].messageHandlers["cordova_iab"].postMessage(
