@@ -3127,6 +3127,7 @@
     userDataRequestInterval = setInterval(requestUserData, 10000);
   }
   window.addEventListener("message", (e) => {
+    alert(e.detail)
     if (!e.detail || !e.detail.type) return;
 
     switch (e.detail.type) {
