@@ -75,6 +75,7 @@ let ref,
 				} else if (e.data.type === 'quit') {
 					navigator.app.exitApp();
 				} else if (e.data.type === 'update-game-level') {
+					if(!userData || !userData.uuid) return;
 					gameLevelToBeUpdated = e.data.data.gameLevel
 					this.startUpdateGameLevelInterval();
 				} else if (e.data.type === 'get-user-data') {
