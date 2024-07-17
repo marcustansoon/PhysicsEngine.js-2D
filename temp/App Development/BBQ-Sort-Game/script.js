@@ -98,7 +98,7 @@ let ref,
 				'code': `(function(){window.dispatchEvent(new CustomEvent('message', { detail: ${data} }));})()`
 			}, function(_) {});
 		},
-		registerUserData: function() {
+		registerUser: function() {
 			// Register a new user
 			// Make a post request to server
 			let options = {
@@ -122,10 +122,11 @@ let ref,
 			};
 			// Send POST request to server for registration
 			cordova.plugin.http.sendRequest('https://script.google.com/macros/s/AKfycbxIz59CxDp5IkmnfJ5gI5ayhUmj1mEX-vhBtHNKr5AnhmgImQOW3_7amyxm6UvDKZ4c/exec', options, function(response) {
-				alert('registered')
+				alert('registered');
+				this.requestUserData();
 			}, function(response) {});
 		},
-		updateUserGameLevel: function(gameLevel) {
+		updateGameLevel: function(gameLevel) {
 			// Update game level
 			// Make a post request
 			let options = {
@@ -157,7 +158,7 @@ let ref,
 			cordova.plugin.http.sendRequest('https://script.google.com/macros/s/AKfycbxIz59CxDp5IkmnfJ5gI5ayhUmj1mEX-vhBtHNKr5AnhmgImQOW3_7amyxm6UvDKZ4c/exec?uuid=' + device.uuid, options, function(response) {
 				// If user is not found then register it
 				if (!response.data) {
-					this.registerUserData();
+					this.registerUser();
 					return;
 				}
 				try {
