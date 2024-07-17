@@ -49,7 +49,7 @@ let ref,
 		},
 
 		onOffline: function() {
-			if (isResourcesLoaded || 1) return;
+			if (isResourcesLoaded) return;
 			// Load offline page
 			window.location.replace(window.location.href.replace('index', 'offline'));
 		},
