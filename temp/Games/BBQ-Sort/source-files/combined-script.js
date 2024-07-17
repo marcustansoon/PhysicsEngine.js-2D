@@ -100,7 +100,7 @@
         {
           alias: "setting-icon",
           src:
-            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/setting-icon.png"
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/setting-icon-cropped.png"
         },
         {
           alias: "wooden-banner",
@@ -1686,7 +1686,7 @@
       // Create setting icon
       const settingIcon = new PIXI.Sprite(PIXI.Assets.get("setting-icon"));
       settingIcon.anchor.set(0.5);
-      settingIcon.scale.set(floor((scale / 0.45) * 0.18, 2));
+      settingIcon.scale.set(floor((scale / 0.45) * 0.16, 2));
       settingIcon.position.set(
         (this.app.screen.width * 5) / 6,
         levelBanner.height / 2
