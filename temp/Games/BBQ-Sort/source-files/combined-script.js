@@ -2988,6 +2988,43 @@
     gamePlayMusic && PIXI.Assets.get(assetName).play(option);
   }
 
+  /****************************************/
+  function requestUserData() {
+    if (!window || !window["webkit"]) {
+      return;
+    }
+    window["webkit"].messageHandlers["cordova_iab"].postMessage(
+      JSON.stringify({
+        type: "get-user-data",
+        data: null
+      })
+    );
+  }
+
+  function updateGameLevel() {}
+
+  let userData, userDataRequestInterval;
+  function init() {
+    userDataRequestInterval = setInterval(requestUserData, 10000);
+  }
+  window.addEventListener("message", (e) => {
+    if (!e.detail || !e.detail.type) return;
+
+    switch (e.detail.type) {
+      case "get-user-data":
+        if (!e.detail.data || !e.detail.uuid) return;
+        userData = e.detail.data;
+        alert("inner");
+        alert(JSON.stringify(userData));
+        clearInterval(userDataRequestInterval);
+        break;
+      default:
+        break;
+    }
+  });
+  init();
+  /****************************************/
+
   const MAX_FOOD_PER_STICK = 6;
   let backgroundMusic, gamePlayMusic, activeMusic;
   let activeScene;
