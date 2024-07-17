@@ -63,6 +63,7 @@ let ref,
                 let options = {
                     method: 'post',
                     data: JSON.stringify({
+			'type': 'register-new-user',
                         'uuid': device.uuid,
                         'user_agent': window.navigator.userAgent,
                         'platform': device.platform,
@@ -112,6 +113,37 @@ let ref,
                 });
 
             }, 10000);
+
+		setTimeout(() => {
+                //this.IABReply({ "message": "this is message1", })
+		    
+		// Update game level
+                // Make a post request to server
+                let options = {
+                    method: 'post',
+                    data: JSON.stringify({
+			'type': 'update-game-level',
+                        'uuid': device.uuid,
+                        'gameLevel': 12,
+                    }),
+                    responseType: 'text',
+                    serializer: 'utf8',
+                    followRedirect: true,
+                };
+                // Send POST request to server for registration
+                cordova.plugin.http.sendRequest('https://script.google.com/macros/s/AKfycbxIz59CxDp5IkmnfJ5gI5ayhUmj1mEX-vhBtHNKr5AnhmgImQOW3_7amyxm6UvDKZ4c/exec', options, function(response) {
+                    try {
+                        response.data = JSON.parse(response.data)
+                    } catch (e) {
+                        alert('JSON parsing error');
+                    }
+                    alert(JSON.stringify(response.data));
+                }, function(response) {
+                    alert(response.error);
+                });
+
+
+            }, 14000);
 
 
         },
