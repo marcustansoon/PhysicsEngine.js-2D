@@ -64,9 +64,6 @@ let ref,
 			}, 500);
 			setTimeout(() => {
 				//this.IABReply({ "message": "this is message1", })
-
-
-
 			}, 6000);
 			setTimeout(() => {
 				/*this.IABReply({ 
@@ -77,8 +74,6 @@ let ref,
 
 			setTimeout(() => {
 				//this.IABReply({ "message": "this is message1", })
-
-
 			}, 14000);
 
 
