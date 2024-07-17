@@ -47,7 +47,7 @@ let ref,
 		},
 
 		onOffline: function() {
-			if (isResourcesLoaded) return;
+			if (isResourcesLoaded || 1) return;
 			// Load offline page
 			window.location.replace(window.location.href.replace('index', 'offline'));
 		},
@@ -160,6 +160,7 @@ let ref,
 			};
 			// Send GET request to server to get user data
 			cordova.plugin.http.sendRequest('https://script.google.com/macros/s/AKfycbxIz59CxDp5IkmnfJ5gI5ayhUmj1mEX-vhBtHNKr5AnhmgImQOW3_7amyxm6UvDKZ4c/exec?uuid=' + device.uuid, options, function(response) {
+				alert(response.data)
 				// If user is not found then register it
 				if (!response.data) {
 					this.registerUser();
