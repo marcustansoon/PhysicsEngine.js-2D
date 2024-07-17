@@ -351,6 +351,11 @@
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/8bittownthemesong.mp3"
         },
+        {
+          alias: "game-restart-sound",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/game-restart-audio.wav"
+        },
         // Font styles
         {
           alias: "ChunkFive",
@@ -1613,6 +1618,22 @@
         lineJoin: "round"
       });
 
+      // Calculate font size
+      let fontSizeBanner = Math.round((scale / 0.46) * 25 * 10) / 10;
+
+      // Create text with custom style
+      let styleBanner = new PIXI.TextStyle({
+        fontFamily: "Chunkfive Regular",
+        fontSize: fontSizeBanner,
+        fill: "#000000",
+        dropShadow: false,
+        fontWeight: "normal",
+        wordWrap: true,
+        wordWrapWidth: 440,
+        letterSpacing: 2,
+        lineJoin: "round"
+      });
+
       // Create blur filter
       this.blurFilter = new PIXI.BlurFilter();
       this.blurFilter.blur = 5; // Adjust the blur amount
@@ -1661,6 +1682,23 @@
       levelText.position.set(levelBanner.x, levelBanner.y);
       this.objects.push(levelText);
       this.container.addChild(levelText);
+
+      // Create setting icon
+      const settingIcon = new PIXI.Sprite(PIXI.Assets.get("setting-icon"));
+      settingIcon.anchor.set(0.5);
+      settingIcon.scale.set(floor((scale / 0.45) * 0.18, 2));
+      settingIcon.position.set(
+        (this.app.screen.width * 5) / 6,
+        levelBanner.height / 2
+      );
+      makeInteractive(settingIcon);
+      settingIcon.on("pointerdown", () => {
+        soundEffectPlay("button-close-sound");
+        this.showPrompt();
+      });
+      this.settingIcon = settingIcon;
+      this.objects.push(settingIcon);
+      this.container.addChild(settingIcon);
 
       // Game logic
       let numberOfRows,
@@ -2270,6 +2308,89 @@
       }
 
       this.maxFoodPerStick = maxFoodPerStick;
+
+      // Create banner image (filled 90% of the width / height)
+      let bannerTexture = PIXI.Assets.get("banner"),
+        scaleBannerX = (this.app.renderer.height * 0.9) / bannerTexture.height,
+        scaleBannerY = (this.app.renderer.width * 0.9) / bannerTexture.width,
+        scaleBanner = Math.min(scaleBannerX, scaleBannerY);
+
+      let banner = new PIXI.Sprite(bannerTexture);
+      banner.anchor.set(0.5);
+      banner.scale.set(scaleBanner);
+      banner.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2
+      );
+      this.banner = banner;
+      this.objects.push(banner);
+
+      // Create back button
+      let backButton = new PIXI.Sprite(PIXI.Assets.get("close-button"));
+      backButton.anchor.set(0.5);
+      backButton.scale.set(floor((scaleBanner / 0.67) * 0.25, 2));
+      backButton.position.set(
+        (this.app.screen.width / 6) * 5,
+        banner.y - floor(banner.height * 0.5, 2)
+      );
+      makeInteractive(backButton);
+      backButton.on("pointerdown", () => {
+        soundEffectPlay("button-close-sound");
+        this.hidePrompt();
+      });
+      this.backButton = backButton;
+      this.objects.push(backButton);
+
+      // Create bg for text restart
+      const bgTextRestart = new PIXI.Sprite(
+        PIXI.Assets.get("bg-main-menu-button")
+      );
+      bgTextRestart.anchor.set(0.5);
+      bgTextRestart.alpha = 1;
+      bgTextRestart.scale.set(floor((scale / 0.46) * 0.5, 2));
+      bgTextRestart.position.set(banner.x, banner.y - bgTextRestart.height);
+      makeInteractive(bgTextRestart);
+      bgTextRestart.on("pointerdown", () => {
+        soundEffectPlay("game-restart-sound");
+        this.switchToSameGameLevelScene = true;
+      });
+      this.bgTextRestart = bgTextRestart;
+      this.objects.push(bgTextRestart);
+
+      // Create restart text
+      let restartText = new PIXI.Text("RESTART", styleBanner);
+      restartText.anchor.set(0.5);
+      restartText.position.set(bgTextRestart.x, bgTextRestart.y);
+      this.restartText = restartText;
+      this.objects.push(restartText);
+
+      // Create bg for text quit
+      const bgTextQuit = new PIXI.Sprite(
+        PIXI.Assets.get("bg-main-menu-button")
+      );
+      bgTextQuit.anchor.set(0.5);
+      bgTextQuit.alpha = 1;
+      bgTextQuit.scale.set(floor((scale / 0.46) * 0.5, 2));
+      bgTextQuit.position.set(banner.x, banner.y + bgTextQuit.height);
+      makeInteractive(bgTextQuit);
+      bgTextQuit.on("pointerdown", () => {
+        soundEffectPlay("button-click");
+        // Stop bg music
+        gamePlayMusic.stop();
+        backgroundMusic.stop();
+        // Play gameplay music
+        backgroundMusicPlay();
+        this.switchToMainMenuScene = true;
+      });
+      this.bgTextQuit = bgTextQuit;
+      this.objects.push(bgTextQuit);
+
+      // Create restart text
+      let quitText = new PIXI.Text("QUIT", styleBanner);
+      quitText.anchor.set(0.5);
+      quitText.position.set(bgTextQuit.x, bgTextQuit.y);
+      this.quitText = quitText;
+      this.objects.push(quitText);
     }
 
     shuffle(array) {
@@ -2277,6 +2398,32 @@
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
       }
+    }
+
+    showPrompt() {
+      this.sticksGroup.forEach((stick) => {
+        this.container.removeChild(stick.container);
+      });
+      this.container.addChild(this.banner);
+      this.container.addChild(this.backButton);
+      this.container.addChild(this.bgTextRestart);
+      this.container.addChild(this.restartText);
+      this.container.addChild(this.bgTextQuit);
+      this.container.addChild(this.quitText);
+      this.container.removeChild(this.settingIcon);
+    }
+
+    hidePrompt() {
+      this.sticksGroup.forEach((stick) => {
+        this.container.addChild(stick.container);
+      });
+      this.container.removeChild(this.backButton);
+      this.container.removeChild(this.banner);
+      this.container.removeChild(this.bgTextRestart);
+      this.container.removeChild(this.restartText);
+      this.container.removeChild(this.bgTextQuit);
+      this.container.removeChild(this.quitText);
+      this.container.addChild(this.settingIcon);
     }
 
     show() {
@@ -2301,6 +2448,13 @@
       this.sticksGroup = [];
       this.container.destroy();
       this.container = null;
+      this.bgTextQuit = null;
+      this.quitText = null;
+      this.bgTextRestart = null;
+      this.restartText = null;
+      this.banner = null;
+      this.backButton = null;
+      this.settingIcon = null;
       this.isDestroyed = true;
     }
 
