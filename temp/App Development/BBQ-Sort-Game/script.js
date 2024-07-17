@@ -165,6 +165,11 @@ let ref,
 				try {
 					response.data = JSON.parse(response.data)
 					userData = response.data
+					// Send user data to client
+					this.IABReply({ 
+						"type": "get-user-data",
+						"data": userData,
+					});
 					clearInterval(intervalRequestUserData)
 				} catch (e) {
 
