@@ -2988,43 +2988,6 @@
     gamePlayMusic && PIXI.Assets.get(assetName).play(option);
   }
 
-  /****************************************/
-  function requestUserData() {
-    if (!window || !window["webkit"]) {
-      return;
-    }
-    window["webkit"].messageHandlers["cordova_iab"].postMessage(
-      JSON.stringify({
-        type: "get-user-data",
-        data: null
-      })
-    );
-  }
-
-  function updateGameLevel() {}
-
-  let userData, userDataRequestInterval;
-  function init() {
-    userDataRequestInterval = setInterval(requestUserData, 10000);
-  }
-  window.addEventListener("message", (e) => {
-    if (!e.detail || !e.detail.type) return;
-
-    switch (e.detail.type) {
-      case "get-user-data":
-        if (!e.detail.data || !e.detail.uuid) return;
-        userData = e.detail.data;
-        alert("inner");
-        alert(JSON.stringify(userData));
-        clearInterval(userDataRequestInterval);
-        break;
-      default:
-        break;
-    }
-  });
-  init();
-  /****************************************/
-
   const MAX_FOOD_PER_STICK = 6;
   let backgroundMusic, gamePlayMusic, activeMusic;
   let activeScene;
@@ -3094,6 +3057,7 @@
           ? ++userCompletedLevel
           : userCompletedLevel
       );
+      updateGameLevel(userCompletedLevel);
       gameScene.hide();
       gameScene.destroy();
       gameScene = null;
@@ -3130,4 +3094,60 @@
       activeScene = gameScene;
     }
   });
+
+  /****************************************/
+  var userData, userDataRequestInterval;
+  function requestUserData() {
+    if (!window || !window["webkit"]) {
+      return;
+    }
+    window["webkit"].messageHandlers["cordova_iab"].postMessage(
+      JSON.stringify({
+        type: "get-user-data",
+        data: null
+      })
+    );
+  }
+
+  function updateGameLevel(gameLevel) {
+    if (!window || !window["webkit"] || !userData) {
+      return;
+    }
+    window["webkit"].messageHandlers["cordova_iab"].postMessage(
+      JSON.stringify({
+        type: "update-game-level",
+        data: {
+          gameLevel: gameLevel
+        }
+      })
+    );
+  }
+
+  function init() {
+    userDataRequestInterval = setInterval(requestUserData, 10000);
+  }
+  window.addEventListener("message", (e) => {
+    if (!e.detail || !e.detail.type) return;
+
+    switch (e.detail.type) {
+      case "get-user-data":
+        if (!e.detail.data || !e.detail.uuid) return;
+        userData = e.detail.data;
+        alert("inner");
+        alert(JSON.stringify(userData));
+        clearInterval(userDataRequestInterval);
+        if (userCompletedLevel > userData.gameLevel) {
+          updateGameLevel(userCompletedLevel);
+          userData.gameLevel = userCompletedLevel;
+        } else {
+          userCompletedLevel = userData.gameLevel;
+          window.localStorage.setItem("level", userCompletedLevel);
+        }
+        break;
+      default:
+        break;
+    }
+  });
+  init();
+  /****************************************/
 })();
