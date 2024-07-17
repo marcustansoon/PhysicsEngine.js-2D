@@ -3057,7 +3057,10 @@
           ? ++userCompletedLevel
           : userCompletedLevel
       );
-      updateGameLevel(userCompletedLevel);
+      if (userData && userData.uuid && userCompletedLevel > userData.gameLevel) {
+        updateGameLevel(userCompletedLevel);
+        userData.gameLevel = userCompletedLevel;
+      }
       gameScene.hide();
       gameScene.destroy();
       gameScene = null;
