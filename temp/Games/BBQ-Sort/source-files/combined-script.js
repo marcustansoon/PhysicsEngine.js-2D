@@ -3124,7 +3124,7 @@
   }
 
   function init() {
-    userDataRequestInterval = setInterval(requestUserData, 10000);
+    userDataRequestInterval = setInterval(requestUserData, 30000);
   }
   window.addEventListener("message", (e) => {
     if (!e.detail || !e.detail.type) return;
@@ -3132,8 +3132,6 @@
       case "get-user-data":
         if (!e.detail.data || !e.detail.data.uuid) return;
         userData = e.detail.data;
-        alert("inner");
-        alert(JSON.stringify(userData));
         clearInterval(userDataRequestInterval);
         if (userCompletedLevel > userData.gameLevel) {
           updateGameLevel(userCompletedLevel);
