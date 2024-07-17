@@ -175,7 +175,7 @@ let ref,
 
 				}
 			}, function(response) {
-				//alert(response.error);
+				alert(response.error);
 			});
 		},
 
