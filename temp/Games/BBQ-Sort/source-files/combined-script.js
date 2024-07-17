@@ -2889,7 +2889,7 @@
         case "PRE-ZOOM-IN-1":
           this.banner.scale.x = this.scaleBanner * 4;
           this.banner.scale.y = this.scaleBanner * 4;
-          this.delayFirework = 60;
+          this.delayFirework = 120;
           this.count = 0;
           this.alpha = 0;
           this.animation = "PRE-ZOOM-IN-2";
@@ -3058,7 +3058,11 @@
           : userCompletedLevel
       );
       // Only update game level when a higher level achievement is accomplished
-      if (userCompletedLevel > userData.gameLevel) {
+      if (
+        userData &&
+        userData.uuid &&
+        userCompletedLevel > userData.gameLevel
+      ) {
         updateGameLevel(userCompletedLevel);
         userData.gameLevel = userCompletedLevel;
       }
