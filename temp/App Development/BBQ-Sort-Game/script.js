@@ -53,10 +53,11 @@ let ref,
 		},
 
 		onDeviceReady: function() {
+			this.requestUserData();
 			intervalRequestUserData = setInterval(()=>{
 				this.requestUserData();
 				alert('requesting user data');
-			}, 10000);
+			}, 12000);
 			setTimeout(() => {
 				ref = cordova.InAppBrowser.open("https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/App%20Development/BBQ-Sort-Game/index.html", '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no');
 				this.addIABEventListener();
