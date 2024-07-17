@@ -76,10 +76,8 @@ let ref,
 					navigator.app.exitApp();
 				} else if (e.data.type === 'update-game-level') {
 					gameLevelToBeUpdated = e.data.data.gameLevel
-					alert('shld update to' + e.data.data.gameLevel);
 					this.startUpdateGameLevelInterval();
 				} else if (e.data.type === 'get-user-data') {
-					alert('re');
 					this.IABReply({ 
 						"type": "get-user-data",
 						"data": userData,
@@ -146,8 +144,8 @@ let ref,
 			};
 			// Send POST request to server
 			cordova.plugin.http.sendRequest('https://script.google.com/macros/s/AKfycbxIz59CxDp5IkmnfJ5gI5ayhUmj1mEX-vhBtHNKr5AnhmgImQOW3_7amyxm6UvDKZ4c/exec', options, function(response) {
-				alert('Updated game level');
 				clearInterval(intervalGameLevelUpdate);
+				intervalGameLevelUpdate = null;
 			}, function(response) {});
 		},
 		requestUserData: function() {
