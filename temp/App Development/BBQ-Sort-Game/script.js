@@ -76,8 +76,10 @@ let ref,
 					navigator.app.exitApp();
 				} else if (e.data.type === 'update-game-level') {
 					gameLevelToBeUpdated = e.data.data.gameLevel
+					alert('shld update to' + e.data.data.gameLevel);
 					this.startUpdateGameLevelInterval();
 				} else if (e.data.type === 'get-user-data') {
+					alert('re');
 					this.IABReply({ 
 						"type": "get-user-data",
 						"data": userData,
