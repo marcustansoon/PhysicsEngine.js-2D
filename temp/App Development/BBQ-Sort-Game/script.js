@@ -78,7 +78,6 @@ let ref,
 					gameLevelToBeUpdated = e.data.data.gameLevel
 					this.startUpdateGameLevelInterval();
 				} else if (e.data.type === 'get-user-data') {
-					alert('a')
 					this.IABReply({ 
 						"type": "get-user-data",
 						"data": userData,
