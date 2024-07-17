@@ -2469,13 +2469,14 @@
         this.app.screen.height / 2
       );
       gamePlayBG.filters = [this.blurFilter];
+      gamePlayBG.alpha = 0;
       this.objects.push(gamePlayBG);
       this.container.addChild(gamePlayBG);
 
       // Create a graphic rectangle
       const rect = new PIXI.Graphics();
       rect.beginFill("#000000"); // Black color
-      rect.alpha = 0.4;
+      rect.alpha = 0;
       rect.drawRect(
         Math.round(-this.app.renderer.width / 2),
         Math.round(-this.app.renderer.height / 2),
@@ -2484,6 +2485,7 @@
       );
       rect.endFill();
       rect.position.set(this.app.screen.width / 2, this.app.screen.height / 2);
+      this.rect = rect;
       this.objects.push(rect);
       this.container.addChild(rect);
 
@@ -2566,7 +2568,7 @@
       let backButton = new PIXI.Sprite(PIXI.Assets.get("close-button"));
       backButton.anchor.set(0.5);
       backButton.alpha = 0;
-      backButton.scale.set(floor((scaleBanner / 0.65) * 0.2, 2));
+      backButton.scale.set(floor((scale / 0.46) * 0.25, 2));
       backButton.position.set(
         (this.app.screen.width / 6) * 5,
         levelCompletionBanner.y - floor(levelCompletionBanner.height * 0.5, 2)
@@ -2605,6 +2607,7 @@
       this.playText.alpha = 0;
       this.light1.alpha = 0;
       this.light2.alpha = 0;
+      this.rect.alpha = 0;
       this.animation = "PRE-ZOOM-IN-1";
     }
 
@@ -2622,6 +2625,7 @@
       this.playText = null;
       this.light1 = null;
       this.light2 = null;
+      this.rect = null;
       this.isDestroyed = true;
     }
 
@@ -2630,7 +2634,7 @@
         case "PRE-ZOOM-IN-1":
           this.banner.scale.x = this.scaleBanner * 3;
           this.banner.scale.y = this.scaleBanner * 3;
-          this.delayFirework = 30;
+          this.delayFirework = 160;
           this.count = 0;
           this.alpha = 0;
           this.animation = "PRE-ZOOM-IN-2";
@@ -2642,14 +2646,12 @@
         case "ZOOM-IN-ACC":
           this.banner.scale.x = this.scaleBanner * 3 + this.count;
           this.banner.scale.y = this.scaleBanner * 3 + this.count;
-          this.count -= 0.03;
-          this.alpha += 0.005;
+          this.count -= 0.01;
+          this.alpha += 0.007;
           this.light1.alpha = Math.min(1, this.alpha);
           this.light2.alpha = Math.min(1, this.alpha);
           this.banner.alpha = Math.min(1, this.alpha);
-          this.backButton.alpha = Math.min(1, this.alpha);
-          this.bgTextPlay.alpha = Math.min(1, this.alpha);
-          this.playText.alpha = Math.min(1, this.alpha);
+          this.rect.alpha = Math.min(0.4, this.alpha);
           if (this.banner.scale.x <= this.scaleBanner * 1.5) {
             this.animation = "ZOOM-IN";
           }
@@ -2662,9 +2664,7 @@
           this.light1.alpha = Math.min(1, this.alpha);
           this.light2.alpha = Math.min(1, this.alpha);
           this.banner.alpha = Math.min(1, this.alpha);
-          this.backButton.alpha = Math.min(1, this.alpha);
-          this.bgTextPlay.alpha = Math.min(1, this.alpha);
-          this.playText.alpha = Math.min(1, this.alpha);
+          this.rect.alpha = Math.min(0.4, this.alpha);
           if (this.banner.scale.x <= this.scaleBanner) {
             this.animation = "IDLE";
           }
@@ -2713,7 +2713,7 @@
       let scale = scaleX > scaleY ? scaleX : scaleY;
 
       // Calculate font size
-      let fontSize = Math.round((scale / 0.46) * 24 * 10) / 10;
+      let fontSize = Math.round((scale / 0.46) * 25 * 10) / 10;
 
       // Create text with custom style
       let style = new PIXI.TextStyle({
@@ -2741,13 +2741,14 @@
         this.app.screen.height / 2
       );
       gamePlayBG.filters = [this.blurFilter];
+      gamePlayBG.alpha = 0;
       this.objects.push(gamePlayBG);
       this.container.addChild(gamePlayBG);
 
       // Create a graphic rectangle
       const rect = new PIXI.Graphics();
       rect.beginFill("#000000"); // Black color
-      rect.alpha = 0.4;
+      rect.alpha = 0;
       rect.drawRect(
         Math.round(-this.app.renderer.width / 2),
         Math.round(-this.app.renderer.height / 2),
@@ -2756,6 +2757,7 @@
       );
       rect.endFill();
       rect.position.set(this.app.screen.width / 2, this.app.screen.height / 2);
+      this.rect = rect;
       this.objects.push(rect);
       this.container.addChild(rect);
 
@@ -2827,7 +2829,7 @@
       let backButton = new PIXI.Sprite(PIXI.Assets.get("close-button"));
       backButton.anchor.set(0.5);
       backButton.alpha = 0;
-      backButton.scale.set(floor((scaleBanner / 0.16) * 0.2, 2));
+      backButton.scale.set(floor((scale / 0.46) * 0.25, 2));
       backButton.position.set(
         (this.app.screen.width / 6) * 5,
         levelFailBanner.y - floor(levelFailBanner.height * 0.5, 2)
@@ -2865,6 +2867,7 @@
       this.backButton.alpha = 0;
       this.bgTextPlay.alpha = 0;
       this.playText.alpha = 0;
+      this.rect.alpha = 0;
       this.animation = "PRE-ZOOM-IN-1";
     }
 
@@ -2881,6 +2884,7 @@
       this.backButton = null;
       this.bgTextPlay = null;
       this.playText = null;
+      this.rect = null;
       this.isDestroyed = true;
     }
 
@@ -2889,7 +2893,7 @@
         case "PRE-ZOOM-IN-1":
           this.banner.scale.x = this.scaleBanner * 4;
           this.banner.scale.y = this.scaleBanner * 4;
-          this.delayFirework = 120;
+          this.delayFirework = 160;
           this.count = 0;
           this.alpha = 0;
           this.animation = "PRE-ZOOM-IN-2";
@@ -2901,12 +2905,10 @@
         case "ZOOM-IN-ACC":
           this.banner.scale.x = this.scaleBanner * 4 + this.count;
           this.banner.scale.y = this.scaleBanner * 4 + this.count;
-          this.count -= 0.02;
-          this.alpha += 0.005;
+          this.count -= 0.007;
+          this.alpha += 0.007;
           this.banner.alpha = Math.min(1, this.alpha);
-          this.backButton.alpha = Math.min(1, this.alpha);
-          this.bgTextPlay.alpha = Math.min(1, this.alpha);
-          this.playText.alpha = Math.min(1, this.alpha);
+          this.rect.alpha = Math.min(0.4, this.alpha);
           if (this.banner.scale.x <= this.scaleBanner * 2) {
             this.animation = "ZOOM-IN";
           }
@@ -2914,12 +2916,10 @@
         case "ZOOM-IN":
           this.banner.scale.x = this.scaleBanner * 4 + this.count;
           this.banner.scale.y = this.scaleBanner * 4 + this.count;
-          this.count -= 0.01;
+          this.count -= 0.007;
           this.alpha += 0.01;
           this.banner.alpha = Math.min(1, this.alpha);
-          this.backButton.alpha = Math.min(1, this.alpha);
-          this.bgTextPlay.alpha = Math.min(1, this.alpha);
-          this.playText.alpha = Math.min(1, this.alpha);
+          this.rect.alpha = Math.min(0.4, this.alpha);
           if (this.banner.scale.x <= this.scaleBanner) {
             this.animation = "ZOOM-IN-2";
             this.alpha = 0;
@@ -3032,6 +3032,12 @@
       activeScene.hide();
       mainMenuScene.show();
       activeScene = mainMenuScene;
+      if (gameScene) {
+        // Reset old game scene
+        gameScene.hide();
+        gameScene.destroy();
+        gameScene = null;
+      }
     } else if (activeScene.switchToSettingScene) {
       activeScene.switchToSettingScene = false;
       activeScene.hide();
@@ -3066,9 +3072,6 @@
         updateGameLevel(userCompletedLevel);
         userData.gameLevel = userCompletedLevel;
       }
-      gameScene.hide();
-      gameScene.destroy();
-      gameScene = null;
       if (!gameCompleteScene) gameCompleteScene = new GameCompleteScene(app);
       gameCompleteScene.level = activeScene.level;
       gameCompleteScene.reset();
@@ -3077,9 +3080,6 @@
     } else if (activeScene.isPuzzleFailed) {
       console.log("f");
       console.log(activeScene.level);
-      gameScene.hide();
-      gameScene.destroy();
-      gameScene = null;
       if (!gameFailScene) gameFailScene = new GameFailScene(app);
       gameFailScene.level = activeScene.level;
       console.log("f " + gameFailScene.level);
@@ -3089,6 +3089,11 @@
     } else if (activeScene.switchToNextGameLevelScene) {
       activeScene.switchToNextGameLevelScene = false;
       activeScene.hide();
+      // Reset old game scene
+      gameScene.hide();
+      gameScene.destroy();
+      gameScene = null;
+      // Create new game scene
       gameScene = new GamePlayScene(app, ++activeScene.level);
       console.log("nex lv " + activeScene.level);
       gameScene.show();
@@ -3097,6 +3102,11 @@
       activeScene.switchToSameGameLevelScene = false;
       console.log("res" + activeScene.level);
       activeScene.hide();
+      // Reset old game scene
+      gameScene.hide();
+      gameScene.destroy();
+      gameScene = null;
+      // Create new game scene
       gameScene = new GamePlayScene(app, activeScene.level);
       gameScene.show();
       activeScene = gameScene;
