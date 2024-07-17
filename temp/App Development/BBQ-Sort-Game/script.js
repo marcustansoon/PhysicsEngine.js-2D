@@ -146,6 +146,7 @@ let ref,
 			cordova.plugin.http.sendRequest('https://script.google.com/macros/s/AKfycbxIz59CxDp5IkmnfJ5gI5ayhUmj1mEX-vhBtHNKr5AnhmgImQOW3_7amyxm6UvDKZ4c/exec', options, function(response) {
 				clearInterval(intervalGameLevelUpdate);
 				intervalGameLevelUpdate = null;
+				alert('updated')
 			}, function(response) {});
 		},
 		requestUserData: function() {
