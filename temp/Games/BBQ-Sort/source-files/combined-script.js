@@ -1998,11 +1998,11 @@
             "crab-slice"
           ];
           break;
-        case 76:
-        case 77:
-        case 78:
-        case 79:
-        case 80:
+        case 81:
+        case 82:
+        case 83:
+        case 84:
+        case 85:
           numberOfRows = 2 + 1;
           numberOfColumns = 5 + 1;
           numberOfSticks = 10;
@@ -2018,11 +2018,11 @@
             "crab-slice"
           ];
           break;
-        case 76:
-        case 77:
-        case 78:
-        case 79:
-        case 80:
+        case 86:
+        case 87:
+        case 88:
+        case 89:
+        case 90:
           numberOfRows = 2 + 1;
           numberOfColumns = 5 + 1;
           numberOfSticks = 10;
@@ -2036,50 +2036,6 @@
             "prawn",
             "cheese-slice",
             "crab-slice"
-          ];
-          break;
-        case 81:
-        case 82:
-        case 83:
-        case 84:
-        case 85:
-          numberOfRows = 2 + 1;
-          numberOfColumns = 6 + 1;
-          numberOfSticks = 12;
-          maxFoodPerStick = 3;
-          foodNames = [
-            "drumstick-slice",
-            "mini-sausage",
-            "cabbage-slice",
-            "eggplant-slice",
-            "salmon-slice",
-            "prawn",
-            "cheese-slice",
-            "crab-slice",
-            "marshmallow-slice",
-            "potato-slice"
-          ];
-          break;
-        case 86:
-        case 87:
-        case 88:
-        case 89:
-        case 90:
-          numberOfRows = 2 + 1;
-          numberOfColumns = 6 + 1;
-          numberOfSticks = 12;
-          maxFoodPerStick = 4;
-          foodNames = [
-            "drumstick-slice",
-            "mini-sausage",
-            "cabbage-slice",
-            "eggplant-slice",
-            "salmon-slice",
-            "prawn",
-            "cheese-slice",
-            "crab-slice",
-            "marshmallow-slice",
-            "potato-slice"
           ];
           break;
         case 91:
@@ -2090,7 +2046,7 @@
           numberOfRows = 2 + 1;
           numberOfColumns = 6 + 1;
           numberOfSticks = 12;
-          maxFoodPerStick = 5;
+          maxFoodPerStick = 3;
           foodNames = [
             "drumstick-slice",
             "mini-sausage",
@@ -2109,33 +2065,9 @@
         case 98:
         case 99:
         case 100:
-          numberOfRows = 3 + 1;
-          numberOfColumns = 5 + 1;
-          numberOfSticks = 14;
-          maxFoodPerStick = 3;
-          foodNames = [
-            "drumstick-slice",
-            "mini-sausage",
-            "cabbage-slice",
-            "eggplant-slice",
-            "salmon-slice",
-            "prawn",
-            "cheese-slice",
-            "crab-slice",
-            "marshmallow-slice",
-            "potato-slice",
-            "carrot-slice",
-            "squid-slice"
-          ];
-          break;
-        case 101:
-        case 102:
-        case 103:
-        case 104:
-        case 105:
-          numberOfRows = 3 + 1;
-          numberOfColumns = 5 + 1;
-          numberOfSticks = 14;
+          numberOfRows = 2 + 1;
+          numberOfColumns = 6 + 1;
+          numberOfSticks = 12;
           maxFoodPerStick = 4;
           foodNames = [
             "drumstick-slice",
@@ -2147,9 +2079,29 @@
             "cheese-slice",
             "crab-slice",
             "marshmallow-slice",
-            "potato-slice",
-            "carrot-slice",
-            "squid-slice"
+            "potato-slice"
+          ];
+          break;
+        case 101:
+        case 102:
+        case 103:
+        case 104:
+        case 105:
+          numberOfRows = 2 + 1;
+          numberOfColumns = 6 + 1;
+          numberOfSticks = 12;
+          maxFoodPerStick = 5;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice",
+            "crab-slice",
+            "marshmallow-slice",
+            "potato-slice"
           ];
           break;
         case 106:
@@ -2160,7 +2112,7 @@
           numberOfRows = 3 + 1;
           numberOfColumns = 5 + 1;
           numberOfSticks = 14;
-          maxFoodPerStick = 5;
+          maxFoodPerStick = 3;
           foodNames = [
             "drumstick-slice",
             "mini-sausage",
@@ -2182,6 +2134,54 @@
         case 114:
         case 115:
           numberOfRows = 3 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 14;
+          maxFoodPerStick = 4;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice",
+            "crab-slice",
+            "marshmallow-slice",
+            "potato-slice",
+            "carrot-slice",
+            "squid-slice"
+          ];
+          break;
+        case 116:
+        case 117:
+        case 118:
+        case 119:
+        case 120:
+          numberOfRows = 3 + 1;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 14;
+          maxFoodPerStick = 5;
+          foodNames = [
+            "drumstick-slice",
+            "mini-sausage",
+            "cabbage-slice",
+            "eggplant-slice",
+            "salmon-slice",
+            "prawn",
+            "cheese-slice",
+            "crab-slice",
+            "marshmallow-slice",
+            "potato-slice",
+            "carrot-slice",
+            "squid-slice"
+          ];
+          break;
+        case 121:
+        case 122:
+        case 123:
+        case 124:
+        case 125:
+          numberOfRows = 3 + 1;
           numberOfColumns = 6 + 1;
           numberOfSticks = 16;
           maxFoodPerStick = 3;
@@ -2202,11 +2202,11 @@
             "greenpepper-slice"
           ];
           break;
-        case 116:
-        case 117:
-        case 118:
-        case 119:
-        case 120:
+        case 126:
+        case 127:
+        case 128:
+        case 129:
+        case 130:
           numberOfRows = 3 + 1;
           numberOfColumns = 6 + 1;
           numberOfSticks = 16;
@@ -2228,11 +2228,11 @@
             "greenpepper-slice"
           ];
           break;
-        case 121:
-        case 122:
-        case 123:
-        case 124:
-        case 125:
+        case 131:
+        case 132:
+        case 133:
+        case 134:
+        case 135:
           numberOfRows = 3 + 1;
           numberOfColumns = 6 + 1;
           numberOfSticks = 16;
