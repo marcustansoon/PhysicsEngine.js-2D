@@ -371,6 +371,11 @@
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/game-restart-audio.wav"
         },
+        {
+          alias: "game-start-sound",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/game-start.mp3"
+        },
         // Font styles
         {
           alias: "ChunkFive",
@@ -2775,7 +2780,7 @@
       bgTextPlay.y -= (scale / 0.46) * 55;
       makeInteractive(bgTextPlay);
       bgTextPlay.on("pointerdown", () => {
-        soundEffectPlay("button-click");
+        soundEffectPlay("game-start-sound");
         this.switchToNextGameLevelScene = true;
       });
       this.bgTextPlay = bgTextPlay;
@@ -3042,7 +3047,7 @@
       bgTextPlay.y -= (scale / 0.46) * 55;
       makeInteractive(bgTextPlay);
       bgTextPlay.on("pointerdown", () => {
-        soundEffectPlay("button-click");
+        soundEffectPlay("game-restart-sound");
         this.switchToSameGameLevelScene = true;
       });
       this.bgTextPlay = bgTextPlay;
