@@ -87,9 +87,19 @@
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/level-completed-sprite-transparent.png"
         },
         {
-          alias: "level-failed-banner",
+          alias: "level-failed-banner-1",
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/patty-burnt-2.png"
+        },
+        {
+          alias: "level-failed-banner-2",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/patty-burnt-4.png"
+        },
+        {
+          alias: "level-failed-banner-3",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/patty-burnt-6.png"
         },
         {
           alias: "level-failed-bg",
@@ -2920,7 +2930,14 @@
       this.container.addChild(rect);
 
       // Get canvas size ratio
-      let bannerTexture = PIXI.Assets.get("level-failed-banner");
+      let banners = [
+        "level-failed-banner-1",
+        "level-failed-banner-2",
+        "level-failed-banner-3"
+      ];
+      let bannerTexture = PIXI.Assets.get(
+        banners[Math.floor(banners.length * Math.random())]
+      );
       let scaleBannerX = this.app.renderer.width / bannerTexture.width;
       let scaleBannerY = this.app.renderer.height / bannerTexture.height;
       let scaleBanner = Math.min(scaleBannerX, scaleBannerY);
