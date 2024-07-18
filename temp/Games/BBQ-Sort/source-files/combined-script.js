@@ -3092,7 +3092,7 @@
           this.bgTextPlay.alpha = 1;
           this.playText.alpha = 1;
           this.bannerBg.alpha = Math.min(1, this.alpha);
-          this.alpha += 0.01;
+          this.alpha += 0.015;
           if (this.alpha >= 1) {
             this.animation = "IDLE";
           }
