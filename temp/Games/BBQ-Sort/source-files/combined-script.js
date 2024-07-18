@@ -2930,14 +2930,12 @@
       this.container.addChild(rect);
 
       // Get canvas size ratio
-      let banners = [
+      this.banners = [
         "level-failed-banner-1",
         "level-failed-banner-2",
         "level-failed-banner-3"
       ];
-      let bannerTexture = PIXI.Assets.get(
-        banners[Math.floor(banners.length * Math.random())]
-      );
+      let bannerTexture = PIXI.Assets.get("level-failed-banner-1");
       let scaleBannerX = this.app.renderer.width / bannerTexture.width;
       let scaleBannerY = this.app.renderer.height / bannerTexture.height;
       let scaleBanner = Math.min(scaleBannerX, scaleBannerY);
@@ -3030,6 +3028,9 @@
     show() {
       this.app.stage.addChild(this.container);
       PIXI.Assets.get("raindrop").play();
+      this.banner.texture = PIXI.Assets.get(
+        this.banners[Math.floor(this.banners.length * Math.random())]
+      );
     }
 
     hide() {
