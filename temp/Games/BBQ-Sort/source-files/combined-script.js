@@ -2802,22 +2802,22 @@
           if (this.delayFirework <= 0) this.animation = "ZOOM-IN-ACC";
           break;
         case "ZOOM-IN-ACC":
-          this.banner.scale.x = this.scaleBanner * 3 + this.count;
-          this.banner.scale.y = this.scaleBanner * 3 + this.count;
-          this.count -= (this.scaleBanner * 3) / 100;
+          this.banner.scale.x = this.scaleBanner * 4 + this.count;
+          this.banner.scale.y = this.scaleBanner * 4 + this.count;
+          this.count -= (this.scaleBanner * 4) / 130;
           this.alpha += 0.001;
           this.light1.alpha = Math.min(1, this.alpha);
           this.light2.alpha = Math.min(1, this.alpha);
           this.banner.alpha = Math.min(1, this.alpha);
           this.rect.alpha = Math.min(0.4, this.alpha);
-          if (this.banner.scale.x <= this.scaleBanner * 1.5) {
+          if (this.banner.scale.x <= this.scaleBanner * 2) {
             this.animation = "ZOOM-IN";
           }
           break;
         case "ZOOM-IN":
-          this.banner.scale.x = this.scaleBanner * 3 + this.count;
-          this.banner.scale.y = this.scaleBanner * 3 + this.count;
-          this.count -= ((this.scaleBanner * 3) / 100) * 1.5;
+          this.banner.scale.x = this.scaleBanner * 4 + this.count;
+          this.banner.scale.y = this.scaleBanner * 4 + this.count;
+          this.count -= ((this.scaleBanner * 4) / 130) * 1.2;
           this.alpha += 0.01;
           this.light1.alpha = Math.min(1, this.alpha);
           this.light2.alpha = Math.min(1, this.alpha);
@@ -3064,7 +3064,7 @@
         case "ZOOM-IN-ACC":
           this.banner.scale.x = this.scaleBanner * 4 + this.count;
           this.banner.scale.y = this.scaleBanner * 4 + this.count;
-          this.count -= (this.scaleBanner * 4) / 100;
+          this.count -= (this.scaleBanner * 4) / 90;
           this.alpha += 0.007;
           this.banner.alpha = Math.min(1, this.alpha);
           this.rect.alpha = Math.min(0.4, this.alpha);
@@ -3075,7 +3075,7 @@
         case "ZOOM-IN":
           this.banner.scale.x = this.scaleBanner * 4 + this.count;
           this.banner.scale.y = this.scaleBanner * 4 + this.count;
-          this.count -= ((this.scaleBanner * 4) / 100) * 1.5;
+          this.count -= ((this.scaleBanner * 4) / 90) * 1.5;
           this.alpha += 0.01;
           this.banner.alpha = Math.min(1, this.alpha);
           this.rect.alpha = Math.min(0.4, this.alpha);
