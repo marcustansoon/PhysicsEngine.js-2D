@@ -2804,8 +2804,8 @@
         case "ZOOM-IN-ACC":
           this.banner.scale.x = this.scaleBanner * 4 + this.count;
           this.banner.scale.y = this.scaleBanner * 4 + this.count;
-          this.count -= (this.scaleBanner * 4) / 100;
-          this.alpha += 0.007;
+          this.count -= (this.scaleBanner * 4) / 90;
+          this.alpha += 0.01;
           this.light1.alpha = Math.min(1, this.alpha);
           this.light2.alpha = Math.min(1, this.alpha);
           this.banner.alpha = Math.min(1, this.alpha);
@@ -2817,8 +2817,8 @@
         case "ZOOM-IN":
           this.banner.scale.x = this.scaleBanner * 4 + this.count;
           this.banner.scale.y = this.scaleBanner * 4 + this.count;
-          this.count -= ((this.scaleBanner * 4) / 100) * 1.2;
-          this.alpha += 0.01;
+          this.count -= ((this.scaleBanner * 4) / 90) * 1.2;
+          this.alpha += 0.012;
           this.light1.alpha = Math.min(1, this.alpha);
           this.light2.alpha = Math.min(1, this.alpha);
           this.banner.alpha = Math.min(1, this.alpha);
