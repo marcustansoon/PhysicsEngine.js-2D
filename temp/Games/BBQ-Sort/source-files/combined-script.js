@@ -108,6 +108,11 @@
         },
         // In game related images
         {
+          alias: "cloud",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/cloud-rotated.png"
+        },
+        {
           alias: "setting-icon",
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/setting-icon-cropped.png"
@@ -2401,6 +2406,9 @@
       quitText.position.set(bgTextQuit.x, bgTextQuit.y);
       this.quitText = quitText;
       this.objects.push(quitText);
+
+      // Create clouds
+      this.createClouds();
     }
 
     shuffle(array) {
@@ -2438,6 +2446,38 @@
 
     show() {
       this.app.stage.addChild(this.container);
+      // Show clouds animation
+      this.showCloudsExitEffect();
+    }
+
+    createClouds() {
+      // Create left cloud
+      let cloudTexture = PIXI.Assets.get("cloud"),
+        leftCloud = new PIXI.Sprite(cloudTexture);
+      leftCloud.anchor.set(0.5);
+      leftCloud.scale.set(this.app.renderer.height / cloudTexture.height);
+      leftCloud.position.set(leftCloud.width / 2, this.app.screen.height / 2);
+      this.leftCloud = leftCloud;
+      this.objects.push(leftCloud);
+
+      // Create right cloud
+      let rightCloud = new PIXI.Sprite(cloudTexture);
+      rightCloud.anchor.set(0.5);
+      rightCloud.scale.set(this.app.renderer.height / cloudTexture.height);
+      rightCloud.scale.x = -rightCloud.scale.x;
+      rightCloud.position.set(
+        this.app.renderer.width - rightCloud.width / 2,
+        this.app.screen.height / 2
+      );
+      this.rightCloud = rightCloud;
+      this.objects.push(rightCloud);
+    }
+
+    showCloudsExitEffect() {
+      this.cloudSpeed = 0;
+      this.displayCloudExitEffect = true;
+      this.container.addChild(this.leftCloud);
+      this.container.addChild(this.rightCloud);
     }
 
     hide() {
@@ -2465,10 +2505,30 @@
       this.banner = null;
       this.backButton = null;
       this.settingIcon = null;
+      this.leftCloud = null;
+      this.rightCloud = null;
       this.isDestroyed = true;
     }
 
+    updateCloudAnimation() {
+      if (this.displayCloudExitEffect) {
+        this.leftCloud.x -= this.cloudSpeed;
+        this.rightCloud.x += this.cloudSpeed;
+        this.cloudSpeed += 0.1;
+        if (this.leftCloud.x < -this.leftCloud.width) {
+          // Reset
+          this.displayCloudExitEffect = false;
+          this.container.removeChild(this.leftCloud);
+          this.container.removeChild(this.rightCloud);
+          console.log("stop");
+        }
+      }
+    }
+
     update() {
+      // Cloud animation
+      this.updateCloudAnimation();
+
       let isPuzzleCompleted = true,
         isPuzzleFailed = true;
       for (let indexM = 0; indexM < this.sticksGroup.length; indexM++) {
