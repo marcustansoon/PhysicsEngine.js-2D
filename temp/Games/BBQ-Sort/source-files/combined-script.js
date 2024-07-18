@@ -779,7 +779,7 @@
       let startPositionY = -1.3;
       let startPositionX = -1.3;
       let currentPageDisplayCount = 0;
-      for (let level = 0; level < 126; level++) {
+      for (let level = 0; level < 136; level++) {
         // Only display a maximum of 12 levels on a page
         if (currentPageDisplayCount >= 9) {
           currentPageDisplayCount = 0;
