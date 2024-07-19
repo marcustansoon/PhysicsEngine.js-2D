@@ -102,6 +102,11 @@
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/patty-burnt-6.png"
         },
         {
+          alias: "level-failed-banner-4",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/patty-burnt-7.png"
+        },
+        {
           alias: "level-failed-bg",
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/level-failure-banner.png"
@@ -2519,7 +2524,7 @@
       if (this.displayCloudExitEffect) {
         this.leftCloud.x -= this.cloudSpeed;
         this.rightCloud.x += this.cloudSpeed;
-        this.cloudSpeed += 0.1;
+        this.cloudSpeed += 0.2;
         if (this.leftCloud.x < -this.leftCloud.width) {
           // Reset
           this.displayCloudExitEffect = false;
@@ -2998,7 +3003,8 @@
       this.banners = [
         "level-failed-banner-1",
         "level-failed-banner-2",
-        "level-failed-banner-3"
+        "level-failed-banner-3",
+        "level-failed-banner-4"
       ];
       let bannerTexture = PIXI.Assets.get("level-failed-banner-1");
       let scaleBannerX = this.app.renderer.width / bannerTexture.width;
