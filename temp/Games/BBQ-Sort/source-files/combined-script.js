@@ -2649,11 +2649,10 @@
         this.rightCloud.x += this.cloudSpeed;
         this.cloudSpeed += 0.2;
         if (this.leftCloud.x < -this.leftCloud.width) {
-          // Reset
+          // Disable animation and hide clouds
           this.displayCloudExitEffect = false;
-          this.container.removeChild(this.leftCloud);
-          this.container.removeChild(this.rightCloud);
-          console.log("stop");
+          this.leftCloud.visible = false;
+          this.rightCloud.visible = false;
         }
       }
     }
