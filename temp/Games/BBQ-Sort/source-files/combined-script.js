@@ -400,11 +400,19 @@
         }
       ];
 
-      const bgMainMenuTexture = await PIXI.Assets.load({
-        alias: "bg-main-menu",
-        src:
-          "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bbq-grill-bg-6-compressed.jpg"
-      });
+      await PIXI.Assets.load([
+        {
+          alias: "bg-main-menu",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/bbq-grill-bg-6-compressed.jpg"
+        },
+        {
+          alias: "green-banner",
+          src:
+            "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/green-banner.jpg"
+        }
+      ]);
+      const bgMainMenuTexture = PIXI.Assets.get("bg-main-menu");
 
       // Get canvas size ratio
       let scaleX = this.app.renderer.width / bgMainMenuTexture.width;
@@ -468,6 +476,14 @@
       this.loadingText = loadingText;
       this.progress = 0;
 
+      if (window.localStorage.getItem("user-consent")) {
+        this.setCompletion();
+        window.localStorage.setItem("user-consent", 1);
+      } else {
+        // Show user data collection prompt
+        this.showUserDataCollectionPrompt(scale);
+      }
+
       await PIXI.Assets.load(
         resourcesToBeLoad,
         this.loadProgressCallback.bind(this)
@@ -480,7 +496,99 @@
           })
         );
       }
-      this.isComplete = true;
+
+      this.setCompletion();
+    }
+
+    setCompletion() {
+      this.count = (this.count ?? 0) + 1;
+      if (this.count >= 2) {
+        this.isComplete = true;
+      }
+    }
+
+    showUserDataCollectionPrompt(scale) {
+      // Define rectangle dimensions
+      const rectWidth = Math.min(this.app.renderer.width * 0.95, 500);
+
+      // Agree button
+      let agreeButton = new PIXI.Sprite(PIXI.Assets.get("green-banner"));
+      agreeButton.anchor.set(0.5);
+      agreeButton.scale.set((scale / 0.19) * 0.13);
+      agreeButton.position.set(
+        this.app.renderer.width / 2,
+        this.app.renderer.height / 2 + agreeButton.height * 2
+      );
+      this.objects.push(agreeButton);
+      makeInteractive(agreeButton);
+      agreeButton.on("pointerdown", () => {
+        window.localStorage.setItem("user-consent", 1);
+        consentSentenceText.visible = false;
+        graphics.visible = false;
+        consentAcceptText.visible = false;
+        agreeButton.visible = false;
+        this.setCompletion();
+      });
+
+      // Create text with custom style
+      let consentSentenceStyle = new PIXI.TextStyle({
+          fontFamily: "Trebuchet MS, sans-serif",
+          fontSize: Math.round((scale / 0.3) * 12 * 10) / 10,
+          fill: "#000000",
+          dropShadow: false,
+          fontWeight: "bold",
+          wordWrap: true,
+          wordWrapWidth: rectWidth * 0.9,
+          letterSpacing: 1,
+          lineJoin: "round"
+        }),
+        consentAgreeStyle = new PIXI.TextStyle({
+          fontFamily: "Trebuchet MS, sans-serif",
+          fontSize: Math.round((scale / 0.3) * 12 * 10) / 10,
+          fill: "#FFFFFF",
+          dropShadow: false,
+          fontWeight: "bold",
+          wordWrap: true,
+          wordWrapWidth: rectWidth * 0.9,
+          letterSpacing: 1,
+          lineJoin: "round"
+        });
+
+      // Agreement text
+      let consentSentenceText = new PIXI.Text(
+        "BBQ Sort Puzzle collects and stores data about your device to enable core gameplay (e.g. saving your game progress), tailor your game experience, provide you with customer service whenever necessary. You may opt for data deletion at any time by emailing us. To learn more, please check out our privacy policy listed on our website. To continue playing the game, we hereby require your consent on the data collection",
+        consentSentenceStyle
+      );
+      consentSentenceText.anchor.set(0.5);
+      consentSentenceText.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2 - agreeButton.height
+      );
+      this.objects.push(consentSentenceText);
+
+      // Accept text
+      let consentAcceptText = new PIXI.Text("Accept", consentAgreeStyle);
+      consentAcceptText.anchor.set(0.5);
+      consentAcceptText.position.set(
+        this.app.screen.width / 2,
+        this.app.screen.height / 2 + agreeButton.height * 2
+      );
+      this.objects.push(consentAcceptText);
+
+      // Rectangle graphics
+      const graphics = new PIXI.Graphics();
+      const rectHeight = consentSentenceText.height + agreeButton.height * 3;
+      graphics.rect(-rectWidth / 2, -rectHeight / 2, rectWidth, rectHeight);
+      graphics.fill("#FFFFFF");
+      graphics.position.set(
+        this.app.renderer.width / 2,
+        this.app.renderer.height / 2
+      );
+
+      this.container.addChild(graphics);
+      this.container.addChild(consentSentenceText);
+      this.container.addChild(agreeButton);
+      this.container.addChild(consentAcceptText);
     }
 
     loadProgressCallback(progress) {
@@ -1248,7 +1356,10 @@
       let stick = new PIXI.Sprite(PIXI.Assets.get("bbq-stick"));
       stick.anchor.set(0.5);
       stick.scale.set(this.scale);
-      this.stick = { type: "bbq-stick", obj: stick };
+      this.stick = {
+        type: "bbq-stick",
+        obj: stick
+      };
       this.container.addChild(stick);
     }
 
@@ -1266,7 +1377,10 @@
       rect.alpha = 0.0;
       rect.cursor = "pointer";
       rect.on("pointerdown", () => this.onClick());
-      this.rect = { obj: rect, type: "rect" };
+      this.rect = {
+        obj: rect,
+        type: "rect"
+      };
       this.container.addChild(rect);
     }
 
@@ -1287,7 +1401,10 @@
       sprite.anchor.set(0.5);
       sprite.x = -500;
       sprite.y = -500;
-      this.content.push({ obj: sprite, type: childName });
+      this.content.push({
+        obj: sprite,
+        type: childName
+      });
       this.scaleTo(this.scale);
       this.container.addChild(sprite);
     }
@@ -1299,7 +1416,10 @@
       sprite.anchor.set(0.5);
       sprite.x = this.stick.obj.x;
       sprite.y = this.stick.obj.y;
-      this.completedPuzzleSprite = { obj: sprite, type: childName };
+      this.completedPuzzleSprite = {
+        obj: sprite,
+        type: childName
+      };
       this.scaleTo(this.stick.obj.scale.x);
       this.container.addChild(sprite);
     }
@@ -1313,7 +1433,10 @@
         if (type !== this.content[index].type) break;
         length++;
       }
-      return { type: type, length: length };
+      return {
+        type: type,
+        length: length
+      };
     }
 
     setCompletion() {
@@ -2699,16 +2822,16 @@
 
       // Create bg main menu image
       /*const gamePlayBG = new PIXI.Sprite(gamePlayTexture);
-      gamePlayBG.anchor.set(0.5);
-      gamePlayBG.scale.set(floor(scale, 2));
-      gamePlayBG.position.set(
-        this.app.screen.width / 2,
-        this.app.screen.height / 2
-      );
-      gamePlayBG.filters = [this.blurFilter];
-      gamePlayBG.alpha = 0;
-      this.objects.push(gamePlayBG);
-      this.container.addChild(gamePlayBG);*/
+			gamePlayBG.anchor.set(0.5);
+			gamePlayBG.scale.set(floor(scale, 2));
+			gamePlayBG.position.set(
+			  this.app.screen.width / 2,
+			  this.app.screen.height / 2
+			);
+			gamePlayBG.filters = [this.blurFilter];
+			gamePlayBG.alpha = 0;
+			this.objects.push(gamePlayBG);
+			this.container.addChild(gamePlayBG);*/
 
       // Create a graphic rectangle
       const rect = new PIXI.Graphics();
@@ -2972,16 +3095,16 @@
 
       // Create bg main menu image
       /*const gamePlayBG = new PIXI.Sprite(gamePlayTexture);
-      gamePlayBG.anchor.set(0.5);
-      gamePlayBG.scale.set(floor(scale, 2));
-      gamePlayBG.position.set(
-        this.app.screen.width / 2,
-        this.app.screen.height / 2
-      );
-      gamePlayBG.filters = [this.blurFilter];
-      gamePlayBG.alpha = 0;
-      this.objects.push(gamePlayBG);
-      this.container.addChild(gamePlayBG);*/
+			gamePlayBG.anchor.set(0.5);
+			gamePlayBG.scale.set(floor(scale, 2));
+			gamePlayBG.position.set(
+			  this.app.screen.width / 2,
+			  this.app.screen.height / 2
+			);
+			gamePlayBG.filters = [this.blurFilter];
+			gamePlayBG.alpha = 0;
+			this.objects.push(gamePlayBG);
+			this.container.addChild(gamePlayBG);*/
 
       // Create a graphic rectangle
       const rect = new PIXI.Graphics();
@@ -3368,6 +3491,7 @@
 
   /****************************************/
   var userData, userDataRequestInterval;
+
   function requestUserData() {
     if (!window || !window["webkit"]) {
       return;
