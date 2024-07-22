@@ -3510,7 +3510,7 @@
       }
     ];
 
-    await PIXI.Assets.load(res).then();
+    await PIXI.Assets.load(res);
     let s = new PIXI.Sprite(PIXI.Assets.get("test-dummy"));
     app.stage.addChild(s);
   }
@@ -3615,7 +3615,7 @@
         }
         break;
       case "get-game-data":
-        alert("recieved" + e.detail.data.fileName);
+        alert("received" + e.detail.data.fileName);
         alert(e.detail.data.fileData);
         showTestSprite(e.detail.data.fileData);
         break;
