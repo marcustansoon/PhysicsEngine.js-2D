@@ -180,6 +180,33 @@ let ref,
 			});
 		},
 
+		requestTemporaryStorage(){
+			window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, (fs) => {
+				alert('file system open: ' + fs.name);
+				alert('file root path: ' + fs.root);
+				this.createFile(fs.root, "newTempFile.txt", false);
+			}, function(err){alert(err)});
+		},
+		createFile(dirEntry, fileName, isAppend) {
+			// Creates a new file or returns the file if it already exists.
+			dirEntry.getFile(fileName, {create: true, exclusive: false}, (fileEntry) => {
+				//writeFile(fileEntry, null, isAppend);
+				this.readFile(fileEntry)
+			}, function(err){alert(err)});
+		},
+		readFile(fileEntry) {
+			fileEntry.file(function (file) {
+			        var reader = new FileReader();
+			        reader.onloadend = function() {
+			        	alert("Successful file read: " + this.result);
+			        	//displayFileData(fileEntry.fullPath + ": " + this.result);
+			        };
+				reader.readAsText(file);
+			}, function(err){alert(err)});
+		},
+
+		
+
 	};
 
 app.initialize();
