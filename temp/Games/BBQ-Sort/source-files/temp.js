@@ -45,7 +45,6 @@
 			let gifs = {};
 			fetch(urlPath).then((res) => {
             	return res.blob()
-            	return res.arrayBuffer()
             
             }).then(blob => {
             	return new Promise((resolve, reject) => {
@@ -71,23 +70,30 @@
 				return res.blob();
 				return res.arrayBuffer()
 			}).then(blob => {
-				const reader = new FileReader();
-				reader.onloadend = function() {
-					const base64String = reader.result.split(',')[1];
-					//console.log(base64String)
-
-					const arrayBuffer = base64ToArrayBuffer(base64String);
-					PIXI.sound.add('my-sound', {
-						source: arrayBuffer
-					});
-					PIXI.sound.play('my-sound', {
-						loop: true
-					})
-					setTimeout(() => PIXI.sound.stop('my-sound'), 6000)
-				};
-				reader.readAsDataURL(blob);
-			})
+            	return new Promise((resolve, reject) => {
+                  const reader = new FileReader();
+                  reader.onloadend = function() {
+                      let base64String = reader.result.split(',')[1];
+                      let arrayBuffer = base64ToArrayBuffer(base64String);
+                      resolve(arrayBuffer)
+                  };
+                  reader.readAsDataURL(blob);
+                  })
+			}).then(buffer =>{
+            		PIXI.sound.add('my-sound', {
+                          source: buffer
+                      });
+                      PIXI.sound.play('my-sound', {
+                          loop: true
+                      })
+                      setTimeout(() => PIXI.sound.stop('my-sound'), 6000)
+            })
+            
+            
+            
 			fetch("https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/banner-4.png").then(res => res.blob()).then(blob => {
+            
+            
 				var reader = new FileReader();
 				reader.onload = async function test() {
                 
