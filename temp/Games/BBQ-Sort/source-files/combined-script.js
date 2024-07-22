@@ -3489,62 +3489,85 @@
   });
 
   /****************************************/
-	function requestToStoreGameData(fileName, fileData){
-	    if (!window || !window["webkit"]) {
-	      return;
-	    }
-		window["webkit"].messageHandlers["cordova_iab"].postMessage(
-		      JSON.stringify({
-		        type: "store-game-data",
-		        data: {
-				"fileName": fileName,//"test.txt",
-				"fileData": fileData,//"this is another test string, 123,456"
-			}
-		      })
-	   	);
-	}
+  fetch(
+    "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/banner-4.png"
+  )
+    .then((res) => res.blob())
+    .then((blob) => {
+      var reader = new FileReader();
+      reader.onload = async function test() {
+        const base64String = reader.result;
+        requestToStoreGameData("test.txt", base64String);
+      };
+      reader.readAsDataURL(blob);
+    });
+  setTimeout(() => requestStoredGameData("test.txt"), 10000);
+  async function showTestSprite(base64) {
+    let res = [
+      {
+        alias: "test-dummy",
+        src: base64
+      }
+    ];
 
-	//setTimeout(()=> requestToStoreGameData("test.txt", "this is a test file"), 1000)
+    await PIXI.Assets.load(res).then();
+    let s = new PIXI.Sprite(PIXI.Assets.get("test-dummy"));
+    app.stage.addChild(s);
+  }
 
-	function requestStoredGameData(fileName){
-	    if (!window || !window["webkit"]) {
-	      return;
-	    }
-		window["webkit"].messageHandlers["cordova_iab"].postMessage(
-		      JSON.stringify({
-		        type: "get-game-data",
-		        data: {
-				"fileName": fileName,
-			}
-		      })
-	    	);
-	}
-	
-	setTimeout(function(){
-	    if (!window || !window["webkit"]) {
-	      return;
-	    }
-		window["webkit"].messageHandlers["cordova_iab"].postMessage(
-		      JSON.stringify({
-		        type: "get-game-data",
-		        data: {
-				"fileName": "test.txt",
-			}
-		      })
-	    	);
-		window["webkit"].messageHandlers["cordova_iab"].postMessage(
-		      JSON.stringify({
-		        type: "get-game-data",
-		        data: {
-				"fileName": "test-dummy.txt",
-			}
-		      })
-	    	);
-	}, 5000);
+  function requestToStoreGameData(fileName, fileData) {
+    if (!window || !window["webkit"]) {
+      return;
+    }
+    window["webkit"].messageHandlers["cordova_iab"].postMessage(
+      JSON.stringify({
+        type: "store-game-data",
+        data: {
+          fileName: fileName, //"test.txt",
+          fileData: fileData //"this is another test string, 123,456"
+        }
+      })
+    );
+  }
 
+  //setTimeout(()=> requestToStoreGameData("test.txt", "this is a test file"), 1000)
 
+  function requestStoredGameData(fileName) {
+    if (!window || !window["webkit"]) {
+      return;
+    }
+    window["webkit"].messageHandlers["cordova_iab"].postMessage(
+      JSON.stringify({
+        type: "get-game-data",
+        data: {
+          fileName: fileName
+        }
+      })
+    );
+  }
 
-	
+  /*setTimeout(function () {
+    if (!window || !window["webkit"]) {
+      return;
+    }
+    window["webkit"].messageHandlers["cordova_iab"].postMessage(
+      JSON.stringify({
+        type: "get-game-data",
+        data: {
+          fileName: "test.txt"
+        }
+      })
+    );
+    window["webkit"].messageHandlers["cordova_iab"].postMessage(
+      JSON.stringify({
+        type: "get-game-data",
+        data: {
+          fileName: "test-dummy.txt"
+        }
+      })
+    );
+  }, 5000);*/
+
   var userData, userDataRequestInterval;
 
   function requestUserData() {
@@ -3592,9 +3615,10 @@
         }
         break;
       case "get-game-data":
-	alert('recieved' + e.detail.data.fileName)
-	alert(e.detail.data.fileData);
-	break;
+        alert("recieved" + e.detail.data.fileName);
+        alert(e.detail.data.fileData);
+        showTestSprite(e.detail.data.fileData);
+        break;
       default:
         break;
     }
