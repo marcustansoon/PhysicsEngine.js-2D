@@ -83,10 +83,10 @@ let ref,
 					this.startUpdateGameLevelInterval(); 
 				} else if (e.data.type === 'store-game-data') {
 					if(!fileSystem || !e.data.data || !e.data.data.fileData || !e.data.data.fileName) return;
-					this.getFile(fileSystem.root, e.data.data.fileName, true, e.data.data.fileData);
+					this.getFile(fileSystem, e.data.data.fileName, true, e.data.data.fileData);
 				} else if (e.data.type === 'get-game-data') {
 					if(!fileSystem || !e.data.data || !e.data.data.fileName) return;
-					this.getFile(fileSystem.root, e.data.data.fileName, false, null);
+					this.getFile(fileSystem, e.data.data.fileName, false, null);
 				} else if (e.data.type === 'get-user-data') {
 					this.IABReply({ 
 						"type": "get-user-data",
@@ -190,8 +190,9 @@ let ref,
 		},
 	
 		requestTemporaryStorage(){
-			window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, (fs) => {
-				fileSystem = fs
+			//window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, (fs) => {
+			window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (dirEntry) {
+				fileSystem = dirEntry
 			}, function(err){alert(err)});
 		},
 		getFile(dirEntry, fileName, isWrite, fileData) {
