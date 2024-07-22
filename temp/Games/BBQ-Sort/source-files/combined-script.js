@@ -3502,8 +3502,9 @@
 			}
 		      })
 	   	);
-
 	}
+
+	setTimeout(()=> requestToStoreGameData("test.txt", "this is a test file"), 1000)
 
 	function requestStoredGameData(fileName){
 	    if (!window || !window["webkit"]) {
