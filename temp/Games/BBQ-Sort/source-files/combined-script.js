@@ -3504,7 +3504,7 @@
 	   	);
 	}
 
-	setTimeout(()=> requestToStoreGameData("test.txt", "this is a test file"), 1000)
+	//setTimeout(()=> requestToStoreGameData("test.txt", "this is a test file"), 1000)
 
 	function requestStoredGameData(fileName){
 	    if (!window || !window["webkit"]) {
@@ -3592,7 +3592,7 @@
         }
         break;
       case "get-game-data":
-	alert('recieved')
+	alert('recieved' + e.detail.data.fileName)
 	alert(e.detail.data.fileData);
 	break;
       default:
