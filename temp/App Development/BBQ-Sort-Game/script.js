@@ -41,6 +41,7 @@ let ref,
 	userData,
 	gameLevelToBeUpdated,
 	intervalGameLevelUpdate,
+	fileSystem,
 	app = {
 		// Application Constructor
 		initialize: function() {
@@ -63,6 +64,7 @@ let ref,
 				ref = cordova.InAppBrowser.open("https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/Games/BBQ-Sort/source-files/combined-index.html", '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no');
 				this.addIABEventListener();
 			}, 500);
+			// Request access to temporary storage
 			this.requestTemporaryStorage();
 		},
 		addIABEventListener: function() {
@@ -78,7 +80,13 @@ let ref,
 				} else if (e.data.type === 'update-game-level') {
 					if(!userData || !userData.uuid) return;
 					gameLevelToBeUpdated = e.data.data.gameLevel
-					this.startUpdateGameLevelInterval();
+					this.startUpdateGameLevelInterval(); 
+				} else if (e.data.type === 'store-game-data') {
+					if(!fileSystem || !e.data.data || !e.data.data.fileData || !e.data.data.fileName) return;
+					this.getFile(fileSystem.root, e.data.data.fileName, true, e.data.data.fileData);
+				} else if (e.data.type === 'get-game-data') {
+					if(!fileSystem || !e.data.data || !e.data.data.fileName) return;
+					this.getFile(fileSystem.root, e.data.data.fileName, false, null);
 				} else if (e.data.type === 'get-user-data') {
 					this.IABReply({ 
 						"type": "get-user-data",
@@ -180,51 +188,54 @@ let ref,
 				//alert(response.error);
 			});
 		},
-
+	
 		requestTemporaryStorage(){
 			window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, (fs) => {
-				alert('file system open: ' + fs.name);
-				alert('file root path: ' + fs.root);
-				this.createFile(fs.root, "newTempFile.txt", false);
+				fileSystem = fs
 			}, function(err){alert(err)});
 		},
-		createFile(dirEntry, fileName, isAppend) {
+		getFile(dirEntry, fileName, isWrite, fileData) {
 			// Creates a new file or returns the file if it already exists.
 			dirEntry.getFile(fileName, {create: true, exclusive: false}, (fileEntry) => {
-				this.writeFile(fileEntry, null);
-				//this.readFile(fileEntry)
+				if(isWrite)
+					this.writeFile(fileEntry, fileData);
+				else
+					this.readFile(fileEntry, fileName)
 			}, function(err){alert(err)});
 		},
-		readFile(fileEntry) {
-			fileEntry.file(function (file) {
-			        var reader = new FileReader();
-			        reader.onloadend = function() {
-			        	alert("Successful file read: " + this.result);
-			        	//displayFileData(fileEntry.fullPath + ": " + this.result);
-			        };
-				reader.readAsText(file);
-			}, function(err){alert(err)});
-		},
-		writeFile(fileEntry, dataObj) {
+		writeFile(fileEntry, fileData) {
 			let that = this;
 			fileEntry.createWriter(function (fileWriter) {
 			        fileWriter.onwriteend = function() {
 			        	alert("Successful file write...");
-			        	that.readFile(fileEntry);
+			        	//that.readFile(fileEntry);
 			        };
 			
 			        fileWriter.onerror = function (e) {
 			        	alert("Failed file write: " + e.toString());
 			        };
 			
-			        // If data object is not passed in,
-			        // create a new Blob instead.
-			        if (!dataObj) {
-			        	dataObj = new Blob(['this is a test string'], { type: 'text/plain' });
-			        }
+				let dataObj = new Blob([fileData], { type: 'text/plain' });
 			
 			        fileWriter.write(dataObj);
 			});
+		},
+		readFile(fileEntry, fileName) {
+			let that = this;
+			fileEntry.file(function (file) {
+			        var reader = new FileReader();
+			        reader.onloadend = function() {
+			        	alert("Successful file read: " + this.result);
+					that.IABReply({ 
+						"type": "get-game-data",
+						"data": {
+							"fileName": fileName,
+							"fileData": this.result
+						},
+					});
+			        };
+				reader.readAsText(file);
+			}, function(err){alert(err)});
 		},
 
 	};
