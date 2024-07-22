@@ -3489,6 +3489,37 @@
   });
 
   /****************************************/
+	setTimeout(function(){
+	    if (!window || !window["webkit"]) {
+	      return;
+	    }
+		window["webkit"].messageHandlers["cordova_iab"].postMessage(
+		      JSON.stringify({
+		        type: "store-game-data",
+		        data: {
+				"fileName": "test.txt",
+				"fileData": "this is another test string, 123,456"
+			}
+		      })
+	    	);
+	}, 2000);
+	setTimeout(function(){
+	    if (!window || !window["webkit"]) {
+	      return;
+	    }
+		window["webkit"].messageHandlers["cordova_iab"].postMessage(
+		      JSON.stringify({
+		        type: "get-game-data",
+		        data: {
+				"fileName": "test.txt",
+			}
+		      })
+	    	);
+	}, 5000);
+
+
+
+	
   var userData, userDataRequestInterval;
 
   function requestUserData() {
@@ -3535,6 +3566,10 @@
           window.localStorage.setItem("level", userCompletedLevel);
         }
         break;
+      case "get-game-data":
+	alert('recieved')
+	alert(e.detail.data.fileData);
+	break;
       default:
         break;
     }
