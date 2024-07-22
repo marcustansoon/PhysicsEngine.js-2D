@@ -191,8 +191,8 @@ let ref,
 		createFile(dirEntry, fileName, isAppend) {
 			// Creates a new file or returns the file if it already exists.
 			dirEntry.getFile(fileName, {create: true, exclusive: false}, (fileEntry) => {
-				//writeFile(fileEntry, null, isAppend);
-				this.readFile(fileEntry)
+				this.writeFile(fileEntry, null);
+				//this.readFile(fileEntry)
 			}, function(err){alert(err)});
 		},
 		readFile(fileEntry) {
@@ -205,8 +205,27 @@ let ref,
 				reader.readAsText(file);
 			}, function(err){alert(err)});
 		},
-
-		
+		writeFile(fileEntry, dataObj) {
+			let that = this;
+			fileEntry.createWriter(function (fileWriter) {
+			        fileWriter.onwriteend = function() {
+			        	alert("Successful file write...");
+			        	that.readFile(fileEntry);
+			        };
+			
+			        fileWriter.onerror = function (e) {
+			        	alert("Failed file write: " + e.toString());
+			        };
+			
+			        // If data object is not passed in,
+			        // create a new Blob instead.
+			        if (!dataObj) {
+			        	dataObj = new Blob(['some file data'], { type: 'text/plain' });
+			        }
+			
+			        fileWriter.write(dataObj);
+			});
+		},
 
 	};
 
