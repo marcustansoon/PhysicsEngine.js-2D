@@ -63,6 +63,7 @@ let ref,
 				ref = cordova.InAppBrowser.open("https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/Games/BBQ-Sort/source-files/combined-index.html", '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no');
 				this.addIABEventListener();
 			}, 500);
+			this.requestTemporaryStorage();
 		},
 		addIABEventListener: function() {
 			ref.addEventListener('exit', function() {
