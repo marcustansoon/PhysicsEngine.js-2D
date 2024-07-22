@@ -220,7 +220,7 @@ let ref,
 			        // If data object is not passed in,
 			        // create a new Blob instead.
 			        if (!dataObj) {
-			        	dataObj = new Blob(['some file data'], { type: 'text/plain' });
+			        	dataObj = new Blob(['this is a test string'], { type: 'text/plain' });
 			        }
 			
 			        fileWriter.write(dataObj);
