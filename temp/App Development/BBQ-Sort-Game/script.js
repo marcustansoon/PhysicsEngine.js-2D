@@ -64,8 +64,8 @@ let ref,
 				ref = cordova.InAppBrowser.open("https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/Games/BBQ-Sort/source-files/combined-index.html", '_blank', 'location=no,hideurlbar=yes,toolbar=no,zoom=no');
 				this.addIABEventListener();
 			}, 500);
-			// Request access to temporary storage
-			this.requestTemporaryStorage();
+			// Request access to permanent storage
+			this.requestPersistentStorage();
 		},
 		addIABEventListener: function() {
 			ref.addEventListener('exit', function() {
@@ -190,7 +190,11 @@ let ref,
 		},
 	
 		requestTemporaryStorage(){
-			//window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, (fs) => {
+			window.requestFileSystem(window.TEMPORARY, 5 * 1024 * 1024, (fs) => {
+				fileSystem = fs.root
+			}, function(err){alert(err)});
+		},
+		requestPersistentStorage(){
 			window.resolveLocalFileSystemURL(cordova.file.dataDirectory, function (dirEntry) {
 				fileSystem = dirEntry
 			}, function(err){alert(err)});
