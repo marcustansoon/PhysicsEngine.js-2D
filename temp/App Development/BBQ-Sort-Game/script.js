@@ -207,7 +207,7 @@ let ref,
 			let that = this;
 			fileEntry.createWriter(function (fileWriter) {
 			        fileWriter.onwriteend = function() {
-			        	alert("Successful file write...");
+			        	//alert("Successful file write...");
 			        	//that.readFile(fileEntry);
 			        };
 			
@@ -225,7 +225,6 @@ let ref,
 			fileEntry.file(function (file) {
 			        var reader = new FileReader();
 			        reader.onloadend = function() {
-			        	alert("Successful file read: " + this.result);
 					that.IABReply({ 
 						"type": "get-game-data",
 						"data": {
