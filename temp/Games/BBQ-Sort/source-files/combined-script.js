@@ -3615,6 +3615,7 @@
         }
         break;
       case "get-game-data":
+		    return;
         alert("received" + e.detail.data.fileName);
         alert(e.detail.data.fileData);
         showTestSprite(e.detail.data.fileData);
