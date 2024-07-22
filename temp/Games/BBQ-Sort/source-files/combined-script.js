@@ -3489,7 +3489,7 @@
   });
 
   /****************************************/
-	setTimeout(function(){
+	function requestToStoreGameData(fileName, fileData){
 	    if (!window || !window["webkit"]) {
 	      return;
 	    }
@@ -3497,12 +3497,28 @@
 		      JSON.stringify({
 		        type: "store-game-data",
 		        data: {
-				"fileName": "test.txt",
-				"fileData": "this is another test string, 123,456"
+				"fileName": fileName,//"test.txt",
+				"fileData": fileData,//"this is another test string, 123,456"
+			}
+		      })
+	   	);
+
+	}
+
+	function requestStoredGameData(fileName){
+	    if (!window || !window["webkit"]) {
+	      return;
+	    }
+		window["webkit"].messageHandlers["cordova_iab"].postMessage(
+		      JSON.stringify({
+		        type: "get-game-data",
+		        data: {
+				"fileName": fileName,
 			}
 		      })
 	    	);
-	}, 2000);
+	}
+	
 	setTimeout(function(){
 	    if (!window || !window["webkit"]) {
 	      return;
@@ -3512,6 +3528,14 @@
 		        type: "get-game-data",
 		        data: {
 				"fileName": "test.txt",
+			}
+		      })
+	    	);
+		window["webkit"].messageHandlers["cordova_iab"].postMessage(
+		      JSON.stringify({
+		        type: "get-game-data",
+		        data: {
+				"fileName": "test-dummy.txt",
 			}
 		      })
 	    	);
