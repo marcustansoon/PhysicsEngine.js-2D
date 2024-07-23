@@ -500,7 +500,7 @@
             clearInterval(interval);
             resolve(1);
           }
-        }, 30);
+        }, 50);
       });
     }
 
@@ -516,7 +516,7 @@
             clearInterval(interval);
             resolve(1);
           }
-        }, 30);
+        }, 50);
       });
     }
 
@@ -532,7 +532,7 @@
             clearInterval(interval);
             resolve(1);
           }
-        }, 30);
+        }, 50);
       });
     }
 
@@ -545,9 +545,10 @@
         ).length;
       return new Promise((resolve, reject) => {
         interval = setInterval(() => {
-          if (count >= 15 || Object.keys(localAssets).length === length) {
+          if (count >= 20 || Object.keys(localAssets).length === length) {
             clearInterval(interval);
             resolve(1);
+            if (count >= 20) alert("timeout");
           } else {
             count++;
           }
