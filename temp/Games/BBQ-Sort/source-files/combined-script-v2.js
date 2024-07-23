@@ -530,7 +530,7 @@
       let count = 0;
       for (let index = 0; index < this.resourcesToBeLoad.gifs.length; index++) {
         let alias = this.resourcesToBeLoad.gifs[index].alias;
-        if (localAssets[alias + ".txt"] && localAssets[alias + ".txt"]) {
+        if (localAssets[alias + ".txt"]) {
           this.resourcesToBeLoad.gifs[index].base64String =
             localAssets[alias + ".txt"];
           count++;
