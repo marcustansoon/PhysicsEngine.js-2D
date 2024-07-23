@@ -491,10 +491,10 @@
         interval;
       return new Promise((resolve, reject) => {
         interval = setInterval(() => {
-          let res = this.resourcesToBeLoad.images[index];
-          getGameAsset(res + ".txt");
+          let res = this.resourcesToBeLoad.gifs[index];
+          getGameAsset(res.alias + ".txt");
           index++;
-          if (index === this.resourcesToBeLoad.images.length) {
+          if (index === this.resourcesToBeLoad.gifs.length) {
             clearInterval(interval);
             resolve(1);
           }
@@ -509,13 +509,13 @@
         interval = setInterval(() => {
           if (
             Object.keys(localAssets).length ===
-            this.resourcesToBeLoad.images.length
+            this.resourcesToBeLoad.gifs.length
           )
             alert("succ retrieval!");
           if (
             count >= 20 ||
             Object.keys(localAssets).length ===
-              this.resourcesToBeLoad.images.length
+              this.resourcesToBeLoad.gifs.length
           ) {
             clearInterval(interval);
             resolve(1);
@@ -524,6 +524,22 @@
           }
         }, 250);
       });
+    }
+
+    async mergeLocalAsset() {
+      let count = 0;
+      for (let index = 0; index < this.resourcesToBeLoad.gifs.length; index++) {
+        let alias = this.resourcesToBeLoad.gifs[index].alias;
+        if (
+          localAssets[alias + ".txt"] &&
+          localAssets[alias + ".txt"].fileData
+        ) {
+          this.resourcesToBeLoad.gifs[index].base64String =
+            localAssets[alias + ".txt"].fileData;
+          count++;
+        }
+      }
+      alert(count);
     }
 
     async createScene() {
@@ -633,24 +649,7 @@
       this.progress = "Assets";
       await this.fetchLocalAsset();
       await this.waitLocalAsset();
-
-      let count = 0;
-      for (
-        let index = 0;
-        index < this.resourcesToBeLoad.images.length;
-        index++
-      ) {
-        let alias = this.resourcesToBeLoad.images[index].alias;
-        if (
-          localAssets[alias + ".txt"] &&
-          localAssets[alias + ".txt"].fileData
-        ) {
-          this.resourcesToBeLoad.images[index].base64String =
-            localAssets[alias + ".txt"].fileData;
-          count++;
-        }
-      }
-      alert(count);
+      this.mergeLocalAsset();
 
       // Fetch images
       await this.customFetchLoader("images");
