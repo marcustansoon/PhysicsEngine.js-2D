@@ -530,12 +530,9 @@
       let count = 0;
       for (let index = 0; index < this.resourcesToBeLoad.gifs.length; index++) {
         let alias = this.resourcesToBeLoad.gifs[index].alias;
-        if (
-          localAssets[alias + ".txt"] &&
-          localAssets[alias + ".txt"].fileData
-        ) {
+        if (localAssets[alias + ".txt"] && localAssets[alias + ".txt"]) {
           this.resourcesToBeLoad.gifs[index].base64String =
-            localAssets[alias + ".txt"].fileData;
+            localAssets[alias + ".txt"];
           count++;
         }
       }
@@ -645,19 +642,19 @@
       // Get resources
       this.resourcesToBeLoad = this.getResources();
 
-      // Check resources from user storage
+      // Fetch resources from user storage
       this.progress = "Assets";
       await this.fetchLocalAsset();
       await this.waitLocalAsset();
       this.mergeLocalAsset();
 
-      // Fetch images
+      // Download incomplete  images
       await this.customFetchLoader("images");
       this.progress = "Images";
-      // Fetch gifs
+      // Download incomplete gifs
       await this.customFetchLoader("gifs");
       this.progress = "Gifs";
-      // Fetch sounds
+      // Download incomplete sounds
       await this.customFetchLoader("sounds");
       this.progress = "Sounds";
 
