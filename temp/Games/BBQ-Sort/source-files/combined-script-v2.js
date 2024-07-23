@@ -543,10 +543,11 @@
           this.resourcesToBeLoad.gifs,
           this.resourcesToBeLoad.sounds
         ).length;
+      //console.log(length);
       return new Promise((resolve, reject) => {
         interval = setInterval(() => {
-          if (Object.keys(localAssets).length === length)
-            alert("succ retrieval!");
+          //if (Object.keys(localAssets).length === length)
+            //alert("succ retrieval!");
           if (count >= 20 || Object.keys(localAssets).length === length) {
             clearInterval(interval);
             resolve(1);
@@ -591,7 +592,7 @@
           count++;
         }
       }
-      alert(count);
+      //alert(count);
     }
 
     async createScene() {
