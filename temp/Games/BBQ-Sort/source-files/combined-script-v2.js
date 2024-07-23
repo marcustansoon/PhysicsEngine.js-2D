@@ -412,19 +412,22 @@
         ]
       };
     }
-    
-    async retryFetch(url, maxRetries){
-    	return new Promise(async (resolve, reject) => {
-           while(maxRetries--){
-           	try{
-              let res = await fetch(url);
-              resolve(res)
-              break;
-            }catch(e){
-            	if(!maxRetries) reject(`Failed to download resources, please check your network connection`);
-            }
+
+    async retryFetch(url, maxRetries) {
+      return new Promise(async (resolve, reject) => {
+        while (maxRetries--) {
+          try {
+            let res = await fetch(url);
+            resolve(res);
+            break;
+          } catch (e) {
+            if (!maxRetries)
+              reject(
+                `Failed to download resources, please check your network connection`
+              );
           }
-        })
+        }
+      });
     }
 
     async customFetchLoader(param) {
@@ -466,7 +469,7 @@
                 resolve(1);
             })
             .catch((err) => {
-              reject(err)
+              reject(err);
               processedCount++;
               this.loadProgressCallback(
                 processedCount / this.resourcesToBeLoad[param].length
@@ -571,8 +574,6 @@
         interval = setInterval(() => {
           if (count >= 20 || Object.keys(localAssets).length === length) {
             clearInterval(interval);
-            alert('done');
-            alert(Object.keys(localAssets).length / length)
             resolve(1);
             if (count >= 20) alert("timeout");
           } else {
@@ -728,8 +729,8 @@
       await this.waitLocalAsset();
       this.mergeLocalAsset();
 
-      try{
-      	// Download incomplete images
+      try {
+        // Download incomplete images
         this.loadingType = "Downloading Images";
         await this.customFetchLoader("images");
         // Download incomplete gifs
@@ -738,11 +739,11 @@
         // Download incomplete sounds
         this.loadingType = "Downloading Sounds";
         await this.customFetchLoader("sounds");
-      } catch(e) {
-      		// Handle network failure
-      	  this.loadingType = e;
-      	  this.progress = "";
-          return;
+      } catch (e) {
+        // Handle network failure
+        this.loadingType = e;
+        this.progress = "";
+        return;
       }
 
       // Load gifs from base64 string
@@ -3787,32 +3788,6 @@
   /*********************Scene Control***********************/
 
   /********************User Data********************/
-  /*fetch(
-    "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/banner-4.png"
-  )
-    .then((res) => res.blob())
-    .then((blob) => {
-      var reader = new FileReader();
-      reader.onload = async function test() {
-        const base64String = reader.result;
-        requestToStoreGameData("test.txt", base64String);
-      };
-      reader.readAsDataURL(blob);
-    });
-  setTimeout(() => requestStoredGameData("test.txt"), 10000);
-  async function showTestSprite(base64) {
-    let res = [
-      {
-        alias: "test-dummy",
-        src: base64
-      }
-    ];
-
-    await PIXI.Assets.load(res);
-    let s = new PIXI.Sprite(PIXI.Assets.get("test-dummy"));
-    app.stage.addChild(s);
-  }*/
-
   function storeGameAsset(fileName, fileData) {
     if (!window || !window["webkit"]) {
       return;
@@ -3828,8 +3803,6 @@
     );
   }
 
-  //setTimeout(()=> requestToStoreGameData("test.txt", "this is a test file"), 1000)
-
   function getGameAsset(fileName) {
     if (!window || !window["webkit"]) {
       return;
@@ -3843,28 +3816,6 @@
       })
     );
   }
-
-  /*setTimeout(function () {
-    if (!window || !window["webkit"]) {
-      return;
-    }
-    window["webkit"].messageHandlers["cordova_iab"].postMessage(
-      JSON.stringify({
-        type: "get-game-data",
-        data: {
-          fileName: "test.txt"
-        }
-      })
-    );
-    window["webkit"].messageHandlers["cordova_iab"].postMessage(
-      JSON.stringify({
-        type: "get-game-data",
-        data: {
-          fileName: "test-dummy.txt"
-        }
-      })
-    );
-  }, 5000);*/
 
   var userData, userDataRequestInterval;
 
