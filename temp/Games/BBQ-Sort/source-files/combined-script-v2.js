@@ -419,6 +419,8 @@
         this.resourcesToBeLoad[param].forEach((res, index) => {
           if (res.base64String) {
             processedCount++;
+            if (processedCount === this.resourcesToBeLoad[param].length)
+              resolve(1);
             return;
           }
           fetch(res.src)
@@ -533,10 +535,10 @@
         if (localAssets[alias + ".txt"]) {
           this.resourcesToBeLoad.gifs[index].base64String =
             localAssets[alias + ".txt"];
+          alert(localAssets[alias + ".txt"]);
           count++;
         }
       }
-      alert(count);
     }
 
     async createScene() {
@@ -649,14 +651,14 @@
       this.mergeLocalAsset();
 
       // Download incomplete  images
-      await this.customFetchLoader("images");
       this.progress = "Images";
+      await this.customFetchLoader("images");
       // Download incomplete gifs
-      await this.customFetchLoader("gifs");
       this.progress = "Gifs";
+      await this.customFetchLoader("gifs");
       // Download incomplete sounds
-      await this.customFetchLoader("sounds");
       this.progress = "Sounds";
+      await this.customFetchLoader("sounds");
 
       // Load gifs from base64 string
       await this.loadGifs();
