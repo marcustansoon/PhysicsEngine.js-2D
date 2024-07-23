@@ -557,6 +557,7 @@
         interval = setInterval(() => {
           if (count >= 20 || Object.keys(localAssets).length === length) {
             clearInterval(interval);
+            alert(Object.keys(localAssets).length / length)
             resolve(1);
             if (count >= 20) alert("timeout");
           } else {
@@ -676,7 +677,8 @@
         wordWrap: true,
         wordWrapWidth: this.app.renderer.width * 0.9,
         letterSpacing: 2,
-        lineJoin: "round"
+        lineJoin: "round",
+        align: "center"
       });
       let loadingText = new PIXI.Text("Loading ...", style);
       loadingText.anchor.set(0.5);
@@ -707,6 +709,7 @@
       await this.fetchLocalAssetGifs();
       await this.fetchLocalAssetSounds();
       await this.fetchLocalAssetImages();
+      // Wait for resources
       await this.waitLocalAsset();
       this.mergeLocalAsset();
 
@@ -738,7 +741,7 @@
       }
 
       // Load image assets
-      this.progress = 0;
+      this.loadingType = "Loading Images";
       await PIXI.Assets.load(
         imagesRes.concat(fontResourcesToBeLoad),
         this.loadProgressCallback.bind(this)
