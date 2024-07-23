@@ -412,6 +412,20 @@
         ]
       };
     }
+    
+    async retryFetch(url, maxRetries){
+    	return new Promise(async (resolve, reject) => {
+           while(maxRetries--){
+           	try{
+              let res = await fetch(url);
+              resolve(res)
+              break;
+            }catch(e){
+            	if(!maxRetries) reject(`Failed to download resources, please check your network connection`);
+            }
+          }
+        })
+    }
 
     async customFetchLoader(param) {
       let processedCount = 0;
@@ -426,7 +440,7 @@
               resolve(1);
             return;
           }
-          fetch(res.src)
+          this.retryFetch(res.src, 5)
             .then((res) => res.blob())
             .then((blob) => {
               return new Promise((resolve, reject) => {
@@ -452,7 +466,7 @@
                 resolve(1);
             })
             .catch((err) => {
-              console.log(err);
+              reject(err)
               processedCount++;
               this.loadProgressCallback(
                 processedCount / this.resourcesToBeLoad[param].length
@@ -557,6 +571,7 @@
         interval = setInterval(() => {
           if (count >= 20 || Object.keys(localAssets).length === length) {
             clearInterval(interval);
+            alert('done');
             alert(Object.keys(localAssets).length / length)
             resolve(1);
             if (count >= 20) alert("timeout");
@@ -713,15 +728,22 @@
       await this.waitLocalAsset();
       this.mergeLocalAsset();
 
-      // Download incomplete  images
-      this.loadingType = "Downloading Images";
-      await this.customFetchLoader("images");
-      // Download incomplete gifs
-      this.loadingType = "Downloading Gifs";
-      await this.customFetchLoader("gifs");
-      // Download incomplete sounds
-      this.loadingType = "Downloading Sounds";
-      await this.customFetchLoader("sounds");
+      try{
+      	// Download incomplete images
+        this.loadingType = "Downloading Images";
+        await this.customFetchLoader("images");
+        // Download incomplete gifs
+        this.loadingType = "Downloading Gifs";
+        await this.customFetchLoader("gifs");
+        // Download incomplete sounds
+        this.loadingType = "Downloading Sounds";
+        await this.customFetchLoader("sounds");
+      } catch(e) {
+      		// Handle network failure
+      	  this.loadingType = e;
+      	  this.progress = "";
+          return;
+      }
 
       // Load gifs from base64 string
       this.progress = "";
