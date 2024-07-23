@@ -419,6 +419,9 @@
         this.resourcesToBeLoad[param].forEach((res, index) => {
           if (res.base64String) {
             processedCount++;
+            this.loadProgressCallback(
+              processedCount / this.resourcesToBeLoad[param].length
+            );
             if (processedCount === this.resourcesToBeLoad[param].length)
               resolve(1);
             return;
@@ -442,12 +445,18 @@
               );
               this.resourcesToBeLoad[param][index].base64String = base64String;
               processedCount++;
+              this.loadProgressCallback(
+                processedCount / this.resourcesToBeLoad[param].length
+              );
               if (processedCount === this.resourcesToBeLoad[param].length)
                 resolve(1);
             })
             .catch((err) => {
               console.log(err);
               processedCount++;
+              this.loadProgressCallback(
+                processedCount / this.resourcesToBeLoad[param].length
+              );
               if (processedCount === this.resourcesToBeLoad[param].length)
                 resolve(1);
             });
@@ -544,6 +553,7 @@
           this.resourcesToBeLoad.sounds
         ).length;
       return new Promise((resolve, reject) => {
+        this.loadProgressCallback(Object.keys(localAssets).length / length);
         interval = setInterval(() => {
           if (count >= 20 || Object.keys(localAssets).length === length) {
             clearInterval(interval);
@@ -664,7 +674,7 @@
         dropShadow: false,
         fontWeight: "bold",
         wordWrap: true,
-        wordWrapWidth: 440,
+        wordWrapWidth: this.app.renderer.width * 0.9,
         letterSpacing: 2,
         lineJoin: "round"
       });
@@ -692,8 +702,8 @@
       this.resourcesToBeLoad = this.getResources();
 
       // Fetch resources from local storage
-      this.loadingType = "Getting";
-      this.progress = "Local Assets";
+      this.loadingType = "Getting Local Assets";
+      this.progress = "";
       await this.fetchLocalAssetGifs();
       await this.fetchLocalAssetSounds();
       await this.fetchLocalAssetImages();
@@ -701,22 +711,21 @@
       this.mergeLocalAsset();
 
       // Download incomplete  images
-      this.loadingType = "Downloading";
-      this.progress = "Images";
+      this.loadingType = "Downloading Images";
       await this.customFetchLoader("images");
       // Download incomplete gifs
-      this.progress = "Gifs";
+      this.loadingType = "Downloading Gifs";
       await this.customFetchLoader("gifs");
       // Download incomplete sounds
-      this.progress = "Sounds";
+      this.loadingType = "Downloading Sounds";
       await this.customFetchLoader("sounds");
 
       // Load gifs from base64 string
-      this.loadingType = "Loading";
-      this.progress = "Gifs";
+      this.progress = "";
+      this.loadingType = "Loading Gifs";
       await this.loadGifs();
       // Load sounds from base64 string
-      this.progress = "Sounds";
+      this.loadingType = "Loading Sounds";
       await this.loadSounds();
 
       // Preparation to load image assets
