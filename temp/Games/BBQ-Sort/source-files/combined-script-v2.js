@@ -488,7 +488,7 @@
       });
     }
 
-    async fetchLocalAsset() {
+    async fetchLocalAssetGifs() {
       let index = 0,
         interval;
       return new Promise((resolve, reject) => {
@@ -504,21 +504,50 @@
       });
     }
 
-    async waitLocalAsset() {
-      let interval,
-        count = 0;
+    async fetchLocalAssetSounds() {
+      let index = 0,
+        interval;
       return new Promise((resolve, reject) => {
         interval = setInterval(() => {
-          if (
-            Object.keys(localAssets).length ===
-            this.resourcesToBeLoad.gifs.length
-          )
+          let res = this.resourcesToBeLoad.sounds[index];
+          getGameAsset(res.alias + ".txt");
+          index++;
+          if (index === this.resourcesToBeLoad.sounds.length) {
+            clearInterval(interval);
+            resolve(1);
+          }
+        }, 100);
+      });
+    }
+
+    async fetchLocalAssetImages() {
+      let index = 0,
+        interval;
+      return new Promise((resolve, reject) => {
+        interval = setInterval(() => {
+          let res = this.resourcesToBeLoad.images[index];
+          getGameAsset(res.alias + ".txt");
+          index++;
+          if (index === this.resourcesToBeLoad.images.length) {
+            clearInterval(interval);
+            resolve(1);
+          }
+        }, 100);
+      });
+    }
+
+    async waitLocalAsset() {
+      let interval,
+        count = 0,
+        length = this.resourcesToBeLoad.images.concat(
+          this.resourcesToBeLoad.gifs,
+          this.resourcesToBeLoad.sounds
+        ).length;
+      return new Promise((resolve, reject) => {
+        interval = setInterval(() => {
+          if (Object.keys(localAssets).length === length)
             alert("succ retrieval!");
-          if (
-            count >= 20 ||
-            Object.keys(localAssets).length ===
-              this.resourcesToBeLoad.gifs.length
-          ) {
+          if (count >= 20 || Object.keys(localAssets).length === length) {
             clearInterval(interval);
             resolve(1);
           } else {
@@ -535,10 +564,34 @@
         if (localAssets[alias + ".txt"]) {
           this.resourcesToBeLoad.gifs[index].base64String =
             localAssets[alias + ".txt"];
-          alert(localAssets[alias + ".txt"]);
           count++;
         }
       }
+      for (
+        let index = 0;
+        index < this.resourcesToBeLoad.sounds.length;
+        index++
+      ) {
+        let alias = this.resourcesToBeLoad.sounds[index].alias;
+        if (localAssets[alias + ".txt"]) {
+          this.resourcesToBeLoad.sounds[index].base64String =
+            localAssets[alias + ".txt"];
+          count++;
+        }
+      }
+      for (
+        let index = 0;
+        index < this.resourcesToBeLoad.images.length;
+        index++
+      ) {
+        let alias = this.resourcesToBeLoad.images[index].alias;
+        if (localAssets[alias + ".txt"]) {
+          this.resourcesToBeLoad.images[index].base64String =
+            localAssets[alias + ".txt"];
+          count++;
+        }
+      }
+      alert(count);
     }
 
     async createScene() {
@@ -646,7 +699,9 @@
 
       // Fetch resources from user storage
       this.progress = "Assets";
-      await this.fetchLocalAsset();
+      await this.fetchLocalAssetGifs();
+      await this.fetchLocalAssetSounds();
+      await this.fetchLocalAssetImages();
       await this.waitLocalAsset();
       this.mergeLocalAsset();
 
