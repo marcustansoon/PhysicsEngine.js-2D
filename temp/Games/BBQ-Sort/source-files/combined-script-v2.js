@@ -500,7 +500,7 @@
             clearInterval(interval);
             resolve(1);
           }
-        }, 100);
+        }, 30);
       });
     }
 
@@ -516,7 +516,7 @@
             clearInterval(interval);
             resolve(1);
           }
-        }, 100);
+        }, 30);
       });
     }
 
@@ -532,7 +532,7 @@
             clearInterval(interval);
             resolve(1);
           }
-        }, 100);
+        }, 30);
       });
     }
 
@@ -543,12 +543,9 @@
           this.resourcesToBeLoad.gifs,
           this.resourcesToBeLoad.sounds
         ).length;
-      //console.log(length);
       return new Promise((resolve, reject) => {
         interval = setInterval(() => {
-          //if (Object.keys(localAssets).length === length)
-            //alert("succ retrieval!");
-          if (count >= 20 || Object.keys(localAssets).length === length) {
+          if (count >= 15 || Object.keys(localAssets).length === length) {
             clearInterval(interval);
             resolve(1);
           } else {
@@ -592,7 +589,7 @@
           count++;
         }
       }
-      //alert(count);
+      alert(count);
     }
 
     async createScene() {
@@ -680,6 +677,7 @@
       this.container.addChild(loadingText);
       this.loadingText = loadingText;
       this.progress = 0;
+      this.loadingType = "";
 
       if (window.localStorage.getItem("user-consent")) {
         this.setCompletion();
@@ -689,17 +687,12 @@
         this.showUserDataCollectionPrompt(scale);
       }
 
-      /* // Old load method
-      await PIXI.Assets.load(
-        resourcesToBeLoad,
-        this.loadProgressCallback.bind(this)
-      );*/
-
       // Get resources
       this.resourcesToBeLoad = this.getResources();
 
-      // Fetch resources from user storage
-      this.progress = "Assets";
+      // Fetch resources from local storage
+      this.loadingType = "Getting";
+      this.progress = "Local Assets";
       await this.fetchLocalAssetGifs();
       await this.fetchLocalAssetSounds();
       await this.fetchLocalAssetImages();
@@ -707,6 +700,7 @@
       this.mergeLocalAsset();
 
       // Download incomplete  images
+      this.loadingType = "Downloading";
       this.progress = "Images";
       await this.customFetchLoader("images");
       // Download incomplete gifs
@@ -717,6 +711,7 @@
       await this.customFetchLoader("sounds");
 
       // Load gifs from base64 string
+      this.loadingType = "Loading";
       await this.loadGifs();
       // Load sounds from base64 string
       await this.loadSounds();
@@ -841,7 +836,7 @@
     }
 
     loadProgressCallback(progress) {
-      this.progress = floor(progress * 100, 2);
+      this.progress = floor(progress * 100, 2) + "%";
     }
 
     show() {
@@ -864,7 +859,7 @@
     update() {
       // Update the percentage text
       if (!this.loadingText) return;
-      this.loadingText.text = `Loading: ${this.progress}%`;
+      this.loadingText.text = `${this.loadingType} ${this.progress}`;
     }
   }
 
