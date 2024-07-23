@@ -712,8 +712,10 @@
 
       // Load gifs from base64 string
       this.loadingType = "Loading";
+      this.progress = "Gifs";
       await this.loadGifs();
       // Load sounds from base64 string
+      this.progress = "Sounds";
       await this.loadSounds();
 
       // Preparation to load image assets
