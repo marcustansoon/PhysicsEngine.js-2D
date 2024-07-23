@@ -589,7 +589,7 @@
           count++;
         }
       }
-      alert(count);
+      //alert(count);
     }
 
     async createScene() {
