@@ -409,6 +409,13 @@
             src:
               "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/game-start.mp3"
           }
+        ],
+        fonts: [
+          {
+            alias: "chunkfive-regular",
+            src:
+              "https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/Games/BBQ-Sort/temp/ChunkFive-Regular.otf"
+          }
         ]
       };
     }
@@ -514,6 +521,22 @@
       });
     }
 
+    async loadFonts() {
+      let processedCount = 0;
+      return new Promise((resolve, reject) => {
+        this.resourcesToBeLoad.fonts.forEach(async (res) => {
+          let base64String = res.base64String;
+          const customFont = new FontFace(res.alias, `url(${base64String})`);
+          await customFont.load();
+          document.fonts.add(customFont);
+          processedCount++;
+          if (processedCount === this.resourcesToBeLoad.fonts.length) {
+            resolve(1);
+          }
+        });
+      });
+    }
+
     async fetchLocalAssetGifs() {
       let index = 0,
         interval;
@@ -562,12 +585,29 @@
       });
     }
 
+    async fetchLocalAssetFonts() {
+      let index = 0,
+        interval;
+      return new Promise((resolve, reject) => {
+        interval = setInterval(() => {
+          let res = this.resourcesToBeLoad.fonts[index];
+          getGameAsset(res.alias + ".txt");
+          index++;
+          if (index === this.resourcesToBeLoad.fonts.length) {
+            clearInterval(interval);
+            resolve(1);
+          }
+        }, 50);
+      });
+    }
+
     async waitLocalAsset() {
       let interval,
         count = 0,
         length = this.resourcesToBeLoad.images.concat(
           this.resourcesToBeLoad.gifs,
-          this.resourcesToBeLoad.sounds
+          this.resourcesToBeLoad.sounds,
+          this.resourcesToBeLoad.fonts
         ).length;
       return new Promise((resolve, reject) => {
         this.loadProgressCallback(Object.keys(localAssets).length / length);
@@ -575,7 +615,7 @@
           if (count >= 20 || Object.keys(localAssets).length === length) {
             clearInterval(interval);
             resolve(1);
-            //if (count >= 20) alert("timeout");
+            if (count >= 20) alert("timeout");
           } else {
             count++;
           }
@@ -617,17 +657,29 @@
           count++;
         }
       }
-      //alert(count);
+      for (
+        let index = 0;
+        index < this.resourcesToBeLoad.fonts.length;
+        index++
+      ) {
+        let alias = this.resourcesToBeLoad.fonts[index].alias;
+        if (localAssets[alias + ".txt"]) {
+          this.resourcesToBeLoad.fonts[index].base64String =
+            localAssets[alias + ".txt"];
+          count++;
+        }
+      }
+      alert(count);
     }
 
     async createScene() {
       // Font style related resources
       const fontResourcesToBeLoad = [
-        {
+        /*{
           alias: "ChunkFive",
           src:
             "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/ChunkFive-Regular.otf"
-        }
+        }*/
       ];
 
       await PIXI.Assets.load([
@@ -725,6 +777,7 @@
       await this.fetchLocalAssetGifs();
       await this.fetchLocalAssetSounds();
       await this.fetchLocalAssetImages();
+      await this.fetchLocalAssetFonts();
       // Wait for resources
       await this.waitLocalAsset();
       this.mergeLocalAsset();
@@ -739,6 +792,9 @@
         // Download incomplete sounds
         this.loadingType = "Downloading Sounds";
         await this.customFetchLoader("sounds");
+        // Download incomplete fonts
+        this.loadingType = "Downloading Fonts";
+        await this.customFetchLoader("fonts");
       } catch (e) {
         // Handle network failure
         this.loadingType = e;
@@ -753,6 +809,9 @@
       // Load sounds from base64 string
       this.loadingType = "Loading Sounds";
       await this.loadSounds();
+      // Load fonts from base64 string
+      this.loadingType = "Loading Fonts";
+      await this.loadFonts();
 
       // Preparation to load image assets
       let imagesRes = [];
@@ -926,7 +985,7 @@
 
       // Create text with custom style
       let style = new PIXI.TextStyle({
-        fontFamily: "Chunkfive Regular",
+        fontFamily: "chunkfive-regular",
         fontSize: fontSize,
         fill: "#000000",
         dropShadow: false,
@@ -1105,7 +1164,7 @@
 
       // Create text with custom style
       let style = new PIXI.TextStyle({
-        fontFamily: "Chunkfive Regular",
+        fontFamily: "chunkfive-regular",
         fontSize: fontSize,
         fill: "#000000",
         dropShadow: false,
@@ -1335,7 +1394,7 @@
 
       // Create text with custom style
       let style = new PIXI.TextStyle({
-        fontFamily: "Chunkfive Regular",
+        fontFamily: "chunkfive-regular",
         fontSize: fontSize,
         fill: "#000000",
         dropShadow: false,
@@ -2037,7 +2096,7 @@
 
       // Create text with custom style
       let style = new PIXI.TextStyle({
-        fontFamily: "Chunkfive Regular",
+        fontFamily: "chunkfive-regular",
         fontSize: fontSize,
         fill: "#FFFFFF",
         dropShadow: false,
@@ -2053,7 +2112,7 @@
 
       // Create text with custom style
       let styleBanner = new PIXI.TextStyle({
-        fontFamily: "Chunkfive Regular",
+        fontFamily: "chunkfive-regular",
         fontSize: fontSizeBanner,
         fill: "#000000",
         dropShadow: false,
@@ -3086,7 +3145,7 @@
 
       // Create text with custom style
       let style = new PIXI.TextStyle({
-        fontFamily: "Chunkfive Regular",
+        fontFamily: "chunkfive-regular",
         fontSize: fontSize,
         fill: "#000000",
         dropShadow: false,
@@ -3103,16 +3162,16 @@
 
       // Create bg main menu image
       /*const gamePlayBG = new PIXI.Sprite(gamePlayTexture);
-			gamePlayBG.anchor.set(0.5);
-			gamePlayBG.scale.set(floor(scale, 2));
-			gamePlayBG.position.set(
-			  this.app.screen.width / 2,
-			  this.app.screen.height / 2
-			);
-			gamePlayBG.filters = [this.blurFilter];
-			gamePlayBG.alpha = 0;
-			this.objects.push(gamePlayBG);
-			this.container.addChild(gamePlayBG);*/
+              gamePlayBG.anchor.set(0.5);
+              gamePlayBG.scale.set(floor(scale, 2));
+              gamePlayBG.position.set(
+                this.app.screen.width / 2,
+                this.app.screen.height / 2
+              );
+              gamePlayBG.filters = [this.blurFilter];
+              gamePlayBG.alpha = 0;
+              this.objects.push(gamePlayBG);
+              this.container.addChild(gamePlayBG);*/
 
       // Create a graphic rectangle
       const rect = new PIXI.Graphics();
@@ -3359,7 +3418,7 @@
 
       // Create text with custom style
       let style = new PIXI.TextStyle({
-        fontFamily: "Chunkfive Regular",
+        fontFamily: "chunkfive-regular",
         fontSize: fontSize,
         fill: "#000000",
         dropShadow: false,
@@ -3376,16 +3435,16 @@
 
       // Create bg main menu image
       /*const gamePlayBG = new PIXI.Sprite(gamePlayTexture);
-			gamePlayBG.anchor.set(0.5);
-			gamePlayBG.scale.set(floor(scale, 2));
-			gamePlayBG.position.set(
-			  this.app.screen.width / 2,
-			  this.app.screen.height / 2
-			);
-			gamePlayBG.filters = [this.blurFilter];
-			gamePlayBG.alpha = 0;
-			this.objects.push(gamePlayBG);
-			this.container.addChild(gamePlayBG);*/
+              gamePlayBG.anchor.set(0.5);
+              gamePlayBG.scale.set(floor(scale, 2));
+              gamePlayBG.position.set(
+                this.app.screen.width / 2,
+                this.app.screen.height / 2
+              );
+              gamePlayBG.filters = [this.blurFilter];
+              gamePlayBG.alpha = 0;
+              this.objects.push(gamePlayBG);
+              this.container.addChild(gamePlayBG);*/
 
       // Create a graphic rectangle
       const rect = new PIXI.Graphics();
