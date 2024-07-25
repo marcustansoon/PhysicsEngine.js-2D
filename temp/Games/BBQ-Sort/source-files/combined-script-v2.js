@@ -615,7 +615,7 @@
           if (count >= 20 || Object.keys(localAssets).length === length) {
             clearInterval(interval);
             resolve(1);
-            if (count >= 20) alert("timeout");
+            //if (count >= 20) alert("timeout");
           } else {
             count++;
           }
@@ -669,7 +669,7 @@
           count++;
         }
       }
-      alert(count);
+      //alert(count);
     }
 
     async createScene() {
