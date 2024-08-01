@@ -1,0 +1,13 @@
+{
+    "status": "NEW",
+    "pricingPlanView": {
+        "planName": "Advanced",
+        "planType": "ADVANCED",
+        "planPrice": 1,
+        "billingInterval": "MONTH",
+        "planVersion": 1
+    },
+    "renewalDate": null,
+    "billingAmount": 0,
+    "creditCount": 10
+}
