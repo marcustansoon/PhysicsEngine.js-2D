@@ -1,8 +1,8 @@
 {
     "status": "NEW",
     "pricingPlanView": {
-        "planName": "Advanced",
-        "planType": "ADVANCED",
+        "planName": "Professional",
+        "planType": "PROFESSIONAL",
         "planPrice": 1,
         "billingInterval": "MONTH",
         "planVersion": 1
