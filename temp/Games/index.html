@@ -8,64 +8,67 @@
     <script src="https://cdn.jsdelivr.net/npm/pixi-filters@6.0.5/dist/pixi-filters.min.js"></script>
     <script>
       (async () => {
-      	// Create a new application
-      	const app = new PIXI.Application();
-      	// Initialize the application
-      	await app.init({
-      		background: '#ff0',
-      		resizeTo: window
-      	});
-      	// Append the application canvas to the document body
-      	document.body.appendChild(app.canvas);
-      	// Create and add a container to the stage
-      	const container = new PIXI.Container();
-      	app.stage.addChild(container);
-      	// Load the bunny texture
-      	const bgtexture = await PIXI.Assets.load('https://i.imgur.com/glWla8v.png');
-      	// Load the bunny texture
-      	const texture = await PIXI.Assets.load('https://pixijs.com/assets/bunny.png');
-      	// Create the reflection filter
-      	const reflectionFilter = new PIXI.filters.ReflectionFilter({
-      		boundary: 0.8,
-      		//amplitude :[0,20],
-      		mirror: true
-      	});
-      	const pixelateFilter = new PIXI.filters.PixelateFilter({
-      		size: [2, 1]
-      	});
-      	const bg = new PIXI.Sprite(bgtexture);
-      	let scaleX = app.screen.width / bg.texture.width,
-      		scaleY = app.screen.height / bg.texture.height
-      	console.log(scaleX, scaleY)
-      	bg.scale.set(Math.max(scaleY, scaleX));
-      	const bunny = new PIXI.Sprite(texture);
-      	const bunny2 = new PIXI.Sprite(texture);
-      	bg.x = -app.screen.width / 2
-      	bg.y = -app.screen.height / 2
-      	bunny.anchor.set(0.5);
-      	bunny2.anchor.set(0.5);
-      	bunny.x = -150 //app.screen.width / 2;
-      	bunny.y = 120 //app.screen.height / 2;
-      	bunny.scale.set(2);
-      	bunny2.x = 50 //app.screen.width / 2;
-      	bunny2.y = 120 //app.screen.height / 2;
-      	bunny2.scale.set(3);
-      	container.addChild(bg);
-      	container.addChild(bunny);
-      	container.addChild(bunny2);
-      	// Move the container to the center
-      	container.pivot.x = 0.5
-      	container.pivot.y = 0.5
-      	container.x = app.screen.width / 2;
-      	container.y = app.screen.height / 2;
-      	container.filters = [reflectionFilter];
-      	// Listen for animate update
-      	app.ticker.add((time) => {
-      		// Continuously rotate the container!
-      		// * use delta to create frame-independent transform *
-      		bunny.rotation -= 0.01 * time.deltaTime;
-      		bunny2.rotation -= 0.02 * time.deltaTime;
-      	});
+        // Create a new application
+        const app = new PIXI.Application();
+        // Initialize the application
+        await app.init({
+          background: '#ff0',
+          resizeTo: window
+        });
+        // Append the application canvas to the document body
+        document.body.appendChild(app.canvas);
+        // Create and add a container to the stage
+        const container = new PIXI.Container();
+        app.stage.addChild(container);
+        // Load the bunny texture
+        const bgtexture = await PIXI.Assets.load('https://i.imgur.com/glWla8v.png');
+        // Load the bunny texture
+        const texture = await PIXI.Assets.load('https://pixijs.com/assets/bunny.png');
+        // Create the reflection filter
+        const reflectionFilter = new PIXI.filters.ReflectionFilter({
+          boundary: 0.8,
+          //amplitude :[0,20],
+          mirror: true,
+        });
+		
+        const pixelateFilter = new PIXI.filters.PixelateFilter({
+          size: [2, 1]
+        });
+        const bg = new PIXI.Sprite(bgtexture);
+        let scaleX = app.screen.width / bg.texture.width,
+          scaleY = app.screen.height / bg.texture.height
+        console.log(scaleX, scaleY)
+        bg.scale.set(Math.max(scaleY, scaleX));
+        const bunny = new PIXI.Sprite(texture);
+        const bunny2 = new PIXI.Sprite(texture);
+        bg.x = -app.screen.width / 2
+        bg.y = -app.screen.height / 2
+        bunny.anchor.set(0.5);
+        bunny2.anchor.set(0.5);
+        bunny.x = -150 //app.screen.width / 2;
+        bunny.y = 120 //app.screen.height / 2;
+        bunny.scale.set(2);
+        bunny2.x = 50 //app.screen.width / 2;
+        bunny2.y = 120 //app.screen.height / 2;
+        bunny2.scale.set(3);
+        container.addChild(bg);
+        container.addChild(bunny);
+        container.addChild(bunny2);
+        // Move the container to the center
+        container.pivot.x = 0.5
+        container.pivot.y = 0.5
+        container.x = app.screen.width / 2;
+        container.y = app.screen.height / 2;
+        container.filters = [reflectionFilter];
+        // Listen for animate update
+        app.ticker.add((time) => {
+          // Continuously rotate the container!
+          // * use delta to create frame-independent transform *
+          bunny.rotation -= 0.01 * time.deltaTime;
+          bunny2.rotation -= 0.02 * time.deltaTime;
+		  
+          reflectionFilter.time = (reflectionFilter.time + 0.1) % 6;
+        });
       })();
     </script>
   </body>
