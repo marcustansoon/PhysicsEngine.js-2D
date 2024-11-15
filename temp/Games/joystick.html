@@ -24,20 +24,19 @@
 // Joystick properties
 const joystickRadius = 80;
 const thumbRadius = 30;
-const joystickCenter = { x: window.innerWidth / 2 - 50, y: 150 };
+const joystickCenter = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 
 // Create joystick container
 const joystickContainer = new PIXI.Container();
 app.stage.addChild(joystickContainer);
 
 
+
 let box = new PIXI.Graphics();
 box.beginFill(0xff0000, 1);
 // draw a rectangle
-box.drawRect(-200, -150, 450, window.innerHeight / 3 * 2);
+box.drawRect(-250, -window.innerHeight / 2, 500, window.innerHeight);
 box.endFill();
-box.x = joystickCenter.x;
-box.y = joystickCenter.y;
 box.alpha = 0.2;
 joystickContainer.addChild(box);
 
@@ -46,8 +45,6 @@ const base = new PIXI.Graphics();
 base.beginFill(0x555555, 0.5);
 base.drawCircle(0, 0, joystickRadius);
 base.endFill();
-base.x = joystickCenter.x;
-base.y = joystickCenter.y;
 joystickContainer.addChild(base);
 
 // Inner circle (thumb)
@@ -55,11 +52,18 @@ const thumb = new PIXI.Graphics();
 thumb.beginFill(0xffffff, 1);
 thumb.drawCircle(0, 0, thumbRadius);
 thumb.endFill();
-thumb.x = joystickCenter.x;
-thumb.y = joystickCenter.y;
 joystickContainer.addChild(thumb);
 
+reposition();
 
+function reposition(x, y){
+	box.x = joystickCenter.x;
+	box.y = joystickCenter.y;
+	base.x = joystickCenter.x;
+	base.y = joystickCenter.y;
+	thumb.x = joystickCenter.x;
+	thumb.y = joystickCenter.y;
+}
 // Variables for joystick movement
 let isDragging = false;
 let joystickVector = { x: 0, y: 0 };
@@ -68,9 +72,17 @@ let joystickVector = { x: 0, y: 0 };
 joystickContainer.interactive = true;
 joystickContainer.on('pointerdown', (event) => {
     isDragging = true;
+	
+	joystickCenter.x = event.data.global.x
+	joystickCenter.y = event.data.global.y
+	reposition();
 });
 joystickContainer.on('touchdown', (event) => {
     isDragging = true;
+	
+	joystickCenter.x = event.data.global.x
+	joystickCenter.y = event.data.global.y
+	reposition();
 });
 
 // Attach listeners to stage for movement and release
@@ -82,6 +94,7 @@ joystickContainer.on('pointermove', onPointerMove);
 joystickContainer.on('pointerup', onPointerUp);
 	
 function onPointerMove(event) {
+
     if (isDragging) {
         const pointerPosition = event.data.global;
         const dx = pointerPosition.x - joystickCenter.x;
