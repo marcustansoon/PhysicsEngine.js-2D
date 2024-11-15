@@ -68,6 +68,8 @@
           bunny.rotation -= 0.01 * time.deltaTime;
           bunny2.rotation -= 0.02 * time.deltaTime;
 		  
+		  bunny.x += 2;
+		  if(bunny.x > window.innerWidth) bunny.x = -window.innerWidth;
           reflectionFilter.time = (reflectionFilter.time + 0.1) % 6;
         });
       })();
