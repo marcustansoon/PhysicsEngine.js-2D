@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Page Title</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  </head>
+  <body style="margin:0px;padding:0px;">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.5.1/pixi.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pixi-filters@6.0.5/dist/pixi-filters.min.js"></script>
+    <script>
+      (async () => {
+        // Create a new application
+        const app = new PIXI.Application();
+        // Initialize the application
+        await app.init({
+          background: '#0000',
+          resizeTo: window
+        });
+        // Append the application canvas to the document body
+        document.body.appendChild(app.canvas);
+        
+		
+		
+// Joystick properties
+const joystickRadius = 80;
+const thumbRadius = 30;
+const joystickCenter = { x: window.innerWidth / 2 - 50, y: 150 };
+
+// Create joystick container
+const joystickContainer = new PIXI.Container();
+app.stage.addChild(joystickContainer);
+
+
+let box = new PIXI.Graphics();
+box.beginFill(0xff0000, 1);
+// draw a rectangle
+box.drawRect(-200, -150, 450, window.innerHeight / 3 * 2);
+box.endFill();
+box.x = joystickCenter.x;
+box.y = joystickCenter.y;
+box.alpha = 0.2;
+joystickContainer.addChild(box);
+
+// Outer circle (base)
+const base = new PIXI.Graphics();
+base.beginFill(0x555555, 0.5);
+base.drawCircle(0, 0, joystickRadius);
+base.endFill();
+base.x = joystickCenter.x;
+base.y = joystickCenter.y;
+joystickContainer.addChild(base);
+
+// Inner circle (thumb)
+const thumb = new PIXI.Graphics();
+thumb.beginFill(0xffffff, 1);
+thumb.drawCircle(0, 0, thumbRadius);
+thumb.endFill();
+thumb.x = joystickCenter.x;
+thumb.y = joystickCenter.y;
+joystickContainer.addChild(thumb);
+
+
+// Variables for joystick movement
+let isDragging = false;
+let joystickVector = { x: 0, y: 0 };
+
+// Event listeners for interaction
+joystickContainer.interactive = true;
+joystickContainer.on('pointerdown', (event) => {
+    isDragging = true;
+});
+joystickContainer.on('touchdown', (event) => {
+    isDragging = true;
+});
+
+// Attach listeners to stage for movement and release
+joystickContainer.on('touchmove', onPointerMove);
+joystickContainer.on('touchup', onPointerUp);
+
+// Attach listeners to stage for movement and release
+joystickContainer.on('pointermove', onPointerMove);
+joystickContainer.on('pointerup', onPointerUp);
+	
+function onPointerMove(event) {
+    if (isDragging) {
+        const pointerPosition = event.data.global;
+        const dx = pointerPosition.x - joystickCenter.x;
+        const dy = pointerPosition.y - joystickCenter.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance <= joystickRadius) {
+            // Thumb is within bounds
+            thumb.x = pointerPosition.x;
+            thumb.y = pointerPosition.y;
+        } else {
+            // Limit thumb to joystick radius
+            const angle = Math.atan2(dy, dx);
+            thumb.x = joystickCenter.x + Math.cos(angle) * joystickRadius;
+            thumb.y = joystickCenter.y + Math.sin(angle) * joystickRadius;
+        }
+
+        // Update joystick vector
+        joystickVector = {
+            x: (thumb.x - joystickCenter.x) / joystickRadius,
+            y: (thumb.y - joystickCenter.y) / joystickRadius,
+        };
+
+        console.log('Joystick Vector:', joystickVector);
+    }
+}
+
+function onPointerUp() {
+    isDragging = false;
+    thumb.x = joystickCenter.x;
+    thumb.y = joystickCenter.y;
+    joystickVector = { x: 0, y: 0 }; // Reset vector
+    console.log('Joystick Released');
+    //joystickContainer.off('pointermove', onPointerMove);
+    //joystickContainer.off('pointerup', onPointerUp);
+    //joystickContainer.off('touchmove', onPointerMove);
+    //joystickContainer.off('touchup', onPointerUp);
+}
+      })();
+    </script>
+  </body>
+</html>
