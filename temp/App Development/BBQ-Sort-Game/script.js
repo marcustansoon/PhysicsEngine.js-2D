@@ -18,7 +18,14 @@ let ref,
 			window.location.replace(window.location.href.replace('index', 'offline'));
 		},
 
+		handleOpenURL: function(url){
+	        	alert(url);
+		},
+
 		onDeviceReady: function() {
+		        // Custom URL Scheme handler
+		        window.handleOpenURL = this.handleOpenURL;
+			
 			this.requestUserData();
 			intervalRequestUserData = setInterval(()=>{
 				this.requestUserData();
