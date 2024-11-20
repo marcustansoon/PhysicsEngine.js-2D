@@ -19,7 +19,9 @@ let ref,
 		},
 
 		handleOpenURL: function(url){
-	        	alert(url);
+			setTimeout(()=>{
+	        		alert(url);
+			}, 1000);
 		},
 
 		onDeviceReady: function() {
