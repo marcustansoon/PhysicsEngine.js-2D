@@ -6623,6 +6623,7 @@
                 }
             }
               , s = function(e) {
+                    console.log(s)
                 return null != e
             };
             function l(e, t, n) {
@@ -7746,6 +7747,9 @@
                     console.log(e)
                     console.log(p)
                     var t = p()(e, "quote_web");
+                    console.log(s)
+                    console.log(t)
+                    console.log(t.toString().slice(0, 10))
                     return s()(t.toString().slice(0, 10)).toString().slice(0, 10)
                 }(JSON.stringify(e.data) || (0,
                 i._M)(e.params) || "{}");
