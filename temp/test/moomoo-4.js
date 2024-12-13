@@ -7743,11 +7743,10 @@
                 document && (e.headers["futu-x-csrf-token"] = (0,
                 i.WJ)("csrfToken"));
                 var t = function(e) {
+                    console.log(e)
                     e.length <= 0 && (e = "quote");
                     console.log(e)
-                    p();
                     var t = p()(e, "quote_web");
-                    s();
                     console.log(t)
                     console.log(t.toString().slice(0, 10))
                     return s()(t.toString().slice(0, 10)).toString().slice(0, 10)
