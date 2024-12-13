@@ -7745,9 +7745,9 @@
                 var t = function(e) {
                     e.length <= 0 && (e = "quote");
                     console.log(e)
-                    p
+                    p();
                     var t = p()(e, "quote_web");
-                    s
+                    s();
                     console.log(t)
                     console.log(t.toString().slice(0, 10))
                     return s()(t.toString().slice(0, 10)).toString().slice(0, 10)
