@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+</head>
+<body>
+https://ws20.bursamalaysia.com/api/v2/stock_price_data?stock_code=5014.MY&mode=historical&from_date=20191207&ws_a=9976b9b5893ebba7b88535470a1bfc228e742369f1d9492fbaf5ed5a9e8785be&ws_m=1733893424.0
+<script>
+async function scrapeWithProxy() {
+    const proxy = "https://cors-anywhere.herokuapp.com/";
+    const url = `https://www.klsescreener.com/v2/stocks/chart/1155`;
+
+    try {
+        const response = await fetch(proxy + url, {
+            headers: {
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+                "Origin": "https://www.klsescreener.com",   // Origin header
+                "X-Requested-With": "XMLHttpRequest",       // X-Requested-With header
+            },
+        });
+        let html = await response.text();
+
+        console.log(html)
+
+		return;
+        // Parse the HTML
+		html = html.replace(/^\s+|\s+$/g, '')
+        //console.log(html)
+		let pattern = /\[(.*)\]/g;
+let result = html.match(pattern);
+console.log(result[0])
+let data = JSON.parse('['+result[0])
+console.log(data)
+
+
+
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+let r = scrapeWithProxy();
+console.log(r)
+
+
+</script>
+<h1>My First Heading</h1>
+<p>My first paragraph.</p>
+
+</body>
+</html>
+
