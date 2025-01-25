@@ -22,7 +22,7 @@
   <video id="my-video" class="video-js vjs-default-skin" controls preload="auto">
     <source src="https://zorvixwave32.xyz/file1/2FzWpgKLzTf~zknNCHNMwv4XdJBJUKOruix7U60CnN7am+rTKxCcqD+Hh5swmwnCpCs3k3XibQRPD61yMATIZ~8BF3XxNaIrnNmMYdryKt4ZGPJgAbpyfcjsYkUh45uJihOsS3QEV5iS8k~mRFNE60Xwi7xjaX9ENOtoMT9WAjc=/MTA4MA==/aW5kZXgubTN1OA==.m3u8" type="application/x-mpegURL">
     <!-- Subtitles (SRT file) -->
-    <track kind="subtitles" src="https://marcustansoon.github.io/PhysicsEngine.js-2D/video/thesubstance-en.srt" srclang="en" label="English" default>
+    <track kind="subtitles" label="English" srclang="en" src="https://marcustansoon.github.io/PhysicsEngine.js-2D/video/thesubstance-en.srt" default>
   </video>
 
 
@@ -38,7 +38,7 @@
     var player = videojs('my-video');
     
     // Function to adjust subtitle delay
-    function adjustSubtitleDelay(track, delay) {
+    /*function adjustSubtitleDelay(track, delay) {
       var cues = track.cues;
 
       for (var i = 0; i < cues.length; i++) {
@@ -62,7 +62,8 @@
         // Adjust subtitle delay based on the current delay
         adjustSubtitleDelay(track, subtitleDelay);
         // Update the display value of the subtitle delay
-        document.getElementById('subtitle-delay-value').textContent = subtitleDelay.toFixed(1);
+        // Log only the start and end time of the cue for debugging
+    console.log('Adjusted Cue:', { startTime: cue.startTime, endTime: cue.endTime });
       }
 
       // Button click event for decreasing delay
@@ -76,10 +77,9 @@
         subtitleDelay += delayStep; // Increase delay
         updateSubtitleDelay();
       });
-    });
+    });*/
     
   </script>
 
 </body>
 </html>
-
