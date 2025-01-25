@@ -13,6 +13,15 @@
       margin-right: 10px;
       cursor: pointer;
     }
+
+    /* Style for subtitle tracks */
+    video::cue {
+      font-size: 18px;
+      color: white;
+      background-color: rgba(0, 0, 0, 0.7); /* Transparent black background */
+      padding: 4px;
+      border-radius: 4px;
+    }
   </style>
 </head>
 <body>
@@ -26,12 +35,14 @@
   <div id="delay-controls">
     <button class="btn" id="increase-delay">Increase Subtitle Delay</button>
     <button class="btn" id="decrease-delay">Decrease Subtitle Delay</button>
+    <div>Subtitle Delay: <span id="subtitle-delay-display">0.0s</span></div>
   </div>
   
   
   <div id="subtitle-controls">
     <button class="btn" id="increase-subtitle-size">Increase Subtitle Size</button>
     <button class="btn" id="decrease-subtitle-size">Decrease Subtitle Size</button>
+    <div>Subtitle Size: <span id="subtitle-size-display">16px</span></div>
   </div>
   
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest">
@@ -52,14 +63,21 @@ if (Hls.isSupported()) {
     // Font size adjustment
     let subtitleFontSize = 16; // Default font size
 
+    // Update the displayed subtitle size
+    function updateSubtitleSizeDisplay() {
+        document.getElementById('subtitle-size-display').textContent = `${subtitleFontSize}px`;
+    }
+
     document.getElementById('increase-subtitle-size').addEventListener('click', function () {
         subtitleFontSize += 2;
         updateSubtitleFontSize();
+        updateSubtitleSizeDisplay(); // Update the display when size changes
     });
 
     document.getElementById('decrease-subtitle-size').addEventListener('click', function () {
         subtitleFontSize = Math.max(8, subtitleFontSize - 2); // Prevent font size from going below 8px
         updateSubtitleFontSize();
+        updateSubtitleSizeDisplay(); // Update the display when size changes
     });
 
     function updateSubtitleFontSize() {
@@ -76,14 +94,21 @@ if (Hls.isSupported()) {
     // Subtitle delay control
     let subtitleDelay = 0; // Default delay (in seconds)
 
+    // Update the displayed subtitle delay
+    function updateSubtitleDelayDisplay() {
+        document.getElementById('subtitle-delay-display').textContent = `${subtitleDelay.toFixed(1)}s`;
+    }
+
     document.getElementById('increase-delay').addEventListener('click', function () {
         subtitleDelay += 0.5; // Increase by 0.5 seconds
         updateSubtitleDelay();
+        updateSubtitleDelayDisplay(); // Update the display when delay changes
     });
 
     document.getElementById('decrease-delay').addEventListener('click', function () {
         subtitleDelay = Math.max(0, subtitleDelay - 0.5); // Prevent negative delay
         updateSubtitleDelay();
+        updateSubtitleDelayDisplay(); // Update the display when delay changes
     });
 
     function updateSubtitleDelay() {
