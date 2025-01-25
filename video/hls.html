@@ -37,52 +37,33 @@
   <script>
     var player = videojs('my-video');
 
-	  player.ready(function() {
-      // Debugging: Check the available text tracks
-      console.log(player.textTracks());
-    });
-    
-    // Function to adjust subtitle delay
-    /*function adjustSubtitleDelay(track, delay) {
-      var cues = track.cues;
+	var subtitleDelay = 0; // Initial delay in seconds
 
-      for (var i = 0; i < cues.length; i++) {
-        var cue = cues[i];
-        cue.startTime += delay; // Adjust the start time
-        cue.endTime += delay;   // Adjust the end time
+    // Function to adjust subtitle delay
+    function adjustSubtitleDelay(delayChange) {
+      subtitleDelay += delayChange;
+      const tracks = player.textTracks();
+      if (tracks && tracks.length > 0) {
+        const track = tracks[0]; // Assuming you want to adjust the first subtitle track
+
+        // Iterate through the cues and apply the delay
+        for (let i = 0; i < track.cues.length; i++) {
+          const cue = track.cues[i];
+          cue.startTime += delayChange;
+          cue.endTime += delayChange;
+        }
       }
     }
 
-    // Wait until the player is ready
-    player.ready(function() {
-      var track = player.textTracks()[0]; // Get the first subtitle track
-      track.mode = 'showing'; // Ensure the subtitles are showing
+    // Event listener for the + button (increase delay)
+    document.getElementById('plus-btn').addEventListener('click', function() {
+      adjustSubtitleDelay(0.5); // Increase by 1 second
+    });
 
-      // Initial subtitle delay (in seconds)
-      var subtitleDelay = 0;
-      const delayStep = 0.5; // Step to adjust the delay by (e.g., 0.5 seconds)
-
-      // Function to update subtitle delay value
-      function updateSubtitleDelay() {
-        // Adjust subtitle delay based on the current delay
-        adjustSubtitleDelay(track, subtitleDelay);
-        // Update the display value of the subtitle delay
-        // Log only the start and end time of the cue for debugging
-    console.log('Adjusted Cue:', { startTime: cue.startTime, endTime: cue.endTime });
-      }
-
-      // Button click event for decreasing delay
-      document.getElementById('decrease-delay-btn').addEventListener('click', function() {
-        subtitleDelay -= delayStep; // Decrease delay
-        updateSubtitleDelay();
-      });
-
-      // Button click event for increasing delay
-      document.getElementById('increase-delay-btn').addEventListener('click', function() {
-        subtitleDelay += delayStep; // Increase delay
-        updateSubtitleDelay();
-      });
-    });*/
+    // Event listener for the - button (decrease delay)
+    document.getElementById('minus-btn').addEventListener('click', function() {
+      adjustSubtitleDelay(-0.5); // Decrease by 1 second
+    });
     
   </script>
 
