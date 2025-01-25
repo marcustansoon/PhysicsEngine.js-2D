@@ -1,0 +1,85 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video.js HLS Example</title>
+  <link href="https://vjs.zencdn.net/7.13.3/video-js.css" rel="stylesheet">
+  <style>
+  .my-video-dimensions {
+    width: 100vw;
+    height: 80vh;
+	}
+</style>
+  <!-- Include Video.js and HLS.js (for HLS playback) -->
+  <script src="https://vjs.zencdn.net/7.13.3/video.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+<body>
+
+  <video id="my-video" class="video-js vjs-default-skin" controls preload="auto">
+    <source src="https://zorvixwave32.xyz/file1/2FzWpgKLzTf~zknNCHNMwv4XdJBJUKOruix7U60CnN7am+rTKxCcqD+Hh5swmwnCpCs3k3XibQRPD61yMATIZ~8BF3XxNaIrnNmMYdryKt4ZGPJgAbpyfcjsYkUh45uJihOsS3QEV5iS8k~mRFNE60Xwi7xjaX9ENOtoMT9WAjc=/MTA4MA==/aW5kZXgubTN1OA==.m3u8" type="application/x-mpegURL">
+    <!-- Subtitles (SRT file) -->
+    <track kind="subtitles" src="thesubstance-en.srt" srclang="en" label="English" default>
+  </video>
+
+
+ <!-- Buttons to adjust subtitle delay -->
+  <div>
+    <button id="decrease-delay-btn">-</button>
+    <span id="subtitle-delay-value">0</span>
+    <button id="increase-delay-btn">+</button>
+  </div>
+
+
+  <script>
+    var player = videojs('my-video');
+    
+    // Function to adjust subtitle delay
+    function adjustSubtitleDelay(track, delay) {
+      var cues = track.cues;
+
+      for (var i = 0; i < cues.length; i++) {
+        var cue = cues[i];
+        cue.startTime += delay; // Adjust the start time
+        cue.endTime += delay;   // Adjust the end time
+      }
+    }
+
+    // Wait until the player is ready
+    player.ready(function() {
+      var track = player.textTracks()[0]; // Get the first subtitle track
+      track.mode = 'showing'; // Ensure the subtitles are showing
+
+      // Initial subtitle delay (in seconds)
+      var subtitleDelay = 0;
+      const delayStep = 0.5; // Step to adjust the delay by (e.g., 0.5 seconds)
+
+      // Function to update subtitle delay value
+      function updateSubtitleDelay() {
+        // Adjust subtitle delay based on the current delay
+        adjustSubtitleDelay(track, subtitleDelay);
+        // Update the display value of the subtitle delay
+        document.getElementById('subtitle-delay-value').textContent = subtitleDelay.toFixed(1);
+      }
+
+      // Button click event for decreasing delay
+      document.getElementById('decrease-delay-btn').addEventListener('click', function() {
+        subtitleDelay -= delayStep; // Decrease delay
+        updateSubtitleDelay();
+      });
+
+      // Button click event for increasing delay
+      document.getElementById('increase-delay-btn').addEventListener('click', function() {
+        subtitleDelay += delayStep; // Increase delay
+        updateSubtitleDelay();
+      });
+    });
+    
+  </script>
+
+</body>
+</html>
+
