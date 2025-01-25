@@ -101,7 +101,7 @@ if (Hls.isSupported()) {
     const cues = cueStyle.cues;
     for (let i = 0; i < cues.length; i++) {
       const cue = cues[i];
-      cue.text = `<span style="font-size: ${subtitleFontSize}em">${cue.text}</span>`; // Inline style for subtitle size
+      cue.text = `<span style="font-size: ${subtitleFontSize}px">${cue.text}</span>`; // Inline style for subtitle size
     }
   }
 
