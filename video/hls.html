@@ -66,7 +66,7 @@ if (Hls.isSupported()) {
     hls.attachMedia(video);
 
     // Font size adjustment
-    let subtitleFontSize = 16; // Default font size
+    let subtitleFontSize = 18; // Default font size
 
     // Update the displayed subtitle size
     function updateSubtitleSizeDisplay() {
@@ -85,7 +85,7 @@ if (Hls.isSupported()) {
 
   // Function to decrease subtitle size
   function decreaseSubtitleSize() {
-    subtitleFontSize = Math.max(0.5, subtitleSize - 0.25); // Decrease subtitle size but ensure it doesn't go below 0.5em
+    subtitleFontSize = Math.max(0.5, subtitleFontSize - 0.25); // Decrease subtitle size but ensure it doesn't go below 0.5em
     updateSubtitleSize();
   }
 
