@@ -1,70 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>Video.js HLS Example</title>
-		<link href="https://vjs.zencdn.net/7.13.3/video-js.css" rel="stylesheet">
-		<style>
-			.my-video-dimensions {
-				width: 100vw;
-				height: 80vh;
-			}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HLS.js</title>
+  <style>
+    #subtitle-controls, #delay-controls {
+      margin-top: 10px;
+    }
+    .btn {
+      padding: 5px 10px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>HLS.js Streaming</h1>
+  <video id="video" width="100%" height="50%" controls>
+  	<track kind="subtitles" label="English" src="https://marcustansoon.github.io/PhysicsEngine.js-2D/video/thesubstance-en.vtt" default>
+  </video>
 
-			.controls {
-				margin-top: 20px;
-			}
 
-			button {
-				padding: 10px;
-				margin: 0 10px;
-				font-size: 16px;
-				cursor: pointer;
-			}
-		</style>
-		<!-- Include Video.js and HLS.js (for HLS playback) -->
-		<script src="https://unpkg.com/video.js/dist/video.js"></script>
-		<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-	</head>
-	<body>
-		<video id="my-video" class="video-js vjs-default-skin" controls preload="auto">
-			<source src="https://zorvixwave32.xyz/file1/2FzWpgKLzTf~zknNCHNMwv4XdJBJUKOruix7U60CnN7am+rTKxCcqD+Hh5swmwnCpCs3k3XibQRPD61yMATIZ~8BF3XxNaIrnNmMYdryKt4ZGPJgAbpyfcjsYkUh45uJihOsS3QEV5iS8k~mRFNE60Xwi7xjaX9ENOtoMT9WAjc=/MTA4MA==/aW5kZXgubTN1OA==.m3u8" type="application/x-mpegURL">
-			<!-- Subtitles (SRT file) -->
-			<track kind="subtitles" label="English" srclang="en" src="https://marcustansoon.github.io/PhysicsEngine.js-2D/video/thesubstance-en.vtt" default>
-		</video>
-		<!-- Buttons to adjust subtitle delay -->
-		<div class="controls">
-			<button id="minus-btn">- 0.5s Delay</button>
-			<button id="plus-btn">+ 0.5s Delay</button>
-			<p>Current Subtitle Delay: <span id="delay-display">0.0</span> seconds </p>
-		</div>
-		<script>
-			var player = videojs('my-video');
-			var subtitleDelay = 0; // Initial delay in seconds
-			// Function to adjust subtitle delay
-			function adjustSubtitleDelay(delayChange) {
-				subtitleDelay += delayChange;
-				const tracks = player.textTracks();
-				if (tracks && tracks.length > 0) {
-					const track = tracks[0]; // Assuming you want to adjust the first subtitle track
-					// Iterate through the cues and apply the delay
-					for (let i = 0; i < track.cues.length; i++) {
-						const cue = track.cues[i];
-						cue.startTime += delayChange;
-						cue.endTime += delayChange;
-					}
-					// Update the display of the current delay
-					document.getElementById('delay-display').textContent = subtitleDelay.toFixed(1);
-				}
-			}
-			// Event listener for the + button (increase delay)
-			document.getElementById('plus-btn').addEventListener('click', function() {
-				adjustSubtitleDelay(0.5); // Increase by 1 second
-			});
-			// Event listener for the - button (decrease delay)
-			document.getElementById('minus-btn').addEventListener('click', function() {
-				adjustSubtitleDelay(-0.5); // Decrease by 1 second
-			});
-		</script>
-	</body>
+  
+  <div id="delay-controls">
+    <button class="btn" id="increase-delay">Increase Subtitle Delay</button>
+    <button class="btn" id="decrease-delay">Decrease Subtitle Delay</button>
+  </div>
+  
+  
+  <div id="subtitle-controls">
+    <button class="btn" id="increase-subtitle-size">Increase Subtitle Size</button>
+    <button class="btn" id="decrease-subtitle-size">Decrease Subtitle Size</button>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest">
+  </script>
+  <script>
+  // Check if HLS.js is supported
+if (Hls.isSupported()) {
+    var video = document.getElementById('video');
+    var hls = new Hls();
+    
+    // Replace the URL below with your HLS stream (mu38 in your case)
+    var streamUrl = 'https://zorvixwave32.xyz/file1/2FzWpgKLzTf~zknNCHNMwv4XdJBJUKOruix7U60CnN7am+rTKxCcqD+Hh5swmwnCpCs3k3XibQRPD61yMATIZ~8BF3XxNaIrnNmMYdryKt4ZGPJgAbpyfcjsYkUh45uJihOsS3QEV5iS8k~mRFNE60Xwi7xjaX9ENOtoMT9WAjc=/MTA4MA==/aW5kZXgubTN1OA==.m3u8'; // Example: 'https://example.com/video.m3u8'
+    
+     // Load HLS stream
+    hls.loadSource(streamUrl);
+    hls.attachMedia(video);
+
+    // Font size adjustment
+    let subtitleFontSize = 16; // Default font size
+
+    document.getElementById('increase-subtitle-size').addEventListener('click', function () {
+        subtitleFontSize += 2;
+        updateSubtitleFontSize();
+    });
+
+    document.getElementById('decrease-subtitle-size').addEventListener('click', function () {
+        subtitleFontSize = Math.max(8, subtitleFontSize - 2); // Prevent font size from going below 8px
+        updateSubtitleFontSize();
+    });
+
+    function updateSubtitleFontSize() {
+        const tracks = video.textTracks;
+        for (let i = 0; i < tracks.length; i++) {
+            const track = tracks[i];
+            if (track.mode === 'showing') {
+                // Apply font size to the track
+                track.fontSize = subtitleFontSize + 'px';
+            }
+        }
+    }
+
+    // Subtitle delay control
+    let subtitleDelay = 0; // Default delay (in seconds)
+
+    document.getElementById('increase-delay').addEventListener('click', function () {
+        subtitleDelay += 0.5; // Increase by 0.5 seconds
+        updateSubtitleDelay();
+    });
+
+    document.getElementById('decrease-delay').addEventListener('click', function () {
+        subtitleDelay = Math.max(0, subtitleDelay - 0.5); // Prevent negative delay
+        updateSubtitleDelay();
+    });
+
+    function updateSubtitleDelay() {
+        const tracks = video.textTracks;
+        for (let i = 0; i < tracks.length; i++) {
+            const track = tracks[i];
+            if (track.mode === 'showing') {
+                // Adjust all subtitle cues based on the delay
+                track.cues.forEach(cue => {
+                    cue.startTime += subtitleDelay; // Apply the delay
+                    cue.endTime += subtitleDelay;
+                });
+            }
+        }
+    }
+
+} else {
+    console.error('HLS.js is not supported in this browser.');
+}
+
+  </script>
+</body>
 </html>
