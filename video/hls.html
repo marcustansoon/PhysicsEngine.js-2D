@@ -107,7 +107,7 @@ if (Hls.isSupported()) {
     });
 
     document.getElementById('decrease-delay').addEventListener('click', function () {
-        subtitleDelay = Math.max(0, subtitleDelay - 0.5); // Prevent negative delay
+        subtitleDelay = -0.5; // Prevent negative delay
         updateSubtitleDelay();
         updateSubtitleDelayDisplay(); // Update the display when delay changes
     });
