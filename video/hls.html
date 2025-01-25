@@ -71,13 +71,13 @@ if (Hls.isSupported()) {
 
     document.getElementById('increase-subtitle-size').addEventListener('click', function () {
         subtitleFontSize += 2;
-        updateSubtitleFontSize();
+        updateSubtitleSize();
         updateSubtitleSizeDisplay(); // Update the display when size changes
     });
 
     document.getElementById('decrease-subtitle-size').addEventListener('click', function () {
         subtitleFontSize = Math.max(8, subtitleFontSize - 2); // Prevent font size from going below 8px
-        updateSubtitleFontSize();
+        updateSubtitleSize();
         updateSubtitleSizeDisplay(); // Update the display when size changes
     });
 
@@ -91,6 +91,19 @@ if (Hls.isSupported()) {
             }
         }
     }
+
+   // Function to update subtitle size
+  function updateSubtitleSize() {
+    const cueStyle = video.textTracks[0];
+    if (!cueStyle) return; // No subtitles track available
+    
+    // Adjust the font size of the subtitles based on current subtitle size
+    const cues = cueStyle.cues;
+    for (let i = 0; i < cues.length; i++) {
+      const cue = cues[i];
+      cue.text = `<span style="font-size: ${subtitleFontSize}em">${cue.text}</span>`; // Inline style for subtitle size
+    }
+  }
 
     // Subtitle delay control
     let subtitleDelay = 0; // Default delay (in seconds)
