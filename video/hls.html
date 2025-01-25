@@ -1,80 +1,70 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Video.js HLS Example</title>
-  <link href="https://vjs.zencdn.net/7.13.3/video-js.css" rel="stylesheet">
-  <style>
-  .my-video-dimensions {
-    width: 100vw;
-    height: 80vh;
-	}
-    .controls {
-      margin-top: 20px;
-    }
-    button {
-      padding: 10px;
-      margin: 0 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-</style>
-  <!-- Include Video.js and HLS.js (for HLS playback) -->
-  <script src="https://unpkg.com/video.js/dist/video.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
-</head>
-<body>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Video.js HLS Example</title>
+		<link href="https://vjs.zencdn.net/7.13.3/video-js.css" rel="stylesheet">
+		<style>
+			.my-video-dimensions {
+				width: 100vw;
+				height: 80vh;
+			}
 
-  <video id="my-video" class="video-js vjs-default-skin" controls preload="auto">
-    <source src="https://zorvixwave32.xyz/file1/2FzWpgKLzTf~zknNCHNMwv4XdJBJUKOruix7U60CnN7am+rTKxCcqD+Hh5swmwnCpCs3k3XibQRPD61yMATIZ~8BF3XxNaIrnNmMYdryKt4ZGPJgAbpyfcjsYkUh45uJihOsS3QEV5iS8k~mRFNE60Xwi7xjaX9ENOtoMT9WAjc=/MTA4MA==/aW5kZXgubTN1OA==.m3u8" type="application/x-mpegURL">
-    <!-- Subtitles (SRT file) -->
-    <track kind="subtitles" label="English" srclang="en" src="https://marcustansoon.github.io/PhysicsEngine.js-2D/video/thesubstance-en.vtt" default>
-  </video>
+			.controls {
+				margin-top: 20px;
+			}
 
-
- <!-- Buttons to adjust subtitle delay -->
- <div class="controls">
-    <button id="minus-btn">- 0.5s Delay</button>
-    <button id="plus-btn">+ 0.5s Delay</button>
-    <p>Current Subtitle Delay: <span id="delay-display">0.0</span> seconds</p>
-  </div>
-
-
-  <script>
-    var player = videojs('my-video');
-
-	var subtitleDelay = 0; // Initial delay in seconds
-
-    // Function to adjust subtitle delay
-    function adjustSubtitleDelay(delayChange) {
-      subtitleDelay += delayChange;
-      const tracks = player.textTracks();
-      if (tracks && tracks.length > 0) {
-        const track = tracks[0]; // Assuming you want to adjust the first subtitle track
-
-        // Iterate through the cues and apply the delay
-        for (let i = 0; i < track.cues.length; i++) {
-          const cue = track.cues[i];
-          cue.startTime += delayChange;
-          cue.endTime += delayChange;
-        }
-      }
-    }
-
-    // Event listener for the + button (increase delay)
-    document.getElementById('plus-btn').addEventListener('click', function() {
-      adjustSubtitleDelay(0.5); // Increase by 1 second
-    });
-
-    // Event listener for the - button (decrease delay)
-    document.getElementById('minus-btn').addEventListener('click', function() {
-      adjustSubtitleDelay(-0.5); // Decrease by 1 second
-    });
-    
-  </script>
-
-</body>
+			button {
+				padding: 10px;
+				margin: 0 10px;
+				font-size: 16px;
+				cursor: pointer;
+			}
+		</style>
+		<!-- Include Video.js and HLS.js (for HLS playback) -->
+		<script src="https://unpkg.com/video.js/dist/video.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+	</head>
+	<body>
+		<video id="my-video" class="video-js vjs-default-skin" controls preload="auto">
+			<source src="https://zorvixwave32.xyz/file1/2FzWpgKLzTf~zknNCHNMwv4XdJBJUKOruix7U60CnN7am+rTKxCcqD+Hh5swmwnCpCs3k3XibQRPD61yMATIZ~8BF3XxNaIrnNmMYdryKt4ZGPJgAbpyfcjsYkUh45uJihOsS3QEV5iS8k~mRFNE60Xwi7xjaX9ENOtoMT9WAjc=/MTA4MA==/aW5kZXgubTN1OA==.m3u8" type="application/x-mpegURL">
+			<!-- Subtitles (SRT file) -->
+			<track kind="subtitles" label="English" srclang="en" src="https://marcustansoon.github.io/PhysicsEngine.js-2D/video/thesubstance-en.vtt" default>
+		</video>
+		<!-- Buttons to adjust subtitle delay -->
+		<div class="controls">
+			<button id="minus-btn">- 0.5s Delay</button>
+			<button id="plus-btn">+ 0.5s Delay</button>
+			<p>Current Subtitle Delay: <span id="delay-display">0.0</span> seconds </p>
+		</div>
+		<script>
+			var player = videojs('my-video');
+			var subtitleDelay = 0; // Initial delay in seconds
+			// Function to adjust subtitle delay
+			function adjustSubtitleDelay(delayChange) {
+				subtitleDelay += delayChange;
+				const tracks = player.textTracks();
+				if (tracks && tracks.length > 0) {
+					const track = tracks[0]; // Assuming you want to adjust the first subtitle track
+					// Iterate through the cues and apply the delay
+					for (let i = 0; i < track.cues.length; i++) {
+						const cue = track.cues[i];
+						cue.startTime += delayChange;
+						cue.endTime += delayChange;
+					}
+					// Update the display of the current delay
+					document.getElementById('delay-display').textContent = subtitleDelay.toFixed(1);
+				}
+			}
+			// Event listener for the + button (increase delay)
+			document.getElementById('plus-btn').addEventListener('click', function() {
+				adjustSubtitleDelay(0.5); // Increase by 1 second
+			});
+			// Event listener for the - button (decrease delay)
+			document.getElementById('minus-btn').addEventListener('click', function() {
+				adjustSubtitleDelay(-0.5); // Decrease by 1 second
+			});
+		</script>
+	</body>
 </html>
