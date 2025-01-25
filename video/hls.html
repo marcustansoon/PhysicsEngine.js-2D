@@ -14,9 +14,13 @@
       cursor: pointer;
     }
 
+    video {
+      --subtitle-size: 18px; /* Default subtitle size */
+    }
+      
     /* Style for subtitle tracks */
     video::cue {
-      font-size: 18px;
+      font-size: var(--subtitle-size);
       color: white;
       background-color: rgba(0, 0, 0, 0.7); /* Transparent black background */
       padding: 4px;
@@ -69,40 +73,26 @@ if (Hls.isSupported()) {
         document.getElementById('subtitle-size-display').textContent = `${subtitleFontSize}px`;
     }
 
-    document.getElementById('increase-subtitle-size').addEventListener('click', function () {
-        subtitleFontSize += 2;
-        updateSubtitleSize();
-        updateSubtitleSizeDisplay(); // Update the display when size changes
-    });
+    document.getElementById('increase-subtitle-size').addEventListener('click', increaseSubtitleSize);
 
-    document.getElementById('decrease-subtitle-size').addEventListener('click', function () {
-        subtitleFontSize = Math.max(8, subtitleFontSize - 2); // Prevent font size from going below 8px
-        updateSubtitleSize();
-        updateSubtitleSizeDisplay(); // Update the display when size changes
-    });
+    document.getElementById('decrease-subtitle-size').addEventListener('click', decreaseSubtitleSize);
 
-    function updateSubtitleFontSize() {
-        const tracks = video.textTracks;
-        for (let i = 0; i < tracks.length; i++) {
-            const track = tracks[i];
-            if (track.mode === 'showing') {
-                // Apply font size to the track
-                track.fontSize = subtitleFontSize + 'px';
-            }
-        }
-    }
+   // Function to increase subtitle size
+  function increaseSubtitleSize() {
+    subtitleFontSize += 0.25; // Increase the subtitle size by 0.25
+    updateSubtitleSize();
+  }
 
-   // Function to update subtitle size
+  // Function to decrease subtitle size
+  function decreaseSubtitleSize() {
+    subtitleFontSize = Math.max(0.5, subtitleSize - 0.25); // Decrease subtitle size but ensure it doesn't go below 0.5em
+    updateSubtitleSize();
+  }
+
+  // Function to update the CSS variable for subtitle size
   function updateSubtitleSize() {
-    const cueStyle = video.textTracks[0];
-    if (!cueStyle) return; // No subtitles track available
-    
-    // Adjust the font size of the subtitles based on current subtitle size
-    const cues = cueStyle.cues;
-    for (let i = 0; i < cues.length; i++) {
-      const cue = cues[i];
-      cue.text = `<span style="font-size: ${subtitleFontSize}px">${cue.text}</span>`; // Inline style for subtitle size
-    }
+    video.style.setProperty('--subtitle-size', `${subtitleFontSize}px`);
+    updateSubtitleSizeDisplay();
   }
 
     // Subtitle delay control
