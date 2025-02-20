@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en">
   <head>
+  
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Meal Tracker</title>
@@ -174,48 +175,30 @@
         </svg>
       </button>
 
-
-
-
-
       <!-- Date Header -->
       <div class="mb-8">
         <div class="text-gray-500 text-sm">Today</div>
         <h1 class="text-2xl font-bold">Friday, 15 July</h1>
       </div>
-	  
-	  
-	  
-	  
-	  
 
-<!-- Featured Card -->
-        <div class="bg-gradient-to-br from-orange-50 to-rose-50 rounded-3xl p-6 mb-8">
-			<div class="text-xl text-rose-500 font-bold mb-2">Today Calorie Goal</div>
-			<div class="space-y-4">
-			  <div class="flex justify-between items-center">
-				<span class="text-gray-500">Remaining</span>
-				<span class="font-medium">2,642 kcal</span>
-			  </div>
-			  <div class="h-1 bg-gray-200 rounded-full">
-				<div class="h-full w-2/4 bg-blue-500 rounded-full"></div>
-			  </div>
-			  <div class="text-xs text-right text-gray-500">3422 / 6083 Kcal</div>
-			</div>
+      <!-- Featured Card -->
+      <div
+        class="bg-gradient-to-br from-orange-50 to-rose-50 rounded-3xl p-6 mb-8"
+      >
+        <div class="text-xl text-rose-500 font-bold mb-2">
+          Today Calorie Goal
         </div>
-
-
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
-	  
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-500">Remaining</span>
+            <span class="font-medium">2,642 kcal</span>
+          </div>
+          <div class="h-1 bg-gray-200 rounded-full">
+            <div class="h-full w-2/4 bg-blue-500 rounded-full"></div>
+          </div>
+          <div class="text-xs text-right text-gray-500">3422 / 6083 Kcal</div>
+        </div>
+      </div>
 
       <!-- Meals List -->
       <div class="space-y-8 mb-8">
@@ -225,40 +208,55 @@
             <span class="font-medium">Breakfast</span>
             <span class="ml-auto text-gray-500">534 kcal</span>
           </div>
-          <div class="space-y-3 pl-9">
+          <div class="space-y-3">
             <div class="flex items-center gap-3">
               <div
                 class="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center"
               >
                 <span class="text-lg">🍞</span>
               </div>
-			  <div class="flex-1">
-                        <div class="flex items-center justify-between">
-                            <h3 class="font-medium">Milk Bread</h3>
-                            <div class="flex items-center gap-2">
-                                <button>
-                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M3 17.25V21H6.75L18.81 8.94L15.06 5.19L3 17.25ZM20.71 6.83L17.83 4L19.29 2.54C19.68 2.15 20.32 2.15 20.71 2.54L22.17 4C22.56 4.39 22.56 5.03 22.17 5.42L20.71 6.83Z" fill="currentColor"/>
-</svg>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="flex justify-between gap-2 text-sm text-gray-500">
-							<span class="flex gap-1"><span>🔥</span><span>113 kcal</span></span>
-							<span class="flex gap-1"><span>🍚</span><span>100 carbs</span></span>
-							<span class="flex gap-1"></span>
-						</div>
-						
-                        <div class="flex justify-between gap-2 text-sm text-gray-500">
-							<span class="flex gap-1"><span>🧈</span><span>5 fats</span></span>
-							<span class="flex gap-1">
-							<span>🥚</span><span>100 protein</span>
-							</span>
-							<span class="flex gap-1"></span>
-                        </div>
+              <div class="flex-1">
+                <div class="flex items-center justify-between">
+                  <div class="font-medium">Milk Bread</div>
+                  <div class="flex items-center gap-2">
+                    <button>
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M3 17.25V21H6.75L18.81 8.94L15.06 5.19L3 17.25ZM20.71 6.83L17.83 4L19.29 2.54C19.68 2.15 20.32 2.15 20.71 2.54L22.17 4C22.56 4.39 22.56 5.03 22.17 5.42L20.71 6.83Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
+                <div class="flex justify-between gap-2 text-sm text-gray-500">
+                  <span class="flex gap-1"
+                    ><span>🔥</span><span>113 kcal</span></span
+                  >
+                  <span class="flex gap-1"
+                    ><span>🍚</span><span>100 carbs</span></span
+                  >
+                  <span class="flex gap-1"></span>
+                </div>
+
+                <div class="flex justify-between gap-2 text-sm text-gray-500">
+                  <span class="flex gap-1"
+                    ><span>🧈</span><span>5 fats</span></span
+                  >
+                  <span class="flex gap-1">
+                    <span>🥚</span><span>100 protein</span>
+                  </span>
+                  <span class="flex gap-1"></span>
+                </div>
+              </div>
             </div>
-			
+
             <div class="flex items-center gap-3">
               <div
                 class="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center"
@@ -266,20 +264,44 @@
                 <span class="text-lg">🍓</span>
               </div>
               <div class="flex-1">
-                <div class="font-medium">Strawberry</div>
-                        <div class="flex justify-between gap-2 text-sm text-gray-500">
-							<span class="flex gap-1"><span>🔥</span><span>113 kcal</span></span>
-							<span class="flex gap-1"><span>🍚</span><span>100 carbs</span></span>
-							<span class="flex gap-1"></span>
-						</div>
-						
-                        <div class="flex justify-between gap-2 text-sm text-gray-500">
-							<span class="flex gap-1"><span>🧈</span><span>5 fats</span></span>
-							<span class="flex gap-1">
-							<span>🥚</span><span>100 protein</span>
-							</span>
-							<span class="flex gap-1"></span>
-                        </div>
+                <div class="flex items-center justify-between">
+                  <div class="font-medium">Strawberry</div>
+                  <div class="flex items-center gap-2">
+                    <button>
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M3 17.25V21H6.75L18.81 8.94L15.06 5.19L3 17.25ZM20.71 6.83L17.83 4L19.29 2.54C19.68 2.15 20.32 2.15 20.71 2.54L22.17 4C22.56 4.39 22.56 5.03 22.17 5.42L20.71 6.83Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="flex justify-between gap-2 text-sm text-gray-500">
+                  <span class="flex gap-1"
+                    ><span>🔥</span><span>113 kcal</span></span
+                  >
+                  <span class="flex gap-1"
+                    ><span>🍚</span><span>100 carbs</span></span
+                  >
+                  <span class="flex gap-1"></span>
+                </div>
+
+                <div class="flex justify-between gap-2 text-sm text-gray-500">
+                  <span class="flex gap-1"
+                    ><span>🧈</span><span>5 fats</span></span
+                  >
+                  <span class="flex gap-1">
+                    <span>🥚</span><span>100 protein</span>
+                  </span>
+                  <span class="flex gap-0"></span>
+                </div>
               </div>
             </div>
           </div>
@@ -290,7 +312,7 @@
             <span class="font-medium">Lunch</span>
             <span class="ml-auto text-gray-500">781 kcal</span>
           </div>
-          <div class="space-y-3 pl-9">
+          <div class="space-y-3">
             <div class="flex items-center gap-3">
               <div
                 class="w-10 h-10 bg-orange-100 rounded-xl flex items-center justify-center"
@@ -298,20 +320,44 @@
                 <span class="text-lg">🍕</span>
               </div>
               <div class="flex-1">
-                <div class="font-medium">Chicken Pizza</div>
-                        <div class="flex justify-between gap-2 text-sm text-gray-500">
-							<span class="flex gap-1"><span>🔥</span><span>113 kcal</span></span>
-							<span class="flex gap-1"><span>🍚</span><span>100 carbs</span></span>
-							<span class="flex gap-1"></span>
-						</div>
-						
-                        <div class="flex justify-between gap-2 text-sm text-gray-500">
-							<span class="flex gap-1"><span>🧈</span><span>5 fats</span></span>
-							<span class="flex gap-1">
-							<span>🥚</span><span>100 protein</span>
-							</span>
-							<span class="flex gap-1"></span>
-                        </div>
+                <div class="flex items-center justify-between">
+                  <div class="font-medium">Chicken Pizza</div>
+                  <div class="flex items-center gap-2">
+                    <button>
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M3 17.25V21H6.75L18.81 8.94L15.06 5.19L3 17.25ZM20.71 6.83L17.83 4L19.29 2.54C19.68 2.15 20.32 2.15 20.71 2.54L22.17 4C22.56 4.39 22.56 5.03 22.17 5.42L20.71 6.83Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="flex justify-between gap-2 text-sm text-gray-500">
+                  <span class="flex gap-1"
+                    ><span>🔥</span><span>113 kcal</span></span
+                  >
+                  <span class="flex gap-1"
+                    ><span>🍚</span><span>100 carbs</span></span
+                  >
+                  <span class="flex gap-1"></span>
+                </div>
+
+                <div class="flex justify-between gap-2 text-sm text-gray-500">
+                  <span class="flex gap-1"
+                    ><span>🧈</span><span>5 fats</span></span
+                  >
+                  <span class="flex gap-1">
+                    <span>🥚</span><span>100 protein</span>
+                  </span>
+                  <span class="flex gap-1"></span>
+                </div>
               </div>
             </div>
             <div class="flex items-center gap-3">
@@ -321,20 +367,44 @@
                 <span class="text-lg">🍚</span>
               </div>
               <div class="flex-1">
-                <div class="font-medium">Cooked Rice</div>
-                        <div class="flex justify-between gap-2 text-sm text-gray-500">
-							<span class="flex gap-1"><span>🔥</span><span>113 kcal</span></span>
-							<span class="flex gap-1"><span>🍚</span><span>100 carbs</span></span>
-							<span class="flex gap-1"></span>
-						</div>
-						
-                        <div class="flex justify-between gap-2 text-sm text-gray-500">
-							<span class="flex gap-1"><span>🧈</span><span>5 fats</span></span>
-							<span class="flex gap-1">
-							<span>🥚</span><span>100 protein</span>
-							</span>
-							<span class="flex gap-1"></span>
-                        </div>
+                <div class="flex items-center justify-between">
+                  <div class="font-medium">Cooked Rice</div>
+                  <div class="flex items-center gap-2">
+                    <button>
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M3 17.25V21H6.75L18.81 8.94L15.06 5.19L3 17.25ZM20.71 6.83L17.83 4L19.29 2.54C19.68 2.15 20.32 2.15 20.71 2.54L22.17 4C22.56 4.39 22.56 5.03 22.17 5.42L20.71 6.83Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="flex justify-between gap-2 text-sm text-gray-500">
+                  <span class="flex gap-1"
+                    ><span>🔥</span><span>113 kcal</span></span
+                  >
+                  <span class="flex gap-1"
+                    ><span>🍚</span><span>100 carbs</span></span
+                  >
+                  <span class="flex gap-1"></span>
+                </div>
+
+                <div class="flex justify-between gap-2 text-sm text-gray-500">
+                  <span class="flex gap-1"
+                    ><span>🧈</span><span>5 fats</span></span
+                  >
+                  <span class="flex gap-1">
+                    <span>🥚</span><span>100 protein</span>
+                  </span>
+                  <span class="flex gap-1"></span>
+                </div>
               </div>
             </div>
           </div>
@@ -346,7 +416,7 @@
             <span class="font-medium">Dinner</span>
             <span class="ml-auto text-gray-500">327 kcal</span>
           </div>
-          <div class="space-y-3 pl-9">
+          <div class="space-y-3">
             <div class="flex items-center gap-3">
               <div
                 class="w-10 h-10 bg-orange-50 rounded-xl flex items-center justify-center"
@@ -354,38 +424,53 @@
                 <span class="text-lg">🍖</span>
               </div>
               <div class="flex-1">
-                <div class="font-medium">Meat Balls</div>
-                        <div class="flex justify-between gap-2 text-sm text-gray-500">
-							<span class="flex gap-1"><span>🔥</span><span>113 kcal</span></span>
-							<span class="flex gap-1"><span>🍚</span><span>100 carbs</span></span>
-							<span class="flex gap-1"></span>
-						</div>
-						
-                        <div class="flex justify-between gap-2 text-sm text-gray-500">
-							<span class="flex gap-1"><span>🧈</span><span>5 fats</span></span>
-							<span class="flex gap-1">
-							<span>🥚</span><span>100 protein</span>
-							</span>
-							<span class="flex gap-1"></span>
-                        </div>
+                <div class="flex items-center justify-between">
+                  <div class="font-medium">Meat Balls</div>
+                  <div class="flex items-center gap-2">
+                    <button>
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M3 17.25V21H6.75L18.81 8.94L15.06 5.19L3 17.25ZM20.71 6.83L17.83 4L19.29 2.54C19.68 2.15 20.32 2.15 20.71 2.54L22.17 4C22.56 4.39 22.56 5.03 22.17 5.42L20.71 6.83Z"
+                          fill="currentColor"
+                        />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                <div class="flex justify-between gap-2 text-sm text-gray-500">
+                  <span class="flex gap-1"
+                    ><span>🔥</span><span>113 kcal</span></span
+                  >
+                  <span class="flex gap-1"
+                    ><span>🍚</span><span>100 carbs</span></span
+                  >
+                  <span class="flex gap-1"></span>
+                </div>
+
+                <div class="flex justify-between gap-2 text-sm text-gray-500">
+                  <span class="flex gap-1"
+                    ><span>🧈</span><span>5 fats</span></span
+                  >
+                  <span class="flex gap-1">
+                    <span>🥚</span><span>100 protein</span>
+                  </span>
+                  <span class="flex gap-1"></span>
+                </div>
               </div>
-			  
             </div>
-			
           </div>
         </div>
       </div>
 
-
-
-
-
       <!-- Bottom Navigation -->
-      <div
-        class="fixed bottom-0 left-0 right-0 lg:hidden z-0"
-      >
-		
-      <!-- Add Meal Button -->
+      <div class="fixed bottom-0 left-0 right-0 lg:hidden z-0">
+        <!-- Add Meal Button -->
         <div class="max-w-md mx-auto p-6">
           <button
             class="w-full bg-gray-900 text-white py-4 rounded-2xl font-medium"
@@ -393,11 +478,8 @@
             ➕ Add Meal
           </button>
         </div>
-	  
-	  
-	  
-	  
-      <!-- Navigation Buttons -->
+
+        <!-- Navigation Buttons -->
         <div class="max-w-md mx-auto space-y-3 bg-white border-t">
           <div class="flex">
             <button
@@ -489,9 +571,6 @@
           </div>
         </div>
       </div>
-	  
-	  
-	  
     </div>
 
     <br />
