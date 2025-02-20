@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Order</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-app-bg ">
+    <div class="max-w-md mx-auto min-h-screen p-6">
+        <div class="bg-white/80 backdrop-blur-sm rounded-3xl  overflow-hidden bg-gradient-to-b from-orange-200 to-orange-10">
+            <!-- Header -->
+            <div class="relative p-6">
+                <button class="absolute right-6 top-6 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <h1 class="text-2xl font-bold">
+                    Veggie <span class="font-normal">Pizza</span>
+                </h1>
+            </div>
+
+            <!-- Pizza Image -->
+            <div class="relative px-6 mb-6">
+                <div class="aspect-square rounded-full overflow-hidden">
+                    <img src="https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/App%20Development/Calorie-Tracker/resources/spicy-spaghetti-arrabbiata.jpg" alt="Veggie Pizza" class="w-full h-full object-cover">
+                </div>
+                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-16 h-2 bg-black/10 rounded-t-lg"></div>
+            </div>
+
+            <!-- Description -->
+            <div class="px-6 mb-8">
+                <p class="text-center text-gray-600">
+                    Tomato, spicy sauce, onion, basil,<br>
+                    soft cheese, spinach
+                </p>
+            </div>
+
+            <!-- Size Selection -->
+            <div class="flex justify-center gap-4 mb-8">
+                <button class="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center font-medium">
+                    S
+                </button>
+                <button class="w-12 h-12 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-medium">
+                    M
+                </button>
+                <button class="w-12 h-12 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-medium">
+                    L
+                </button>
+            </div>
+
+            <!-- Quantity Controls -->
+            <div class="flex justify-center items-center gap-6 mb-8">
+                <button class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+                    </svg>
+                </button>
+                <span class="text-2xl font-medium">1</span>
+                <button class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Price and Cart -->
+            <div class="bg-black text-white p-6 flex items-center justify-between">
+                <div class="text-2xl font-medium">$9.30</div>
+                <button class="w-12 h-12 bg-white rounded-full flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
