@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xefag Product Page</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -17,20 +17,212 @@
         }
     </script>
 </head>
-<body class="">
+<body class="bg-black">
 
 
- <!-- Wavy Background -->
-  <div>
-	<div class="absolute w-full top-0 overflow-hidden h-32" style="background-color:#FFD580"></div>
-	<div class="absolute w-full top-32 overflow-hidden">
-	<svg width="100%" height="100%" id="svg" viewBox="0 0 1440 590" xmlns="http://www.w3.org/2000/svg" class="transition duration-300 ease-in-out delay-150"><path d="M 0,600 L 0,337 C 125.5,378.19642857142856 251,419.39285714285717 381,393 C 511,366.60714285714283 645.5000000000001,272.625 747,242 C 848.4999999999999,211.375 917,244.10714285714283 1027,233 C 1137,221.89285714285717 1288.5,166.94642857142858 1440,112 L 1440,600 L 0,600 Z" stroke="none" stroke-width="0" fill="#ffd580" fill-opacity="0.4" class="transition-all duration-300 ease-in-out delay-150 path-0" transform="rotate(-180 720 300)"></path><path d="M 0,600 L 0,487 C 104.39285714285714,491.625 208.78571428571428,496.25 319,484 C 429.2142857142857,471.75 545.25,442.62499999999994 688,407 C 830.75,371.37500000000006 1000.2142857142858,329.25 1130,304 C 1259.7857142857142,278.75 1349.892857142857,270.375 1440,262 L 1440,600 L 0,600 Z" stroke="none" stroke-width="0" fill="#ffd580" fill-opacity="0.53" class="transition-all duration-300 ease-in-out delay-150 path-1" transform="rotate(-180 720 300)"></path><path d="M 0,600 L 0,637 C 94.21428571428572,648.9107142857142 188.42857142857144,660.8214285714286 326,644 C 463.57142857142856,627.1785714285714 644.5000000000001,581.6249999999999 776,558 C 907.4999999999999,534.3750000000001 989.5714285714284,532.6785714285714 1092,512 C 1194.4285714285716,491.32142857142856 1317.2142857142858,451.6607142857143 1440,412 L 1440,600 L 0,600 Z" stroke="none" stroke-width="0" fill="#ffd580" fill-opacity="1" class="transition-all duration-300 ease-in-out delay-150 path-2" transform="rotate(-180 720 300)"></path></svg>
-	</div>
-  </div>
   
   
-  
-    <div class="max-w-md mx-auto p-6 relative overflow-hidden min-h-screen flex flex-col pb-[140px]">
+    <div class="max-w-md mx-auto p-6 relative overflow-hidden min-h-screen flex flex-col">
+	
+	
+	
+	
+	<!-- Sidebar -->
+      <div
+        id="hs-sidebar-basic-usage"
+        class="hs-overlay [--auto-close:lg] lg:block lg:translate-x-0 lg:end-auto lg:bottom-0 w-64 hs-overlay-open:translate-x-0 -translate-x-full transition-all duration-300 transform h-full hidden fixed top-0 start-0 bottom-0 z-[60] bg-white border-e border-gray-200 dark:bg-neutral-800 dark:border-neutral-700"
+        role="dialog"
+        tabindex="-1"
+        aria-label="Sidebar"
+      >
+        <div class="relative flex flex-col h-full max-h-full">
+          <!-- Header -->
+          <header class="p-4 flex justify-between items-center gap-x-2">
+            <a
+              class="flex-none font-semibold text-xl text-black focus:outline-none focus:opacity-0 dark:text-white"
+              href="#"
+              aria-label="Brand"
+              >Calorie Tracker</a
+            >
+
+            <div class="lg:hidden -me-2">
+              <!-- Close Button -->
+              <button
+                type="button"
+                class="flex justify-center items-center gap-x-3 size-6 bg-white border border-gray-200 text-sm text-gray-600 hover:bg-gray-100 rounded-full disabled:opacity-50 disabled:pointer-events-none focus:outline-none focus:bg-gray-100 dark:bg-neutral-00 dark:border-neutral-00 dark:text-neutral-400 dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:hover:text-neutral-200 dark:focus:text-neutral-200"
+                data-hs-overlay="#hs-sidebar-basic-usage"
+              >
+                <svg
+                  class="shrink-0 size-4"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
+                </svg>
+                <span class="sr-only">Close</span>
+              </button>
+              <!-- End Close Button -->
+            </div>
+          </header>
+          <!-- End Header -->
+
+          <!-- Body -->
+          <nav
+            class="h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-gray-100 [&::-webkit-scrollbar-thumb]:bg-gray-300 dark:[&::-webkit-scrollbar-track]:bg-neutral-700 dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500"
+          >
+            <div class="pb-0 px-2 w-full flex flex-col flex-wrap">
+              <ul class="space-y-1">
+                <li>
+                  <a
+                    class="flex items-center gap-x-3 py-2 px-2.5 bg-gray-100 text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:bg-neutral-700 dark:text-white"
+                    href="#"
+                  >
+                    <svg
+                      class="size-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                      <path
+                        d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"
+                      />
+                      <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    Home
+                  </a>
+                </li>
+
+                <li>
+                  <a
+                    class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
+                    href="#"
+                  >
+                    <svg
+                      class="size-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"
+                ></path>
+                    </svg>
+                    Stats
+                    <span
+                      class="ms-auto py-0.5 px-1.5 inline-flex items-center gap-x-1.5 text-xs bg-gray-200 text-gray-800 rounded-full dark:bg-neutral-600 dark:text-neutral-200"
+                      >New</span
+                    >
+                  </a>
+                </li>
+                <li>
+                  <a
+                    class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
+                    href="#"
+                  >
+                    <svg
+                      class="size-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                ></path>
+                    </svg>
+                    Camera
+                  </a>
+                </li>
+				
+                <li>
+                  <a
+                    class="flex items-center gap-x-3 py-2 px-2.5 text-sm text-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-300"
+                    href="#"
+                  >
+                    <svg
+                      class="size-4"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                ></path>
+                    </svg>
+                    Profile
+                  </a>
+                </li>
+				
+				
+				
+              </ul>
+            </div>
+          </nav>
+          <!-- End Body -->
+        </div>
+      </div>
+      <!-- End Sidebar -->
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
         <!-- Top Navigation -->
         <div class="flex justify-between items-center mb-6">
             <div class="flex items-center gap-4">
@@ -42,25 +234,27 @@
             </div>
         </div>
 
-<!-- Centering Wrapper -->
+	<!-- Centering Wrapper -->
     <div class="flex-1 flex justify-center items-center">
         <!-- Product Image -->
-		<div class="flex justify-center mb-8">
+		<div class="flex justify-center">
 			<div class="relative p-2 bg-white rounded-3xl shadow-lg">
 				<img src="https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/App%20Development/Calorie-Tracker/resources/spicy-spaghetti-arrabbiata.jpg" 
 					 alt="Relax 30 Dissolvable Wafers" 
-					 class="w-full rounded-2xl border-4 border-orange-100 object-contain">
-				<div class="absolute inset-0 rounded-2xl border-2 border-orange-400"></div>
+					 class="w-full rounded-2xl border-4 border-gray-100 object-contain">
 			</div>
 		</div>
 
 		</div>
 		
-		
+    <div class="flex-2 flex justify-center items-center"></div>
+	
+
+	
 		<!-- Bottom Navigation -->
-      <div class="max-w-md mx-auto lg:hidden z-0">
+      <div class="lg:hidden">
 		
-		<div class="fixed bottom-0 bg-white fixed bottom-0 left-0 right-0 rounded-3xl">
+		<div class="max-w-md mx-auto fixed bottom-0 bg-white fixed bottom-0 left-0 right-0 rounded-t-3xl">
 			<!-- Add Meal Button -->
 			<div class="flex gap-2 p-6 pb-0">
 				<div class="flex items-center gap-3 rounded-2xl cursor-pointer justify-center border border-black w-4/5">
