@@ -8,7 +8,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-gray-00">
-    <div class="max-w-md mx-auto bg-white min-h-screen p-6">
+  
+  
+ <!-- Wavy Background -->
+  <div>
+	<div class="absolute w-full top-0 overflow-hidden h-32" style="background-color:#FFD580"></div>
+	<div class="absolute w-full top-32 overflow-hidden">
+	<svg width="100%" height="100%" id="svg" viewBox="0 0 1440 590" xmlns="http://www.w3.org/2000/svg" class="transition duration-300 ease-in-out delay-150"><path d="M 0,600 L 0,337 C 125.5,378.19642857142856 251,419.39285714285717 381,393 C 511,366.60714285714283 645.5000000000001,272.625 747,242 C 848.4999999999999,211.375 917,244.10714285714283 1027,233 C 1137,221.89285714285717 1288.5,166.94642857142858 1440,112 L 1440,600 L 0,600 Z" stroke="none" stroke-width="0" fill="#ffd580" fill-opacity="0.4" class="transition-all duration-300 ease-in-out delay-150 path-0" transform="rotate(-180 720 300)"></path><path d="M 0,600 L 0,487 C 104.39285714285714,491.625 208.78571428571428,496.25 319,484 C 429.2142857142857,471.75 545.25,442.62499999999994 688,407 C 830.75,371.37500000000006 1000.2142857142858,329.25 1130,304 C 1259.7857142857142,278.75 1349.892857142857,270.375 1440,262 L 1440,600 L 0,600 Z" stroke="none" stroke-width="0" fill="#ffd580" fill-opacity="0.53" class="transition-all duration-300 ease-in-out delay-150 path-1" transform="rotate(-180 720 300)"></path><path d="M 0,600 L 0,637 C 94.21428571428572,648.9107142857142 188.42857142857144,660.8214285714286 326,644 C 463.57142857142856,627.1785714285714 644.5000000000001,581.6249999999999 776,558 C 907.4999999999999,534.3750000000001 989.5714285714284,532.6785714285714 1092,512 C 1194.4285714285716,491.32142857142856 1317.2142857142858,451.6607142857143 1440,412 L 1440,600 L 0,600 Z" stroke="none" stroke-width="0" fill="#ffd580" fill-opacity="1" class="transition-all duration-300 ease-in-out delay-150 path-2" transform="rotate(-180 720 300)"></path></svg>
+	</div>
+  </div>
+  
+  
+  
+  
+  
+  
+    <div class="relative max-w-md mx-auto min-h-screen p-6">
       <!-- Sidebar -->
       <div
         id="hs-sidebar-basic-usage"
@@ -218,29 +233,12 @@
         <h1 class="text-2xl font-bold">Friday, 15 July</h1>
       </div>
 
-      <!-- Featured Card -->
-      <div
-        class="bg-gradient-to-br from-orange-50 to-rose-50 rounded-3xl p-6 mb-8"
-      >
-        <div class="text-xl text-rose-500 font-bold mb-2">
-          Today Calorie Goal
-        </div>
-        <div class="space-y-4">
-          <div class="flex justify-between items-center">
-            <span class="text-gray-500">Remaining</span>
-            <span class="font-medium">2,642 kcal</span>
-          </div>
-          <div class="h-1 bg-gray-200 rounded-full">
-            <div class="h-full w-2/4 bg-blue-500 rounded-full"></div>
-          </div>
-          <div class="text-xs text-right text-gray-500">3422 / 6083 Kcal</div>
-        </div>
-      </div>
+      
 
       <!-- Meals List -->
       <div class="space-y-8 mb-8">
         <!-- Breakfast -->
-        <div class="space-y-4 rounded-2xl border p-5">
+        <div class="bg-white space-y-4 rounded-2xl border p-5">
           <div class="flex items-center gap-3">
             <span class="font-medium">Breakfast</span>
             <span class="ml-auto text-gray-500">534 kcal</span>
@@ -504,6 +502,26 @@
           </div>
         </div>
       </div>
+	  
+	  <!-- Featured Card -->
+      <div
+        class="bg-gradient-to-br from-orange-50 to-rose-50 rounded-3xl p-6 mb-8"
+      >
+        <div class="text-xl text-rose-500 font-bold mb-2">
+          Today Calorie Goal
+        </div>
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-500">Remaining</span>
+            <span class="font-medium">2,642 kcal</span>
+          </div>
+          <div class="h-1 bg-gray-200 rounded-full">
+            <div class="h-full w-2/4 bg-blue-500 rounded-full"></div>
+          </div>
+          <div class="text-xs text-right text-gray-500">3422 / 6083 Kcal</div>
+        </div>
+      </div>
+	  
 
       <!-- Bottom Navigation -->
       <div class="fixed bottom-0 left-0 right-0 lg:hidden z-0">
