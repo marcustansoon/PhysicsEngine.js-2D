@@ -4,40 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shawarma Details</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js Datalabels plugin for showing values -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+	
+	
+	
 </head>
-<body class="bg-gray-50">
-    <div class="max-w-md mx-auto bg-white min-h-screen p-6">
+<body class="bg-gray-0">
+	<!-- Wavy Background -->
+	<div>
+		<div class="fixed w-full top-0 overflow-hidden"><svg id="visual" viewBox="0 0 540 960" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><rect x="0" y="0" fill="#ffffff"></rect><defs><linearGradient id="grad1_0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="30%" stop-color="#ffd580" stop-opacity="1"></stop><stop offset="70%" stop-color="#ffd580" stop-opacity="1"></stop></linearGradient></defs><defs><linearGradient id="grad1_1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="30%" stop-color="#ffd580" stop-opacity="1"></stop><stop offset="70%" stop-color="#ffeabf" stop-opacity="1"></stop></linearGradient></defs><defs><linearGradient id="grad1_2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="30%" stop-color="#ffffff" stop-opacity="1"></stop><stop offset="70%" stop-color="#ffeabf" stop-opacity="1"></stop></linearGradient></defs><defs><linearGradient id="grad2_0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="30%" stop-color="#ffd580" stop-opacity="1"></stop><stop offset="70%" stop-color="#ffd580" stop-opacity="1"></stop></linearGradient></defs><defs><linearGradient id="grad2_1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="30%" stop-color="#ffeabf" stop-opacity="1"></stop><stop offset="70%" stop-color="#ffd580" stop-opacity="1"></stop></linearGradient></defs><defs><linearGradient id="grad2_2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="30%" stop-color="#ffeabf" stop-opacity="1"></stop><stop offset="70%" stop-color="#ffffff" stop-opacity="1"></stop></linearGradient></defs><g transform="translate(540, 0)"><path d="M0 378C-24.6 359.6 -49.1 341.3 -77 337.3C-104.9 333.4 -136 343.8 -163.6 339.7C-191.1 335.6 -215.1 316.9 -235.7 295.5C-256.3 274.1 -273.5 249.9 -278.3 222C-283.2 194 -275.5 162.2 -290.1 139.7C-304.7 117.2 -341.4 103.9 -359.7 82.1C-378.1 60.4 -378 30.2 -378 0L0 0Z" fill="#fff4df"></path><path d="M0 252C-16.4 239.8 -32.8 227.5 -51.3 224.9C-69.9 222.2 -90.7 229.2 -109 226.4C-127.4 223.7 -143.4 211.3 -157.1 197C-170.8 182.8 -182.3 166.6 -185.6 148C-188.8 129.3 -183.7 108.2 -193.4 93.1C-203.1 78.1 -227.6 69.2 -239.8 54.7C-252.1 40.2 -252 20.1 -252 0L0 0Z" fill="#ffdfa0"></path><path d="M0 126C-8.2 119.9 -16.4 113.8 -25.7 112.4C-35 111.1 -45.3 114.6 -54.5 113.2C-63.7 111.9 -71.7 105.6 -78.6 98.5C-85.4 91.4 -91.2 83.3 -92.8 74C-94.4 64.7 -91.8 54.1 -96.7 46.6C-101.6 39.1 -113.8 34.6 -119.9 27.4C-126 20.1 -126 10.1 -126 0L0 0Z" fill="#ffd580"></path></g></svg></div>
+		<div class="fixed w-full bottom-0 overflow-hidden -mt-px">
+		<svg id="visual" viewBox="0 0 540 960" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"><rect x="0" y="0" fill="#ffffff"></rect><defs><linearGradient id="grad1_0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="30%" stop-color="#ffd580" stop-opacity="1"></stop><stop offset="70%" stop-color="#ffd580" stop-opacity="1"></stop></linearGradient></defs><defs><linearGradient id="grad1_1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="30%" stop-color="#ffd580" stop-opacity="1"></stop><stop offset="70%" stop-color="#ffeabf" stop-opacity="1"></stop></linearGradient></defs><defs><linearGradient id="grad1_2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="30%" stop-color="#ffffff" stop-opacity="1"></stop><stop offset="70%" stop-color="#ffeabf" stop-opacity="1"></stop></linearGradient></defs><defs><linearGradient id="grad2_0" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="30%" stop-color="#ffd580" stop-opacity="1"></stop><stop offset="70%" stop-color="#ffd580" stop-opacity="1"></stop></linearGradient></defs><defs><linearGradient id="grad2_1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="30%" stop-color="#ffeabf" stop-opacity="1"></stop><stop offset="70%" stop-color="#ffd580" stop-opacity="1"></stop></linearGradient></defs><defs><linearGradient id="grad2_2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="30%" stop-color="#ffeabf" stop-opacity="1"></stop><stop offset="70%" stop-color="#ffffff" stop-opacity="1"></stop></linearGradient></defs><g transform="translate(0, 960)"><path d="M0 -378C25.6 -357 51.2 -336 73.2 -320.8C95.3 -305.5 113.8 -296.1 142.7 -296.4C171.7 -296.7 211.2 -306.7 235.7 -295.5C260.1 -284.4 269.6 -252.1 282.2 -225.1C294.9 -198.1 310.8 -176.4 314.4 -151.4C318 -126.5 309.3 -98.3 317.8 -72.5C326.4 -46.8 352.2 -23.4 378 0L0 0Z" fill="#fff4df"></path><path d="M0 -252C17.1 -238 34.1 -224 48.8 -213.8C63.5 -203.7 75.8 -197.4 95.2 -197.6C114.5 -197.8 140.8 -204.5 157.1 -197C173.4 -189.6 179.7 -168.1 188.2 -150.1C196.6 -132.1 207.2 -117.6 209.6 -101C212 -84.3 206.2 -65.5 211.9 -48.4C217.6 -31.2 234.8 -15.6 252 0L0 0Z" fill="#ffdfa0"></path><path d="M0 -126C8.5 -119 17.1 -112 24.4 -106.9C31.8 -101.8 37.9 -98.7 47.6 -98.8C57.2 -98.9 70.4 -102.2 78.6 -98.5C86.7 -94.8 89.9 -84 94.1 -75C98.3 -66 103.6 -58.8 104.8 -50.5C106 -42.2 103.1 -32.8 105.9 -24.2C108.8 -15.6 117.4 -7.8 126 0L0 0Z" fill="#ffd580"></path></g></svg>
+		</div>
+	  </div>
+
+    <div class="relative max-w-md mx-auto min-h-screen p-6">
         <!-- Header -->
-        <div class="flex justify-between items-center mb-8">
+        <div class="z-1 flex px-6 left-0 fixed w-full justify-between items-center mb-8">
             <button onclick="history.back()" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
             </button>
             <button class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
                 </svg>
             </button>
         </div>
 
         <!-- Title -->
-        <div class="text-center mb-6">
-            <h1 class="text-2xl font-bold mb-2">Shwarma with fresh Arabic bread</h1>
-            <p class="text-gray-500">Meat sandwich with vegetables</p>
+        <div class="text-center mb-6 pt-14">
+            <h1 class="text-2xl font-bold mb-2">Shwarma with fresh Arabic</h1>
         </div>
 
         <!-- Food Image -->
-       <div class="relative w-64 h-64 mx-auto mb-8">
-    <div class="absolute inset-0 bg-green-100 rounded-full"></div>
+       <div class="relative w-72 h-72 mx-auto mb-8">
     <img 
         src="https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/App%20Development/Calorie-Tracker/resources/spicy-spaghetti-arrabbiata.jpg" 
         alt="Shawarma" 
-        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 object-cover rounded-full"
+        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-72 h-72 object-cover rounded-full"
     >
 </div>
-
 
         <!-- Nutritional Info -->
         <div class="grid grid-cols-2 gap-4 mb-8">
@@ -76,7 +88,7 @@
             <h2 class="font-bold mb-3">Details</h2>
             <p class="text-gray-600 text-sm mb-2">
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy eirmod tempor invidunt ut labore et dolore...
-                <button class="text-blue-600 font-medium">Read More...</button>
+                
             </p>
         </div>
 
@@ -98,11 +110,76 @@
                 </div>
             </div>
         </div>
+		
+		
+		  <!-- Donut Chart -->
+		<div class="bg-wh1ite p-6 rounde1d-lg sha1dow-lg w-full max-w-md">
+			<h1 class="text-2xl font-bold text-gray-800 mb-4 text-center">Nutrient Breakdown</h1>
+			<div class="relative">
+				<canvas id="nutrientChart"></canvas>
+			</div>
+		</div>
+		
 
         <!-- Order Button -->
         <button class="w-full bg-indigo-600 text-white py-4 rounded-xl font-medium hover:bg-indigo-700 transition-colors">
             Order Now
         </button>
     </div>
+	
+	
+<script>
+        // Register the datalabels plugin
+        Chart.register(ChartDataLabels);
+
+        // Get the canvas context
+        const ctx = document.getElementById('nutrientChart').getContext('2d');
+
+        // Nutrient data (in grams)
+        const data = {
+            labels: ['Carbs', 'Protein', 'Fats', 'Calories'],
+            datasets: [{
+                data: [50, 20, 15, 50], // Sample values in grams
+                backgroundColor: [
+                    'rgb(74, 222, 128)',  // Green for carbs
+                    'rgb(96, 165, 250)',  // Blue for protein
+                    'rgb(248, 113, 113)', // Red for fats
+                    '#FFC300', // Yellow for calories
+                ],
+                borderWidth: 0,
+                cutout: '60%' // Makes it a donut chart
+            }]
+        };
+
+        // Chart configuration
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: data,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    },
+                    datalabels: {
+                        color: '#fff',
+                        formatter: (value) => {
+                            return value + 'g'; // Display value with 'g' suffix
+                        },
+                        font: {
+                            weight: 'bold',
+                            size: 16
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+	
 </body>
 </html>
