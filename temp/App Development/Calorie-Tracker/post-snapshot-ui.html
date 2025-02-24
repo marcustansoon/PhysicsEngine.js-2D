@@ -114,11 +114,47 @@
 		
 		  <!-- Donut Chart -->
 		<div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 w-full max-w-md mb-8">
-			<h1 class="text-2xl font-bold text-gray-800 mb-4 text-center">Nutrient Breakdown</h1>
+                <div class="flex items-center mb-2">
+                    <span class="text-xl mr-2">
+      𓍝
+     </span>
+                    <h2 class="text-lg font-semibold text-gray-800">Nutrient Breakdown</h2>
+                </div>
 			<div class="relative">
 				<canvas id="nutrientChart"></canvas>
 			</div>
 		</div>
+		
+		  <!-- Apple Chart -->
+		<div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 w-full max-w-md mb-8">
+            <div class="">
+                <div class="flex items-center mb-2">
+                    <span class="text-xl mr-2">🍎</span>
+                    <h2 class="text-lg font-semibold text-gray-800">Daily Fruit Tracker</h2>
+                </div>
+                <div class="relative w-full" style="height: 200px;">
+                    <canvas id="fruitChart"></canvas>
+                </div>
+                <p class="text-gray-600 text-sm mt-2">1/2 | Remain 1 | Last week's avg: 0.6</p>
+            </div>
+		</div>
+		
+		  <!-- Seafood Chart -->
+		<div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200 w-full max-w-md mb-8">
+            <div class="">
+                <div class="flex items-center mb-2">
+                    <span class="text-xl mr-2">🐟</span>
+                    <h2 class="text-lg font-semibold text-gray-800">Daily Seafood Tracker</h2>
+                </div>
+                <div class="relative w-full" style="height: 200px;">
+                    <canvas id="seafoodChart"></canvas>
+                </div>
+                <p class="text-gray-600 text-sm mt-2">3/4 | Remain 0.2kg | Last week's avg: 0.5kg</p>
+			</div>
+		</div>
+		
+		
+		
 		
 
         <!-- Order Button -->
@@ -157,6 +193,7 @@
             data: data,
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 plugins: {
                     legend: {
                         position: 'bottom',
@@ -178,6 +215,100 @@
                     }
                 }
             }
+        });
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		// Fruit Chart (Daily Fruit Tracker)
+        const fruitCtx = document.getElementById('fruitChart').getContext('2d');
+        const fruitChart = new Chart(fruitCtx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [50, 50], // 50% progress (1/2), 50% remaining
+                    backgroundColor: ['#ff8c00', '#e5e7eb'], // Orange for progress, gray for remaining
+                    borderWidth: 0,
+                    cutout: '80%' // Makes it thinner like a progress ring
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    datalabels: {display: false },
+                    legend: { display: false },
+                    title: { display: false },
+                    tooltip: { enabled: false }
+                },
+                rotation: -90, // Start from top
+                circumference: 180, // Half circle for progress
+                animation: { animateRotate: true }
+            },
+            plugins: [{
+                beforeDraw: function(chart) {
+                    const ctx = chart.ctx;
+                    const width = chart.width;
+                    const height = chart.height;
+                    const fontSize = (height / 114).toFixed(2);
+                    ctx.font = `${fontSize}em sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#4a5568';
+                    ctx.fillText('1/2', width / 2, height / 2);
+                    ctx.font = `${(fontSize * 0.8).toFixed(2)}em sans-serif`;
+                    ctx.fillText('🍎', width / 2, height / 2 + 20);
+                }
+            }]
+        });
+		
+		
+		
+		// Seafood Chart (Weekly Seafood Tracker)
+        const seafoodCtx = document.getElementById('seafoodChart').getContext('2d');
+        const seafoodChart = new Chart(seafoodCtx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: [75, 25], // 75% progress (3/4), 25% remaining
+                    backgroundColor: ['#00b4d8', '#e5e7eb'], // Teal for progress, gray for remaining
+                    borderWidth: 0,
+                    cutout: '80%' // Makes it thinner like a progress ring
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    datalabels: {display: false },
+                    legend: { display: false },
+                    title: { display: false },
+                    tooltip: { enabled: false }
+                },
+                rotation: -90, // Start from top
+                circumference: 180, // Half circle for progress
+                animation: { animateRotate: true }
+            },
+            plugins: [{
+                beforeDraw: function(chart) {
+                    const ctx = chart.ctx;
+                    const width = chart.width;
+                    const height = chart.height;
+                    const fontSize = (height / 114).toFixed(2);
+                    ctx.font = `${fontSize}em sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#4a5568';
+                    ctx.fillText('3/4', width / 2, height / 2);
+                    ctx.font = `${(fontSize * 0.8).toFixed(2)}em sans-serif`;
+                    ctx.fillText('🐟', width / 2, height / 2 + 20);
+                }
+            }]
         });
     </script>
 	
