@@ -53,19 +53,29 @@
 
 
         <!-- Nutritional Info -->
+		
+		
+		<div class="mb-8">
+            <div class="flex items-center mb-2 justify-center">
+                    <span class="text-xl mr-2">𓍝</span>
+                    <h2 class="text-lg font-semibold text-gray-800">Nutrient Breakdown</h2>
+            </div>
+		</div>
+				
+				
         <div class="flex gap-4 mb-8 justify-around">
 			<div class="flex flex-col">
 				<div class="flex items-center gap-2">
 					<span class="text-2xl">🔥</span>
 					<div>
-						<div class="font-semibold">Calories</div>
+						<div class="font-semibold"><span class="bg-blue-300 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">Calories</span></div>
 						<div class="text-gray-500">482k</div>
 					</div>
 				</div>
 				<div class="flex items-center gap-2 mt-2">
 					<span class="text-2xl">🥓</span>
 					<div>
-						<div class="font-semibold">Fat</div>
+						<div class="font-semibold"><span class="bg-red-300 text-red-800 font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Fats</span></div>
 						<div class="text-gray-500">25g</div>
 					</div>
 				</div>
@@ -74,19 +84,27 @@
 				<div class="flex items-center gap-2">
 					<span class="text-2xl">🥚</span>
 					<div>
-						<div class="font-semibold">Protein</div>
+						<div class="font-semibold"><span class="bg-green-300 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Proteins</span></div>
 						<div class="text-gray-500">125g</div>
 					</div>
 				</div>
 				<div class="flex items-center gap-2 mt-2">
 					<span class="text-2xl">🌾</span>
 					<div>
-						<div class="font-semibold">Carbs</div>
+						<div class="font-semibold"><span class="bg-yellow-300 text-yellow-800 font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">Carbs</span></div>
 						<div class="text-gray-500">75g</div>
 					</div>
 				</div>
 			</div>
         </div>
+		
+		
+		  <!-- Donut Chart -->
+		<div class="mb-8">
+			<div class="relative">
+				<canvas id="nutrientChart"></canvas>
+			</div>
+		</div>
 
         <!-- Details -->
         <div class="mb-8">
@@ -115,20 +133,6 @@
                 </div>
             </div>
         </div>
-		
-		
-		  <!-- Donut Chart -->
-		<div class="w-full max-w-md mb-8">
-                <div class="flex items-center mb-2">
-                    <span class="text-xl mr-2">
-      𓍝
-     </span>
-                    <h2 class="text-lg font-semibold text-gray-800">Nutrient Breakdown</h2>
-                </div>
-			<div class="relative">
-				<canvas id="nutrientChart"></canvas>
-			</div>
-		</div>
 		
 		  <!-- Apple Chart -->
 		<div class="w-full max-w-md mb-8">
@@ -193,57 +197,96 @@
 	
 	
 <script>
+
+	// Load the image (do this outside the chart initialization)
+const appleImage = new Image();
+appleImage.src = 'https://cdn-icons-png.flaticon.com/512/7305/7305241.png'; // Replace with your image URL
+appleImage.crossOrigin = 'Anonymous'; // Optional: For CORS if the image is from a different domain
+
+
         // Register the datalabels plugin
-        Chart.register(ChartDataLabels);
+    Chart.register(ChartDataLabels);
 
-        // Get the canvas context
-        const ctx = document.getElementById('nutrientChart').getContext('2d');
+    // Get the canvas context
+    const ctx = document.getElementById('nutrientChart').getContext('2d');
 
-        // Nutrient data (in grams)
-        const data = {
-            labels: ['Carbs', 'Protein', 'Fats', 'Calories'],
-            datasets: [{
-                data: [50, 20, 15, 50], // Sample values in grams
-                backgroundColor: [
-                    'rgb(74, 222, 128)',  // Green for carbs
-                    'rgb(96, 165, 250)',  // Blue for protein
-                    'rgb(248, 113, 113)', // Red for fats
-                    '#FFC300', // Yellow for calories
-                ],
-                borderWidth: 0,
-                cutout: '60%' // Makes it a donut chart
-            }]
-        };
+    // Nutrient data
+    const data = {
+        labels: ['Carbs', 'Protein', 'Fats', 'Calories'],
+        datasets: [{
+            data: [50, 20, 15, 482], // Sample values: g, g, g, kcal
+            backgroundColor: [
+                'rgb(96, 165, 250)',  // Blue for Calories
+                'rgb(74, 222, 128)',  // Green for Protein
+                'rgb(248, 113, 113)', // Red for Fats
+                '#FFC300'             // Yellow for Calories
+            ],
+            borderWidth: 0,
+            cutout: '60%' // Makes it a donut chart
+        }]
+    };
 
-        // Chart configuration
-        new Chart(ctx, {
-            type: 'doughnut',
-            data: data,
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: {
-                                size: 14
-                            }
-                        }
-                    },
-                    datalabels: {
-                        color: '#fff',
-                        formatter: (value) => {
-                            return value + 'g'; // Display value with 'g' suffix
-                        },
+    // Calculate total for percentage
+    const total = data.datasets[0].data.reduce((sum, value) => sum + value, 0);
+
+    // Chart configuration
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: data,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                    display: false,
+                    labels: {
                         font: {
-                            weight: 'bold',
-                            size: 16
+                            size: 14
                         }
                     }
+                },
+                datalabels: {
+                    color: '#fff',
+                    formatter: (value, context) => {
+                        // Calculate percentage
+                        const percentage = ((value / total) * 100).toFixed(1);
+                        // Get label and unit
+                        const label = context.chart.data.labels[context.dataIndex];
+                        const unit = label === 'Calories' ? 'kcal' : 'g';
+                        // Return value with unit and percentage
+                        return `${percentage}%`;
+                    },
+                    font: {
+                        weight: 'bold',
+                        size: 16
+                    },
+                    // Optional: Adjust positioning
+                    anchor: 'center',
+                    align: 'center',
+                    textAlign: 'center'
                 }
             }
-        });
+        },
+    plugins: [{
+        beforeDraw: function(chart) {
+            const ctx = chart.ctx;
+            const width = chart.width;
+            const height = chart.height;
+
+            // Wait for the image to load before drawing
+            if (appleImage.complete) {
+                // Calculate the size of the image (e.g., 50px or scale based on chart size)
+                const imageSize = Math.min(width, height) * 0.3; // 30% of the smaller dimension
+                const x = width / 2 - imageSize / 2; // Center horizontally
+                const y = height / 2 - imageSize / 2; // Center vertically
+
+                // Draw the image
+                ctx.drawImage(appleImage, x, y, imageSize, imageSize);
+            }
+        }
+    }]
+    });
 		
 		
 		
