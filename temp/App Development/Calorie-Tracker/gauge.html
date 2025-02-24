@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Percentage Doughnut Charts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-yellow-100 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-4xl mx-auto">
+        <div class="flex justify-center items-center space-x-6">
+            <!-- Chart Containers -->
+            <div class="relative w-32 h-32">
+                <canvas id="chart1"></canvas>
+            </div>
+            <div class="relative w-32 h-32">
+                <canvas id="chart2"></canvas>
+            </div>
+            <div class="relative w-32 h-32">
+                <canvas id="chart3"></canvas>
+            </div>
+            <div class="relative w-32 h-32">
+                <canvas id="chart4"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    
+    function darkenHexColor(hex, factor = 0.7) {
+    // Remove '#' if present and validate hex
+    hex = hex.replace('#', '');
+    if (hex.length !== 6) throw new Error('Invalid hex color');
+
+    // Convert hex to RGB
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+
+    // Darken each RGB value (multiply by factor, ensuring values stay between 0 and 255)
+    const darkenedR = Math.max(0, Math.min(255, Math.floor(r * factor)));
+    const darkenedG = Math.max(0, Math.min(255, Math.floor(g * factor)));
+    const darkenedB = Math.max(0, Math.min(255, Math.floor(b * factor)));
+
+    // Convert back to hex, padding with zeros if necessary
+    const darkenedHex = `#${darkenedR.toString(16).padStart(2, '0')}${darkenedG.toString(16).padStart(2, '0')}${darkenedB.toString(16).padStart(2, '0')}`.toUpperCase();
+
+    return darkenedHex;
+}
+        // Function to create Doughnut Charts
+        function createCharts() {
+            const chartData = [
+                { percentage: 80, color: '#FF6384', label: '80%' }, // Red
+                { percentage: 60, color: '#9966FF', label: '60%' }, // Purple
+                { percentage: 40, color: '#4BC0C0', label: '40%' }, // Teal
+                { percentage: 20, color: '#FFCE56', label: '20%' }  // Yellow
+            ];
+
+            chartData.forEach((data, index) => {
+                const ctx = document.getElementById(`chart${index + 1}`).getContext('2d');
+console.log(data.color)
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: [data.percentage, 100 - data.percentage], // Progress and remaining
+                            backgroundColor: [darkenHexColor(data.color, 0.6), data.color], // 70% of original brightness (30% darker)], // Chart color and light gray for remaining
+                            borderWidth: 0,
+                            cutout: '70%' // Creates a thinner ring effect
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: false },
+                            tooltip: {
+                                enabled: false // Disable default tooltips (custom text in center)
+                            },
+                            datalabels: {
+                                display: false // Disable default data labels to use custom text
+                            }
+                        },
+                        rotation: -90, // Start from top
+                        circumference: 180, // Half circle for ring effect
+                        animation: { animateRotate: true }
+                    },
+                    plugins: [{
+                        beforeDraw: (chart) => {
+                            const ctx = chart.ctx;
+                            const width = chart.width;
+                            const height = chart.height;
+                            const fontSize = (height / 144).toFixed(2); // Adjust for readability
+
+                            // Draw percentage label
+                            ctx.font = `${fontSize}em sans-serif`;
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillStyle = '#2d3748'; // Dark gray for text (matches your design)
+                            ctx.fillText(data.label, width / 2, height / 2);
+                        }
+                    }]
+                });
+            });
+        }
+
+        // Initialize charts when the page loads
+        document.addEventListener('DOMContentLoaded', createCharts);
+    </script>
+</body>
+</html>
