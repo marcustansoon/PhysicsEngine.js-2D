@@ -116,7 +116,17 @@
         </div>
 
 		
-		
+        <!-- Minerals -->
+        <div class="mb-8">
+            <h2 class="font-bold mb-4">Minerals</h2>
+				<div class="flex w-full max-w-md py-6 max-h-48 overflow-y-auto">
+					<canvas id="myPieChart-1"></canvas>
+					<canvas id="myPieChart-2"></canvas>
+					<canvas id="myPieChart-3"></canvas>
+					<canvas id="myPieChart-4"></canvas>
+					<canvas id="myPieChart-5"></canvas>
+				</div>
+        </div>
 		
 		
         <!-- Vegetables -->
@@ -210,6 +220,108 @@
 
         // Register the datalabels plugin
     Chart.register(ChartDataLabels);
+	
+	
+	
+	// Load the image (do this outside the chart initialization)
+const b12 = new Image();
+b12.src = 'https://cdn-icons-png.flaticon.com/512/4464/4464827.png'; // Replace with your image URL
+b12.crossOrigin = 'Anonymous'; // Optional: For CORS if the image is from a different domain
+
+
+	
+	
+	
+	for(let x=1; x< 6; x++){
+		// Get the canvas context
+		const piectx = document.getElementById('myPieChart-'+x).getContext('2d');
+
+		// Create the pie chart
+		const myPieChart = new Chart(piectx, {
+		  type: 'doughnut', // Changed from 'pie' to 'doughnut'
+		  data: {
+			labels: ['Red', 'Blue'],
+			datasets: [{
+			  data: [25, 80], // Percentage or value for each slice
+			  backgroundColor: [
+				'#f87171', // Red
+				('#ffffff'), // Dark Red
+			  ],
+			  borderWidth: 1,
+			  borderColor: '#fff'
+			}]
+		  },
+		  options: {
+            responsive: true,
+			plugins: {
+			  legend: {
+				display: false,
+				position: 'top',
+				labels: {
+				  font: {
+					size: 14
+				  }
+				}
+			  },
+			  tooltip: {
+				enabled: false
+			  }
+			}
+		  },
+			plugins: [{
+				beforeDraw: function(chart) {
+					const ctx = chart.ctx;
+					const width = chart.width;
+					const height = chart.height;
+
+					// Wait for the image to load before drawing
+					if (b12.complete) {
+						// Calculate the size of the image (e.g., 50px or scale based on chart size)
+						/*const imageSize = Math.min(width, height) * 0.3; // 30% of the smaller dimension
+						const x = width / 2 - imageSize / 2; // Center horizontally
+						const y = height / 2 - imageSize / 2; // Center vertically
+
+						// Draw the image
+						ctx.drawImage(b12, x, y, imageSize, imageSize);
+						*/
+						
+                    const ctx = chart.ctx;
+                    const width = chart.width;
+                    const height = chart.height;
+                    const fontSize = (height / 114).toFixed(2);
+                    ctx.font = `${fontSize}em sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillStyle = '#4a5568';
+					switch (x){
+						case 1:ctx.fillText('C', width / 2, height / 2);break;
+						case 2:ctx.fillText('B1', width / 2, height / 2);break;
+						case 3:ctx.fillText('B9', width / 2, height / 2);break;
+						case 4:ctx.fillText('A', width / 2, height / 2);break;
+						case 5:ctx.fillText('B3', width / 2, height / 2);break;
+						case 6:ctx.fillText('B2', width / 2, height / 2);break;
+					}
+					}
+				}
+			}]
+		});
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
