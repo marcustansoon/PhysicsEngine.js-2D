@@ -68,14 +68,14 @@
 				<div class="flex items-center gap-2">
 					<span class="text-2xl">🔥</span>
 					<div>
-						<div class="font-semibold"><span class="bg-blue-300 text-blue-800 font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-blue-900 dark:text-blue-300">Calories</span></div>
+						<div class="font-semibold">Calories</div>
 						<div class="text-gray-500">482k</div>
 					</div>
 				</div>
 				<div class="flex items-center gap-2 mt-2">
 					<span class="text-2xl">🥓</span>
 					<div>
-						<div class="font-semibold"><span class="bg-red-300 text-red-800 font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-red-900 dark:text-red-300">Fats</span></div>
+						<div class="font-semibold">Fats</div>
 						<div class="text-gray-500">25g</div>
 					</div>
 				</div>
@@ -84,14 +84,14 @@
 				<div class="flex items-center gap-2">
 					<span class="text-2xl">🥚</span>
 					<div>
-						<div class="font-semibold"><span class="bg-green-300 text-green-800 font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-green-900 dark:text-green-300">Proteins</span></div>
+						<div class="font-semibold">Proteins</div>
 						<div class="text-gray-500">125g</div>
 					</div>
 				</div>
 				<div class="flex items-center gap-2 mt-2">
 					<span class="text-2xl">🌾</span>
 					<div>
-						<div class="font-semibold"><span class="bg-yellow-300 text-yellow-800 font-medium me-2 px-2.5 py-0.5 rounded-full dark:bg-yellow-900 dark:text-yellow-300">Carbs</span></div>
+						<div class="font-semibold">Carbs</div>
 						<div class="text-gray-500">75g</div>
 					</div>
 				</div>
@@ -115,10 +115,19 @@
             </p>
         </div>
 
+		
+		
+		
+		
         <!-- Vegetables -->
         <div class="mb-8">
             <h2 class="font-bold mb-4">Vegetables</h2>
-            <div class="grid grid-cols-4 gap-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div class="aspect-square bg-gre1en-100 rounded-2xl flex items-center justify-center">
+                <div class="relative w-full p-4" style="height: 100px;">
+                    <canvas id="chart1"></canvas>
+                </div>
+                </div>
                 <div class="aspect-square bg-green-100 rounded-2xl flex items-center justify-center">
                     <span class="text-2xl">🥦</span>
                 </div>
@@ -198,14 +207,41 @@
 	
 <script>
 
+
+        // Register the datalabels plugin
+    Chart.register(ChartDataLabels);
+	
+	
+	
+	function darkenHexColor(hex, factor = 0.7) {
+    // Remove '#' if present and validate hex
+    hex = hex.replace('#', '');
+    if (hex.length !== 6) throw new Error('Invalid hex color');
+
+    // Convert hex to RGB
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+
+    // Darken each RGB value (multiply by factor, ensuring values stay between 0 and 255)
+    const darkenedR = Math.max(0, Math.min(255, Math.floor(r * factor)));
+    const darkenedG = Math.max(0, Math.min(255, Math.floor(g * factor)));
+    const darkenedB = Math.max(0, Math.min(255, Math.floor(b * factor)));
+
+    // Convert back to hex, padding with zeros if necessary
+    const darkenedHex = `#${darkenedR.toString(16).padStart(2, '0')}${darkenedG.toString(16).padStart(2, '0')}${darkenedB.toString(16).padStart(2, '0')}`.toUpperCase();
+
+    return darkenedHex;
+}
+
+
+		
+
 	// Load the image (do this outside the chart initialization)
 const appleImage = new Image();
 appleImage.src = 'https://cdn-icons-png.flaticon.com/512/7305/7305241.png'; // Replace with your image URL
 appleImage.crossOrigin = 'Anonymous'; // Optional: For CORS if the image is from a different domain
 
-
-        // Register the datalabels plugin
-    Chart.register(ChartDataLabels);
 
     // Get the canvas context
     const ctx = document.getElementById('nutrientChart').getContext('2d');
@@ -265,7 +301,21 @@ appleImage.crossOrigin = 'Anonymous'; // Optional: For CORS if the image is from
                     anchor: 'center',
                     align: 'center',
                     textAlign: 'center'
-                }
+                },
+				// Customize the tooltip
+				tooltip: {
+					enabled: true, // Enable tooltips
+					callbacks: {
+						label: function(context) {
+							const label = context.label || '';
+							const value = context.raw;
+							const unit = label === 'Calories' ? 'kcal' : 'g';
+							const percentage = ((value / total) * 100).toFixed(1);
+							// Show custom value + label
+							return ` ${value} ${unit}`;
+						}
+					}
+				}
             }
         },
     plugins: [{
@@ -381,6 +431,71 @@ appleImage.crossOrigin = 'Anonymous'; // Optional: For CORS if the image is from
                 }
             }]
         });
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+          const chartData = [
+                { percentage: 80, color: '#FF6384', label: '80%' }, // Red
+            ];
+
+            
+                const ctx2 = document.getElementById('chart1').getContext('2d');
+				
+                new Chart(ctx2, {
+                    type: 'doughnut',
+                    data: {
+                        datasets: [{
+                            data: [chartData[0].percentage, 100 - chartData[0].percentage], // Progress and remaining
+                            backgroundColor: [(chartData[0].color), darkenHexColor(chartData[0].color, 0.7)], // 70% of original brightness (30% darker)], // Chart color and light gray for remaining
+                            borderWidth: 0,
+                            cutout: '70%' // Creates a thinner ring effect
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            title: { display: false },
+                            tooltip: {
+                                enabled: false // Disable default tooltips (custom text in center)
+                            },
+                            datalabels: {
+                                display: false // Disable default data labels to use custom text
+                            }
+                        },
+                        rotation: -90, // Start from top
+                        circumference: 180, // Half circle for ring effect
+                        animation: { animateRotate: false }
+                    },
+                    plugins: [{
+                        beforeDraw: (chart) => {
+                            const ctx = chart.ctx;
+                            const width = chart.width;
+                            const height = chart.height;
+                            const fontSize = (height / 144).toFixed(2); // Adjust for readability
+
+                            // Draw percentage label
+                            ctx.font = `${fontSize}em sans-serif`;
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillStyle = '#2d3748'; // Dark gray for text (matches your design)
+                            ctx.fillText(chartData[0].label, width / 2, height / 2);
+                        }
+                    }]
+                });
+				
+				
+				
     </script>
 	
 </body>
