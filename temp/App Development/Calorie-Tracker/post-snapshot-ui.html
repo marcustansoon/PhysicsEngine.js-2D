@@ -118,8 +118,16 @@
 		
         <!-- Minerals & Vitamins -->
         <div class="mb-8">
-            <h2 class="font-bold mb-4">Minerals & Vitamins</h2>
+            <h2 class="font-bold mb-4">Minerals & Vitamins Daily Value (%)</h2>
 				<div id="vitamin-charts" class="grid grid-flow-row grid-cols-2 max-w-md py-6 overflow-y-auto gap-4">
+				</div>
+        </div>
+		
+        <!-- Fat Composition -->
+        <div class="mb-8">
+            <h2 class="font-bold mb-4">Fat Composition (%)</h2>
+                <div class="relative w-full" style="height: 200px;">
+				<canvas id="fat-chart"  style="height: 200px;"></canvas>
 				</div>
         </div>
 		
@@ -213,6 +221,85 @@
 	
 	
 	
+	function plotFatChart (){
+		const ctx = document.getElementById('fat-chart').getContext('2d');
+		 const fatCompositionChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: [''], // No y-axis label
+        datasets: [
+          {
+            label: 'Saturated Fat',
+            data: [40],
+            backgroundColor: '#ef4444', // Red-500
+            borderWidth: 2,
+            borderColor: '#fff',
+            barPercentage: 0.5
+          },
+          {
+            label: 'Unsaturated Fat',
+            data: [55],
+            backgroundColor: '#3b82f6', // Blue-500
+            borderWidth: 2,
+            borderColor: '#fff',
+            barPercentage: 0.5
+          },
+          {
+            label: 'Trans Fat',
+            data: [5],
+            backgroundColor: '#f59e0b', // Amber-500
+            borderWidth: 2,
+            borderColor: '#fff',
+            barPercentage: 0.5
+          }
+        ]
+      },
+      options: {
+        indexAxis: 'y', // Horizontal bar
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { 
+			display: true,
+			position: 'bottom', // Place it at the bottom
+		  }, // No legend
+          datalabels: {
+			display: false,
+            color: '#fff', // White text for contrast
+            font: { size: 14, weight: 'bold' },
+            formatter: (value) => value, // Show raw value
+            anchor: 'center', // Center the label in each segment
+            align: 'center'
+          },
+          tooltip: {
+            enabled: true,
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            titleFont: { size: 14 },
+            bodyFont: { size: 12 }
+          }
+        },
+        scales: {
+          x: {
+            stacked: true,
+            grid: { display: false },
+            ticks: { color: '#4b5563', font: { size: 12 } },
+            title: {
+              display: true,
+              text: 'Percentage (%)',
+              color: '#4b5563',
+              font: { size: 14, weight: 'bold' }
+            },
+            max: 100
+          },
+          y: {
+            stacked: true,
+            display: false // No y-axis
+          }
+        }
+      }
+    });
+	}
+	plotFatChart();
 	
 	
 	
@@ -287,6 +374,7 @@ appleImage.crossOrigin = 'Anonymous'; // Optional: For CORS if the image is from
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
+                title: { display: false },
                 legend: {
                     position: 'bottom',
                     display: false,
