@@ -116,58 +116,10 @@
         </div>
 
 		
-        <!-- Minerals -->
+        <!-- Minerals & Vitamins -->
         <div class="mb-8">
-            <h2 class="font-bold mb-4">Minerals</h2>
-				<div class="flex w-full max-w-md py-6 overflow-y-auto gap-4">
-					<div class="flex flex-col">
-						<div  class="max-h-28 max-w-32">
-							<canvas id="myPieChart-1"></canvas>
-						</div>
-						<div class="text-center">
-							<div>Vitamin C</div>
-						</div>
-					</div>
-					<div class="flex flex-col">
-						<div  class="max-h-28 max-w-32">
-							<canvas id="myPieChart-2"></canvas>
-						</div>
-						<div class="text-center">
-							<div>Vitamin B1</div>
-						</div>
-					</div>
-					<div class="flex flex-col">
-						<div  class="max-h-28 max-w-32">
-							<canvas id="myPieChart-3"></canvas>
-						</div>
-						<div class="text-center">
-							<div>Vitamin B6</div>
-						</div>
-					</div>
-					<div class="flex flex-col">
-						<div  class="max-h-28 max-w-32">
-							<canvas id="myPieChart-4"></canvas>
-						</div>
-						<div class="text-center">
-							<div>Vitamin C</div>
-						</div>
-					</div>
-					<div class="flex flex-col">
-						<div  class="max-h-28 max-w-32">
-							<canvas id="myPieChart-5"></canvas>
-						</div>
-						<div class="text-center">
-							<div>Vitamin C</div>
-						</div>
-					</div>
-					<div class="flex flex-col">
-						<div  class="max-h-28 max-w-32">
-							<canvas id="myPieChart-6"></canvas>
-						</div>
-						<div class="text-center">
-							<div>Vitamin C</div>
-						</div>
-					</div>
+            <h2 class="font-bold mb-4">Minerals & Vitamins</h2>
+				<div id="vitamin-charts" class="flex w-full max-w-md py-6 overflow-y-auto gap-4">
 				</div>
         </div>
 		
@@ -500,24 +452,169 @@ appleImage.crossOrigin = 'Anonymous'; // Optional: For CORS if the image is from
 		
 		
 		
+		async function plotVitaminCharts(vitaminsInFood){
 		
-		
-		
-		
-		
-          const chartData = [
-                { percentage: 80, color: '#FF6384', label: '80%' }, // Red
-            ];
+			let response = await fetch('https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/App%20Development/Calorie-Tracker/data/vitamins-minerals-daily-values.json');
+			// Get Daily values for minerals and vitamins based on user age and gender
+			let vitaminDailyValues = await response.json();
+			
+				function getVitaminDV(age, gender, vitaminName) {
+				  let ageRange = "";
+				  
+				  // Determine the correct age range
+				  if (age >= 1 && age <= 3) {
+					ageRange = "1-3";
+				  } else if (age >= 4 && age <= 8) {
+					ageRange = "4-8";
+				  } else if (age >= 9 && age <= 13) {
+					ageRange = "9-13";
+				  } else if (age >= 14 && age <= 18) {
+					ageRange = "14-18";
+				  } else if (age >= 19 && age <= 50) {
+					ageRange = "19-50";
+				  } else if (age >= 51) {
+					ageRange = "51+";
+				  } else {
+					return "Invalid age";
+				  }
 
-            for(let x = 1;x < 6; x++){
-                const ctx2 = document.getElementById('myPieChart-'+x).getContext('2d');
+				  // Access the vitamin data
+				  const vitaminData = vitaminDailyValues[vitaminName];
+				  if (!vitaminData) {
+					return;
+				  }
+
+				  // Return the DV value for the given vitamin, age, and gender
+				  const dvValue = vitaminData[gender][ageRange];
+				  if (dvValue !== undefined) {
+					return {value: dvValue, unit: vitaminData.unit};
+				  } else {
+					return;
+				  }
+				}
+			
+			// Vitamin Alias Names
+			let vitaminAliasNames = {
+				'vitamin_a' : 'vitamin_a',
+				'retinol' : 'vitamin_a',
+				'beta_carotene' : 'vitamin_a',
+				'vitamin_c': 'vitamin_c',
+				'ascorbic_acid': 'vitamin_c',
+				'vitamin_b1' : 'vitamin_b1',
+				'thiamine' : 'vitamin_b1',
+				'vitamin_b2' : 'vitamin_b2',
+				'riboflavin' : 'vitamin_b2',
+				'vitamin_b3' : 'vitamin_b3',
+				'niacin' : 'vitamin_b3',
+				'vitamin_b5' : 'vitamin_b5',
+				'pantothenic_acid' : 'vitamin_b5',
+				'vitamin_b6' : 'vitamin_b6',
+				'pyridoxine' : 'vitamin_b6',
+				'vitamin_b7' : 'vitamin_b7',
+				'biotin' : 'vitamin_b7',
+				'vitamin_b9' : 'vitamin_b9',
+				'folate' : 'vitamin_b9',
+				'folic_acid' : 'vitamin_b9',
+				'vitamin_b12' : 'vitamin_b12',
+				'cobalamin' : 'vitamin_b12',
+				'vitamin_e' : 'vitamin_e',
+				'tocopherol' : 'vitamin_e',
+				'vitamin_h' : 'vitamin_h',
+				'vitamin_d' : 'vitamin_d',
+				'biotin' : 'vitamin_h',
+				'vitamin_k' : 'vitamin_k',
+				'vitamin_p' : 'vitamin_p',
+				'bioflavonoids' : 'vitamin_p',
+				'vitamin_t' : 'vitamin_t',
+				'tocotrienols' : 'vitamin_t',
+				'calcium' : 'calcium',
+				'iron' : 'iron',
+				'magnesium' : 'magnesium',
+				'potassium' : 'potassium',
+				'zinc' : 'zinc',
+				'sodium' : 'sodium',
+				'phosphorus' : 'phosphorus',
+				'copper' : 'copper',
+				'manganese' : 'manganese',
+				'iodine' : 'iodine',
+				'selenium' : 'selenium',
+				'chromium' : 'chromium',
+				'fluoride' : 'fluoride',
+				'boron' : 'boron',
+				'chloride' : 'chloride',
+				'vanadium' : 'vanadium',
+			};
+			
+			function convertVitaminName(vitamin) {
+				// Replace underscores with spaces, then capitalize the first letter of each word
+				return vitamin
+					.replace(/_/g, ' ')                      // Replace underscores with spaces
+					.replace(/\b\w/g, (char) => char.toUpperCase()); // Capitalize the first letter of each word
+			}
+			
+			function replaceSpacesAndHyphens(str) {
+				return str.replace(/[\s-]/g, '_').toLowerCase();
+			}
+			
+			function splitToObject(str) {
+				if(!str || !str.amount || isNaN(parseInt(str.amount))) return { min: 0, max: 0, avg: 0 };
 				
-                new Chart(ctx2, {
+				if(!str.amount.includes('-')){
+					return { min: parseInt(str.amount), max: parseInt(str.amount), avg: parseInt(str.amount) };
+				}
+				
+				const parts = str.amount.split('-');
+				const min = parseInt(parts[0], 10);
+				const max = parseInt(parts[1], 10);
+				const avg = (min + max) / 2;
+
+				return { min: min, max: max, avg: avg };
+			}
+			
+			let index = 0;
+			
+			// Decode vitamin
+			for(name in vitaminsInFood ){
+				if(!vitaminAliasNames[replaceSpacesAndHyphens(name)]) continue;
+				
+				// Get alias name
+				let aliasName = vitaminAliasNames[replaceSpacesAndHyphens(name)];
+				// Get value
+				let parsedValue = splitToObject(vitaminsInFood[name]);
+				// Get DV from database
+				let dv = getVitaminDV(23, 'male', aliasName);
+				// Calculate food daily value in percent %
+				let computedPercent = parsedValue.avg / dv.value * 100;
+				
+				// Get color code
+				let color = vitaminDailyValues[aliasName].color_code;
+				
+				let html = `
+						<div class="flex flex-col">
+							<div  class="max-h-28 max-w-32">
+								<canvas id="vitamin-chart-${index}"></canvas>
+							</div>
+							<div class="text-center text-white rounded-full" style="background-color: ${color}">
+								<div>${convertVitaminName(aliasName)}</div>
+							</div>
+						</div>
+				`;
+
+				// Create a new div element
+				let newDiv = document.createElement('div');
+				newDiv.innerHTML = html;
+				
+				// Append the new div to the parent element
+				document.getElementById('vitamin-charts').appendChild(newDiv);
+				
+				const ctx = document.getElementById('vitamin-chart-' + index).getContext('2d');
+				
+				new Chart(ctx, {
                     type: 'doughnut',
                     data: {
                         datasets: [{
-                            data: [chartData[0].percentage, 100 - chartData[0].percentage], // Progress and remaining
-                            backgroundColor: [(chartData[0].color), darkenHexColor(chartData[0].color, 0.7)], // 70% of original brightness (30% darker)], // Chart color and light gray for remaining
+                            data: [Math.round(computedPercent), computedPercent >= 100 ? 0 : 100 - Math.round(computedPercent)], // Progress and remaining
+                            backgroundColor: [(color), darkenHexColor(color, 0.7)], // 70% of original brightness (30% darker)], // Chart color and light gray for remaining
                             borderWidth: 0,
                             cutout: '70%' // Creates a thinner ring effect
                         }]
@@ -529,7 +626,20 @@ appleImage.crossOrigin = 'Anonymous'; // Optional: For CORS if the image is from
                             legend: { display: false },
                             title: { display: false },
                             tooltip: {
-                                enabled: false // Disable default tooltips (custom text in center)
+								enabled: true,
+								mode: 'index', // Tooltip mode, can be 'index', 'nearest', etc.
+								callbacks: {
+									label: function(tooltipItem) {
+										// Access data for custom display
+										var label = tooltipItem.dataset.label || '';
+										// Return custom tooltip string
+										return parsedValue.avg + ' / ' + dv.value + ' ' + dv.unit;
+									},
+									title: function(tooltipItem) {
+										// Example of changing the tooltip title (index of data point)
+										return convertVitaminName(aliasName) + tooltipItem[0].label;
+									}
+								}
                             },
                             datalabels: {
                                 display: false // Disable default data labels to use custom text
@@ -549,13 +659,49 @@ appleImage.crossOrigin = 'Anonymous'; // Optional: For CORS if the image is from
 							ctx.textAlign = 'center';
 							ctx.textBaseline = 'middle';
 							ctx.fillStyle = '#4a5568';
-							ctx.fillText('80%', width / 2, height / 2 + 10);
+							ctx.fillText(Math.round(computedPercent) + '%', width / 2, height / 2 + 20);
 						}
 					}]
                 });
+				
+				index++;
 			}
-				
-				
+			
+		}
+		
+		// Vitamins in food
+			let vitaminsInFood = {
+				"iron": {
+				  "amount": "2-3",
+				  "unit": "mg"
+				},
+				"zinc": {
+				  "amount": "3-5",
+				  "unit": "mg"
+				},
+				"vitamin_B12": {
+				  "amount": "2-3",
+				  "unit": "mcg"
+				},
+				"vitamin_c": {
+				  "amount": "23",
+				  "unit": "mcg"
+				},
+				"vitamin_b3": {
+				  "amount": "23",
+				  "unit": "mcg"
+				},
+				"vitamin_b6": {
+				  "amount": "23",
+				  "unit": "mcg"
+				},
+				"calcium": {
+				  "amount": "150-250",
+				  "unit": "mg"
+				}
+			}
+			
+			plotVitaminCharts(vitaminsInFood);
     </script>
 	
 </body>
