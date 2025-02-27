@@ -5,7 +5,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Meal Tracker</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@tailwindcss/browser@4"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Chart.js Datalabels plugin for showing values -->
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
   </head>
   <body class="bg-gray-00">
   
@@ -238,7 +242,7 @@
       <!-- Meals List -->
       <div class="space-y-8 mb-8">
         <!-- Breakfast -->
-        <div class="bg-white space-y-4 rounded-2xl shadow-lg border p-5">
+        <div class="bg-white space-y-4 rounded-2xl shadow-lg border p-5 border-gray-200">
           <div class="flex items-center gap-3">
             <span class="font-medium">Breakfast</span>
             <span class="ml-auto text-gray-500">534 kcal</span>
@@ -342,7 +346,7 @@
           </div>
         </div>
         <!-- Lunch -->
-        <div class="bg-white space-y-4 rounded-2xl shadow-lg border p-5">
+        <div class="bg-white space-y-4 rounded-2xl shadow-lg border p-5 border-gray-200">
           <div class="flex items-center gap-3">
             <span class="font-medium">Lunch</span>
             <span class="ml-auto text-gray-500">781 kcal</span>
@@ -446,7 +450,7 @@
         </div>
 
         <!-- Dinner -->
-        <div class="bg-white space-y-4 rounded-2xl shadow-lg border p-5">
+        <div class="bg-white space-y-4 rounded-2xl shadow-lg border p-5 border-gray-200">
           <div class="flex items-center gap-3">
             <span class="font-medium">Dinner</span>
             <span class="ml-auto text-gray-500">327 kcal</span>
@@ -503,12 +507,88 @@
         </div>
       </div>
 	  
+	  
+	  <!-- Chart of the Day Card -->
+      <div
+        class="bg-white rounded-2xl shadow-lg p-6 mb-8 border p-5 border-gray-200"
+      >
+	  
+		<div class="flex justify-between items-center mb-2">
+			<span class="text-xl font-bold">Today's Meal Summary</span>
+			<div class="relative inline-block text-left">
+			  <div>
+				<button id="dropdownButton" type="button" class="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 hover:bg-gray-50" id="menu-button" aria-expanded="true" aria-haspopup="true">
+				  
+				  <svg class="size-8 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+					<path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+				  </svg>
+				</button>
+			  </div>
+			  <div id="dropdownMenu" class="hidden absolute right-0 z-10 mt-2 w-32 origin-top-right rounded-md bg-white ring-1 shadow-lg ring-black/5 focus:outline-hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1">
+				<div class="py-1" role="none">
+				  <!-- Active: "bg-gray-100 text-gray-900 outline-hidden", Not Active: "text-gray-700" -->
+				  <button onclick="changeChart(1)" class="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" role="menuitem" tabindex="-1" id="menu-item-0">Breakfast</button>
+				  <button onclick="changeChart(2)" class="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" role="menuitem" tabindex="-1" id="menu-item-1">Lunch</button>
+				  <button onclick="changeChart(3)" class="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50" role="menuitem" tabindex="-1" id="menu-item-2">Dinner</button>
+				  <button onclick="changeChart(4)" class="w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 disabled" role="menuitem" tabindex="-1" id="menu-item-2">Overall</button>
+				</div>
+			  </div>
+			</div>
+        </div>
+        <div class="">
+			<!-- Total Calories -->
+          
+			<div class="flex justify-between items-center">
+				<div class="flex justify-between items-center">
+					<div class="flex justify-center items-center">
+						<div class="w-4 h-4 m-2 rounded-full bg-yellow-500"></div>
+						<span class="">Total Calories</span>
+					</div>
+				</div>
+				<span class="font-medium">2,642 kcal</span>
+			</div>
+			<div class="flex justify-between items-center">
+				<div class="flex justify-between items-center">
+					<div class="flex justify-center items-center">
+						<div class="w-4 h-4 m-2 rounded-full bg-green-500"></div>
+						<span class="">Total Proteins</span>
+					</div>
+				</div>
+				<span class="font-medium">2,642 kcal</span>
+			</div>
+			<div class="flex justify-between items-center">
+				<div class="flex justify-between items-center">
+					<div class="flex justify-center items-center">
+						<div class="w-4 h-4 m-2 rounded-full bg-red-400"></div>
+						<span class="">Total Fat</span>
+					</div>
+				</div>
+				<span class="font-medium">2,642 kcal</span>
+			</div>
+			<div class="flex justify-between items-center">
+				<div class="flex justify-between items-center">
+					<div class="flex justify-center items-center">
+						<div class="w-4 h-4 m-2 rounded-full bg-blue-500"></div>
+						<span class="">Total Carbs</span>
+					</div>
+				</div>
+				<span class="font-medium">2,642 kcal</span>
+			</div>
+			<div height="200px">
+				<canvas id="nutrientChart"></canvas>
+			  </div>
+			</div>
+		
+      </div>
+	  
+	  
+	  
 	  <!-- Featured Card -->
       <div
-        class="bg-gradient-to-br from-orange-50 to-rose-50 rounded-2xl shadow-lg p-6 mb-8"
+        class="bg-gradient-to-br from-orange-50 to-rose-50 rounded-2xl shadow-lg p-6 mb-8 border p-5 border-gray-200"
       >
         <div class="text-xl text-rose-500 font-bold mb-2">
-          Today Calorie Goal
+          Today's Calorie Goal
         </div>
         <div class="space-y-4">
           <div class="flex justify-between items-center">
@@ -635,5 +715,96 @@
     <br />
     <br />
     <br />
+	
+	<script>
+
+        // Register the datalabels plugin
+		Chart.register(ChartDataLabels);
+		
+		let foodEntries = {
+			'breakfast': [],
+			'lunch': [],
+			'dinner': [],
+		}
+	
+	
+        const button = document.getElementById('dropdownButton');
+        const menu = document.getElementById('dropdownMenu');
+
+        button.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (event) => {
+            if (!button.contains(event.target) && !menu.contains(event.target)) {
+                menu.classList.add('hidden');
+            }
+        });
+		
+		function changeChart(type){
+			console.log(type)
+            menu.classList.toggle('hidden');
+		}
+		
+		
+		// Data for the donut chart (example values for Breakfast)
+        const nutrientData = {
+            labels: ['Proteins', 'Fat', 'Carbs', 'Calories'],
+            datasets: [{
+                data: [200, 250, 350, 50],
+                backgroundColor: ['rgb(74, 222, 128)', 'rgb(248, 113, 113)', 'rgb(96, 165, 250)', '#FFC300'],
+                borderWidth: 0
+            }]
+        };
+
+		// Calculate total for percentage
+		const total = nutrientData.datasets[0].data.reduce((sum, value) => sum + value, 0);
+
+        // Donut Chart Setup
+        const ctx = document.getElementById('nutrientChart').getContext('2d');
+        const nutrientChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: nutrientData,
+            options: {
+                cutout: '70%', // Creates a larger hole for the gauge-like effect
+                plugins: {
+                    legend: { display: false }, // Hide default legend (using custom below)
+                    title: { display: false },
+					datalabels: {
+						display: false, // Enable tooltips
+					},
+					// Customize the tooltip
+					tooltip: {
+						display: false, // Enable tooltips
+						callbacks: {
+							label: function(context) {
+								const label = context.label || '';
+								const value = context.raw;
+								const unit = label === 'Calories' ? 'kcal' : 'g';
+								const percentage = ((value / total) * 100).toFixed(1);
+								// Show custom value + label
+								return ` ${value} ${unit} (${percentage}%)`;
+							}
+						}
+					}
+                },
+                maintainAspectRatio: false,
+				responsive: true,
+            },
+        });
+		
+		function updateNutrientChart(mealData) {
+			nutrientChart.data.datasets[0].data = mealData.values;
+			nutrientChart.update();
+		}
+
+		// Example for Breakfast
+		const breakfastData = { values: [200, 250, 350, 200] }; // Your detected values
+		updateNutrientChart(breakfastData);
+		
+		
+    </script>
+	
   </body>
 </html>
