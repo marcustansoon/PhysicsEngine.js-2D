@@ -117,7 +117,7 @@
 
 		
         <!-- Minerals & Vitamins -->
-        <div class="mb-8">
+        <div id="vitamin-main-container" class="mb-8 hidden">
             <h2 class="font-bold mb-4">Minerals & Vitamins Daily Value (%)</h2>
 				<div id="vitamin-charts" class="grid grid-flow-row grid-cols-2 max-w-md py-6 overflow-y-auto gap-4">
 				</div>
@@ -133,7 +133,7 @@
 		
 		
         <!-- Vegetables -->
-        <div class="mb-8">
+        <div class="mb-8 hidden">
             <h2 class="font-bold mb-4">Vegetables</h2>
             <div class="grid grid-cols-4 gap-4">
                 <div class="aspect-square bg-green-100 rounded-2xl flex items-center justify-center">
@@ -151,58 +151,42 @@
             </div>
         </div>
 		
-		  <!-- Apple Chart -->
-		<div class="w-full max-w-md mb-8">
+		  <!-- Cholesterol Chart -->
+        <div class="mb-8">
+            <h2 class="font-bold mb-4">Cholesterol Daily Value (%)</h2>
             <div class="">
-                <div class="flex items-center mb-2">
-                    <span class="text-xl mr-2">🍎</span>
-                    <h2 class="text-lg font-semibold text-gray-800">Daily Fruit Tracker</h2>
-                </div>
                 <div class="relative w-full" style="height: 200px;">
-                    <canvas id="fruitChart"></canvas>
+                    <canvas id="cholesterol-chart"></canvas>
                 </div>
-                <p class="text-gray-600 text-sm mt-2">1/2 | Remain 1 | Last week's avg: 0.6</p>
+                <p class="hidden text-gray-600 text-sm mt-2">1/2 | Remain 1 | Last week's avg: 0.6</p>
             </div>
 		</div>
 		
-		  <!-- Seafood Chart -->
-		<div class="w-full max-w-md mb-8">
-            <div class="">
-                <div class="flex items-center mb-2">
-                    <span class="text-xl mr-2">🐟</span>
-                    <h2 class="text-lg font-semibold text-gray-800">Daily Seafood Tracker</h2>
-                </div>
-                <div class="relative w-full" style="height: 200px;">
-                    <canvas id="seafoodChart"></canvas>
-                </div>
-                <p class="text-gray-600 text-sm mt-2">3/4 | Remain 0.2kg | Last week's avg: 0.5kg</p>
-			</div>
-		</div>
+	
 		
 		
 		
-		<div class="">
-		
-		<div class="max-w-md mx-auto fix1ed bottom-0 bg-white bottom-0 left-0 right-0 rounded-t-3xl">
-			<!-- Add Meal Button -->
-			<div class="flex gap-2">
-				<div class="flex items-center gap-3 bg-orange-400 rounded-2xl cursor-pointer justify-center w-4/5">
-					<div><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0,0,256,256">
-	<g fill="#ffffff" fill-rule="evenodd" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M11,2v9h-9v2h9v9h2v-9h9v-2h-9v-9z"></path></g></g>
-	</svg></div>
-	<div class="text-white py-4 rounded-2xl font-medium"> Add Meal</div>
-				</div>
-				<div class="flex items-center gap-3 rounded-2xl cursor-pointer justify-center border border-black w-1/5">
-					<div>
-						<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 50 50">
-	<path d="M 25 2 A 1.0001 1.0001 0 1 0 25 4 C 36.609534 4 46 13.390466 46 25 C 46 36.609534 36.609534 46 25 46 C 13.390466 46 4 36.609534 4 25 C 4 18.307314 7.130711 12.364806 12 8.5195312 L 12 15 A 1.0001 1.0001 0 1 0 14 15 L 14 6.5507812 L 14 5 L 4 5 A 1.0001 1.0001 0 1 0 4 7 L 10.699219 7 C 5.4020866 11.214814 2 17.712204 2 25 C 2 37.690466 12.309534 48 25 48 C 37.690466 48 48 37.690466 48 25 C 48 12.309534 37.690466 2 25 2 z"></path>
-						</svg>
+		<div>
+			<div class="max-w-md mx-auto fix1ed bottom-0 bg-white bottom-0 left-0 right-0 rounded-t-3xl">
+				<!-- Add Meal Button -->
+				<div class="flex gap-2">
+					<div class="flex items-center gap-3 bg-orange-400 rounded-2xl cursor-pointer justify-center w-4/5">
+						<div><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20" height="20" viewBox="0,0,256,256">
+		<g fill="#ffffff" fill-rule="evenodd" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(10.66667,10.66667)"><path d="M11,2v9h-9v2h9v9h2v-9h9v-2h-9v-9z"></path></g></g>
+		</svg></div>
+		<div class="text-white py-4 rounded-2xl font-medium"> Add Meal</div>
 					</div>
-				  </div>
+					<div class="flex items-center gap-3 rounded-2xl cursor-pointer justify-center border border-black w-1/5">
+						<div>
+							<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="25" height="25" viewBox="0 0 50 50">
+		<path d="M 25 2 A 1.0001 1.0001 0 1 0 25 4 C 36.609534 4 46 13.390466 46 25 C 46 36.609534 36.609534 46 25 46 C 13.390466 46 4 36.609534 4 25 C 4 18.307314 7.130711 12.364806 12 8.5195312 L 12 15 A 1.0001 1.0001 0 1 0 14 15 L 14 6.5507812 L 14 5 L 4 5 A 1.0001 1.0001 0 1 0 4 7 L 10.699219 7 C 5.4020866 11.214814 2 17.712204 2 25 C 2 37.690466 12.309534 48 25 48 C 37.690466 48 48 37.690466 48 25 C 48 12.309534 37.690466 2 25 2 z"></path>
+							</svg>
+						</div>
+					  </div>
+				</div>
+				
 			</div>
-			
 		</div>
-      </div>
 		
 		
 		</div>
@@ -223,7 +207,7 @@
 	
 	function plotFatChart (){
 		const ctx = document.getElementById('fat-chart').getContext('2d');
-		 const fatCompositionChart = new Chart(ctx, {
+		const fatCompositionChart = new Chart(ctx, {
       type: 'bar',
       data: {
         labels: [''], // No y-axis label
@@ -338,7 +322,7 @@
 
 		
 
-	// Load the image (do this outside the chart initialization)
+// Load the image (do this outside the chart initialization)
 const appleImage = new Image();
 appleImage.src = 'https://cdn-icons-png.flaticon.com/512/7305/7305241.png'; // Replace with your image URL
 appleImage.crossOrigin = 'Anonymous'; // Optional: For CORS if the image is from a different domain
@@ -448,94 +432,118 @@ appleImage.crossOrigin = 'Anonymous'; // Optional: For CORS if the image is from
 		
 		
 		
-		// Fruit Chart (Daily Fruit Tracker)
-        const fruitCtx = document.getElementById('fruitChart').getContext('2d');
-        const fruitChart = new Chart(fruitCtx, {
-            type: 'doughnut',
-            data: {
-                datasets: [{
-                    data: [50, 50], // 50% progress (1/2), 50% remaining
-                    backgroundColor: ['#ff8c00', '#e5e7eb'], // Orange for progress, gray for remaining
-                    borderWidth: 0,
-                    cutout: '80%' // Makes it thinner like a progress ring
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    datalabels: {display: false },
-                    legend: { display: false },
-                    title: { display: false },
-                    tooltip: { enabled: false }
-                },
-                rotation: -90, // Start from top
-                circumference: 180, // Half circle for progress
-                animation: { animateRotate: true }
-            },
-            plugins: [{
-                beforeDraw: function(chart) {
-                    const ctx = chart.ctx;
-                    const width = chart.width;
-                    const height = chart.height;
-                    const fontSize = (height / 114).toFixed(2);
-                    ctx.font = `${fontSize}em sans-serif`;
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillStyle = '#4a5568';
-                    ctx.fillText('1/2', width / 2, height / 2);
-                    ctx.font = `${(fontSize * 0.8).toFixed(2)}em sans-serif`;
-                    ctx.fillText('🍎', width / 2, height / 2 + 30);
-                }
-            }]
-        });
+		// Cholesterol chart
+		function plotCholesterolChart(cholesterolData){
 		
+			function getColor(value) {
+				// Ensure the input is within the range 0 - 100
+				value = Math.max(0, Math.min(value, 100));
+				
+				// Calculate the red and green components based on the input value
+				let red = Math.round((value * 2.55)); // Convert value to range 0-255 for red
+				let green = Math.round(255 - (value * 2.55)); // Convert value to range 0-255 for green
+
+				// Generate the hex color code
+				let hexColor = `#${toHex(red)}${toHex(green)}00`; // Use blue as 0 (always)
+
+				return hexColor;
+			}
+
+			// Helper function to convert a number to a 2-digit hex string
+			function toHex(num) {
+				return num.toString(16).padStart(2, '0');
+			}
+			
+			function splitToObject(str) {
+				if(!str || !str.amount || isNaN(parseInt(str.amount))) return { min: 0, max: 0, avg: 0 };
+				
+				if(!str.amount.includes('-')){
+					return { min: parseInt(str.amount), max: parseInt(str.amount), avg: parseInt(str.amount) };
+				}
+				
+				const parts = str.amount.split('-');
+				const min = parseInt(parts[0], 10);
+				const max = parseInt(parts[1], 10);
+				const avg = (min + max) / 2;
+
+				return { min: min, max: max, avg: avg };
+			}
+			
+			// Display vitamin
+			for(name in cholesterolData){
+				if(typeof name !== 'string' || name.toLowerCase() !== "cholesterol") continue;
+				
+				let parsedValue = splitToObject(cholesterolData[name]);
+				
+				// Calculate cholesterol DV (percent)
+				const dv = {value: 300, unit: 'mg'}; // mg
+				// Calculate food daily value in percent %
+				let computedPercent = parsedValue.avg / dv.value * 100;
+				
+				console.log(computedPercent)
+				
+				const ctx = document.getElementById('cholesterol-chart').getContext('2d');
+				const chart = new Chart(ctx, {
+					type: 'doughnut',
+					data: {
+						labels: ['Cholesterol', 'Remaining'],
+						datasets: [{
+							data: [Math.round(computedPercent), Math.round(computedPercent) >= 100 ? 0 : 100 - Math.round(computedPercent)],
+							backgroundColor: [getColor(computedPercent)/*'#ff8c00'*/, '#e5e7eb'], // Orange for progress, gray for remaining
+							borderWidth: 0,
+							cutout: '80%' // Makes it thinner like a progress ring
+						}]
+					},
+					options: {
+						responsive: true,
+						maintainAspectRatio: false,
+						plugins: {
+									tooltip: {
+										enabled: true,
+										mode: 'index', // Tooltip mode, can be 'index', 'nearest', etc.
+										callbacks: {
+											label: function(tooltipItem) {
+												// Access data for custom display
+												var label = tooltipItem.label || '';
+												var data = tooltipItem.dataset.data || '';
+												// Return custom tooltip string
+												return label === 'Cholesterol' ? parsedValue.avg + ' mg (' + data[0] + '%)' : (parsedValue.avg > dv.value ? 0 : dv.value - parsedValue.avg) + ' mg (' + data[1] + '%)';
+											}
+									}
+								},
+							datalabels: {display: false },
+							legend: { display: false },
+							title: { display: false },
+						},
+						rotation: -90, // Start from top
+						circumference: 180, // Half circle for progress
+						animation: { animateRotate: true }
+					},
+					plugins: [{
+						beforeDraw: function(chart) {
+							const ctx = chart.ctx;
+							const width = chart.width;
+							const height = chart.height;
+							const fontSize = (height / 114).toFixed(2);
+							ctx.font = `${fontSize}em sans-serif`;
+							ctx.textAlign = 'center';
+							ctx.textBaseline = 'middle';
+							ctx.fillStyle = '#4a5568';
+							ctx.font = `${(fontSize * 0.8).toFixed(2)}em sans-serif`;
+							ctx.fillText(parsedValue.avg + ' / ' + dv.value + ' ' + dv.unit, width / 2, height / 2 + 30);
+						}
+					}]
+				});
+			}
+		}
 		
-		
-		// Seafood Chart (Weekly Seafood Tracker)
-        const seafoodCtx = document.getElementById('seafoodChart').getContext('2d');
-        const seafoodChart = new Chart(seafoodCtx, {
-            type: 'doughnut',
-            data: {
-                datasets: [{
-                    data: [75, 25], // 75% progress (3/4), 25% remaining
-                    backgroundColor: ['#00b4d8', '#e5e7eb'], // Teal for progress, gray for remaining
-                    borderWidth: 0,
-                    cutout: '80%' // Makes it thinner like a progress ring
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    datalabels: {display: false },
-                    legend: { display: false },
-                    title: { display: false },
-                    tooltip: { enabled: false }
-                },
-                rotation: -90, // Start from top
-                circumference: 180, // Half circle for progress
-                animation: { animateRotate: true }
-            },
-            plugins: [{
-                beforeDraw: function(chart) {
-                    const ctx = chart.ctx;
-                    const width = chart.width;
-                    const height = chart.height;
-                    const fontSize = (height / 114).toFixed(2);
-                    ctx.font = `${fontSize}em sans-serif`;
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'middle';
-                    ctx.fillStyle = '#4a5568';
-                    ctx.fillText('3/4', width / 2, height / 2);
-                    ctx.font = `${(fontSize * 0.8).toFixed(2)}em sans-serif`;
-                    ctx.fillText('🐟', width / 2, height / 2 + 30);
-                }
-            }]
-        });
-		
-		
-		
+		let cholesterolData = {
+		  "cholesterol": {
+			"amount": "100-110",
+			"unit": "mg"
+		  }
+		};
+		plotCholesterolChart(cholesterolData);
 		
 		
 		
@@ -661,7 +669,7 @@ appleImage.crossOrigin = 'Anonymous'; // Optional: For CORS if the image is from
 			
 			let index = 0;
 			
-			// Decode vitamin
+			// Display vitamin
 			for(name in vitaminsInFood ){
 				if(!vitaminAliasNames[replaceSpacesAndHyphens(name)]) continue;
 				
@@ -684,6 +692,9 @@ appleImage.crossOrigin = 'Anonymous'; // Optional: For CORS if the image is from
 					document.getElementById('vitamin-charts').classList.remove('grid-cols-2');
 					document.getElementById('vitamin-charts').classList.add('grid-rows-2');
 				}
+				
+				// Make sure main container is not hidden
+				document.getElementById('vitamin-main-container').classList.remove('hidden');
 				
 				let html = `
 						<div class="max-w-32">
@@ -729,7 +740,7 @@ appleImage.crossOrigin = 'Anonymous'; // Optional: For CORS if the image is from
 										// Access data for custom display
 										var label = tooltipItem.dataset.label || '';
 										// Return custom tooltip string
-										return parsedValue.avg + ' / ' + dv.value + ' ' + dv.unit;
+										return ' ' + parsedValue.avg + ' / ' + dv.value + ' ' + dv.unit + ' (' + Math.round(computedPercent) + '%)';
 									},
 									title: function(tooltipItem) {
 										// Example of changing the tooltip title (index of data point)
@@ -755,7 +766,8 @@ appleImage.crossOrigin = 'Anonymous'; // Optional: For CORS if the image is from
 							ctx.textAlign = 'center';
 							ctx.textBaseline = 'middle';
 							ctx.fillStyle = '#4a5568';
-							ctx.fillText(Math.round(computedPercent) + '%', width / 2, height / 2 + 20);
+							ctx.fillText(' ' + parsedValue.avg + ' ' + dv.unit, width / 2, height / 2 + 20);
+							//ctx.fillText(Math.round(computedPercent) + '%', width / 2, height / 2 + 20);
 						}
 					}]
                 });
