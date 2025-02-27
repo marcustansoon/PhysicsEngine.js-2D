@@ -1,0 +1,25 @@
+gmails table
+id, gmail, refresh token, token, created_at, updated_at
+
+users table
+id, gmail id, created_at, updated_at
+
+meals table
+id, type (breakfast, lunch, dinner, etc)
+
+user_meals table
+id, user id, meal id, data (json)
+
+subscriptions table
+id, type, description, Ai advanced_analysis, max_barcode_scanning_token, max_ai_token, max_food_entries_per_day, subscription_period
+
+user_subscription table
+id, user id, subscription id, created_at, updated_at, expired_at
+
+keywords table
+id
+
+
+
+
+
