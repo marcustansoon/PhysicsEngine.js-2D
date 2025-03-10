@@ -1,23 +1,24 @@
+users table
+id, model, platform, uuid, version, manufacterer, serial, user_agent, created_at, updated_at
+
 gmails table
 id, gmail, refresh token, token, created_at, updated_at
 
-users table
-id, gmail id, created_at, updated_at
+gmail_users table
+id, gmail_id, user_id, created_at, updated_at
 
 meals table
 id, type (breakfast, lunch, dinner, etc)
 
 user_meals table
-id, user id, meal id, data (json)
+id, user id, meal id, data (json), img url??
 
 subscriptions table
-id, type, description, Ai advanced_analysis, max_barcode_scanning_token, max_ai_token, max_food_entries_per_day, subscription_period
+id, type, description, advanced_ai_analysis, max_barcode_scanning_per_day_token, max_ai_analysis_per_day_token, max_food_entries_per_day, subscription_period, price
 
-user_subscription table
+gmail_subscription table
 id, user id, subscription id, created_at, updated_at, expired_at
 
-keywords table
-id
 
 
 
