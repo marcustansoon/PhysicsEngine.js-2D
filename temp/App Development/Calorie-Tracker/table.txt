@@ -5,7 +5,7 @@ gmails table
 id, gmail, refresh token, token, created_at, updated_at
 
 gmail_users table
-id, gmail_id, user_id, created_at, updated_at
+gmail_id, user_id, created_at, updated_at
 
 meals table
 id, type (breakfast, lunch, dinner, etc)
