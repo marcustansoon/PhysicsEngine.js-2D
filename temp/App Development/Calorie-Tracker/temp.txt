@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Progress Bar with Rounded Corners</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #e0f7f9;
+        }
+        .container {
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+        h1 {
+            font-size: 24px;
+            color: #d81b60;
+            margin-bottom: 10px;
+        }
+        .chart-container {
+            position: relative;
+            margin: 20px 0;
+        }
+        canvas {
+            max-width: 100%;
+        }
+        .info-text {
+            font-size: 16px;
+            color: #757575;
+            margin-top: 10px;
+        }
+        .remaining-text {
+            color: #1976d2;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Today's Goal</h1>
+        <div class="chart-container">
+            <canvas id="calorieChart"></canvas>
+        </div>
+        <div class="info-text">Remaining Calorie <span class="remaining-text">1,217 kcal</span><br>4,866 / 6,083 kcal</div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('calorieChart').getContext('2d');
+        const calorieChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Calories'],
+                datasets: [{
+                    label: 'Consumed',
+                    data: [4866], // 80% of 6083 kcal (consumed)
+                    backgroundColor: '#1976d2', // Blue for consumed portion
+     borderWidth: 0,
+      borderRadius: 10,
+                    barThickness: 10,
+                    maxBarThickness: 10
+                }, {
+                    label: 'Remaining',
+                    data: [1217], // 20% of 6083 kcal (remaining)
+                    backgroundColor: '#e0e0e0', // Light gray for remaining portion
+     borderWidth: 0,
+      borderRadius: 10,
+                    barThickness: 10,
+                    maxBarThickness: 10
+                }]
+            },
+            options: {
+                indexAxis: 'y', // Horizontal bar chart
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        display: false, // Hide x-axis
+                        max: 6083, // Total calorie goal
+                        stacked: true, // Stack the datasets
+                        beginAtZero: true
+                    },
+                    y: {
+                        display: false, // Hide y-axis
+                        stacked: true // Stack the datasets
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false // Hide legend
+                    },
+                    tooltip: {
+                        enabled: true, // Enable tooltips
+                        callbacks: {
+                            label: function(context) {
+                                const label = context.dataset.label || '';
+                                const value = context.parsed.x;
+                                return `${label}: ${value} kcal`;
+                            }
+                        }
+                    }
+                },
+                animation: {
+                    duration: 0 // Disable animation for a static feel
+                }
+            }
+        });
+    </script>
+</body>
+</html>
