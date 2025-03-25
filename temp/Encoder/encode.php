@@ -116,7 +116,7 @@ function getDailyJSON($url){
     return $arr;
 }
 
-$url = "_YOUR_URL_";
+$url = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&outputsize=full&apikey=demo";
 $arr = getDailyJSON($url);
 
 
@@ -175,11 +175,9 @@ $height = ceil(strlen($string) / 6 / $width);
 // Fill up empty spaces
 $paddingCount = 6 - strlen($string) % 6;
 while($paddingCount--){
-    $string .= "@";
+    $string .= " ";
 }
 
-echo $string;
-exit;
 
     
 $image = imagecreatetruecolor($width, $height);
