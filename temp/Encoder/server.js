@@ -7,6 +7,7 @@ const app = express();
 app.use(express.json());
 
 //const proxy = 'http://halusngj:iqii2z5mv1ke@38.154.227.167:5868';
+const proxy = 'http://64.62.219.99:312';
 
 const agent = new HttpsProxyAgent(proxy);
 
