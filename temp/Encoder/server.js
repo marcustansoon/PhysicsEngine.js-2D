@@ -158,7 +158,7 @@ tickers = ["IBM"]
 
 //const proxy = 'http://halusngj:iqii2z5mv1ke@38.154.227.167:5868';
 const proxyList = [
-	'http://64.62.219.99:3128',
+	'http://halusngj:iqii2z5mv1ke@38.154.227.167:5868',//'http://64.62.219.99:3128',
 ];
 
 
@@ -180,7 +180,7 @@ app.get('/proxy', async (req, res) => {
 		for (let i = 0; i < proxyList.length; i++) {
 					  
 			let proxy = proxyList[i];
-			const agent = new HttpsProxyAgent(proxy);
+			let agent = new HttpsProxyAgent(proxy);
 			
 			res.write("Using proxy: " + proxy + ' \n');
 						
@@ -200,7 +200,6 @@ app.get('/proxy', async (req, res) => {
 				await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&outputsize=full&apikey=demo`,{
 				   agent: agent, 
 				  }).then(d => d.json()).then(async resp => {
-					  
 					
 					if(!resp['Time Series (Daily)']) {
 						res.write(resp);
@@ -276,8 +275,8 @@ app.get('/proxy', async (req, res) => {
 						
 					// Create a link to download the canvas as a PNG
 					let base64Image = canvas.toDataURL('image/png');
-					res.send(base64Image);
-					return;
+					//res.write(base64Image);
+					//return;
 					
 					
 					const albumId = 'G0DQ6Hk'; // Imgur album ID
