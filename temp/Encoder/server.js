@@ -158,32 +158,57 @@ const fetchWithTimeout = (url, options, timeout = 10000) => {
 
 
 let tickers = [
-    "AWX",
-    "AX",
-    "AXDX",
-    "AXGN",
-    "AXL",
-    "AXON",
-    "AXP",
-    "AXR",
-    "AXS",
-    "AXSM",
-    "AXTA",
-    "AXTI",
-    "AYI",
-    "AYRO",
-    "AYTU",
-    "AZ",
-    "AZEK",
-    "AZI",
-    "AZN",
-    "AZO",
-    "AZPN",
-    "AZTA",
-    "AZTR",
-    "AZUL",
-    "AZZ"
-];
+    "BA",
+    "BABA",
+    "BAC",
+    "BACK",
+    "BACQ",
+    "BAER",
+    "BAFN",
+    "BAH",
+    "BAK",
+    "BALL",
+    "BAM",
+    "BANC",
+    "BAND",
+    "BANF",
+    "BANL",
+    "BANR",
+    "BANX",
+    "BAOS",
+    "BAP",
+    "BARK",
+    "BASE",
+    "BATL",
+    "BATRA",
+    "BATRK",
+    "BAX",
+    "BAYA",
+    "BB",
+    "BBAI",
+    "BBAR",
+    "BBBYQ",
+    "BBCP",
+    "BBD",
+    "BBDC",
+    "BBDO",
+    "BBGI",
+    "BBIO",
+    "BBLG",
+    "BBNX",
+    "BBSI",
+    "BBU",
+    "BBVA",
+    "BBW",
+    "BBWI",
+    "BBY",
+    "BC",
+    "BCAB",
+    "BCAL",
+    "BCAX",
+    "BCBP",
+    "BCC"
+]
 let jsonTickers = {};
 
 const albumId = 'G0DQ6Hk'; // Imgur album ID
@@ -370,7 +395,7 @@ app.get('/proxy', async (req, res) => {
 					//return;
 
 
-					const albumId = 'G0DQ6Hk'; // Imgur album ID
+					const albumId = "YcnD8zI";//'G0DQ6Hk'; // Imgur album ID
 					const accessToken = 'ffc8fd46eb1f0d2bf28d099af47f421eb574bfa3'; // Imgur access token
 					let dd = {
 						//"imgur-id": imageId,
