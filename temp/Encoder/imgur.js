@@ -1,12 +1,11 @@
-async function uploadImageToImgur(imagePath, accessToken) {
+async function uploadImageToImgur(base64Image, accessToken) {
     const url = 'https://api.imgur.com/3/image';
 
     // Read image file as a Base64 encoded string (using FileReader)
-    const imageData = await fetch(imagePath).then(res => res.arrayBuffer());
-    const base64Image = btoa(String.fromCharCode(...new Uint8Array(imageData)));
+    //const imageData = await fetch(imagePath).then(res => res.arrayBuffer());
+    //const base64Image = btoa(String.fromCharCode(...new Uint8Array(imageData)));
 
     const postData = {
-        name: 'beast', // Image name
         image: base64Image // Base64-encoded image data
     };
 
