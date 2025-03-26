@@ -128,7 +128,8 @@ async function delay(ms) {
 
 
 
-
+let tickers = [..]
+let jsonTickers = {}
 
 for(let loop = 0; loop < tickers.length; loop++){
     let ticker = tickers[loop]
