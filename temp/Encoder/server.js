@@ -158,26 +158,6 @@ const fetchWithTimeout = (url, options, timeout = 10000) => {
 
 
 let tickers = [
-    "BA",
-    "BABA",
-    "BAC",
-    "BACK",
-    "BACQ",
-    "BAER",
-    "BAFN",
-    "BAH",
-    "BAK",
-    "BALL",
-    "BAM",
-    "BANC",
-    "BAND",
-    "BANF",
-    "BANL",
-    "BANR",
-    "BANX",
-    "BAOS",
-    "BAP",
-    "BARK",
     "BASE",
     "BATL",
     "BATRA",
@@ -283,6 +263,12 @@ const proxyList = [
 	
 	//'http://halusngj:iqii2z5mv1ke@38.154.227.167:5868',//'http://64.62.219.99:3128',
 ];
+
+app.get('/json', async (req, res) => {
+	res.write(JSON.stringify(jsonTickers));
+	res.end();
+});
+
 
 
 //const proxy = 'http://64.62.219.99:3128';
