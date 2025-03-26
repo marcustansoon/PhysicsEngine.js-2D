@@ -1,0 +1,194 @@
+[
+    { 
+        "symbol": "BTCUSD", 
+        "full_name": "BTCUSD", 
+        "description": "Bitcoin / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCBTC.svg"]
+    },
+    { 
+        "symbol": "ETHUSD", 
+        "full_name": "ETHUSD", 
+        "description": "Ethereum / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCETH.svg"]
+    },
+    { 
+        "symbol": "XRPUSD", 
+        "full_name": "XRPUSD", 
+        "description": "XRP / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCXRP.svg"]
+    },
+    { 
+        "symbol": "BNBUSD", 
+        "full_name": "BNBUSD", 
+        "description": "Binance Coin / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCBNB.svg"]
+    },
+    { 
+        "symbol": "SOLUSD", 
+        "full_name": "SOLUSD", 
+        "description": "Solana / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCSOL.svg"]
+    },
+    { 
+        "symbol": "DOGEUSD", 
+        "full_name": "DOGEUSD", 
+        "description": "Doge Coin / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCDOGE.svg"]
+    },
+    { 
+        "symbol": "ADAUSD", 
+        "full_name": "ADAUSD", 
+        "description": "Cardano Coin / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCADA.svg"]
+    },
+    { 
+        "symbol": "TRXUSD", 
+        "full_name": "TRXUSD", 
+        "description": "Tron Coin / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCTRX.svg"]
+    },
+    { 
+        "symbol": "SUIUSD", 
+        "full_name": "SUIUSD", 
+        "description": "SUI Coin / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCSUI.svg"]
+    },
+    { 
+        "symbol": "LINKUSD", 
+        "full_name": "LINKUSD", 
+        "description": "ChainLink Coin / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCLINK.svg"]
+    },
+    { 
+        "symbol": "TONUSD", 
+        "full_name": "TONUSD", 
+        "description": "TON Coin / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCTON.svg"]
+    },
+    { 
+        "symbol": "TRUMPUSD", 
+        "full_name": "TRUMPUSD", 
+        "description": "Trump Coin / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCTRUMP.svg"]
+    },
+    { 
+        "symbol": "MELANIAUSD", 
+        "full_name": "MELANIAUSD", 
+        "description": "Melanie Coin / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCMELANIA.svg"]
+    },
+    { 
+        "symbol": "BCHUSD", 
+        "full_name": "BCHUSD", 
+        "description": "Bitcoin Cash / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCBCH.svg"]
+    },
+    { 
+        "symbol": "LTCUSD", 
+        "full_name": "LTCUSD", 
+        "description": "Litecoin / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCLTC.svg"]
+    },
+    { 
+        "symbol": "DOTUSD", 
+        "full_name": "DOTUSD", 
+        "description": "Polkadot / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCDOT.svg"]
+    },
+    { 
+        "symbol": "AVAXUSD", 
+        "full_name": "AVAXUSD", 
+        "description": "Avalanche / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCAVAX.svg"]
+    },
+    { 
+        "symbol": "UNIUSD", 
+        "full_name": "UNIUSD", 
+        "description": "Uniswap / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCCOIN.svg"]
+    },
+    { 
+        "symbol": "SHIBUSD", 
+        "full_name": "SHIBUSD", 
+        "description": "Shiba Inu / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCSHIB.svg"]
+    },
+    { 
+        "symbol": "MATICUSD", 
+        "full_name": "MATICUSD", 
+        "description": "Polygon / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCMATIC.svg"]
+    },
+    { 
+        "symbol": "AAVEUSD", 
+        "full_name": "AAVEUSD", 
+        "description": "Aave / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCAAVE.svg"]
+    },
+    { 
+        "symbol": "ATOMUSD", 
+        "full_name": "ATOMUSD", 
+        "description": "Cosmos / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCATOM.svg"]
+    },
+    { 
+        "symbol": "FILUSD", 
+        "full_name": "FILUSD", 
+        "description": "Filecoin / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCFIL.svg"]
+    },
+    { 
+        "symbol": "HBARUSD", 
+        "full_name": "HBARUSD", 
+        "description": "Hedera / US. Dollar", 
+        "type": "crypto", 
+        "exchange": "Binance", 
+        "logo_urls": ["https://s3-symbol-logo.tradingview.com/crypto/XTVCHBAR.svg"]
+    }
+]

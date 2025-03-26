@@ -23,6 +23,7 @@
   <script type="text/javascript" src="lib/charting_library.js"></script>
 
   <script type="text/javascript">
+  
  const DummyDatafeed = {
   onReady: function(callback) {
     setTimeout(() => {
@@ -39,8 +40,8 @@
     }, 100);
   },
 
-  searchSymbols: function(userInput, exchange, symbolType, onResultReadyCallback) {
-      const allSymbols = [
+  searchSymbols: async function(userInput, exchange, symbolType, onResultReadyCallback) {
+      let allSymbols = [
       { symbol: "DUMMY:STOCK", full_name: "DUMMY:STOCK", description: "Dummy Stock", type: "stock", "exchange": "", logo_urls: ["https://s3-symbol-logo.tradingview.com/crypto/XTVCETH.svg"]},
       { symbol: "BTCUSD", full_name: "BTCUSD", description: "Bitcoin / US. Dollar", type: "crypto", "exchange": "Binance", logo_urls: ["https://s3-symbol-logo.tradingview.com/crypto/XTVCADA.svg"]},
       { symbol: "ETHUSD", full_name: "ETHUSD", description: "Ethereum / US. Dollar", type: "crypto", "exchange": "Binance", logo_urls: ["https://s3-symbol-logo.tradingview.com/crypto/XTVCETH.svg"]},
@@ -55,20 +56,34 @@
       { symbol: "TONUSD", full_name: "TONUSD", description: "TON Coin / US. Dollar", type: "crypto", "exchange": "Binance", logo_urls: ["https://s3-symbol-logo.tradingview.com/crypto/XTVCTON.svg"]},
       { symbol: "TRUMPUSD", full_name: "TRUMPUSD", description: "Trump Coin / US. Dollar", type: "crypto", "exchange": "Binance", logo_urls: ["https://s3-symbol-logo.tradingview.com/crypto/XTVCTRUMP.svg"]},
       { symbol: "MELANIAUSD", full_name: "MELANIAUSD", description: "Melanie Coin / US. Dollar", type: "crypto", "exchange": "Binance", logo_urls: ["https://s3-symbol-logo.tradingview.com/crypto/XTVCMELANIA.svg"]},
+
+
+
+      
+      //{ symbol: "AAPL", full_name: "AAPL", description: "Apple", type: "stock", "exchange": "Nasdaq", logo_urls: ["https://s3-symbol-logo.tradingview.com/crypto/XTVCMELANIA.svg"]},
     ];
 
-    const results = allSymbols.filter(s =>
+    
+    let timeNow = Date.now();
+    window.activeSymbolSearch = timeNow;
+    let results = await fetch(`https://foodify-ai.great-site.net/symbol-search.php?query=${userInput}`).then(d => d.json()); 
+
+    if(window.activeSymbolSearch === timeNow) {
+        console.log("Search results:", results.data);
+        setTimeout(() => onResultReadyCallback(results.data), 0);
+    }
+    /*const results = allSymbols.filter(s =>
       s.symbol.toLowerCase().includes(userInput.toLowerCase()) ||
       s.description.toLowerCase().includes(userInput.toLowerCase())
-    );
+    );*/
 
-    console.log("Search results:", results);
-    setTimeout(() => onResultReadyCallback(results), 0);
+    //console.log("Search results:", results.data);
+    //setTimeout(() => onResultReadyCallback(results.data), 0);
   },
 
-  resolveSymbol: function(symbolName, onSymbolResolvedCallback, onResolveErrorCallback) {
+  resolveSymbol: async function(symbolName, onSymbolResolvedCallback, onResolveErrorCallback) {
     console.log("resolveSymbol called with:", symbolName);
-    const symbols = {
+    let symbols = {
       /*"DUMMY:STOCK": {
         name: "DUMMY:STOCK",
         description: "Dummy Stock",
@@ -279,12 +294,31 @@
         supported_resolutions:  ["1", "3", "5", "15", "30", "60", "120", "180", "240", "300", "360", "480", "720", "D", "2D", "3D", "4D", "5D", "6D", "10D", "15D", "45D", "1W", "2W", "3W", "1M", "2M", "3M", "6M"],
         volume_precision: 2,
       },
+
+      
+    //   "AAPL": {
+    //     name: "AAPL",
+    //     description: 'Apple Inc.',
+    //     type: "stock",
+    //     ticker: "AAPL",
+    //     session: '0930-1600:12345', // 9:30 AM - 4:00 PM EST, Mon-Fri
+    //     timezone: 'America/New_York', // Matches AAPL’s market
+    //     minmov: 1,
+    //     pricescale: 100,
+    //     has_intraday: true,
+    //     has_daily: true,
+    //     intraday_multipliers:   ["D"],
+    //     supported_resolutions:  ["D", "2D", "3D", "4D", "5D", "6D", "10D", "15D", "45D", "1W", "2W", "3W", "1M", "2M", "3M", "6M"],
+    //     volume_precision: 2,
+    //   },
     };
 
+    symbols = await fetch(`https://foodify-ai.great-site.net/symbol-resolve.php?query=${symbolName}`).then(d => d.json()); 
+
     setTimeout(() => {
-      if (symbols[symbolName]) {
+      if (symbols.data && symbols.data[0]) {
         console.log("Resolving symbol:", symbolName);
-        onSymbolResolvedCallback(symbols[symbolName]);
+        onSymbolResolvedCallback(symbols.data[0]);
       } else {
         console.log("Symbol not found:", symbolName);
         onResolveErrorCallback("Symbol not found: " + symbolName);
@@ -312,7 +346,7 @@
     }
 
 
-    if(["BTCUSD", "ETHUSD", "SOLUSD", "XRPUSD", "ADAUSD", "BNBUSD", "DOGEUSD", "TRXUSD", "TRUMPUSD", "MELANIAUSD", "TONUSD", "SUIUSD", "LINKUSD"].includes(symbolInfo.name)){
+    if(["BTCUSD", "ETHUSD", "SOLUSD", "XRPUSD", "ADAUSD", "BNBUSD", "DOGEUSD", "TRXUSD", "TRUMPUSD", "MELANIAUSD", "TONUSD", "SUIUSD", "LINKUSD", "BCHUSD", "LTCUSD", "DOTUSD", "AVAXUSD", "UNIUSD", "SHIBUSD", "MATICUSD", "AAVEUSD", "ATOMUSD", "FILUSD", "HBARUSD"].includes(symbolInfo.name)){
         let coin, data;
 
         switch(symbolInfo.name){
@@ -356,7 +390,7 @@
                 coin = "MELANIA";
                 break;
             default:
-                coin = "BTC";
+                coin = symbolInfo.name.replace("USD", "");
         }
         switch(resolution) {
             case "1":
@@ -411,10 +445,41 @@
             default:
                 // code block
         }
+    }else if(["AAPL", "A", "META", "TSLA", "NVDA", "AMZN", "GOOGL", "MSFT"].includes(symbolInfo.name) || 1) {
+        let ticker, data;
 
-
-
-
+        switch(symbolInfo.name){
+            case "AAPL":
+                ticker = "AAPL";
+                break;
+            case "META":
+                ticker = "META";
+                break;
+            case "TSLA":
+                ticker = "TSLA";
+                break;
+            case "A":
+                ticker = "A";
+                break;
+            default:
+                ticker = symbolInfo.name;
+        }
+        switch(resolution) {
+            case "1D":
+                data = await fetchMacroTrendsData(ticker, currentTime, endTime);
+                for(let index = 0; index < data.length; index++){
+                    bars.push({
+                        time: data[index].d,
+                        open: parseFloat(data[index].o),
+                        high: parseFloat(data[index].h),
+                        low: parseFloat(data[index].l),
+                        close: parseFloat(data[index].c),
+                        volume: parseFloat(data[index].v) * 1000000
+                    });
+                }
+                break;
+            default:
+        }
 
     }else if (resolution === "7") { 
       while (currentTime < endTime) {
@@ -530,9 +595,54 @@ break;
   },
 
    subscribeBars: function(symbolInfo, resolution, onRealtimeCallback, subscriberUID, onResetCacheNeededCallback) {
-        console.log(`Subscribing to ${resolution} bars for ${symbolInfo.ticker}`);
+
+        console.log('[subscribeBars]:', symbolInfo.name, resolution, subscriberUID); // ETHUSD 15 ETHUSD_#_15
+
+
+
+
+
+
+
+
+
+        if(!["BTCUSD", "ETHUSD", "SOLUSD", "XRPUSD", "ADAUSD", "BNBUSD", "DOGEUSD", "TRXUSD", "TRUMPUSD", "MELANIAUSD", "TONUSD", "SUIUSD", "LINKUSD", "BCHUSD", "LTCUSD", "DOTUSD", "AVAXUSD", "UNIUSD", "SHIBUSD", "MATICUSD", "AAVEUSD", "ATOMUSD", "FILUSD", "HBARUSD"].includes(symbolInfo.name)){
+            //https://stockanalysis.com/api/quotes/s/tsla
+            window.activeSubscriptions = window.activeSubscriptions || {};
+            window.activeSubscriptions[subscriberUID] = {
+                symbol: symbolInfo.name,
+                resolution: resolution,
+                callback: onRealtimeCallback,
+                lastBarTime: 0,
+                intervalId: null
+            };
+
+            // Align to the last 1-minute boundary
+            window.activeSubscriptions[subscriberUID].lastBarTime = Date.now() - (Date.now() % (24 * 60 * 60 * 1000));
+            
+            // Use the last historical bar if available
+            if (this.lastBars && this.lastBars.length) {
+                window.activeSubscriptions[subscriberUID].lastBarTime = this.lastBars[this.lastBars.length - 1].time;
+            }
+            window.activeSubscriptions[subscriberUID].intervalId = setInterval(async () => {
+                let data = await fetch(`https://stockanalysis.com/api/quotes/s/${symbolInfo.name.toLowerCase()}`).then(d => d.json());
+                const newBar = {
+                    time: window.activeSubscriptions[subscriberUID].lastBarTime,
+                    open: data.data.o,
+                    high: data.data.h,
+                    low: data.data.l,
+                    close: data.data.p,
+                    volume: data.data.v
+                };
+                window.activeSubscriptions[subscriberUID].callback(newBar);
+            }, 5 * 1000);  // 5-seconds interval
+
+
+            return;
+        }
+
         if (resolution === "7") {
-          // Align to the last 7-minute boundary
+          // Align to the last 5-minute boundary
           let lastBarTime = Date.now() - (Date.now() % (7 * 60 * 1000));
           
           // Use the last historical bar if available
@@ -546,23 +656,58 @@ break;
           }
 
           window.realtimeInterval = setInterval(() => {
-            lastBarTime += 7 * 60 * 1000; // Next 7-minute slot
+            lastBarTime += 7 * 60 * 1000; // Next 5-minute slot
             const newBar = {
               time: lastBarTime,
-              open: 100 + Math.random() * 10,
-              high: 105 + Math.random() * 10,
-              low: 95 + Math.random() * 10,
-              close: 100 + Math.random() * 10,
+              open: 84200 + Math.random() * 10,
+              high: 83600 + Math.random() * 10,
+              low: 82600 + Math.random() * 10,
+              close: 82600 + Math.random() * 10,
               volume: 1000 + Math.random() * 500
             };
-            console.log("New 7-min bar:", newBar);
+            console.log("New 5-min bar:", newBar);
             onRealtimeCallback(newBar);
           }, 7 * 60 * 1000); // 10 seconds for testing; use 7 * 60 * 1000 (420000 ms) for real 7-minute updates
         }else if(resolution === "1") {
-            console.log('1min')
+
+            window.activeSubscriptions = window.activeSubscriptions || {};
+            window.activeSubscriptions[subscriberUID] = {
+                symbol: symbolInfo.name,
+                resolution: resolution,
+                callback: onRealtimeCallback,
+                lastBarTime: 0,
+                intervalId: null
+            };
+
+            // Align to the last 1-minute boundary
+            window.activeSubscriptions[subscriberUID].lastBarTime = Date.now() - (Date.now() % (1 * 60 * 1000));
+            
+            // Use the last historical bar if available
+            if (this.lastBars && this.lastBars.length) {
+                window.activeSubscriptions[subscriberUID].lastBarTime = this.lastBars[this.lastBars.length - 1].time;
+            }
+            
+            window.activeSubscriptions[subscriberUID].intervalId = setInterval(async () => {
+                let data = await fetchBinanceData("1m", symbolInfo.name.replace("USD", ""), window.activeSubscriptions[subscriberUID].lastBarTime, Date.now() + 60 * 1000);
+                window.activeSubscriptions[subscriberUID].lastBarTime += 5 * 1000; // Next 10 seconds slot
+                if(!data.length) return;
+                const newBar = {
+                    time: data[data.length-1][0],
+                    open: data[data.length-1][1],
+                    high: data[data.length-1][2],
+                    low: data[data.length-1][3],
+                    close: data[data.length-1][4],
+                    volume: data[data.length-1][5]
+                };
+                window.activeSubscriptions[subscriberUID].callback(newBar);
+            }, 5 * 1000);  // 5-seconds interval
+
+
+/*
+
+            return;
           // Align to the last 1-minute boundary
-          let lastBarTime = Date.now() - (Date.now() % (1 * 60 * 1000));
-            console.log(lastBarTime)
+          let lastBarTime = Date.now() - (Date.now() % (parseInt(resolution) * 60 * 1000));
           
           // Use the last historical bar if available
           if (this.lastBars && this.lastBars.length) {
@@ -575,28 +720,153 @@ break;
           }
 
 
+            window.activeSubscriptions[subscriberUID].intervalId = setInterval(async () => {
+                    const sub = window.activeSubscriptions[subscriberUID];
+                    let data = await fetchBinanceData(resolution + "m", symbolInfo.name.replace("USD", ""), lastBarTime, Date.now() + 60 * 1000);
+                            if (!sub.lastBar) {
+                                sub.callback(bar);
+                                sub.lastBar = bar;
+                            } else {
+                                const lastTime = sub.lastBar.time / 1000;
+                                const newTime = bar.time / 1000;
+                                if (newTime >= lastTime + HOUR_IN_SECONDS) {
+                                    sub.callback(bar);
+                                    sub.lastBar = bar;
+                                } else if (newTime === lastTime) {
+                                    sub.callback({ ...sub.lastBar, ...bar });
+                                }
+                            }
+            })
 
-          window.realtimeInterval = setInterval(() => {
-            lastBarTime += 1 * 60 * 1000; // Next 1-minute slot
-            console.log(lastBarTime)
+
+        return;
+        window.realtimeInterval = setInterval(async () => {
+            let data = await fetchBinanceData(resolution + "m", symbolInfo.name.replace("USD", ""), lastBarTime, Date.now() + 60 * 1000);
+                if(!data.length) return;
             const newBar = {
-              time: lastBarTime,
-              open: 100 + Math.random() * 10,
-              high: 105 + Math.random() * 10,
-              low: 95 + Math.random() * 10,
-              close: 100 + Math.random() * 10,
-              volume: 1000 + Math.random() * 500
+              time: data[data.length-1][0],
+              open: data[data.length-1][1],
+              high: data[data.length-1][2],
+              low: data[data.length-1][3],
+              close: data[data.length-1][4],
+              volume: data[data.length-1][5]
             };
-            console.log("New 1-min bar:", newBar);
             onRealtimeCallback(newBar);
-          }, 1 * 60 * 1000); // use 7 * 60 * 1000 (420000 ms) for real 7-minute updates
+          }, 1 * 5 * 1000);*/
+        } else if(["5", "15", "30"].includes(resolution)){
+
+            window.activeSubscriptions = window.activeSubscriptions || {};
+            window.activeSubscriptions[subscriberUID] = {
+                symbol: symbolInfo.name,
+                resolution: resolution,
+                callback: onRealtimeCallback,
+                lastBarTime: 0,
+                intervalId: null
+            };
+
+            // Align to the last 1-minute boundary
+            window.activeSubscriptions[subscriberUID].lastBarTime = Date.now() - (Date.now() % (1 * 60 * 1000));
+            
+            // Use the last historical bar if available
+            if (this.lastBars && this.lastBars.length) {
+                window.activeSubscriptions[subscriberUID].lastBarTime = this.lastBars[this.lastBars.length - 1].time;
+            }
+            
+            window.activeSubscriptions[subscriberUID].intervalId = setInterval(async () => {
+                let data = await fetchBinanceData("1m", symbolInfo.name.replace("USD", ""), window.activeSubscriptions[subscriberUID].lastBarTime, Date.now() + 60 * 1000);
+                window.activeSubscriptions[subscriberUID].lastBarTime += 5 * 1000; // Next 10 seconds slot
+                if(!data.length) return;
+                const newBar = {
+                    time: data[data.length-1][0],
+                    open: data[data.length-1][1],
+                    high: data[data.length-1][2],
+                    low: data[data.length-1][3],
+                    close: data[data.length-1][4],
+                    volume: data[data.length-1][5]
+                };
+                window.activeSubscriptions[subscriberUID].callback(newBar);
+            }, 5 * 1000);  // 5-seconds interval
+        } else if(["60", "120", "180", "240", "300", "360", "480", "720"].includes(resolution)){
+
+            window.activeSubscriptions = window.activeSubscriptions || {};
+            window.activeSubscriptions[subscriberUID] = {
+                symbol: symbolInfo.name,
+                resolution: resolution,
+                callback: onRealtimeCallback,
+                lastBarTime: 0,
+                intervalId: null
+            };
+
+            let getHours = Math.round(parseInt(resolution) / 60);
+
+            // Align to the last 1-minute boundary
+            window.activeSubscriptions[subscriberUID].lastBarTime = Date.now() - (Date.now() % (getHours * 60 * 60 * 1000));
+            
+            // Use the last historical bar if available
+            if (this.lastBars && this.lastBars.length) {
+                window.activeSubscriptions[subscriberUID].lastBarTime = this.lastBars[this.lastBars.length - 1].time;
+            }
+            
+            window.activeSubscriptions[subscriberUID].intervalId = setInterval(async () => {
+                let data = await fetchBinanceData( getHours + "h", symbolInfo.name.replace("USD", ""), window.activeSubscriptions[subscriberUID].lastBarTime, Date.now() + getHours * 60 * 60 * 1000);
+                //window.activeSubscriptions[subscriberUID].lastBarTime += 5 * 1000; // Next 5 seconds slot
+                if(!data.length) return;
+                const newBar = {
+                    time: Date.now(),
+                    open: data[data.length-1][1],
+                    high: data[data.length-1][2],
+                    low: data[data.length-1][3],
+                    close: data[data.length-1][4],
+                    volume: data[data.length-1][5]
+                };
+                window.activeSubscriptions[subscriberUID].callback(newBar);
+            }, 3 * 1000);  // 3-seconds interval
+        } else if(["1D"].includes(resolution)){
+            window.activeSubscriptions = window.activeSubscriptions || {};
+            window.activeSubscriptions[subscriberUID] = {
+                symbol: symbolInfo.name,
+                resolution: resolution,
+                callback: onRealtimeCallback,
+                lastBarTime: 0,
+                intervalId: null
+            };
+
+            // Align to the last 1-minute boundary
+            window.activeSubscriptions[subscriberUID].lastBarTime = Date.now() - (Date.now() % (24 * 60 * 60 * 1000));
+            
+            // Use the last historical bar if available
+            if (this.lastBars && this.lastBars.length) {
+                window.activeSubscriptions[subscriberUID].lastBarTime = this.lastBars[this.lastBars.length - 1].time;
+            }
+
+            
+            window.activeSubscriptions[subscriberUID].intervalId = setInterval(async () => {
+                let data = await fetchBinanceData("1d", symbolInfo.name.replace("USD", ""), window.activeSubscriptions[subscriberUID].lastBarTime, Date.now() + 24 * 60 *  60 * 1000);
+                
+                //window.activeSubscriptions[subscriberUID].lastBarTime += 5 * 1000; // Next 5 seconds slot
+                if(!data.length) return;
+                const newBar = {
+                    time: data[data.length-1][0],
+                    open: data[data.length-1][1],
+                    high: data[data.length-1][2],
+                    low: data[data.length-1][3],
+                    close: data[data.length-1][4],
+                    volume: data[data.length-1][5]
+                };
+                window.activeSubscriptions[subscriberUID].callback(newBar);
+            }, 3 * 1000);  // 3-seconds interval
         }
       },
 
-  unsubscribeBars: function(subscriberUID) {
-    clearInterval(window.realtimeInterval);
-  }
+    unsubscribeBars: function(subscriberUID) {
+        console.log('[unsubscribeBars]: Unsubscribed', subscriberUID);
+        if (window.activeSubscriptions && window.activeSubscriptions[subscriberUID]) {
+            clearInterval(window.activeSubscriptions[subscriberUID].intervalId);
+            delete window.activeSubscriptions[subscriberUID];
+        }
+    }
 };
+
 
 window.onload = function() {
   const widgetOptions = {
@@ -607,7 +877,7 @@ window.onload = function() {
     library_path: "lib/",
     timeframe: "15",
     supported_resolutions: ["1", "3", "5", "15", "30", "60", "120", "180", "240","300", "360", "480", "720", "D", "2D", "3D", "4D", "5D", "6D", "10D", "15D", "45D", "1W", "2W", "3W", "1M", "2M", "3M", "6M"],
-    debug: true,
+    debug: false,
     fullscreen: false,
     autosize: true,
     timezone: "Etc/UTC",
@@ -633,7 +903,7 @@ window.onload = function() {
     enabled_features: ["header_saveload", "header_symbol_search", "show_symbol_logos"], // Added show_symbol_logos
     
     // Ensure no accidental disabling
-    disabled_features: []
+    disabled_features: [],
   };
 
   const widget = new TradingView.widget(widgetOptions)
@@ -752,6 +1022,7 @@ async function fetchHyperLiquidData(interval, coin, currentTime, endTime){
 }
 
 async function fetchBinanceData(interval, coin, currentTime, endTime){
+    
     return new Promise(async (resolve, reject) => {
         // from = currentTime
         // to = endTime
@@ -801,7 +1072,7 @@ async function fetchBinanceData(interval, coin, currentTime, endTime){
         const maxBarCount = 1000;
         let totalBarCount = (endTime - currentTime) / intervalStep;
         let throttleCount = Math.ceil(totalBarCount / maxBarCount);
-        console.log(throttleCount, totalBarCount)
+        //console.log(throttleCount, totalBarCount)
 
 
 
@@ -834,6 +1105,7 @@ async function delay(ms){
 async function _fetchBinanceData(interval, coin, currentTime, endTime){
     return new Promise((resolve, reject) => {
         // Fetch request
+        // Binance API from - inclusive; to - inclusive
         let url = `https://foodify-ai.great-site.net/binance.php?symbol=${coin}USDT&interval=${interval}&startTime=${currentTime}&endTime=${endTime-1}&isPerpetualContract=${["MELANIA"].includes(coin) ? 1 : 0}`;
         fetch(url, {
             method: "GET", 
@@ -855,6 +1127,35 @@ async function _fetchBinanceData(interval, coin, currentTime, endTime){
         });
     });
 }
+
+
+
+
+async function fetchMacroTrendsData(ticker, currentTime, endTime){
+    return new Promise((resolve, reject) => {// Fetch request
+        let url = `https://foodify-ai.great-site.net/macrotrends.php?ticker=${ticker}&startTime=${currentTime}&endTime=${endTime}`;
+        fetch(url, {
+            method: "GET", 
+            headers: {
+                'Accept': 'application/json',
+            },
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json(); // Parse the JSON response
+        })
+        .then(data => {
+            resolve(data.status === "success" && data.data ? data.data : []); // Return the response
+        })
+        .catch(error => {
+            console.error("Fetch error:", error); // Log any errors
+        });
+    });
+}
+
+
   </script>
 </body>
 </html>
