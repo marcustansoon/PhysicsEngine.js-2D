@@ -1,3 +1,135 @@
+// Encode string digits into proper pixel data
+function getEncodedPixelData(char) {
+    let pixelData;
+    switch (char) {
+        case '0': pixelData = 0; break;
+        case '1': pixelData = 1; break;
+        case '2': pixelData = 2; break;
+        case '3': pixelData = 3; break;
+        case '4': pixelData = 4; break;
+        case '5': pixelData = 5; break;
+        case '6': pixelData = 6; break;
+        case '7': pixelData = 7; break;
+        case '8': pixelData = 8; break;
+        case '9': pixelData = 9; break;
+        case '.': pixelData = 10; break;
+        case '-': pixelData = 11; break;
+        case ',': pixelData = 12; break;
+        case ';': pixelData = 13; break;
+        default: pixelData = 15; break;
+    }
+    return pixelData;
+}
+
+// Decode pixel data into proper digits (string)
+function getDecodedPixelData(rawPixelData) {
+    let pixelData;
+    switch (rawPixelData) {
+        case 0: pixelData = '0'; break;
+        case 1: pixelData = '1'; break;
+        case 2: pixelData = '2'; break;
+        case 3: pixelData = '3'; break;
+        case 4: pixelData = '4'; break;
+        case 5: pixelData = '5'; break;
+        case 6: pixelData = '6'; break;
+        case 7: pixelData = '7'; break;
+        case 8: pixelData = '8'; break;
+        case 9: pixelData = '9'; break;
+        case 10: pixelData = '.'; break;
+        case 11: pixelData = '-'; break;
+        case 12: pixelData = ','; break;
+        case 13: pixelData = ';'; break;
+        default: pixelData = ' '; break;
+    }
+    return pixelData;
+}
+
+
+async function uploadImageToImgur(base64Image, accessToken, description) {
+    const url = 'https://api.imgur.com/3/image';
+
+    // Read image file as a Base64 encoded string (using FileReader)
+    //const imageData = await fetch(imagePath).then(res => res.arrayBuffer());
+    //const base64Image = btoa(String.fromCharCode(...new Uint8Array(imageData)));
+
+    const postData = {
+        description:description,
+        image: base64Image.split(',')[1], // Base64-encoded image data
+    };
+
+    const headers = {
+        "Authorization": `Bearer ${accessToken}`,
+        "Content-Type": "application/json"
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(postData)
+        });
+
+        const result = await response.json();
+        return result;
+    } catch (error) {
+        console.error('Error uploading image:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+async function addImageToImgurAlbum(imageId, albumId, accessToken) {
+    const url = `https://api.imgur.com/3/album/${albumId}/add`;
+
+    const postData = {
+        ids: [imageId] // Array of image IDs to be added
+    };
+
+    const headers = {
+        "Authorization": `Bearer ${accessToken}`,
+        "Content-Type": "application/json"
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(postData)
+        });
+
+        const result = await response.json();
+        const httpCode = response.status;
+
+        if (httpCode === 200) {
+            return {
+                success: true,
+                data: result.data
+            };
+        } else {
+            return {
+                success: false,
+                error: result.data.error || `HTTP ${httpCode}: Unknown error`,
+                raw_response: result
+            };
+        }
+    } catch (error) {
+        console.error('Error adding image to album:', error);
+        return { success: false, error: error.message };
+    }
+}
+
+async function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+
+
+
+
+
+
+
+
 for(let loop = 0; loop < tickers.length; loop++){
     let ticker = tickers[loop]
 //tickers.forEach(async ticker => {
