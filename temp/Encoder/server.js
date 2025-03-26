@@ -136,6 +136,12 @@ async function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+const fetchWithTimeout = (url, options, timeout = 10000) => {
+    return Promise.race([
+        fetch(url, options),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Fetch timeout')), timeout))
+    ]);
+};
 
 
 
@@ -146,67 +152,128 @@ async function delay(ms) {
 
 
 
-let tickers = ['AVBP', 'AVD', 'AVDL', 'AVDX', 'AVGO', 'AVGR', 'AVIR', 'AVNS', 'AVNT', 'AVNW', 'AVO', 'AVPT', 'AVR', 'AVT', 'AVTE', 'AVTR', 'AVTX', 'AVXL', 'AVY', 'AWH', 'AWI', 'AWIN', 'AWK', 'AWR', 'AWRE'];
+
+
+
+
+
+let tickers = [
+    "AWX",
+    "AX",
+    "AXDX",
+    "AXGN",
+    "AXL",
+    "AXON",
+    "AXP",
+    "AXR",
+    "AXS",
+    "AXSM",
+    "AXTA",
+    "AXTI",
+    "AYI",
+    "AYRO",
+    "AYTU",
+    "AZ",
+    "AZEK",
+    "AZI",
+    "AZN",
+    "AZO",
+    "AZPN",
+    "AZTA",
+    "AZTR",
+    "AZUL",
+    "AZZ"
+];
 let jsonTickers = {};
 
 const albumId = 'G0DQ6Hk'; // Imgur album ID
 const accessToken = 'ffc8fd46eb1f0d2bf28d099af47f421eb574bfa3'; // Imgur access token
 
-tickers = ["IBM"]
+//tickers = ["IBM", "NVDA", "MSFT"]
 
 
 
-//const proxy = 'http://halusngj:iqii2z5mv1ke@38.154.227.167:5868';
+// Proxy list
 const proxyList = [
-	'http://halusngj:iqii2z5mv1ke@38.154.227.167:5868',//'http://64.62.219.99:3128',
+	"http://43.153.25.185:13001",
+	"http://43.153.61.52:13001",
+	"http://43.153.91.13:13001",
+	"http://43.153.85.114:13001",
+	"http://43.153.2.82:13001",
+	"http://43.153.7.172:13001",
+	"http://31.40.248.2:8080",
+	"http://139.59.1.14.2:80",
+	"http://50.223.246.237:80",
+	"http://50.174.7.159:80",
+	"http://50.207.199.87:80",
+	"http://32.223.6.94:80",
+	"http://172.188.122.92:80",
+	"http://13.38.153.36:80",
+	"http://13.37.59.99:3128",
+	
+	"http://50.122.86.118:80",
+	"http://188.68.52.244:80",
+	"http://184.169.154.119:80",
+	"http://13.56.192.187:80",
+	
+	
+	"http://13.38.153.36:80",
+	"http://13.36.104.85:80",
+	"http://13.37.73.214:80",
+	"http://44.195.247.145:80",
+	"http://50.174.7.153:80",
+	"http://165.232.129.150:80",
+	"http://50.239.72.18:80",
+	"http://50.217.226.47:80",
+	"http://50.239.72.19:80",
+	
+	"http://50.221.74.130:80",
+	"http://190.58.248.86:80",
+	"http://203.115.101.51:82",
+	"http://188.68.52.244:80",
+	"http://184.169.154.119:80",
+	"http://13.56.192.187:80",
+	"http://4.145.89.88:8080",
+	
+	//'http://halusngj:iqii2z5mv1ke@38.154.227.167:5868',//'http://64.62.219.99:3128',
 ];
 
 
 //const proxy = 'http://64.62.219.99:3128';
-
-
 app.get('/proxy', async (req, res) => {
-  const targetUrl = req.query.url;
-				
-			
-				
-					
-					
-	for(let loop = 0; loop < tickers.length; loop++){
+	const targetUrl = req.query.url;
+
+
+	// Set initial proxy
+	let proxyIndex = 0;
+	let proxy = proxyList[proxyIndex];
+	const proxyRetries = 5;
+	let maxRetriesAttempt = proxyRetries;
+	let agent = new HttpsProxyAgent(proxy);
+
+	for (let loop = 0; loop < tickers.length; loop++) {
 		let ticker = tickers[loop];
-				
-				
-				  
-		for (let i = 0; i < proxyList.length; i++) {
-					  
-			let proxy = proxyList[i];
-			let agent = new HttpsProxyAgent(proxy);
-			
-			res.write("Using proxy: " + proxy + ' \n');
-						
-			let proxyFailedAttempts = 0;
+		
+		let shouldLoop = true;
+		let reply;
+		
+		res.write("TICKER: " + ticker + ' \n');
+		res.write("Using proxy: " + proxy + ' \n');
+
+		while (shouldLoop) {
+			try {
+
+				// await delay(500)
+				await fetchWithTimeout(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&outputsize=full&apikey=dem`, {
+					agent: agent,
+				}, 15000).then(d => d.json()).then(async resp => {
+					reply = resp;
 					
-			while(proxyFailedAttempts < 3){
-				try {
-								
-								
-				
-				
-				
-				
-				
-				
-				await delay(500)
-				await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&outputsize=full&apikey=demo`,{
-				   agent: agent, 
-				  }).then(d => d.json()).then(async resp => {
-					
-					if(!resp['Time Series (Daily)']) {
-						res.write(resp);
-						throw new Error("Data not found");
-						return;
+					if (!resp['Time Series (Daily)']) {
+						res.write(JSON.stringify(resp));
+						throw new Error("Error data not found");
 					}
-					
+
 					let arr = [];
 					for (const [date, values] of Object.entries(resp['Time Series (Daily)'])) {
 						arr.push({
@@ -218,9 +285,12 @@ app.get('/proxy', async (req, res) => {
 							v: values['5. volume']
 						});
 					}
+					
+					if(!arr.length)
+						throw new Error("Error length is zero");
 
 
-				
+
 					let string = "";
 					arr.forEach((values, index) => {
 						string += values.d + "," + values.o + "," + values.h + "," + values.l + "," + values.c + "," + values.v;
@@ -228,43 +298,43 @@ app.get('/proxy', async (req, res) => {
 							string += ";";
 						}
 					});
-					
+
 					let widthIndex = 0;
 					let heightIndex = 0;
-				
+
 					let width = 800;
 					let height = Math.ceil(string.length / 6 / width);
-					
+
 					// Fill up empty spaces
 					let paddingCount = 6 - (string.length % 6);
 					while (paddingCount--) {
 						string += " ";
 					}
-				
+
 					// Create a canvas element
 					let canvas = createCanvas(width, height);
-					
+
 					// Get the 2D drawing context
 					let ctx = canvas.getContext('2d');
-					
+
 					// Define a color (RGB) - white
 					ctx.fillStyle = 'rgb(255, 255, 255)';
-					
+
 					// Fill the entire canvas with the color
 					ctx.fillRect(0, 0, canvas.width, canvas.height);
-				
+
 					for (let i = 0; i < string.length; i += 6) {
 						// Get RGB values from the encoded pixel data
-						let red = ((getEncodedPixelData(string[i]) & 0xF) << 4) | (getEncodedPixelData(string[i+1]) & 0xF);
-						let green = ((getEncodedPixelData(string[i+2]) & 0xF) << 4) | (getEncodedPixelData(string[i+3]) & 0xF);
-						let blue = ((getEncodedPixelData(string[i+4]) & 0xF) << 4) | (getEncodedPixelData(string[i+5]) & 0xF);
-					
+						let red = ((getEncodedPixelData(string[i]) & 0xF) << 4) | (getEncodedPixelData(string[i + 1]) & 0xF);
+						let green = ((getEncodedPixelData(string[i + 2]) & 0xF) << 4) | (getEncodedPixelData(string[i + 3]) & 0xF);
+						let blue = ((getEncodedPixelData(string[i + 4]) & 0xF) << 4) | (getEncodedPixelData(string[i + 5]) & 0xF);
+
 						// Set the pixel color
 						ctx.fillStyle = `rgb(${red}, ${green}, ${blue})`;
 						// console.log(`rgb(${red}, ${green}, ${blue})`)
 						// Draw the pixel at the current position
 						ctx.fillRect(widthIndex, heightIndex, 1, 1);
-					
+
 						// Move to the next pixel
 						widthIndex++;
 						if (widthIndex === width) {
@@ -272,82 +342,74 @@ app.get('/proxy', async (req, res) => {
 							heightIndex++;
 						}
 					}
-						
+
 					// Create a link to download the canvas as a PNG
 					let base64Image = canvas.toDataURL('image/png');
 					//res.write(base64Image);
 					//return;
-					
-					
+
+
 					const albumId = 'G0DQ6Hk'; // Imgur album ID
 					const accessToken = 'ffc8fd46eb1f0d2bf28d099af47f421eb574bfa3'; // Imgur access token
 					let dd = {
-								//"imgur-id": imageId,
-								"ticker": ticker,
-								"type": "daily",
-								"from":arr[arr.length-1]['d'],
-								"to":arr[0]['d'],
-							}
+						//"imgur-id": imageId,
+						"ticker": ticker,
+						"type": "daily",
+						"from": arr[arr.length - 1]['d'],
+						"to": arr[0]['d'],
+					}
 					let r = await uploadImageToImgur(base64Image, accessToken, JSON.stringify(dd));
-					if(r['success']){
+					if (r['success']) {
 						let imageId = r['data']['id'];
 						res.write(`Image uploaded successfully. ID: ${imageId} \n`)
-						let albumR = await addImageToImgurAlbum(imageId, albumId, accessToken);
-
-						if(albumR['success']){
-							res.write(`Image Album Added successfully \n`)
-							jsonTickers[ticker] = {
+						jsonTickers[ticker] = {
 								"imgur-id": imageId,
 								"ticker": ticker,
 								"type": "daily",
-								"from":arr[arr.length-1]['d'],
-								"to":arr[0]['d'],
-							};
-						}else{
+								"from": arr[arr.length - 1]['d'],
+								"to": arr[0]['d'],
+						};
+						let albumR = await addImageToImgurAlbum(imageId, albumId, accessToken);
+
+						if (albumR['success']) {
+							res.write(`Image Album Added successfully \n`)
+						} else {
 							res.write(`Added album failed \n`)
 						}
-					}else{
+						shouldLoop = false;
+					} else {
 						res.write(`Image uploaded failed \n`)
 					}
 				})
-			// })
-			
 
-				
-				
-				
-				
-				
-				
-				
-				
-				
-			 
-			 
-			//return;
-			//const response = await fetch(targetUrl, { agent });
-			//const data = await response.text();
-			//res.send(data);
-		  } catch (error) {
-			 
-			//res.status(500).send('Error: ' + error.message);
-			res.write(proxyFailedAttempts + ' Attempt : Error: ' + error.message + ' \n');
-			proxyFailedAttempts++;
-		  }
-		  
+
+			} catch (error) {
+				res.write(maxRetriesAttempt + ' Attempt : Error: ' + error.message + ' \n');
+				res.write(JSON.stringify(reply) + ' \n');
+				maxRetriesAttempt--;
+			}
+			
+			if (maxRetriesAttempt === 0) {
+				if (proxyIndex === proxyList.length - 1){
+					shouldLoop = false;
+					res.write('All proxies failed \n');
+					res.write(JSON.stringify(jsonTickers));
+					res.end();
+					return;
+				}
+
+				// Set next proxy
+				maxRetriesAttempt = proxyRetries;
+				proxyIndex++;
+				proxy = proxyList[proxyIndex];
+				agent = new HttpsProxyAgent(proxy);
+				res.write('Switched to proxy: ' + proxy + ' \n');
+			}
 		}
-		
-		if(proxyFailedAttempts === 3 && proxy === proxyList[proxyList.length - 1]){
-			res.write('All proxies failed \n');
-			res.write(JSON.stringify(jsonTickers));
-			res.end();
-			return;
-		}
-		  
-		  
-		}
+
 	}
 	
+	res.write(JSON.stringify(jsonTickers));
+	res.end();
 });
-
 app.listen(3000, () => console.log('Server running on port 3000'));
