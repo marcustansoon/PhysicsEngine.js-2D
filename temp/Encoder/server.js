@@ -158,36 +158,55 @@ const fetchWithTimeout = (url, options, timeout = 10000) => {
 
 
 let tickers = [
-    "BASE",
-    "BATL",
-    "BATRA",
-    "BATRK",
-    "BAX",
-    "BAYA",
-    "BB",
-    "BBAI",
-    "BBAR",
-    "BBBYQ",
-    "BBCP",
-    "BBD",
-    "BBDC",
-    "BBDO",
-    "BBGI",
-    "BBIO",
-    "BBLG",
-    "BBNX",
-    "BBSI",
-    "BBU",
-    "BBVA",
-    "BBW",
-    "BBWI",
-    "BBY",
-    "BC",
-    "BCAB",
-    "BCAL",
-    "BCAX",
-    "BCBP",
-    "BCC"
+    "CAMT",
+    "CAN",
+    "CANG",
+    "CANPY",
+    "CAPL",
+    "CAPN",
+    "CAPR",
+    "CAPT",
+    "CAR",
+    "CARA",
+    "CARE",
+    "CARG",
+    "CARM",
+    "CARR",
+    "CARS",
+    "CART",
+    "CARV",
+    "CASH",
+    "CASI",
+    "CASK",
+    "CASS",
+    "CASY",
+    "CAT",
+    "CATO",
+    "CATY",
+    "CAUD",
+    "CAVA",
+    "CB",
+    "CBAN",
+    "CBAT",
+    "CBFV",
+    "CBL",
+    "CBLL",
+    "CBNA",
+    "CBNK",
+    "CBRE",
+    "CBRL",
+    "CBRRF",
+    "CBSH",
+    "CBT",
+    "CBU",
+    "CBUS",
+    "CBZ",
+    "CC",
+    "CCAP",
+    "CCB",
+    "CCBG",
+    "CCCC",
+    "CCCS"
 ]
 let jsonTickers = {};
 
@@ -200,6 +219,218 @@ const accessToken = 'ffc8fd46eb1f0d2bf28d099af47f421eb574bfa3'; // Imgur access 
 
 // Proxy list
 const proxyList = [
+	"52.26.114.229:1080",
+	"128.140.113.110:3128",
+	"18.223.25.15:80",
+	"200.60.145.167:8082",
+	"81.215.198.27:1453",
+	"5.75.197.16:10602",
+	"43.153.69.148:18088",
+	"43.153.74.196:18088",
+	"142.171.85.100:800",
+	"43.153.110.21:18089",
+	"172.245.202.41:2335",
+	"43.153.102.192:18088",
+	"38.113.189.131:5340",
+	"43.153.50.118:18088",
+	"113.160.132.195:8080",
+	"47.243.113.74:5555",
+	"170.106.137.158:13001",
+	"170.106.107.101:13001",
+	"49.51.193.30:13001",
+	"3.71.239.218:3128",
+	"3.12.144.146:3128",
+	"43.135.134.152:13001",
+	"43.153.113.17:13001",
+	"43.135.138.21:13001",
+	"43.135.179.180:13001",
+	"170.106.117.36:13001",
+	"49.51.75.240:13001",
+	"43.130.2.30:13001",
+	"13.59.156.167:3128",
+	"161.97.136.251:3128",
+	"43.153.88.171:13001",
+	"43.153.107.10:13001",
+	"3.90.100.12:80",
+	"89.36.65.133:3128",
+	"43.153.11.118:13001",
+	"44.219.175.186:80",
+	
+	
+	"200.60.145.167:8082",
+	"38.113.190.153:5340",
+	"212.111.89.182:443",
+	"43.153.92.230:18088",
+	"185.254.96.244:3030",
+	"27.77.132.33:25810",
+	"172.188.122.92:80",
+	"43.153.110.21:18089",
+	"117.5.58.130:30549",
+	"172.245.202.16:2335",
+	"103.213.218.217:22854",
+	"154.236.177.101:1976",
+	"170.106.107.101:13001",
+	"27.79.245.82:16000",
+	"43.159.132.190:13001",
+	"43.153.4.125:13001",
+	"49.51.75.240:13001",
+	"43.130.9.70:13001",
+	"170.106.169.110:13001",
+	"117.54.114.33:80",
+	"190.103.177.131:80",
+	"77.238.103.98:8080",
+	"43.153.36.97:13001",
+	"43.153.88.171:13001",
+	"43.153.98.107:13001",
+	
+	"3.140.12.63:88",
+	"141.11.123.189:63650",
+	"43.130.32.94:13001",
+	"170.106.106.9:13001",
+	"43.130.17.73:13001",
+	"43.135.179.240:13001",
+	"72.10.160.91:26867",
+	"67.43.227.226:11305",
+	"195.35.2.231:80",
+	"4.175.200.138:8080",
+	"162.214.165.203:80",
+	"139.59.1.14:80",
+	"15.236.186.15:45554",
+	"3.106.120.30:20201",
+	"44.201.43.27:20202",
+	"18.175.216.106:20201",
+	"18.223.25.15:80",
+	"116.125.141.115:80",
+	"77.91.70.115:59620",
+	"77.221.141.36:53647",
+	"43.153.110.21:18089",
+	"13.38.153.36:80",
+	"8.218.14.185:1088",
+	"13.36.113.81:3128",
+	"13.37.73.214:80",
+	
+	
+	"43.153.22.230:13001",
+	"43.153.58.73:13001",
+	"43.153.22.138:13001",
+	"43.153.32.146:13001",
+	"43.153.69.199:13001",
+	"43.153.69.25:13001",
+	"43.153.91.13:13001",
+	"43.153.92.57:13001",
+	"43.153.103.45:13001",
+	"43.153.98.70:13001",
+	"43.153.94.8:13001",
+	"43.153.100.6:13001",
+	"43.153.107.74:13001",
+	"43.153.103.42:13001",
+	"43.153.79.15:13001",
+	"43.153.98.220:13001",
+	"43.153.8.210:13001",
+	"43.153.2.3:13001",
+	"50.169.222.243:80",
+	"43.153.2.82:13001",
+	"43.153.11.82:13001",
+	
+	"43.135.162.60:13001",
+	"170.106.115.219:13001",
+	"43.130.2.57:13001",
+	"170.106.110.139:13001",
+	"43.130.39.127:13001",
+	"43.159.149.150:13001",
+	"43.135.179.180:13001",
+	"43.135.184.36:13001",
+	"43.130.16.92:13001",
+	"43.135.166.82:13001",
+	"43.153.45.169:13001",
+	"170.106.192.157:13001",
+	"43.135.153.235:13001",
+	"81.169.213.169:8888",
+	"43.135.164.4:13001",
+	"43.130.48.100:13001",
+
+
+
+
+
+
+
+	"http://170.106.73.178:13001",
+	"http://170.106.168.138:13001",
+	"http://170.106.100.130:13001",
+	"http://43.135.177.23:13001",
+	"http://43.135.139.239:13001",
+	"http://170.106.67.179:13001",
+	"http://170.106.99.182:13001",
+	"http://43.135.129.111:13001",
+	"http://182.72.203.255:80",
+	"http://170.106.106.9:13001",
+	"http://170.106.196.118:13001",
+	"http://170.106.140.86:13001",
+	"http://170.106.80.237:13001",
+	"http://170.106.153.126:13001",
+	"http://43.135.130.124:13001",
+
+
+
+	"http://38.177.103.132:8899",
+	"http://38.177.105.35:8899",
+	"http://47.251.122.81:8888",
+	"http://85.214.107.177:80",
+	"http://158.255.77.169:80",
+	"http://118.27.111.97:80",
+	
+	"http://50.207.199.80:80",
+	"http://50.207.199.83:80",
+	"http://50.174.7.153:80",
+	"http://50.202.75.26:80",
+	"http://50.239.72.18:80",
+	"http://50.221.74.130:80",
+	"http://50.175.212.74:80",
+	"http://50.207.199.82:80",
+	"http://50.174.7.152:80",
+	"http://71.14.218.2:8080",
+	
+	
+	"http://hrfcwnmp:h5842xrc9zzm@38.154.227.167:5868",
+	"http://hrfcwnmp:h5842xrc9zzm@38.153.152.244:9594",
+	"http://hrfcwnmp:h5842xrc9zzm@86.38.234.176:6630",
+	"http://hrfcwnmp:h5842xrc9zzm@173.211.0.148:6641",
+	"http://hrfcwnmp:h5842xrc9zzm@161.123.152.115:6360",
+	
+	"http://hrfcwnmp:h5842xrc9zzm@216.10.27.159:6837",
+	"http://hrfcwnmp:h5842xrc9zzm@154.36.110.199:6853",
+	"http://hrfcwnmp:h5842xrc9zzm@45.151.162.198:6600",
+	"http://hrfcwnmp:h5842xrc9zzm@185.199.229.156:7492",
+	"http://hrfcwnmp:h5842xrc9zzm@185.199.228.220:7300",
+
+
+	/*'http://halusngj:iqii2z5mv1ke@38.154.227.167:5868',
+	"http://tkifgotd:h5842xrc9zzm@38.154.227.167:5868",
+	"http://tkifgotd:h5842xrc9zzm@38.153.152.244:9594",
+	"http://tkifgotd:h5842xrc9zzm@86.38.234.176:6630",
+	"http://tkifgotd:h5842xrc9zzm@173.211.0.148:6641",
+	"http://tkifgotd:h5842xrc9zzm@161.123.152.115:6360",
+	
+	"http://tkifgotd:h5842xrc9zzm@216.10.27.159:6837",
+	"http://tkifgotd:h5842xrc9zzm@154.36.110.199:6853",
+	"http://tkifgotd:h5842xrc9zzm@45.151.162.198:6600",
+	"http://tkifgotd:h5842xrc9zzm@185.199.229.156:7492",
+	"http://tkifgotd:h5842xrc9zzm@185.199.228.220:7300",
+	
+	"http://83.168.72.172:8081",
+	"http://185.132.242.212:8083",
+	"http://80.249.112.163:80",
+	"http://103.49.114.195:8080",
+	"http://89.110.78.230:80",
+	
+	"http://79.110.200.27:8000",
+	"http://79.110.201.235:8081",
+	
+	"http://83.168.74.163:8080",
+	"http://93.171.157.249:8080",
+	"http://203.74.125.18:8888",*/
+
 	"http://43.153.25.185:13001",
 	"http://43.153.61.52:13001",
 	"http://43.153.91.13:13001",
@@ -261,6 +492,8 @@ const proxyList = [
 	"http://204.236.176.61:3128",
 	"http://3.130.65.162:3128",
 	
+	
+	
 	//'http://halusngj:iqii2z5mv1ke@38.154.227.167:5868',//'http://64.62.219.99:3128',
 ];
 
@@ -278,7 +511,7 @@ app.get('/proxy', async (req, res) => {
 
 	// Set initial proxy
 	let proxyIndex = 0;
-	let proxy = proxyList[proxyIndex];
+	let proxy = proxyList[proxyIndex].includes('http') ? proxyList[proxyIndex] : "http://" + proxyList[proxyIndex];
 	const proxyRetries = 5;
 	let maxRetriesAttempt = proxyRetries;
 	let agent = new HttpsProxyAgent(proxy);
@@ -295,11 +528,16 @@ app.get('/proxy', async (req, res) => {
 		while (shouldLoop) {
 			try {
 
-				// await delay(500)
+				await delay(1000)
 				await fetchWithTimeout(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&outputsize=full&apikey=dem`, {
 					agent: agent,
 				}, 15000).then(d => d.json()).then(async resp => {
 					reply = resp;
+					if (resp['Information']) {
+						res.write(JSON.stringify(resp));
+						maxRetriesAttempt = 0;
+						throw new Error("Error api exceed usage limits");
+					}
 					
 					if (!resp['Time Series (Daily)']) {
 						res.write(JSON.stringify(resp));
@@ -381,8 +619,8 @@ app.get('/proxy', async (req, res) => {
 					//return;
 
 
-					const albumId = "YcnD8zI";//'G0DQ6Hk'; // Imgur album ID
-					const accessToken = 'ffc8fd46eb1f0d2bf28d099af47f421eb574bfa3'; // Imgur access token
+					const albumId = "w2q9yRA";//,"YcnD8zI";//'G0DQ6Hk'; // Imgur album ID
+					const accessToken = '4bbf60ae2a3105a2ed11eb3bee07c069a8943769'// 'ffc8fd46eb1f0d2bf28d099af47f421eb574bfa3'; // Imgur access token
 					let dd = {
 						//"imgur-id": imageId,
 						"ticker": ticker,
@@ -390,6 +628,11 @@ app.get('/proxy', async (req, res) => {
 						"from": arr[arr.length - 1]['d'],
 						"to": arr[0]['d'],
 					}
+					
+					//res.write( JSON.stringify(dd) + `\n`);
+					//res.write( base64Image + `\n`);
+					
+					//return;
 					let r = await uploadImageToImgur(base64Image, accessToken, JSON.stringify(dd));
 					if (r['success']) {
 						let imageId = r['data']['id'];
@@ -411,6 +654,14 @@ app.get('/proxy', async (req, res) => {
 						shouldLoop = false;
 					} else {
 						res.write(`Image uploaded failed \n`)
+						res.write(JSON.stringify(
+							{
+								base64Image:base64Image,
+								description:dd,
+							}
+						));
+						res.write(`\n`)
+						shouldLoop = false;
 					}
 				})
 
@@ -421,7 +672,7 @@ app.get('/proxy', async (req, res) => {
 				maxRetriesAttempt--;
 			}
 			
-			if (maxRetriesAttempt === 0) {
+			if (maxRetriesAttempt <= 0) {
 				if (proxyIndex === proxyList.length - 1){
 					shouldLoop = false;
 					res.write('All proxies failed \n');
@@ -433,7 +684,7 @@ app.get('/proxy', async (req, res) => {
 				// Set next proxy
 				maxRetriesAttempt = proxyRetries;
 				proxyIndex++;
-				proxy = proxyList[proxyIndex];
+				proxy = proxyList[proxyIndex].includes('http') ? proxyList[proxyIndex] : "http://" + proxyList[proxyIndex];
 				agent = new HttpsProxyAgent(proxy);
 				res.write('Switched to proxy: ' + proxy + ' \n');
 			}
