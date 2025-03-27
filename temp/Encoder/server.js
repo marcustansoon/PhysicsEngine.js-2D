@@ -2,13 +2,27 @@
 const express = require('express');
 const { createCanvas } = require('canvas');
 const fetch = require('node-fetch');
+const fs = require("fs");
 const HttpsProxyAgent = require('https-proxy-agent');
 
 const app = express();
 app.use(express.json());
 
 
-
+function createImageFile(name, base64String){
+		
+	// Remove metadata (if present)
+	const base64Data = base64String.replace(/^data:image\/\w+;base64,/, "");
+	
+	// Write the file
+	fs.writeFile(name, base64Data, { encoding: "base64" }, (err) => {
+		if (err) {
+			console.error("❌ Error saving image:", err);
+		} else {
+			console.log("✅ Image saved successfully:", name);
+		}
+	});
+}
 
 
 
@@ -158,10 +172,6 @@ const fetchWithTimeout = (url, options, timeout = 10000) => {
 
 
 let tickers = [
-    "CAMT",
-    "CAN",
-    "CANG",
-    "CANPY",
     "CAPL",
     "CAPN",
     "CAPR",
@@ -195,7 +205,6 @@ let tickers = [
     "CBNK",
     "CBRE",
     "CBRL",
-    "CBRRF",
     "CBSH",
     "CBT",
     "CBU",
@@ -209,18 +218,188 @@ let tickers = [
     "CCCS"
 ]
 let jsonTickers = {};
+let jsonImages = {};
 
 const albumId = 'G0DQ6Hk'; // Imgur album ID
 const accessToken = 'ffc8fd46eb1f0d2bf28d099af47f421eb574bfa3'; // Imgur access token
 
-//tickers = ["IBM", "NVDA", "MSFT"]
+//tickers = ["IBM"]
 
 
 
 // Proxy list
 const proxyList = [
+
+	"3.25.149.163:20202",
+	"56.124.99.210:20201",
+	"13.60.245.53:20202",
+	"13.53.96.5:20202",
+	"3.36.99.188:20201",
+	"18.175.166.238:20201",
+	"13.231.150.2:20202",
+	"3.86.236.60:20201",
+	"3.143.222.197:20202",
+	"56.228.16.241:20201",
+	"13.250.204.5:20202",
+	"3.106.120.30:20201",
+	"44.201.43.27:20202",
+	"43.207.50.162:20202",
+	"51.17.21.181:20202",
+	"56.155.36.111:20201",
+	"54.92.41.120:20005",
+	"13.203.209.37:20202",
+	"51.44.173.80:20202",
+	"204.236.185.207:20201",
+	"54.202.35.97:20201",
+	"44.202.134.58:20201",
+	"3.35.133.153:20201",
+	"47.129.126.231:20005",
+	"13.51.6.203:20202",
+	"51.44.41.231:20201",
+	"51.44.176.151:20202",
+	"13.40.100.60:20202",
+	"13.53.126.216:20201",
+	"13.36.195.120:20201",
+	"184.72.19.222:20201",
+	"3.104.88.178:80",
+	"47.129.112.152:20202",
+	"43.201.58.184:20202",
+	"35.90.98.216:20201",
+	"18.175.216.106:20201",
+	"18.138.124.192:20202",
+	"3.27.112.170:20201",
+	"35.78.114.150:20201",
+	"13.208.191.82:20202",
+	"51.84.68.241:20202",
+	"18.144.50.181:20201",
+	"35.181.61.51:20202",
+	"18.183.24.164:20202",
+	"98.81.33.66:20002",
+	"51.84.12.99:20202",
+	"18.134.96.240:20202",
+	"35.78.198.199:20202",
+	"56.155.32.72:20202",
+	"51.17.101.31:20202",
+	"15.235.10.43:28003",
+	"170.106.116.169:17981",
+	"154.65.39.8:80",
+	"65.49.2.99:3128",
+	"14.229.249.242:8080",
+	"170.106.137.158:13001",
+	"170.106.73.178:13001",
+	"49.51.178.207:13001",
+	"170.106.141.8:13001",
+	"49.51.207.251:13001",
+	"43.159.132.190:13001",
+	"170.106.183.91:13001",
+	"43.159.136.60:13001",
+	"43.135.178.216:13001",
+	"170.106.99.182:13001",
+	"43.135.166.98:13001",
+	"43.159.149.62:13001",
+	"43.159.139.58:13001",
+	"43.153.4.125:13001",
+	"49.51.49.138:13001",
+	"170.106.181.226:13001",
+	"170.106.198.32:13001",
+	"170.106.196.118:13001",
+	"170.106.74.95:13001",
+	"170.106.80.237:13001",
+	"170.106.153.126:13001",
+	"49.51.73.61:13001",
+	"43.159.138.46:13001",
+	"43.159.149.150:13001",
+	"43.135.172.243:13001",
+	"170.106.173.254:13001",
+	"170.106.117.195:13001",
+	"43.130.58.21:13001",
+	"170.106.198.54:13001",
+	"49.51.201.67:13001",
+	"49.51.72.228:13001",
+	"49.51.35.214:13001",
+	"43.130.61.237:13001",
+	"65.49.68.199:3128",
+	"43.153.48.105:13001",
+	"43.153.39.191:13001",
+	"43.153.35.252:13001",
+	"43.153.61.52:13001",
+	"43.153.65.34:13001",
+	"43.153.69.25:13001",
+	"187.28.39.176:80",
+	"43.153.103.42:13001",
+	"43.153.79.15:13001",
+	"189.1.220.189:8080",
+	"192.73.244.36:80",
+	"51.79.145.40:3128",
+	"49.48.91.86:8080",
+	"38.49.149.138:999",
+	"103.122.65.51:8282",
+	"49.48.177.11:8080",
+	"58.69.143.223:41890",
+	"103.156.248.173:3128",
+	"177.184.199.36:80",
+	
+	
+	"3.25.149.163:20202",
+	"56.124.99.210:20201",
+	"13.60.245.53:20202",
+	"13.53.96.5:20202",
+	"3.36.99.188:20201",
+	"18.175.166.238:20201",
+	"13.231.150.2:20202",
+	"3.86.236.60:20201",
+	"3.143.222.197:20202",
+	"56.228.16.241:20201",
+	"13.250.204.5:20202",
+	"3.106.120.30:20201",
+	"44.201.43.27:20202",
+	"43.207.50.162:20202",
+	"51.17.21.181:20202",
+	"56.155.36.111:20201",
+	"54.92.41.120:20005",
+	"13.203.209.37:20202",
+	"51.44.173.80:20202",
+	"204.236.185.207:20201",
+	"54.202.35.97:20201",
+	"44.202.134.58:20201",
+	"3.35.133.153:20201",
+	"47.129.126.231:20005",
+	"13.51.6.203:20202",
+	"51.44.41.231:20201",
+	"51.44.176.151:20202",
+	"13.40.100.60:20202",
+	"13.53.126.216:20201",
+	"13.36.195.120:20201",
+	"184.72.19.222:20201",
+	"3.104.88.178:80",
+	"47.129.112.152:20202",
+	"43.201.58.184:20202",
+	"35.90.98.216:20201",
+	"18.175.216.106:20201",
+	"18.138.124.192:20202",
+	"3.27.112.170:20201",
+	"35.78.114.150:20201",
+	"13.208.191.82:20202",
+	"51.84.68.241:20202",
+	"18.144.50.181:20201",
+	"35.181.61.51:20202",
+	"18.183.24.164:20202",
+	"98.81.33.66:20002",
+	"51.84.12.99:20202",
+	"18.134.96.240:20202",
+	"35.78.198.199:20202",
+	"56.155.32.72:20202",
+	"51.17.101.31:20202",
+	"15.235.10.43:28003",
+	"170.106.116.169:17981",
+	"154.65.39.8:80",
+	"65.49.2.99:3128",
+	"14.229.249.242:8080",
+	"170.106.137.158:13001",
+	"170.106.73.178:13001",
+	"49.51.178.207:13001",
+	
 	"52.26.114.229:1080",
-	"128.140.113.110:3128",
 	"18.223.25.15:80",
 	"200.60.145.167:8082",
 	"81.215.198.27:1453",
@@ -497,6 +676,13 @@ const proxyList = [
 	//'http://halusngj:iqii2z5mv1ke@38.154.227.167:5868',//'http://64.62.219.99:3128',
 ];
 
+
+app.get('/image-json', async (req, res) => {
+	res.write(JSON.stringify(jsonImages));
+	res.end();
+});
+
+
 app.get('/json', async (req, res) => {
 	res.write(JSON.stringify(jsonTickers));
 	res.end();
@@ -535,13 +721,22 @@ app.get('/proxy', async (req, res) => {
 					reply = resp;
 					if (resp['Information']) {
 						res.write(JSON.stringify(resp));
-						maxRetriesAttempt = 0;
-						throw new Error("Error api exceed usage limits");
+						shouldLoop = false;
+						res.write("Error api exceed usage limits");
+						break;
+						//maxRetriesAttempt = 0;
+						//throw new Error("Error api exceed usage limits");
 					}
 					
 					if (!resp['Time Series (Daily)']) {
 						res.write(JSON.stringify(resp));
 						throw new Error("Error data not found");
+					}
+					
+					if(resp['Error Message'] && resp['Error Message'].includes('Invalid API call'){
+						shouldLoop = false;
+						res.write("Skipping " + ticker);
+						break;
 					}
 
 					let arr = [];
@@ -621,47 +816,65 @@ app.get('/proxy', async (req, res) => {
 
 					const albumId = "w2q9yRA";//,"YcnD8zI";//'G0DQ6Hk'; // Imgur album ID
 					const accessToken = '4bbf60ae2a3105a2ed11eb3bee07c069a8943769'// 'ffc8fd46eb1f0d2bf28d099af47f421eb574bfa3'; // Imgur access token
-					let dd = {
-						//"imgur-id": imageId,
-						"ticker": ticker,
-						"type": "daily",
-						"from": arr[arr.length - 1]['d'],
-						"to": arr[0]['d'],
-					}
+					
 					
 					//res.write( JSON.stringify(dd) + `\n`);
 					//res.write( base64Image + `\n`);
 					
 					//return;
-					let r = await uploadImageToImgur(base64Image, accessToken, JSON.stringify(dd));
-					if (r['success']) {
-						let imageId = r['data']['id'];
-						res.write(`Image uploaded successfully. ID: ${imageId} \n`)
-						jsonTickers[ticker] = {
-								"imgur-id": imageId,
-								"ticker": ticker,
-								"type": "daily",
-								"from": arr[arr.length - 1]['d'],
-								"to": arr[0]['d'],
-						};
-						let albumR = await addImageToImgurAlbum(imageId, albumId, accessToken);
-
-						if (albumR['success']) {
-							res.write(`Image Album Added successfully \n`)
-						} else {
-							res.write(`Added album failed \n`)
+					
+					if(1){
+						shouldLoop = false;
+						jsonImages[ticker] = {
+									"image-name": ticker + ".png",
+									"ticker": ticker,
+									"type": "daily",
+									"from": arr[arr.length - 1]['d'],
+									"to": arr[0]['d'],
 						}
-						shouldLoop = false;
-					} else {
-						res.write(`Image uploaded failed \n`)
-						res.write(JSON.stringify(
-							{
-								base64Image:base64Image,
-								description:dd,
+						createImageFile(ticker + ".png", base64Image);
+					}
+					
+					// Temporarily bypass Imgur
+					if(false){
+						let dd = {
+							"imgur-id": imageId,
+							"ticker": ticker,
+							"type": "daily",
+							"from": arr[arr.length - 1]['d'],
+							"to": arr[0]['d'],
+						}
+					
+						let r = await uploadImageToImgur(base64Image, accessToken, JSON.stringify(dd));
+						if (r['success']) {
+							let imageId = r['data']['id'];
+							res.write(`Image uploaded successfully. ID: ${imageId} \n`)
+							jsonTickers[ticker] = {
+									"imgur-id": imageId,
+									"ticker": ticker,
+									"type": "daily",
+									"from": arr[arr.length - 1]['d'],
+									"to": arr[0]['d'],
+							};
+							let albumR = await addImageToImgurAlbum(imageId, albumId, accessToken);
+
+							if (albumR['success']) {
+								res.write(`Image Album Added successfully \n`)
+							} else {
+								res.write(`Added album failed \n`)
 							}
-						));
-						res.write(`\n`)
-						shouldLoop = false;
+							shouldLoop = false;
+						} else {
+							res.write(`Image uploaded failed \n`)
+							res.write(JSON.stringify(
+								{
+									base64Image:base64Image,
+									description:dd,
+								}
+							));
+							res.write(`\n`)
+							shouldLoop = false;
+						}
 					}
 				})
 
