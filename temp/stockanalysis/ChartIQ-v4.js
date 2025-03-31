@@ -1,6 +1,6 @@
 const __vite__mapDeps = (i, m=__vite__mapDeps, d=(m.f || (m.f = ["https://stockanalysis.com/_app/immutable/chunks/excellentexport.DP3fOsTs.js", "https://stockanalysis.com/_app/immutable/chunks/_commonjsHelpers.BosuxZz1.js"]))) => i.map(i => d[i]);
 import {_ as bo} from "https://stockanalysis.com/_app/immutable/chunks/preload-helper.C1FmrZbK.js";
-import {R as Cr, s as od, b as fi, a as hi, H as nr, f as pi, g as wi, q as Pn, c as di, d as li, G as sr, i as tr, am as qt, k as cn, j as Ut, S as ld, T as cd, n as no, l as ir, o as ud, p as Yi, m as hd, e as so} from "https://stockanalysis.com/_app/immutable/chunks/scheduler.-upCTpvA.js";
+import {R as Cr, s as od, b as fi, a as hi, H as nr, f as pi, g as wi, q as Pn, c as di, d as li, G as sr, i as tr, am as qt, k as cn, j as Ut, S as ld, T as cd, n as no, l as ir, o as ud, p as Yi, m as hd, e as so} from "./scheduler.-upCTpvA.js";
 import {S as dd, i as fd} from "https://stockanalysis.com/_app/immutable/chunks/index.DC-wou4R.js";
 import {p as pd} from "https://stockanalysis.com/_app/immutable/chunks/stores.CLkJqh7I.js";
 import {g as Co} from "https://stockanalysis.com/_app/immutable/chunks/entry.C19aB0r5.js";
@@ -85513,7 +85513,7 @@ j.UI && (j.UI.StudyEdit.prototype.addToFavorites = function({params: E}) {
 }
 );
 new Promise(E => {
-    import.meta.webpack ? bo( () => Promise.resolve().then( () => Md), void 0, import.meta.url).then(E) : typeof define == "function" && define.amd ? define(["./studybrowser.css"], E) : typeof window < "u" ? j.loadStylesheet(new URL("" + new URL("../assets/studybrowser.BI8bg8Xa.css",import.meta.url).href,import.meta.url).href, E) : E()
+    import.meta.webpack ? bo( () => Promise.resolve().then( () => Md), void 0, import.meta.url).then(E) : typeof define == "function" && define.amd ? define(["./studybrowser.css"], E) : typeof window < "u" ? j.loadStylesheet(new URL("" + new URL("https://stockanalysis.com/_app/immutable/chunks/assets/studybrowser.BI8bg8Xa.css",import.meta.url).href,import.meta.url).href, E) : E()
 }
 ).then(E => j.addInternalStylesheet(E, "studybrowser"));
 if (!j.UI)
