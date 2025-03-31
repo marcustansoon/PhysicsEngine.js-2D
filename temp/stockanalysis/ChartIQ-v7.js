@@ -18568,7 +18568,7 @@ cl = E => {
                             u.justifyRight !== !1 && (H = u.left + u.width + T - Q)) : u.justifyRight && (H = B + u.width - q),
                             d.addText(N, K, H, M, P, null, L),
                             k && (e.z_m(12),
-                            O = e.J1m(K, " "),
+                            O = e.J1m(K, " "),
                             y = Math.max(y, m.context.measureText(O).width + Math.abs(T) + Q))));
                         this.drawTitleText(a, u, d, H),
                         m.context.restore()
@@ -18754,7 +18754,7 @@ cl = E => {
                             l.justifyRight !== !1 && (Z = l.left + l.width + _ - ge)) : l.justifyRight && (Z = B + l.width - ie),
                             u.addText("text", ne, Z, oe, ee, null, L),
                             k && (e.z_m(12),
-                            re = e.J1m(ne, " "),
+                            re = e.J1m(ne, " "),
                             y = Math.max(y, p.context.measureText(re).width + Math.abs(_) + ge))))
                         }
                         this.drawTitleText(a, l, u, Z),
@@ -36684,7 +36684,7 @@ Dl = E => {
                 [H, L].forEach(function(Qe) {
                     var Ne, De;
                     if (e.f4W(0),
-                    Ne = e.E9E(" ", Qe),
+                    Ne = e.E9E(" ", Qe),
                     De = he && Math.max(D._width, k.chart.context.measureText(Ne).width + Math.abs(K) + ge),
                     e.e4i(),
                     he && De > (D._dynamicWidth || D._width))
@@ -84293,19 +84293,9 @@ function Cp(E={}) {
                     value: [2, 30, "minute"]
                 }, {
                     type: "item",
-                    label: "2 Hour",
-                    tap: "Layout.setPeriodicity",
-                    value: [4, 30, "minute"]
-                }, {
-                    type: "item",
                     label: "4 Hour",
                     tap: "Layout.setPeriodicity",
                     value: [8, 30, "minute"]
-                }, {
-                    type: "item",
-                    label: "8 Hour",
-                    tap: "Layout.setPeriodicity",
-                    value: [16, 30, "minute"]
                 }]
             },
             preferences: {
