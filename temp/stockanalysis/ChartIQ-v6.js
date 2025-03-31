@@ -85513,7 +85513,7 @@ j.UI && (j.UI.StudyEdit.prototype.addToFavorites = function({params: E}) {
 }
 );
 new Promise(E => {
-    import.meta.webpack ? bo( () => Promise.resolve().then( () => Md), void 0, import.meta.url).then(E) : typeof define == "function" && define.amd ? define(["./studybrowser.css"], E) : typeof window < "u" ? j.loadStylesheet(new URL("" + new URL("https://stockanalysis.com/_app/immutable/chunks/assets/studybrowser.BI8bg8Xa.css",import.meta.url).href,import.meta.url).href, E) : E()
+    import.meta.webpack ? bo( () => Promise.resolve().then( () => Md), void 0, import.meta.url).then(E) : typeof define == "function" && define.amd ? define(["./studybrowser.css"], E) : typeof window < "u" ? j.loadStylesheet(new URL("" + new URL("https://stockanalysis.com/_app/immutable/assets/studybrowser.BI8bg8Xa.css",import.meta.url).href,import.meta.url).href, E) : E()
 }
 ).then(E => j.addInternalStylesheet(E, "studybrowser"));
 if (!j.UI)
