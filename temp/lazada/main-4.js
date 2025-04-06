@@ -11964,9 +11964,11 @@ window._CCSettings = {
 						this.part && !this.isKettleIng && (this.waterNum <= 0 ? this.part.setAnimation(0, "watering_shake_Empty", !1) : this.part.setAnimation(0, "watering_shake_Full", !1))
 					}
 					getWaterNum() {
+					    alert(this.waterNum + ' k')
 						return this.waterNum
 					}
 					setWater(e, t = !0) {
+					    alert(e + ' j')
 						this.waterNum != e && (e >= w.HomeController.instance.initConfigDTO.kettleMaxNum && (e = w.HomeController.instance.initConfigDTO.kettleMaxNum), -1 != this.waterNum && e - this.waterNum > 0 ? (t && this.flyAddWaterEffect(e - this.waterNum), this.startNumTimer(this.waterNum, e), this.waterNum = e) : (this.waterNum = e, this.waterNumLabel.string = this.waterNum.toString()), this.waterNumGroup.active = this.getWaterNum() < w.HomeController.instance.getInitConfig().kettleFullNum, this.setIdleState(), e >= w.HomeController.instance.getInitConfig().kettleFullNum && l.GlobalEvent.instance.dispatchEventWith(s.EventConst.BULK_KETTLE_FULL_WATER)), this.showMultKettle(), this.updateErrorWaterNumRed()
 					}
 					updateErrorWaterNumRed() {
@@ -12194,9 +12196,11 @@ window._CCSettings = {
 						this.part && (this.waterNum <= 0 ? this.part.setAnimation(0, "watering_shake_Empty", !1) : this.part.setAnimation(0, "watering_shake_Full", !1))
 					}
 					getWaterNum() {
+					    alert(this.waterNum + ' g')
 						return this.waterNum
 					}
 					setWater(e) {
+					    alert(e + ' h')
 						this.waterNum != e && (e >= l.HomeController.instance.initConfigDTO.kettleMaxNum && (e = l.HomeController.instance.initConfigDTO.kettleMaxNum), -1 != this.waterNum && e - this.waterNum > 0 ? (this.startNumTimer(this.waterNum, e), this.waterNum = e) : (this.waterNum = e, this.waterNumLabel.string = this.waterNum.toString()), this.waterNumGroup.active = this.getWaterNum() < l.HomeController.instance.getInitConfig().kettleFullNum, this.setIdleState())
 					}
 					playWaterReviceSp(e = null) {
