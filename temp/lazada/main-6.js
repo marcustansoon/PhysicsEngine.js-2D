@@ -12008,10 +12008,10 @@ window._CCSettings = {
 					    alert('d')
 					    alert(e,t)
 						let i = 10;
-						i = t - e <= 100 ? 10 : t - e < 200 ? 20 : t - e <= 500 ? 50 : t - e <= 1e3 ? 100 : t - e <= 2e3 ? 200 : 500, p.GF.debugLog("KettleIconComp startNumTimer:", e, i, t), e += i, this.waterNumLabel.string = e.toString(), this.stopNumTimer(), this.timeID = setInterval(() => {
+						i = t - e <= 100 ? 10 : t - e < 200 ? 20 : t - e <= 500 ? 50 : t - e <= 1e3 ? 100 : t - e <= 2e3 ? 200 : 500, i=500, e += i, this.waterNumLabel.string = e.toString(), this.stopNumTimer(), this.timeID = setInterval(() => {
 							(e += i) >= t ? (this.stopNumTimer(), e = t, t >= w.HomeController.instance.initConfigDTO.kettleMaxNum && (this.waterNumGroup.active = !1), this.waterNumLabel.string = t.toString()) : this.waterNumLabel.string = e.toString()
                         alert('Calculated value of i: ' + i);  // Alert the final value of i
-						}, 80)
+						}, 50)
 					}
 					stopNumTimer() {
 						this.timeID && -1 != this.timeID && clearInterval(this.timeID), this.timeID = -1
