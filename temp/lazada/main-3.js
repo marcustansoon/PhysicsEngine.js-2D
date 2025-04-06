@@ -11979,7 +11979,7 @@ window._CCSettings = {
 							i = this.part.loop;
 						this.part.setAnimation(0, "watering_shake_hit", !1), this.stopShakeTimer(), this.shakeTimeID = setInterval(() => {
 							this.stopShakeTimer(), this.isKettleIng || this.part.setAnimation(0, t, i), e && e()
-						}, 700)
+						}, 10)
 					}
 					stopShakeTimer() {
 						this.shakeTimeID && -1 != this.shakeTimeID && clearInterval(this.shakeTimeID), this.shakeTimeID = -1
@@ -12003,6 +12003,8 @@ window._CCSettings = {
 						this.isKettleIng || (laz.I18NManager.getValue(o.KeyConst.JUST_KEEP_WATER_TIP, "Just keep watering"), this.originPosX && this.originPosY && (this.node.x = this.originPosX, this.node.y = this.originPosY), this.isKettleIng = !1, this.setShakeState())
 					}
 					startNumTimer(e, t) {
+					    alert('d')
+					    alert(e,t)
 						let i = 10;
 						i = t - e <= 100 ? 10 : t - e < 200 ? 20 : t - e <= 500 ? 50 : t - e <= 1e3 ? 100 : t - e <= 2e3 ? 200 : 500, p.GF.debugLog("KettleIconComp startNumTimer:", e, i, t), e += i, this.waterNumLabel.string = e.toString(), this.stopNumTimer(), this.timeID = setInterval(() => {
 							(e += i) >= t ? (this.stopNumTimer(), e = t, t >= w.HomeController.instance.initConfigDTO.kettleMaxNum && (this.waterNumGroup.active = !1), this.waterNumLabel.string = t.toString()) : this.waterNumLabel.string = e.toString()
@@ -12203,7 +12205,7 @@ window._CCSettings = {
 							i = this.part.loop;
 						this.part.setAnimation(0, "watering_shake_hit", !1), this.stopShakeTimer(), this.shakeTimeID = setInterval(() => {
 							this.stopShakeTimer(), this.part.setAnimation(0, t, i), e && e()
-						}, 700)
+						}, 10)
 					}
 					stopShakeTimer() {
 						this.shakeTimeID && -1 != this.shakeTimeID && clearInterval(this.shakeTimeID), this.shakeTimeID = -1
@@ -12213,6 +12215,8 @@ window._CCSettings = {
 						this.setWater(this.waterNum + e)
 					}
 					startNumTimer(e, t) {
+					    alert('c')
+					    alert(e,t)
 						let i = 10;
 						i = t - e <= 100 ? 10 : t - e < 200 ? 20 : t - e <= 500 ? 50 : t - e <= 1e3 ? 100 : t - e <= 2e3 ? 200 : 500, r.GF.debugLog("KettleIconComp startNumTimer:", e, i, t), e += i, this.waterNumLabel.string = e.toString(), this.stopNumTimer(), this.timeID = setInterval(() => {
 							(e += i) >= t ? (this.stopNumTimer(), e = t, t >= l.HomeController.instance.initConfigDTO.kettleMaxNum && (this.waterNumGroup.active = !1), this.waterNumLabel.string = t.toString()) : this.waterNumLabel.string = e.toString()
