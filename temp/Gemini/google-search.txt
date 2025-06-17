@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GA with Image Upload</title>
+</head>
+<body>
+  <h1>Send Image with Gemini</h1>
+  <input type="file" id="imageUpload" accept="image/*">
+  <button id="sendRequestButton">Send Request</button>
+  <div id="responseOutput"></div>
+
+  <script>
+    // 
+    const ee = 'AIzaSyBZy7B5nD';
+
+    document.getElementById('sendRequestButton').addEventListener('click', async function() {
+      const imageInput = document.getElementById('imageUpload');
+      const responseOutput = document.getElementById('responseOutput');
+
+      // Check if an image was selected
+      if (!imageInput.files[0]) {
+        responseOutput.innerText = 'Please select an image file first.';
+        return;
+      }
+
+      const imageFile = imageInput.files[0];
+      const reader = new FileReader();
+
+      reader.onloadend = async function () {
+        const base64Image = reader.result.split(',')[1]; // Extract base64 string
+
+        const payload = {
+          contents: [{
+            parts: [
+              { text: 'Perform search on the latest israel-iran war status. How is the situation right now?' }
+            ]
+          }],
+          tools: [
+          	
+          {
+              "google_search": {}
+          }
+          ],
+        };
+
+        try {
+          const response = await
+          fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${ee}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+          });
+
+          const data = await response.json();
+          if (response.ok) {
+            responseOutput.innerText = `Response: ${data.choices[0].text}`;
+          } else {
+            responseOutput.innerText = `Error: ${data.error.message}`;
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          responseOutput.innerText = 'An error occurred.';
+        }
+      };
+
+      // Convert image to base64
+      reader.readAsDataURL(imageFile);
+    });
+  </script>
+</body>
+</html>
