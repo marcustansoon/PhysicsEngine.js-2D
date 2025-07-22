@@ -41,7 +41,7 @@ function screenToWorld(x, y) {
 const ball = world.createDynamicBody(Vec2(5, 3));
 ball.createFixture(pl.Circle(0.4), { density: 1.0, restitution: 0.3 });
 
-// ball 2
+// ball 2 (big one)
 const ball2 = world.createDynamicBody(Vec2(6, 3));
 ball2.createFixture(pl.Circle(2), { density: 1.0, restitution: 0.3 });
 
@@ -49,7 +49,7 @@ ball2.createFixture(pl.Circle(2), { density: 1.0, restitution: 0.3 });
 const bees = [];
 function createBee(x, y) {
   const bee = world.createDynamicBody(Vec2(x, y));
-  bee.setGravityScale(0);
+  bee.setGravityScale(0.1);
   bee.createFixture(pl.Circle(0.2), { density: 0.2 });
   bees.push(bee);
 }
@@ -84,21 +84,46 @@ canvas.addEventListener('mouseup', () => {
     const length = Math.sqrt(dx * dx + dy * dy);
     const angle = Math.atan2(dy, dx);
     body.createFixture(pl.Box(length / 2, 0.05, mid, angle), {
-      density: 1.0, friction: 0.3,
+      density: 1.0,
+      friction: 0.5,
+      restitution: 0.1,
     });
   }
 });
+
+
+function rotateVec(vec, angleRad) {
+  const cos = Math.cos(angleRad);
+  const sin = Math.sin(angleRad);
+  return Vec2(
+    vec.x * cos - vec.y * sin,
+    vec.x * sin + vec.y * cos
+  );
+}
 
 // --- Bee AI ---
 function updateBees() {
   const target = ball.getPosition();
   bees.forEach(bee => {
     const pos = bee.getPosition();
-    const dir = Vec2(target.x - pos.x, target.y - pos.y);
-dir.normalize(); // modifies dir in place
-dir.mul(0.1);     // modifies dir in place
+    const dirToBall = Vec2(target.x - pos.x, target.y - pos.y);
+dirToBall.normalize(); // modifies dirToBall in place
 
-    bee.applyForceToCenter(dir);
+ // Generate a small random angle (e.g. ±15 degrees)
+    const randomAngle = (Math.random() - 0.5) * (Math.PI / 6); // ±PI/12 ~ ±15°
+
+
+let curvedDir = rotateVec(dirToBall, randomAngle).mul(0.5);
+if(Math.random() > 0.6) curvedDir = curvedDir.neg()
+bee.applyForceToCenter(curvedDir);
+//console.log(curvedDir)
+//bee.applyForceToCenter(curvedDir);
+
+//return;
+    /*const dir = Vec2(target.x - pos.x, target.y - pos.y);
+    dir.normalize();
+    dir.mul(0.2); // Force magnitude, tweak as you like
+    bee.applyForceToCenter(dir);*/
   });
 }
 
@@ -130,6 +155,16 @@ function update() {
   ctx.fillStyle = '#ff4400aa';
   ctx.fillRect(0, height - 30, width, 30);
 
+  // Ground line
+  ctx.strokeStyle = '#654321';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  const gStart = worldToScreen(Vec2(-50, 0));
+  const gEnd = worldToScreen(Vec2(50, 0));
+  ctx.moveTo(gStart.x, gStart.y);
+  ctx.lineTo(gEnd.x, gEnd.y);
+  ctx.stroke();
+
   // Ball
   const bp = worldToScreen(ball.getPosition());
   ctx.beginPath();
@@ -137,6 +172,7 @@ function update() {
   ctx.fillStyle = 'blue';
   ctx.fill();
   
+  // Big ball 2
   const bp2 = worldToScreen(ball2.getPosition());
   ctx.beginPath();
   ctx.arc(bp2.x, bp2.y, 2 * scale, 0, Math.PI * 2);
@@ -151,10 +187,23 @@ function update() {
     ctx.fillStyle = 'yellow';
     ctx.fill();
     ctx.strokeStyle = 'black';
+    ctx.lineWidth = 1;
     ctx.stroke();
   });
 
-  // Draw physics shapes
+  // Draw currently drawn line (for user feedback)
+  if (drawing && drawnPoints.length > 1) {
+    ctx.strokeStyle = 'rgba(0,0,0,0.7)';
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(drawnPoints[0][0], drawnPoints[0][1]);
+    for (let i = 1; i < drawnPoints.length; i++) {
+      ctx.lineTo(drawnPoints[i][0], drawnPoints[i][1]);
+    }
+    ctx.stroke();
+  }
+
+  // Draw physics shapes (drawn lines)
   for (let b = world.getBodyList(); b; b = b.getNext()) {
     for (let f = b.getFixtureList(); f; f = f.getNext()) {
       const shape = f.getShape();
