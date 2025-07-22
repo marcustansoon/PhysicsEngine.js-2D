@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Planck.js Car Example with Wheels</title>
+  <style>
+    canvas {
+      border: 2px solid black;
+      background: #eef3f7;
+      display: block;
+      margin: 0 auto;
+    }
+    body {
+      text-align: center;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <h1>Planck.js Car with Wheels — Use Left/Right Arrows to Drive</h1>
+  <canvas id="canvas" width="800" height="400"></canvas>
+
+  <script src="https://unpkg.com/planck-js@0.3.27/dist/planck.min.js"></script>
+  <script>
+    const pl = planck, Vec2 = pl.Vec2;
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const width = canvas.width;
+    const height = canvas.height;
+    const scale = 30;
+
+    // Convert Planck world coords to canvas pixels
+    function worldToScreen(v) {
+      return Vec2(v.x * scale, height - v.y * scale);
+    }
+    // Convert canvas pixels to Planck world coords
+    function screenToWorld(x, y) {
+      return Vec2(x / scale, (height - y) / scale);
+    }
+
+    // Create physics world with gravity downwards
+    const world = new pl.World(Vec2(0, -10));
+
+    // Ground body
+    //const ground = world.createBody();
+    //ground.createFixture(pl.Edge(Vec2(-50, 0), Vec2(50, 0)), 0);
+    
+    // Ground body with terrain
+const ground = world.createBody();
+
+const terrainPoints = [
+  Vec2(-50, 0),
+  Vec2(-40, 1),
+  Vec2(-30, 0.5),
+  Vec2(-20, 1.5),
+  Vec2(-10, 0.8),
+  Vec2(0, 0),
+  Vec2(10, 1),
+  Vec2(20, 0.5),
+  Vec2(30, 1.5),
+  Vec2(40, 1),
+  Vec2(50, 0),
+];
+
+// Create edges between consecutive terrain points
+for (let i = 0; i < terrainPoints.length - 1; i++) {
+  ground.createFixture(pl.Edge(terrainPoints[i], terrainPoints[i + 1]), 0);
+}
+
+
+    // --- Car chassis body (rectangle) ---
+    const chassisWidth = 3;  // meters
+    const chassisHeight = 1; // meters
+    const chassisStartPos = Vec2(0, 5);
+    const chassis = world.createDynamicBody(chassisStartPos);
+    chassis.createFixture(pl.Box(chassisWidth / 2, chassisHeight / 2), {
+      density: 1.0,
+      friction: 0.3,
+    });
+
+    // --- Wheels ---
+    const wheelRadius = 0.6;
+    const wheelPositions = [
+      Vec2(chassisStartPos.x - chassisWidth / 2 + wheelRadius, chassisStartPos.y - chassisHeight / 2),
+      Vec2(chassisStartPos.x + chassisWidth / 2 - wheelRadius, chassisStartPos.y - chassisHeight / 2)
+    ];
+
+    const wheels = wheelPositions.map(pos => {
+      const wheel = world.createDynamicBody(pos);
+      wheel.createFixture(pl.Circle(wheelRadius), {
+        density: 1.0,
+        friction: 1.0, // high friction for grip
+      });
+      return wheel;
+    });
+
+    // --- Revolute joints to connect wheels to chassis ---
+    /*const wheelJoints = wheels.map(wheel => {
+      return world.createJoint(pl.RevoluteJoint({
+        motorSpeed: 0.0,
+        maxMotorTorque: 20.0,
+        enableMotor: true,
+        collideConnected: false,
+      }, chassis, wheel, wheel.getPosition()));
+    });*/
+    
+    const wheelJoints = wheels.map(wheel => {
+  return world.createJoint(pl.WheelJoint({
+    motorSpeed: 0.0,
+    maxMotorTorque: 20.0,
+    enableMotor: true,
+    collideConnected: false,
+    axis: Vec2(0, 1),       // suspension axis (vertical)
+    frequencyHz: 4.0,       // suspension stiffness (typical range: 2-5 Hz)
+    dampingRatio: 0.7       // damping (0 no damping, 1 critical damping)
+  }, chassis, wheel, wheel.getPosition(), Vec2(0,1)));
+});
+
+
+    // --- Controls ---
+    let motorSpeed = 0;
+    window.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') {
+        motorSpeed = -20;  // spin wheels clockwise to move right
+      } else if (e.key === 'ArrowLeft') {
+        motorSpeed = 20;   // spin wheels counterclockwise to move left
+      }
+    });
+    window.addEventListener('keyup', e => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        motorSpeed = 0;
+      }
+    });
+
+    // --- Update loop ---
+    function update() {
+      // Set motor speed on wheels
+      wheelJoints.forEach(joint => {
+        joint.setMotorSpeed(motorSpeed);
+      });
+
+      world.step(1 / 60);
+
+      // Clear canvas
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw ground line
+      // Draw terrain
+ctx.beginPath();
+for (let i = 0; i < terrainPoints.length; i++) {
+  const p = worldToScreen(terrainPoints[i]);
+  if (i === 0) {
+    ctx.moveTo(p.x, p.y);
+  } else {
+    ctx.lineTo(p.x, p.y);
+  }
+}
+ctx.strokeStyle = 'green';
+ctx.lineWidth = 3;
+ctx.stroke();
+
+
+      // Draw chassis (rectangle)
+      const chassisPos = chassis.getPosition();
+      const chassisAngle = chassis.getAngle();
+      const chassisScreen = worldToScreen(chassisPos);
+      ctx.save();
+      ctx.translate(chassisScreen.x, chassisScreen.y);
+      ctx.rotate(-chassisAngle);
+      ctx.fillStyle = 'red';
+      ctx.fillRect(-chassisWidth / 2 * scale, -chassisHeight / 2 * scale, chassisWidth * scale, chassisHeight * scale);
+      ctx.restore();
+
+      // Draw wheels (circles)
+      wheels.forEach(wheel => {
+        const pos = wheel.getPosition();
+        const angle = wheel.getAngle();
+        const screenPos = worldToScreen(pos);
+        ctx.save();
+        ctx.translate(screenPos.x, screenPos.y);
+        ctx.rotate(-angle);
+        ctx.beginPath();
+        ctx.arc(0, 0, wheelRadius * scale, 0, Math.PI * 2);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+        ctx.strokeStyle = 'gray';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+      });
+
+      requestAnimationFrame(update);
+    }
+
+    update();
+  </script>
+</body>
+</html>
