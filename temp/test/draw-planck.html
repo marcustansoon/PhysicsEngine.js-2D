@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Planck.js M Shape with Gravity</title>
+  <style>
+    canvas {
+      border: 1px solid black;
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas" width="800" height="300"></canvas>
+  <script src="https://unpkg.com/planck-js@0.3.27/dist/planck.min.js"></script>
+  <script>
+    const pl = planck;
+    const Vec2 = pl.Vec2;
+    
+    
+    
+    
+const boxes = []; // Store all boxes to render them
+const polygons = [];
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    const width = canvas.width;
+    const height = canvas.height;
+
+    // Scale: 30 pixels = 1 meter
+    const scale = 30;
+
+    function worldToScreen(v) {
+      return Vec2(v.x * scale, height - v.y * scale);
+    }
+
+    function screenToWorld(x, y) {
+      return Vec2(x / scale, (height - y) / scale);
+    }
+
+    // Create world with gravity downward
+    const world = new pl.World(Vec2(0, -10));
+
+    // Ground - static edge
+    const ground = world.createBody();
+    ground.createFixture(pl.Edge(Vec2(-40, 0), Vec2(40, 0)), 0.0);
+
+    // Dynamic box to test collisions
+    const box = world.createDynamicBody(Vec2(0, 10));
+    box.createFixture(pl.Box(1, 1), {
+      density: 1.0,
+      friction: 0.3,
+    });
+
+    // Define M shape points in screen space
+    const mPointsScreen = [
+      [50, 100],
+      [60, 110],
+      [70, 90],
+      [80, 110],
+      [90, 100],
+      [200, 80],
+      [250, 100],
+    ];
+
+    // Convert to world coordinates
+    const mPointsWorld = mPointsScreen.map(([x, y]) => screenToWorld(x, y));
+
+    // Calculate center of M shape for body positioning
+    const centerX = mPointsWorld.reduce((acc, v) => acc + v.x, 0) / mPointsWorld.length;
+    const centerY = mPointsWorld.reduce((acc, v) => acc + v.y, 0) / mPointsWorld.length;
+
+    // Create dynamic body positioned at center
+    const mBody = world.createDynamicBody(Vec2(centerX, centerY));
+
+    // Add thin box fixtures for each segment of the M
+    for (let i = 0; i < mPointsWorld.length - 1; i++) {
+      const v1 = mPointsWorld[i];
+      const v2 = mPointsWorld[i + 1];
+
+      const dx = v2.x - v1.x;
+      const dy = v2.y - v1.y;
+      const length = Math.sqrt(dx * dx + dy * dy);
+      const angle = Math.atan2(dy, dx);
+
+      // Midpoint relative to body center
+      const midX = (v1.x + v2.x) / 2 - centerX;
+      const midY = (v1.y + v2.y) / 2 - centerY;
+
+      // Create a thin box for this segment with thickness 0.05 meters
+      mBody.createFixture(pl.Box(length / 2, 0.05, Vec2(midX, midY), angle), {
+        density: 1.0,
+        friction: 0.3,
+      });
+    }
+
+	
+    
+    
+    
+    // Draw
+    setTimeout(()=>{
+    polygons.push(drawPolygon(simplifyPoints(
+    [
+      [50, 100],
+      [60, 110],
+      [70, 90],
+      [80, 110]
+     ]
+      )));
+	}, 2000)
+	
+    
+    
+
+
+
+
+
+
+
+
+
+    // Game loop
+    function update() {
+      world.step(1 / 60);
+
+      ctx.clearRect(0, 0, width, height);
+
+      // Draw ground line
+      ctx.beginPath();
+      const p1 = worldToScreen(Vec2(-40, 0));
+      const p2 = worldToScreen(Vec2(40, 0));
+      ctx.moveTo(p1.x, p1.y);
+      ctx.lineTo(p2.x, p2.y);
+      ctx.strokeStyle = 'black';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Draw box
+      const posBox = box.getPosition();
+      const angleBox = box.getAngle();
+      const sizeBox = 1 * scale;
+
+      const centerBox = worldToScreen(posBox);
+      ctx.save();
+      ctx.translate(centerBox.x, centerBox.y);
+      ctx.rotate(-angleBox);
+      ctx.fillStyle = 'blue';
+      ctx.fillRect(-sizeBox, -sizeBox, sizeBox * 2, sizeBox * 2);
+      ctx.restore();
+
+      // Draw M shape fixtures
+      ctx.strokeStyle = 'purple';
+      ctx.lineWidth = 3;
+
+      for (let f = mBody.getFixtureList(); f; f = f.getNext()) {
+        const shape = f.getShape();
+        if (shape.getType() === 'polygon') {
+          const vertices = shape.m_vertices.map(v => pl.Transform.mul(mBody.getTransform(), v));
+          const screenVerts = vertices.map(worldToScreen);
+
+          ctx.beginPath();
+          ctx.moveTo(screenVerts[0].x, screenVerts[0].y);
+          for (let i = 1; i < screenVerts.length; i++) {
+            ctx.lineTo(screenVerts[i].x, screenVerts[i].y);
+          }
+          ctx.closePath();
+          ctx.stroke();
+        }
+      }
+      
+      
+      
+      for(let index = 0; index < polygons.length; index++){
+      	let obj = polygons[index]
+       for (let f = obj.getFixtureList(); f; f = f.getNext()) {
+        const shape = f.getShape();
+        if (shape.getType() === 'polygon') {
+          const vertices = shape.m_vertices.map(v => pl.Transform.mul(obj.getTransform(), v));
+          const screenVerts = vertices.map(worldToScreen);
+
+          ctx.beginPath();
+          ctx.moveTo(screenVerts[0].x, screenVerts[0].y);
+          for (let i = 1; i < screenVerts.length; i++) {
+            ctx.lineTo(screenVerts[i].x, screenVerts[i].y);
+          }
+          ctx.closePath();
+          ctx.stroke();
+        }
+      }
+      
+      
+      
+      	if(coordinates.length){
+          ctx.beginPath();
+          ctx.moveTo(coordinates[0][0], coordinates[0][1]);
+      for(let index = 1; index < coordinates.length; index++){
+      	
+            ctx.lineTo(coordinates[index][0], coordinates[index][1]);
+      }
+          ctx.stroke();
+      }
+      
+      
+      
+      
+	}
+    
+    
+
+
+// Draw all boxes
+for (let b of boxes) {
+  const pos = b.getPosition();
+  const angle = b.getAngle();
+  const size = 1 * scale;
+
+  const center = worldToScreen(pos);
+  ctx.save();
+  ctx.translate(center.x, center.y);
+  ctx.rotate(-angle);
+  ctx.fillStyle = 'blue';
+  ctx.fillRect(-size, -size, size * 2, size * 2);
+  ctx.restore();
+}
+
+
+
+
+
+
+
+
+
+      requestAnimationFrame(update);
+    }
+
+    update();
+    
+    
+    
+    let isMouseDown = false;
+    let coordinates = [];
+    
+  canvas.addEventListener('mousedown', (event) => {
+    isMouseDown = true;
+    coordinates.length = 0;
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+
+  const worldPos = screenToWorld(x, y);
+  console.log(worldPos)
+  
+  return
+
+  const newBox = world.createDynamicBody(worldPos);
+  newBox.createFixture(pl.Box(1, 1), {
+    density: 1.0,
+    friction: 0.3,
+  });
+
+  // Optionally store the box if you want to render it later
+  boxes.push(newBox);
+});
+
+    
+    canvas.addEventListener('mousemove', (event) => {
+    if(!isMouseDown) return
+    
+  const rect = canvas.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
+	coordinates.push([x, y])
+	console.log(x, y)
+})
+    
+    
+    canvas.addEventListener('mouseup', (event) => {
+    isMouseDown = false
+    
+   polygons.push(drawPolygon(simplifyPoints( coordinates )));
+
+	coordinates.length = 0
+    
+})
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    function drawPolygon (mPointsScreen) {
+
+	
+    // Convert to world coordinates
+    const mPointsWorld = mPointsScreen.map(([x, y]) => screenToWorld(x, y));
+    console.log(mPointsWorld)
+
+    // Calculate center of M shape for body positioning
+    const centerX = mPointsWorld.reduce((acc, v) => acc + v.x, 0) / mPointsWorld.length;
+    const centerY = mPointsWorld.reduce((acc, v) => acc + v.y, 0) / mPointsWorld.length;
+
+    // Create dynamic body positioned at center
+    const mBody = world.createDynamicBody(Vec2(centerX, centerY));
+
+    // Add thin box fixtures for each segment of the M
+    for (let i = 0; i < mPointsWorld.length - 1; i++) {
+      const v1 = mPointsWorld[i];
+      const v2 = mPointsWorld[i + 1];
+
+      const dx = v2.x - v1.x;
+      const dy = v2.y - v1.y;
+      const length = Math.sqrt(dx * dx + dy * dy);
+      const angle = Math.atan2(dy, dx);
+
+      // Midpoint relative to body center
+      const midX = (v1.x + v2.x) / 2 - centerX;
+      const midY = (v1.y + v2.y) / 2 - centerY;
+
+      // Create a thin box for this segment with thickness 0.05 meters
+      mBody.createFixture(pl.Box(length / 2, 0.05, Vec2(midX, midY), angle), {
+        density: 1.0,
+        friction: 0.3,
+      });
+    }
+	
+    return mBody
+}
+    
+    
+    
+    
+    
+   function simplifyPoints(points, tolerance = 10) {
+  if (points.length < 3) return points;
+
+  const simplified = [points[0]];
+
+  for (let i = 1; i < points.length - 1; i++) {
+    const [x1, y1] = simplified[simplified.length - 1];
+    const [x2, y2] = points[i];
+    const dist = Math.hypot(x2 - x1, y2 - y1);
+
+    if (dist > tolerance) {
+      simplified.push(points[i]);
+    }
+  }
+
+  simplified.push(points[points.length - 1]);
+  return simplified;
+}
+
+    
+  </script>
+</body>
+</html>
