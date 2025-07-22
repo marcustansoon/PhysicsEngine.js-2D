@@ -48,6 +48,8 @@
     // Ground body with terrain
 const ground = world.createBody();
 
+let windForce = Vec2(5.0, 0);  // rightward wind
+
 const terrainPoints = [
   Vec2(-50, 0),
   Vec2(-40, 1),
@@ -131,9 +133,31 @@ world.createJoint(pl.RevoluteJoint({}, anchorB, planks[plankCount - 1], Vec2(bri
 
 
 
+//water
+const droplets = [];
+const dropletRadius = 0.1;
+const dropletDensity = 0.2;
 
 
+const dropletStartX = 15;
+const dropletStartY = 3.5;  // higher so you can see them fall
 
+for (let i = 0; i < 25; i++) {
+  for (let j = 0; j < 4; j++) {
+    const drop = world.createDynamicBody({
+      position: Vec2(dropletStartX + i * dropletRadius * 2.5, dropletStartY + j * dropletRadius * 2.5),
+      linearDamping: 1.0,
+    });
+
+    drop.createFixture(pl.Circle(dropletRadius), {
+      density: dropletDensity,
+      friction: 0.1,
+      restitution: 0.3,
+    });
+
+    droplets.push(drop);
+  }
+}
 
 
 
@@ -166,7 +190,7 @@ world.createJoint(pl.RevoluteJoint({}, anchorB, planks[plankCount - 1], Vec2(bri
     });*/
     
     // --- Wheels (rectangular instead of circular) ---
-const wheelWidth = 0.4;   // width of the rectangular "wheel"
+const wheelWidth = 0.5;   // width of the rectangular "wheel"
 const wheelHeight = 0.8;  // height of the rectangular "wheel"
 
 const wheels = wheelPositions.map(pos => {
@@ -324,6 +348,22 @@ planks.forEach(plank => {
 
       
       
+// apply wind
+/*for (let body = world.getBodyList(); body; body = body.getNext()) {
+  if (body.isDynamic()) {
+    body.applyForceToCenter(windForce , true); // or whatever action you want
+  }
+}*/
+
+      
+      ctx.fillStyle = 'rgba(30, 144, 255, 0.7)';
+droplets.forEach(drop => {
+  const pos = worldToScreen(drop.getPosition());
+  ctx.beginPath();
+  ctx.arc(pos.x, pos.y, dropletRadius * scale * 2, 0, Math.PI * 2);
+  ctx.fill();
+});
+
       
       
       
@@ -355,6 +395,53 @@ setTimeout(() => {
 
   console.log("💥 Front-left tire flattened!");
 }, 15000);
+
+
+
+setTimeout(() => {
+  const explosionCenter = pl.Vec2(5, 1);  // Where explosion happens
+  explode(world, explosionCenter, 5, 200); // (world, center, radius, force)
+
+  console.log("💥 Explosion triggered at", explosionCenter);
+}, 3000);
+
+function explode(world, center, radius, force) {return
+  // Loop through all bodies in the world
+  for (let body = world.getBodyList(); body; body = body.getNext()) {
+    if (!body.isDynamic()) continue;
+
+    const bodyPos = body.getPosition();
+    const distanceVec = pl.Vec2.sub(bodyPos, center);
+    const distance = distanceVec.length();
+
+    if (distance < radius && distance > 0.0001) {
+      // Calculate impulse direction and strength
+      const effect = 1 - distance / radius;
+      const impulse = distanceVec.clone().mul(force * effect / distance);
+
+      body.applyLinearImpulse(impulse, bodyPos, true);
+    }
+  }
+}
+/*
+let totalDamage = 0;
+
+world.on('post-solve', function(contact, impulse) {
+  const normalImpulse = impulse.normalImpulses[0];
+
+  // Threshold: only count strong collisions
+  if (normalImpulse > 5.0) {
+    const bodyA = contact.getFixtureA().getBody();
+    const bodyB = contact.getFixtureB().getBody();
+
+    // Damage the car only if it's involved
+    if (bodyA === chassis || bodyB === chassis) {
+      totalDamage += normalImpulse;
+      console.log(`💥 Hit! Damage: ${normalImpulse.toFixed(2)} | Total: ${totalDamage.toFixed(2)}`);
+    }
+  }
+});*/
+
   </script>
 </body>
 </html>
