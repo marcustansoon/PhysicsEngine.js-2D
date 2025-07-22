@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Planck.js Car Example with Wheels</title>
   <style>
     canvas {
@@ -18,7 +19,7 @@
 </head>
 <body>
   <h1>Planck.js Car with Wheels — Use Left/Right Arrows to Drive</h1>
-  <canvas id="canvas" width="800" height="400"></canvas>
+  <canvas id="canvas" width="600" height="400"></canvas>
 
   <script src="https://unpkg.com/planck-js@0.3.27/dist/planck.min.js"></script>
   <script>
@@ -68,14 +69,47 @@ for (let i = 0; i < terrainPoints.length - 1; i++) {
 }
 
 
+
+
+// --- Bridge: simple planks connected as static body ---
+const bridge = world.createBody();
+
+// Define planks of the bridge
+const bridgeStart = 14;
+const plankCount = 10;
+const plankLength = 1;
+const plankY = 1.2;
+
+for (let i = 0; i < plankCount; i++) {
+  const x1 = bridgeStart + i * plankLength;
+  const x2 = x1 + plankLength;
+  const y = plankY;
+  bridge.createFixture(pl.Edge(Vec2(x1, y), Vec2(x2, y)), {
+    friction: 0.8,
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     // --- Car chassis body (rectangle) ---
     const chassisWidth = 3;  // meters
-    const chassisHeight = 1; // meters
+    const chassisHeight = 2; // meters
     const chassisStartPos = Vec2(0, 5);
     const chassis = world.createDynamicBody(chassisStartPos);
     chassis.createFixture(pl.Box(chassisWidth / 2, chassisHeight / 2), {
       density: 1.0,
-      friction: 0.3,
+      friction: 0.6,
     });
 
     // --- Wheels ---
@@ -85,14 +119,27 @@ for (let i = 0; i < terrainPoints.length - 1; i++) {
       Vec2(chassisStartPos.x + chassisWidth / 2 - wheelRadius, chassisStartPos.y - chassisHeight / 2)
     ];
 
-    const wheels = wheelPositions.map(pos => {
+    /*const wheels = wheelPositions.map(pos => {
       const wheel = world.createDynamicBody(pos);
       wheel.createFixture(pl.Circle(wheelRadius), {
-        density: 1.0,
+        density: 5.0,
         friction: 1.0, // high friction for grip
       });
       return wheel;
-    });
+    });*/
+    
+    // --- Wheels (rectangular instead of circular) ---
+const wheelWidth = 0.4;   // width of the rectangular "wheel"
+const wheelHeight = 0.8;  // height of the rectangular "wheel"
+
+const wheels = wheelPositions.map(pos => {
+  const wheel = world.createDynamicBody(pos);
+  wheel.createFixture(pl.Box(wheelWidth / 2, wheelHeight / 2), {
+    density: 5.0,
+    friction: 1.0, // high friction for grip
+  });
+  return wheel;
+});
 
     // --- Revolute joints to connect wheels to chassis ---
     /*const wheelJoints = wheels.map(wheel => {
@@ -173,7 +220,7 @@ ctx.stroke();
 
       // Draw wheels (circles)
       wheels.forEach(wheel => {
-        const pos = wheel.getPosition();
+        /*const pos = wheel.getPosition();
         const angle = wheel.getAngle();
         const screenPos = worldToScreen(pos);
         ctx.save();
@@ -186,13 +233,77 @@ ctx.stroke();
         ctx.strokeStyle = 'gray';
         ctx.lineWidth = 2;
         ctx.stroke();
-        ctx.restore();
+        ctx.restore();*/
+        
+        // Draw wheels (rectangles)
+  const pos = wheel.getPosition();
+  const angle = wheel.getAngle();
+  const screenPos = worldToScreen(pos);
+  ctx.save();
+  ctx.translate(screenPos.x, screenPos.y);
+  ctx.rotate(-angle);
+  ctx.fillStyle = 'black';
+  ctx.fillRect(-wheelWidth / 2 * scale, -wheelHeight / 2 * scale, wheelWidth * scale, wheelHeight * scale);
+  ctx.strokeStyle = 'gray';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(-wheelWidth / 2 * scale, -wheelHeight / 2 * scale, wheelWidth * scale, wheelHeight * scale);
+  ctx.restore();
+
       });
+      
+      
+      
+      
+      
+      
+      // Draw bridge planks
+ctx.beginPath();
+for (let i = 0; i < plankCount; i++) {
+  const x1 = bridgeStart + i * plankLength;
+  const x2 = x1 + plankLength;
+  const y = plankY;
+  const p1 = worldToScreen(Vec2(x1, y));
+  const p2 = worldToScreen(Vec2(x2, y));
+  ctx.moveTo(p1.x, p1.y);
+  ctx.lineTo(p2.x, p2.y);
+}
+ctx.strokeStyle = '#8B4513'; // brown wood color
+ctx.lineWidth = 3;
+ctx.stroke();
+
+      
+      
+      
+      
+      
+      
+      
 
       requestAnimationFrame(update);
     }
 
     update();
+    
+    
+    
+    // After 2 seconds, flatten the front-left wheel (index 0)
+setTimeout(() => {
+  const flatWheel = wheels[0];
+  const flatJoint = wheelJoints[0];
+
+  // 1. Replace the tire's shape with a smaller radius
+  flatWheel.destroyFixture(flatWheel.getFixtureList());
+  flatWheel.createFixture(pl.Circle(wheelRadius * 0.4), {
+    density: 1.0,
+    friction: 1.0,
+  });
+
+  // 2. Soften the suspension on the joint
+  flatJoint.setSpringFrequencyHz(1.0); // lower = softer
+  flatJoint.setSpringDampingRatio(0.2); // less damping = bouncier
+
+  console.log("💥 Front-left tire flattened!");
+}, 15000);
   </script>
 </body>
 </html>
