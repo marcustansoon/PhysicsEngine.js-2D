@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Save the Ball: Bee Siege</title>
+  <style>
+    canvas {
+      border: 2px solid black;
+      background: #fdf6e3;
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+<canvas id="canvas" width="800" height="300"></canvas>
+<script src="https://unpkg.com/planck-js@0.3.27/dist/planck.min.js"></script>
+<script>
+// --- Setup ---
+const pl = planck, Vec2 = pl.Vec2;
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const width = canvas.width, height = canvas.height;
+const scale = 30;
+
+let gameOver = false, gameWon = false, timeLeft = 20;
+let drawing = false, drawnPoints = [];
+
+const world = new pl.World(Vec2(0, -10));
+const ground = world.createBody();
+ground.createFixture(pl.Edge(Vec2(-50, 0), Vec2(50, 0)), 0.0);
+
+function worldToScreen(v) {
+  return Vec2(v.x * scale, height - v.y * scale);
+}
+function screenToWorld(x, y) {
+  return Vec2(x / scale, (height - y) / scale);
+}
+
+// --- Ball ---
+const ball = world.createDynamicBody(Vec2(5, 3));
+ball.createFixture(pl.Circle(0.4), { density: 1.0, restitution: 0.3 });
+
+// ball 2
+const ball2 = world.createDynamicBody(Vec2(6, 3));
+ball2.createFixture(pl.Circle(2), { density: 1.0, restitution: 0.3 });
+
+// --- Bees ---
+const bees = [];
+function createBee(x, y) {
+  const bee = world.createDynamicBody(Vec2(x, y));
+  bee.setGravityScale(0);
+  bee.createFixture(pl.Circle(0.2), { density: 0.2 });
+  bees.push(bee);
+}
+for (let i = 3; i < 5; i++) createBee(-3 + i * 3, 10);
+
+// --- Drawing Mechanics ---
+canvas.addEventListener('mousedown', e => {
+  if (gameOver || gameWon) return;
+  drawing = true;
+  drawnPoints.length = 0;
+  const rect = canvas.getBoundingClientRect();
+  drawnPoints.push([e.clientX - rect.left, e.clientY - rect.top]);
+});
+canvas.addEventListener('mousemove', e => {
+  if (!drawing) return;
+  const rect = canvas.getBoundingClientRect();
+  drawnPoints.push([e.clientX - rect.left, e.clientY - rect.top]);
+});
+canvas.addEventListener('mouseup', () => {
+  if (!drawing || drawnPoints.length < 2) return;
+  drawing = false;
+
+  const worldPoints = drawnPoints.map(p => screenToWorld(p[0], p[1]));
+  const centerX = worldPoints.reduce((sum, p) => sum + p.x, 0) / worldPoints.length;
+  const centerY = worldPoints.reduce((sum, p) => sum + p.y, 0) / worldPoints.length;
+  const body = world.createBody(Vec2(centerX, centerY));
+
+  for (let i = 0; i < worldPoints.length - 1; i++) {
+    const v1 = worldPoints[i], v2 = worldPoints[i + 1];
+    const mid = Vec2((v1.x + v2.x) / 2 - centerX, (v1.y + v2.y) / 2 - centerY);
+    const dx = v2.x - v1.x, dy = v2.y - v1.y;
+    const length = Math.sqrt(dx * dx + dy * dy);
+    const angle = Math.atan2(dy, dx);
+    body.createFixture(pl.Box(length / 2, 0.05, mid, angle), {
+      density: 1.0, friction: 0.3,
+    });
+  }
+});
+
+// --- Bee AI ---
+function updateBees() {
+  const target = ball.getPosition();
+  bees.forEach(bee => {
+    const pos = bee.getPosition();
+    const dir = Vec2(target.x - pos.x, target.y - pos.y);
+dir.normalize(); // modifies dir in place
+dir.mul(0.1);     // modifies dir in place
+
+    bee.applyForceToCenter(dir);
+  });
+}
+
+// --- Collision Logic ---
+world.on('begin-contact', contact => {
+  const [a, b] = [contact.getFixtureA().getBody(), contact.getFixtureB().getBody()];
+  if ((a === ball && bees.includes(b)) || (b === ball && bees.includes(a))) {
+    gameOver = true;
+  }
+});
+
+// --- Game Loop ---
+let lastTime = performance.now();
+function update() {
+  const now = performance.now();
+  const dt = (now - lastTime) / 1000;
+  lastTime = now;
+
+  if (!gameOver && !gameWon) {
+    timeLeft -= dt;
+    if (timeLeft <= 0) gameWon = true;
+    updateBees();
+  }
+
+  world.step(1 / 60);
+  ctx.clearRect(0, 0, width, height);
+
+  // Lava zone
+  ctx.fillStyle = '#ff4400aa';
+  ctx.fillRect(0, height - 30, width, 30);
+
+  // Ball
+  const bp = worldToScreen(ball.getPosition());
+  ctx.beginPath();
+  ctx.arc(bp.x, bp.y, 0.4 * scale, 0, Math.PI * 2);
+  ctx.fillStyle = 'blue';
+  ctx.fill();
+  
+  const bp2 = worldToScreen(ball2.getPosition());
+  ctx.beginPath();
+  ctx.arc(bp2.x, bp2.y, 2 * scale, 0, Math.PI * 2);
+  ctx.fillStyle = 'blue';
+  ctx.fill();
+
+  // Bees
+  bees.forEach(bee => {
+    const pos = worldToScreen(bee.getPosition());
+    ctx.beginPath();
+    ctx.arc(pos.x, pos.y, 0.2 * scale, 0, Math.PI * 2);
+    ctx.fillStyle = 'yellow';
+    ctx.fill();
+    ctx.strokeStyle = 'black';
+    ctx.stroke();
+  });
+
+  // Draw physics shapes
+  for (let b = world.getBodyList(); b; b = b.getNext()) {
+    for (let f = b.getFixtureList(); f; f = f.getNext()) {
+      const shape = f.getShape();
+      if (shape.getType() === 'polygon') {
+        const verts = shape.m_vertices.map(v => pl.Transform.mul(b.getTransform(), v));
+        const pts = verts.map(worldToScreen);
+        ctx.beginPath();
+        ctx.moveTo(pts[0].x, pts[0].y);
+        for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].x, pts[i].y);
+        ctx.closePath();
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+    }
+  }
+
+  // Timer + messages
+  ctx.fillStyle = 'black';
+  ctx.font = '20px Arial';
+  ctx.fillText(`Time Left: ${Math.max(0, timeLeft).toFixed(1)}s`, 10, 30);
+  if (gameOver) ctx.fillText("💀 Game Over: Bees Got the Ball!", 10, 60);
+  if (gameWon) ctx.fillText("🎉 You Win! The Ball Survived!", 10, 60);
+
+  requestAnimationFrame(update);
+}
+update();
+</script>
+</body>
+</html>
