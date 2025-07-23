@@ -363,6 +363,9 @@ ctx.restore();
     lowerBound: Vec2(platPos.x - 1.5, platPos.y - 0.15),
     upperBound: Vec2(platPos.x + 1.5, platPos.y + 0.15),
   };
+  
+  console.log(platAABB)
+  console.log(mPointsWorld)
 
   const isOverlappingPlatform = mPointsWorld.some(p =>
     p.x >= platAABB.lowerBound.x &&
@@ -376,6 +379,18 @@ ctx.restore();
     return null; // Abort creation
   }
   
+  let isOverlappingPlatform_temp = false;
+  
+  for(let i = 1; i < mPointsWorld.length; i++){
+  	if(!lineIntersectsAABB(mPointsWorld[i-1], mPointsWorld[i], platAABB)) continue;
+  	isOverlappingPlatform_temp = true;
+    break;
+  }
+  
+  if (isOverlappingPlatform_temp) {
+    console.log('Path intersects platform — skipping.2');
+    return null; // Abort creation
+  }
   
   
 
@@ -431,6 +446,37 @@ ctx.restore();
 
   simplified.push(points[points.length - 1]);
   return simplified;
+}
+
+
+
+function lineIntersectsAABB(p1, p2, aabb) {
+  let tmin = 0;
+  let tmax = 1;
+
+  const dx = p2.x - p1.x;
+  const dy = p2.y - p1.y;
+
+  function updateT(minBound, maxBound, origin, direction) {
+    if (direction === 0) {
+      // Line parallel to this axis
+      if (origin < minBound || origin > maxBound) return false;
+      return true;
+    }
+    let t1 = (minBound - origin) / direction;
+    let t2 = (maxBound - origin) / direction;
+    if (t1 > t2) [t1, t2] = [t2, t1]; // swap
+
+    if (t2 < tmin || t1 > tmax) return false;
+    if (t1 > tmin) tmin = t1;
+    if (t2 < tmax) tmax = t2;
+    return true;
+  }
+
+  if (!updateT(aabb.lowerBound.x, aabb.upperBound.x, p1.x, dx)) return false;
+  if (!updateT(aabb.lowerBound.y, aabb.upperBound.y, p1.y, dy)) return false;
+
+  return true; // intersects
 }
 
     
