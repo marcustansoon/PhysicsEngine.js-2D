@@ -108,6 +108,25 @@ const polygons = [];
 
 	
     
+    // Create a kinematic body for the moving platform
+const platformStart = Vec2(-5, 5); // starting position in world coords
+const platform = world.createKinematicBody(platformStart);
+
+// Platform is 3 meters wide, 0.3 meters thick
+platform.createFixture(pl.Box(1.5, 0.15), {
+  friction: 0.6,
+});
+
+// Initial velocity to the right
+platform.setLinearVelocity(Vec2(2, 0));
+
+// Bounds for movement
+const leftBound = -5;
+const rightBound = 5;
+
+
+
+    
     
     
     // Draw
@@ -239,6 +258,27 @@ for (let b of boxes) {
 
 
 
+// Move platform back and forth
+const pX = platform.getPosition().x;
+const vX = platform.getLinearVelocity().x;
+
+if (pX < leftBound && vX < 0) {
+  platform.setLinearVelocity(Vec2(2, 0)); // Move right
+} else if (pX > rightBound && vX > 0) {
+  platform.setLinearVelocity(Vec2(-2, 0)); // Move left
+}
+
+// Draw platform
+const platPos = worldToScreen(platform.getPosition());
+const platAngle = platform.getAngle();
+ctx.save();
+ctx.translate(platPos.x, platPos.y);
+ctx.rotate(-platAngle);
+ctx.fillStyle = 'green';
+ctx.fillRect(-1.5 * scale, -0.15 * scale, 3 * scale, 0.3 * scale);
+ctx.restore();
+
+
 
 
 
@@ -292,7 +332,8 @@ for (let b of boxes) {
     canvas.addEventListener('mouseup', (event) => {
     isMouseDown = false
     
-   polygons.push(drawPolygon(simplifyPoints( coordinates )));
+   let obj = drawPolygon(simplifyPoints( coordinates ))
+   if(obj) polygons.push(obj)
 
 	coordinates.length = 0
     
@@ -313,9 +354,30 @@ for (let b of boxes) {
     function drawPolygon (mPointsScreen) {
 
 	
-    // Convert to world coordinates
-    const mPointsWorld = mPointsScreen.map(([x, y]) => screenToWorld(x, y));
-    console.log(mPointsWorld)
+  // Convert to world coordinates
+  const mPointsWorld = mPointsScreen.map(([x, y]) => screenToWorld(x, y));
+
+  // Check if any point overlaps with the platform's AABB
+  const platPos = platform.getPosition();
+  const platAABB = {
+    lowerBound: Vec2(platPos.x - 1.5, platPos.y - 0.15),
+    upperBound: Vec2(platPos.x + 1.5, platPos.y + 0.15),
+  };
+
+  const isOverlappingPlatform = mPointsWorld.some(p =>
+    p.x >= platAABB.lowerBound.x &&
+    p.x <= platAABB.upperBound.x &&
+    p.y >= platAABB.lowerBound.y &&
+    p.y <= platAABB.upperBound.y
+  );
+
+  if (isOverlappingPlatform) {
+    console.log('Path intersects platform — skipping.');
+    return null; // Abort creation
+  }
+  
+  
+  
 
     // Calculate center of M shape for body positioning
     const centerX = mPointsWorld.reduce((acc, v) => acc + v.x, 0) / mPointsWorld.length;
