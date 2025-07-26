@@ -80,6 +80,8 @@ let ref,
 				} else if (e.data.type === 'get-game-data') {
 					if(!fileSystem || !e.data.data || !e.data.data.fileName) return;
 					this.getFile(fileSystem, e.data.data.fileName, false, null);
+				} else if (e.data.type === 'get-google-auth-url') {
+					this.getGoogleAuthURL();
 				} else if (e.data.type === 'get-user-data') {
 					this.IABReply({ 
 						"type": "get-user-data",
@@ -94,6 +96,31 @@ let ref,
 			ref.executeScript({
 				'code': `(function(){window.dispatchEvent(new CustomEvent('message', { detail: ${data} }));})()`
 			}, function(_) {});
+		},
+		getGoogleAuthURL: function() {
+			// Make a GET request to server
+			let options = {
+				method: 'GET',
+				responseType: 'text',
+				serializer: 'json',
+			};
+			// Send GET request to server to get user data
+			cordova.plugin.http.sendRequest('https://script.google.com/macros/s/AKfycbxIz59CxDp5IkmnfJ5gI5ayhUmj1mEX-vhBtHNKr5AnhmgImQOW3_7amyxm6UvDKZ4c/exec?uuid=' + device.uuid + '&getoauth=1', options, (response) => {
+				if (!response.data) {
+					return;
+				}
+				try {
+					response.data = JSON.parse(response.data)
+					let parsed = response.data
+					alert(parsed.url);
+			                ref = cordova.InAppBrowser.open(parsed.url, '_system', '');
+			                this.addIABEventListener();
+				} catch (e) {
+
+				}
+			}, function(response) {
+				//alert(response.error);
+			});
 		},
 		registerUser: function() {
 			// Register a new user
