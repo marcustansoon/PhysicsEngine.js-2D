@@ -4003,6 +4003,9 @@
           window.localStorage.setItem("level", userCompletedLevel);
         }
         break;
+      case "test-alert":
+        alert("test received");
+        break;
       case "get-game-data":
         if (
           !e.detail.data ||
