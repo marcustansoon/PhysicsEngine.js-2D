@@ -1610,6 +1610,7 @@
           console.log('click')
           signInBg.interactive = false;
           getGoogleAuthURL();
+          alert('z')
           // Re-enable the button after 1 second (1000ms)
           setTimeout(() => {
               signInBg.interactive = true;
