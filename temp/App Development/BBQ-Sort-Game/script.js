@@ -24,10 +24,6 @@ let ref,
 	        		let data = url.replace('com.notadevstudio.bbqsortpuzzle://?data=', '');
 				try {
 					let parsed = JSON.parse(atob(data));
-					//alert(atob(data));
-					alert('b');
-					alert(JSON.stringify(that));
-					alert(JSON.stringify(this));
 					if(parsed.status === 200 && parsed.bindingConfirmation){
 						this.IABReply({ 
 							"type": "bind-success",
