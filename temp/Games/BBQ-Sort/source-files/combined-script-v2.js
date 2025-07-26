@@ -108,6 +108,11 @@
               "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/untick.png"
           },
           {
+            alias: "google-logo",
+            src:
+              "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/g-logo.png"
+          },
+          {
             alias: "level-completion-bg",
             src:
               "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/level-completed-sprite-transparent.png"
@@ -1475,7 +1480,7 @@
         this.app.renderer.width / 2 -
           (soundEffectText.width + tickSoundEffect.width * 2) / 2 +
           soundEffectText.width / 2,
-        this.app.renderer.height / 2 - banner.height / 4
+        this.app.renderer.height / 2 - banner.height / 5 * 1.5
       );
       this.objects.push(soundEffectText);
       this.container.addChild(soundEffectText);
@@ -1484,7 +1489,7 @@
         this.app.screen.width / 2 +
           (soundEffectText.width + tickSoundEffect.width * 2) / 2 -
           tickSoundEffect.width / 2,
-        this.app.renderer.height / 2 - banner.height / 4
+        this.app.renderer.height / 2 - banner.height / 5 * 1.5
       );
       this.objects.push(tickSoundEffect);
       this.container.addChild(tickSoundEffect);
@@ -1492,7 +1497,7 @@
       // Create text
       let musicText = new PIXI.Text("MUSIC", style);
       musicText.anchor.set(0.5);
-      musicText.position.set(soundEffectText.x, this.app.renderer.height / 2);
+      musicText.position.set(soundEffectText.x, this.app.renderer.height / 2 - banner.height / 5 * 0.5);
       this.objects.push(musicText);
       this.container.addChild(musicText);
       // Create tick
@@ -1501,7 +1506,7 @@
       );
       tickMusic.anchor.set(0.5);
       tickMusic.scale.set((scaleBanner / 0.5) * 0.15);
-      tickMusic.position.set(tickSoundEffect.x, this.app.renderer.height / 2);
+      tickMusic.position.set(tickSoundEffect.x, this.app.renderer.height / 2 - banner.height / 5 * 0.5);
       makeInteractive(tickMusic);
       tickMusic.on("pointerdown", () => {
         music = !music;
@@ -1532,7 +1537,7 @@
       vibrationText.anchor.set(0.5);
       vibrationText.position.set(
         soundEffectText.x,
-        this.app.renderer.height / 2 + banner.height / 4
+        this.app.renderer.height / 2 + banner.height / 5 * 0.5
       );
       this.objects.push(vibrationText);
       this.container.addChild(vibrationText);
@@ -1544,7 +1549,7 @@
       tickVibration.scale.set((scaleBanner / 0.5) * 0.15);
       tickVibration.position.set(
         tickSoundEffect.x,
-        this.app.renderer.height / 2 + banner.height / 4
+        this.app.renderer.height / 2 + banner.height / 5 * 0.5
       );
       makeInteractive(tickVibration);
       tickVibration.on("pointerdown", () => {
@@ -1557,6 +1562,69 @@
       });
       this.objects.push(tickVibration);
       this.container.addChild(tickVibration);
+
+
+      // Create style for Google Sign In text
+      const signInStyle = new PIXI.TextStyle({
+        fontFamily: 'Arial',
+        fontSize: 18,
+        fill: 0x444444,
+      });
+      
+      // Create Google sign in logo
+      let signInLogo = new PIXI.Sprite(
+        1 ? PIXI.Assets.get("google-logo") : PIXI.Assets.get("google-logo")
+      );
+      signInLogo.anchor.set(0.5);
+      signInLogo.scale.set((scaleBanner / 0.5) * 0.2);
+      this.objects.push(signInLogo);
+
+      // Create Google sign in text
+      let signInText = new PIXI.Text("Sign In with Google ", signInStyle);
+      signInText.anchor.set(0.5);
+      signInText.position.set(
+        this.app.renderer.width / 2 + signInLogo.width,
+        this.app.renderer.height / 2 + banner.height / 5 * 1.5
+      );
+      this.objects.push(signInText);
+
+      // Adjust logo position
+      signInLogo.position.set(
+        this.app.renderer.width / 2 - signInText.width / 2 - signInLogo.width / 3 * 2,
+        this.app.renderer.height / 2 + banner.height / 5 * 1.5
+      );
+
+      // Create flat white bg for Google Sign In
+      const signInBg = new PIXI.Graphics();
+      signInBg.beginFill(0xffffff);
+      signInBg.lineStyle(1, 0xcccccc);
+      signInBg.drawRoundedRect(-(signInText.width + signInLogo.width * 4) / 2, - signInLogo.height / 2 * 1.7, signInText.width + signInLogo.width * 4, signInLogo.height * 1.7, 6);
+      signInBg.endFill();
+      signInBg.position.set(
+          this.app.renderer.width / 2,
+          this.app.renderer.height / 2 + banner.height / 5 * 1.5
+      );
+      makeInteractive(signInBg);
+      signInBg.on("pointerdown", () => {
+          // Disable the button temporarily
+          console.log('click')
+          signInBg.interactive = false;
+          getGoogleAuthURL();
+          // Re-enable the button after 1 second (1000ms)
+          setTimeout(() => {
+              signInBg.interactive = true;
+          }, 2000);  // 1000ms = 1 second
+      });
+      this.objects.push(signInBg);
+
+      this.container.addChild(signInBg);
+      this.container.addChild(signInText);
+      this.container.addChild(signInLogo);
+
+
+
+
+      
 
       // Create back button
       let backButton = new PIXI.Sprite(PIXI.Assets.get("close-button"));
@@ -3903,6 +3971,18 @@
       })
     );
   }
+  
+  function getGoogleAuthURL() {
+    if (!window || !window["webkit"] || !userData || !userData.uuid) {
+      return;
+    }
+    window["webkit"].messageHandlers["cordova_iab"].postMessage(
+      JSON.stringify({
+        type: "get-google-auth-url",
+        data: {}
+      })
+    );
+  }
 
   function init() {
     userDataRequestInterval = setInterval(requestUserData, 30000);
@@ -3934,6 +4014,15 @@
         alert("received" + e.detail.data.fileName);
         alert(e.detail.data.fileData);
         showTestSprite(e.detail.data.fileData);
+        break;
+      case "bind-success":
+        alert("s received" + JSON.stringify(e.detail.data));
+        break;
+      case "bind-fail":
+        alert("f received" + JSON.stringify(e.detail.data));
+        break;
+      case "bind-confirmation":
+        alert("c received" + JSON.stringify(e.detail.data));
         break;
       default:
         break;
