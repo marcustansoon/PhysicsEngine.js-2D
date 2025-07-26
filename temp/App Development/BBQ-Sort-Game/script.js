@@ -36,7 +36,7 @@ let ref,
 					} else {
 						this.IABReply({
 							"type": "bind-fail",
-							"data": null,
+							"data": parsed,
 						});
 					}
 				} catch(e) {
