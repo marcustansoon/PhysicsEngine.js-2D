@@ -20,7 +20,28 @@ let ref,
 
 		handleOpenURL: function(url){
 			setTimeout(()=>{
-	        		alert(url);
+	        		let data = url.replace('com.notadevstudio.bbqsortpuzzle://?data=', '');
+				try {
+					let parsed = JSON.parse(atob(data));
+					if(parsed.status === 200 && parsed.bindingConfirmation){
+						this.IABReply({ 
+							"type": "bind-success",
+							"data": parsed,
+						});
+					} else if(parsed.status === 200 && parsed.bindingConfirmation && parsed.state){
+						this.IABReply({ 
+							"type": "bind-confirmation",
+							"data": parsed,
+						});
+					} else {
+						this.IABReply({
+							"type": "bind-fail",
+							"data": parsed,
+						});
+					}
+				} catch(e) {
+
+				}
 			}, 1000);
 		},
 
