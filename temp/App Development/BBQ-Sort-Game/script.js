@@ -24,6 +24,11 @@ let ref,
 				try {
 					let parsed = JSON.parse(atob(data));
 					alert(atob(data));
+					alert(typeof parsed);
+						this.IABReply({ 
+							"type": "test-alert",
+							"data": 123,
+						});
 					if(parsed.status === 200 && parsed.bindingConfirmation){
 						this.IABReply({ 
 							"type": "bind-success",
