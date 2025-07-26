@@ -19,13 +19,14 @@ let ref,
 		},
 
 		handleOpenURL: function(url){
+			let that = this;
 			setTimeout(()=>{
 	        		let data = url.replace('com.notadevstudio.bbqsortpuzzle://?data=', '');
 				try {
 					let parsed = JSON.parse(atob(data));
 					//alert(atob(data));
-					alert(this.IABReply);
-					this.callme();
+					alert('a');
+					alert(that.IABReply);
 					if(parsed.status === 200 && parsed.bindingConfirmation){
 						this.IABReply({ 
 							"type": "bind-success",
