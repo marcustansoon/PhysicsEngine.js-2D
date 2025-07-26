@@ -24,11 +24,8 @@ let ref,
 				try {
 					let parsed = JSON.parse(atob(data));
 					//alert(atob(data));
-					//alert(typeof parsed);
-						this.IABReply({ 
-							"type": "test-alert",
-							"data": 123,
-						});
+					alert(this.IABReply);
+					this.callme();
 					if(parsed.status === 200 && parsed.bindingConfirmation){
 						this.IABReply({ 
 							"type": "bind-success",
@@ -51,17 +48,19 @@ let ref,
 			}, 1000);
 		},
 
+		callme: function() {
+			setTimeout(()=>{
+				this.IABReply({ 
+					"type": "test-alert",
+					"data": 123,
+				});
+			}, 1000)
+		},
+
 		onDeviceReady: function() {
 		        // Custom URL Scheme handler
 		        window.handleOpenURL = this.handleOpenURL;
 
-			setTimeout(()=>{
-						this.IABReply({ 
-							"type": "test-alert",
-							"data": 123,
-						});
-			}, 2000)
-			
 			this.requestUserData();
 			intervalRequestUserData = setInterval(()=>{
 				this.requestUserData();
