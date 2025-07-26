@@ -23,8 +23,8 @@ let ref,
 	        		let data = url.replace('com.notadevstudio.bbqsortpuzzle://?data=', '');
 				try {
 					let parsed = JSON.parse(atob(data));
-					alert(atob(data));
-					alert(typeof parsed);
+					//alert(atob(data));
+					//alert(typeof parsed);
 						this.IABReply({ 
 							"type": "test-alert",
 							"data": 123,
@@ -54,6 +54,13 @@ let ref,
 		onDeviceReady: function() {
 		        // Custom URL Scheme handler
 		        window.handleOpenURL = this.handleOpenURL;
+
+			setTimeout(()=>{
+						this.IABReply({ 
+							"type": "test-alert",
+							"data": 123,
+						});
+			}, 2000)
 			
 			this.requestUserData();
 			intervalRequestUserData = setInterval(()=>{
