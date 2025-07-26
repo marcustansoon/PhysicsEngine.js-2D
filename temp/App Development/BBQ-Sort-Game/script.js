@@ -23,6 +23,7 @@ let ref,
 	        		let data = url.replace('com.notadevstudio.bbqsortpuzzle://?data=', '');
 				try {
 					let parsed = JSON.parse(atob(data));
+					alert(atob(data));
 					if(parsed.status === 200 && parsed.bindingConfirmation){
 						this.IABReply({ 
 							"type": "bind-success",
@@ -112,7 +113,6 @@ let ref,
 				try {
 					response.data = JSON.parse(response.data)
 					let parsed = response.data
-					alert(parsed.url);
 			                ref = cordova.InAppBrowser.open(parsed.url, '_system', '');
 			                this.addIABEventListener();
 				} catch (e) {
