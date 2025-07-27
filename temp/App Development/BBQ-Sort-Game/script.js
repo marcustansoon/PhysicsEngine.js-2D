@@ -139,7 +139,7 @@ let ref,
 					if(navigator?.notification?.confirm){
 						dialogExists = true;
 					}
-					if(response.data.status === 200 && response.data.email){
+					if(response.data && response.data.status === 200 && response.data.email){
 						dialogExists && navigator.notification.confirm(
 						    `Account successfully bound to ${response.data.email}. Your progress is now saved to this account.`,
 						    ()=>{},    
