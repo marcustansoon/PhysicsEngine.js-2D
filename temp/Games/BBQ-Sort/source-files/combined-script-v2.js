@@ -4020,8 +4020,8 @@
         showTestSprite(e.detail.data.fileData);
         break;
       case "bind-success":
-        alert("s received" + JSON.stringify(e.detail.data));
-        requestUserData();
+        //alert("s received" + JSON.stringify(e.detail.data));
+        //requestUserData();
         break;
       /*case "bind-fail":
         alert("f received" + JSON.stringify(e.detail.data));
