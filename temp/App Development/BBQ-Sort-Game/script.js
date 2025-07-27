@@ -19,7 +19,6 @@ let ref,
 		},
 
 		handleOpenURL: function(url){
-			let that = this;
 			setTimeout(()=>{
 	        		let data = url.replace('com.notadevstudio.bbqsortpuzzle://?data=', '');
 				try {
