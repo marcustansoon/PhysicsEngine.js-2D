@@ -2670,84 +2670,20 @@
         case 112:
         case 113:
         case 114:
-        case 115:
-          numberOfRows = 3 + 1;
-          numberOfColumns = 5 + 1;
-          numberOfSticks = 14;
-          maxFoodPerStick = 4;
-          foodNames = [
-            "drumstick-slice",
-            "mini-sausage",
-            "cabbage-slice",
-            "eggplant-slice",
-            "salmon-slice",
-            "prawn",
-            "cheese-slice",
-            "crab-slice",
-            "marshmallow-slice",
-            "potato-slice",
-            "carrot-slice",
-            "squid-slice"
-          ];
-          break;
+        case 115:        
         case 116:
         case 117:
         case 118:
         case 119:
-        case 120:
-          numberOfRows = 3 + 1;
-          numberOfColumns = 5 + 1;
-          numberOfSticks = 14;
-          maxFoodPerStick = 5;
-          foodNames = [
-            "drumstick-slice",
-            "mini-sausage",
-            "cabbage-slice",
-            "eggplant-slice",
-            "salmon-slice",
-            "prawn",
-            "cheese-slice",
-            "crab-slice",
-            "marshmallow-slice",
-            "potato-slice",
-            "carrot-slice",
-            "squid-slice"
-          ];
-          break;
+        case 120:        
         case 121:
         case 122:
         case 123:
         case 124:
         case 125:
           numberOfRows = 3 + 1;
-          numberOfColumns = 6 + 1;
-          numberOfSticks = 16;
-          maxFoodPerStick = 3;
-          foodNames = [
-            "drumstick-slice",
-            "mini-sausage",
-            "cabbage-slice",
-            "eggplant-slice",
-            "salmon-slice",
-            "prawn",
-            "cheese-slice",
-            "crab-slice",
-            "marshmallow-slice",
-            "potato-slice",
-            "carrot-slice",
-            "squid-slice",
-            "steak-slice",
-            "greenpepper-slice"
-          ];
-          break;
-        case 126:
-        case 127:
-        case 128:
-        case 129:
-        case 130:
-          numberOfRows = 3 + 1;
-          numberOfColumns = 6 + 1;
-          numberOfSticks = 16;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 14;
           maxFoodPerStick = 4;
           foodNames = [
             "drumstick-slice",
@@ -2761,19 +2697,22 @@
             "marshmallow-slice",
             "potato-slice",
             "carrot-slice",
-            "squid-slice",
-            "steak-slice",
-            "greenpepper-slice"
+            "squid-slice"
           ];
           break;
+        case 126:
+        case 127:
+        case 128:
+        case 129:
+        case 130:        
         case 131:
         case 132:
         case 133:
         case 134:
         case 135:
           numberOfRows = 3 + 1;
-          numberOfColumns = 6 + 1;
-          numberOfSticks = 16;
+          numberOfColumns = 5 + 1;
+          numberOfSticks = 14;
           maxFoodPerStick = 5;
           foodNames = [
             "drumstick-slice",
@@ -2787,11 +2726,75 @@
             "marshmallow-slice",
             "potato-slice",
             "carrot-slice",
-            "squid-slice",
-            "steak-slice",
-            "greenpepper-slice"
+            "squid-slice"
           ];
           break;
+
+          // numberOfRows = 3 + 1;
+          // numberOfColumns = 6 + 1;
+          // numberOfSticks = 16;
+          // maxFoodPerStick = 3;
+          // foodNames = [
+          //   "drumstick-slice",
+          //   "mini-sausage",
+          //   "cabbage-slice",
+          //   "eggplant-slice",
+          //   "salmon-slice",
+          //   "prawn",
+          //   "cheese-slice",
+          //   "crab-slice",
+          //   "marshmallow-slice",
+          //   "potato-slice",
+          //   "carrot-slice",
+          //   "squid-slice",
+          //   "steak-slice",
+          //   "greenpepper-slice"
+          // ];
+          // break;
+
+          // numberOfRows = 3 + 1;
+          // numberOfColumns = 6 + 1;
+          // numberOfSticks = 16;
+          // maxFoodPerStick = 4;
+          // foodNames = [
+          //   "drumstick-slice",
+          //   "mini-sausage",
+          //   "cabbage-slice",
+          //   "eggplant-slice",
+          //   "salmon-slice",
+          //   "prawn",
+          //   "cheese-slice",
+          //   "crab-slice",
+          //   "marshmallow-slice",
+          //   "potato-slice",
+          //   "carrot-slice",
+          //   "squid-slice",
+          //   "steak-slice",
+          //   "greenpepper-slice"
+          // ];
+          // break;
+
+          // numberOfRows = 3 + 1;
+          // numberOfColumns = 6 + 1;
+          // numberOfSticks = 16;
+          // maxFoodPerStick = 5;
+          // foodNames = [
+          //   "drumstick-slice",
+          //   "mini-sausage",
+          //   "cabbage-slice",
+          //   "eggplant-slice",
+          //   "salmon-slice",
+          //   "prawn",
+          //   "cheese-slice",
+          //   "crab-slice",
+          //   "marshmallow-slice",
+          //   "potato-slice",
+          //   "carrot-slice",
+          //   "squid-slice",
+          //   "steak-slice",
+          //   "greenpepper-slice"
+          // ];
+          // break;
         default:
           numberOfRows = 3 + 1;
           numberOfColumns = 6 + 1;
