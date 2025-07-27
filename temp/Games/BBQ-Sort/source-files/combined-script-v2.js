@@ -4003,9 +4003,9 @@
           window.localStorage.setItem("level", userCompletedLevel);
         }
         break;
-      case "test-alert":
+      /*case "test-alert":
         alert("test received");
-        break;
+        break;*/
       case "get-game-data":
         if (
           !e.detail.data ||
@@ -4019,7 +4019,7 @@
         alert(e.detail.data.fileData);
         showTestSprite(e.detail.data.fileData);
         break;
-      case "bind-success":
+      /*case "bind-success":
         alert("s received" + JSON.stringify(e.detail.data));
         break;
       case "bind-fail":
@@ -4027,7 +4027,7 @@
         break;
       case "bind-confirmation":
         alert("c received" + JSON.stringify(e.detail.data));
-        break;
+        break;*/
       default:
         break;
     }
