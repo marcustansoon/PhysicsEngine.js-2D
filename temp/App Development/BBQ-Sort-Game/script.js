@@ -122,6 +122,7 @@ let ref,
 			}, function(_) {});
 		},
 		confirmBinding: function(state) {
+			let that = this;
 			// Make a GET request to server
 			let options = {
 				method: 'GET',
@@ -146,6 +147,8 @@ let ref,
 						    'Sync Success',    
 						    ['Okay'],            
 						);
+						alert(this.IABReply)
+						alert(that.IABReply)
 						this.IABReply({ 
 							"type": "bind-success",
 							"data": null,
