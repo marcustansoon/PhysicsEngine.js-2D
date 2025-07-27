@@ -41,10 +41,10 @@ let ref,
 						});*/
 					} else if(parsed.status === 200){
 						dialogExists && navigator.notification.confirm(
-						    `Account successfully binded to ${parsed.email}`,
-						    syncSuccess.bind(this),     // callback to invoke
-						    'Account Sync Success',    // title
-						    ['Okay'],            	// buttonLabels
+						    `Account successfully bound to ${parsed.email}. Your progress is now saved to this account.`,
+						    ()=>{},     
+						    'Sync Success',   
+						    ['Okay'],            	
 						);
 						/*this.IABReply({ 
 							"type": "bind-confirmation",
@@ -52,10 +52,10 @@ let ref,
 						});*/
 					} else {
 						dialogExists && navigator.notification.confirm(
-						    `Binded failed due to ${parsed.error_description}. Please try again.`,
-						    syncFail.bind(this),     // callback to invoke
-						    'Account Sync Failed',    // title
-						    ['Okay'],            	// buttonLabels
+						    `Binding failed due to ${parsed.error_description}. Please try again.`,
+						    ()=>{}, 
+						    'Account Sync Failed',   
+						    ['Okay'],            	
 						);
 						/*this.IABReply({
 							"type": "bind-fail",
@@ -71,13 +71,6 @@ let ref,
 					        // User clicked "Cancel"
 					    }
 					}
-					function syncSuccess(buttonIndex) {
-
-					}
-					function syncFail(buttonIndex) {
-
-					}
-					
 				} catch(e) {
 
 				}
@@ -154,12 +147,20 @@ let ref,
 					if(navigator?.notification?.confirm){
 						dialogExists = true;
 					}
-					dialogExists && navigator.notification.confirm(
-					    `Account successfully binded to ${response.data.email}`,
-					    ()=>{},     // callback to invoke
-					    'Account Sync Success',    // title
-					    ['Okay'],            	// buttonLabels
-					);
+					if(response.data.status === 200 && response.data.email)
+						dialogExists && navigator.notification.confirm(
+						    `Account successfully bound to ${response.data.email}. Your progress is now saved to this account.`,
+						    ()=>{},    
+						    'Sync Success',    
+						    ['Okay'],            
+						);
+					else
+						dialogExists && navigator.notification.confirm(
+						    `Binding failed due to bad request. Please try again.`,
+						    ()=>{}, 
+						    'Account Sync Failed',   
+						    ['Okay'],            	
+						);
 				} catch (e) {
 
 				}
