@@ -4019,10 +4019,11 @@
         alert(e.detail.data.fileData);
         showTestSprite(e.detail.data.fileData);
         break;
-      /*case "bind-success":
-        alert("s received" + JSON.stringify(e.detail.data));
+      case "bind-success":
+        //alert("s received" + JSON.stringify(e.detail.data));
+        requestUserData();
         break;
-      case "bind-fail":
+      /*case "bind-fail":
         alert("f received" + JSON.stringify(e.detail.data));
         break;
       case "bind-confirmation":
