@@ -23,23 +23,62 @@ let ref,
 			setTimeout(()=>{
 	        		let data = url.replace('com.notadevstudio.bbqsortpuzzle://?data=', '');
 				try {
+					
 					let parsed = JSON.parse(atob(data));
-					if(parsed.status === 200 && parsed.bindingConfirmation){
-						this.IABReply({ 
+					let dialogExists = false;
+					if(navigator?.notification?.confirm){
+						dialogExists = true;
+					}
+					if(parsed.status === 200 && parsed.bindingConfirmation && parsed.state){
+						dialogExists && navigator.notification.confirm(
+						    `The Google account ${parsed.email} is linked to game progress at Level ${parsed.emailGameLevel}. Syncing will overwrite your current progress (Level ${parsed.userGameLevel}) with the saved progress. This action cannot be undone. Continue?`,
+						    syncConfirmation,                  			// callback to invoke
+						    'Sync Warning',            			// title
+						    ['Sync Anyway','Cancel'],            	// buttonLabels
+						);
+						/*this.IABReply({ 
 							"type": "bind-success",
 							"data": parsed,
-						});
-					} else if(parsed.status === 200 && parsed.bindingConfirmation && parsed.state){
-						this.IABReply({ 
+						});*/
+					} else if(parsed.status === 200){
+						dialogExists && navigator.notification.confirm(
+						    `Binded successfully to ${parsed.email}`,
+						    syncSuccess.bind(this),     // callback to invoke
+						    'Account sync complete',    // title
+						    ['Okay'],            	// buttonLabels
+						);
+						/*this.IABReply({ 
 							"type": "bind-confirmation",
 							"data": parsed,
-						});
+						});*/
 					} else {
-						this.IABReply({
+						dialogExists && navigator.notification.confirm(
+						    `Binded failed to ${parsed.email}`,
+						    syncSuccess.bind(this),     // callback to invoke
+						    'Account sync failed',    // title
+						    ['Okay'],            	// buttonLabels
+						);
+						/*this.IABReply({
 							"type": "bind-fail",
 							"data": parsed,
-						});
+						});*/
 					}
+					
+					function syncConfirmation(buttonIndex) {
+					    if (buttonIndex === 1) {
+					        // User clicked "Sync Anyway"
+						this.confirmBinding(parsed.state);
+					    } else if (buttonIndex === 2) {
+					        // User clicked "Cancel"
+					    }
+					}
+					function syncSuccess(buttonIndex) {
+
+					}
+					function syncFail(buttonIndex) {
+
+					}
+					
 				} catch(e) {
 
 				}
@@ -97,6 +136,29 @@ let ref,
 			ref.executeScript({
 				'code': `(function(){window.dispatchEvent(new CustomEvent('message', { detail: ${data} }));})()`
 			}, function(_) {});
+		},
+		confirmBinding: function(state) {
+			// Make a GET request to server
+			let options = {
+				method: 'GET',
+				responseType: 'text',
+				serializer: 'json',
+			};
+			// Send GET request to server to get user data
+			cordova.plugin.http.sendRequest('https://script.google.com/macros/s/AKfycbxIz59CxDp5IkmnfJ5gI5ayhUmj1mEX-vhBtHNKr5AnhmgImQOW3_7amyxm6UvDKZ4c/exec?uuid=' + device.uuid + '&bind=1&state=' + encodeURIComponent(state), options, (response) => {
+				if (!response.data) {
+					return;
+				}
+				try {
+					//response.data = JSON.parse(response.data)
+					alert(response.data);
+					alert(typeof response.data);
+				} catch (e) {
+
+				}
+			}, function(response) {
+				//alert(response.error);
+			});
 		},
 		getGoogleAuthURL: function() {
 			// Make a GET request to server
