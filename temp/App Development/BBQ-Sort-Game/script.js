@@ -32,7 +32,7 @@ let ref,
 					if(parsed.status === 200 && parsed.bindingConfirmation && parsed.state){
 						dialogExists && navigator.notification.confirm(
 						    `The Google account ${parsed.email} is linked to game progress at Level ${parsed.emailGameLevel}. Syncing will overwrite your current progress (Level ${parsed.userGameLevel}) with the saved progress. This action cannot be undone. Continue?`,
-						    syncConfirmation,                  			// callback to invoke
+						    syncConfirmation.bind(this),                  			// callback to invoke
 						    'Sync Warning',            			// title
 						    ['Sync Anyway','Cancel'],            	// buttonLabels
 						);
@@ -42,9 +42,9 @@ let ref,
 						});*/
 					} else if(parsed.status === 200){
 						dialogExists && navigator.notification.confirm(
-						    `Binded successfully to ${parsed.email}`,
+						    `Account successfully binded to ${parsed.email}`,
 						    syncSuccess.bind(this),     // callback to invoke
-						    'Account sync complete',    // title
+						    'Account Sync Success',    // title
 						    ['Okay'],            	// buttonLabels
 						);
 						/*this.IABReply({ 
@@ -53,9 +53,9 @@ let ref,
 						});*/
 					} else {
 						dialogExists && navigator.notification.confirm(
-						    `Binded failed to ${parsed.email}`,
-						    syncSuccess.bind(this),     // callback to invoke
-						    'Account sync failed',    // title
+						    `Binded failed due to ${parsed.error_description}. Please try again.`,
+						    syncFail.bind(this),     // callback to invoke
+						    'Account Sync Failed',    // title
 						    ['Okay'],            	// buttonLabels
 						);
 						/*this.IABReply({
@@ -150,9 +150,17 @@ let ref,
 					return;
 				}
 				try {
-					//response.data = JSON.parse(response.data)
-					alert(response.data);
-					alert(typeof response.data);
+					response.data = JSON.parse(response.data)
+					let dialogExists = false;
+					if(navigator?.notification?.confirm){
+						dialogExists = true;
+					}
+					dialogExists && navigator.notification.confirm(
+					    `Account successfully binded to ${response.data.email}`,
+					    ()=>{},     // callback to invoke
+					    'Account Sync Success',    // title
+					    ['Okay'],            	// buttonLabels
+					);
 				} catch (e) {
 
 				}
