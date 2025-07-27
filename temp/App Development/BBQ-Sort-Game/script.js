@@ -31,14 +31,10 @@ let ref,
 					if(parsed.status === 200 && parsed.bindingConfirmation && parsed.state){
 						dialogExists && navigator.notification.confirm(
 						    `The Google account ${parsed.email} is linked to game progress at Level ${parsed.emailGameLevel}. Syncing will overwrite your current progress (Level ${parsed.userGameLevel}) with the saved progress. This action cannot be undone. Continue?`,
-						    syncConfirmation.bind(this),                  			// callback to invoke
-						    'Sync Warning',            			// title
-						    ['Sync Anyway','Cancel'],            	// buttonLabels
+						    syncConfirmation.bind(this),                  			
+						    'Sync Warning',            			
+						    ['Sync Anyway','Cancel'],            	
 						);
-						/*this.IABReply({ 
-							"type": "bind-success",
-							"data": parsed,
-						});*/
 					} else if(parsed.status === 200){
 						dialogExists && navigator.notification.confirm(
 						    `Account successfully bound to ${parsed.email}. Your progress is now saved to this account.`,
@@ -46,27 +42,23 @@ let ref,
 						    'Sync Success',   
 						    ['Okay'],            	
 						);
-						/*this.IABReply({ 
-							"type": "bind-confirmation",
-							"data": parsed,
-						});*/
+						this.IABReply({ 
+							"type": "bind-success",
+							"data": null,
+						});
 					} else {
 						dialogExists && navigator.notification.confirm(
 						    `Binding failed due to ${parsed.error_description}. Please try again.`,
 						    ()=>{}, 
-						    'Account Sync Failed',   
+						    'Sync Failed',   
 						    ['Okay'],            	
 						);
-						/*this.IABReply({
-							"type": "bind-fail",
-							"data": parsed,
-						});*/
 					}
 					
 					function syncConfirmation(buttonIndex) {
 					    if (buttonIndex === 1) {
 					        // User clicked "Sync Anyway"
-						this.confirmBinding(parsed.state);
+						this.confirmBinding(parsed.state).bind(this);
 					    } else if (buttonIndex === 2) {
 					        // User clicked "Cancel"
 					    }
@@ -154,11 +146,15 @@ let ref,
 						    'Sync Success',    
 						    ['Okay'],            
 						);
+						this.IABReply({ 
+							"type": "bind-success",
+							"data": null,
+						});
 					else
 						dialogExists && navigator.notification.confirm(
 						    `Binding failed due to bad request. Please try again.`,
 						    ()=>{}, 
-						    'Account Sync Failed',   
+						    'Sync Failed',   
 						    ['Okay'],            	
 						);
 				} catch (e) {
