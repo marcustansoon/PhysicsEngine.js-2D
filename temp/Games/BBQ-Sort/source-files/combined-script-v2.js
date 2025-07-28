@@ -1596,11 +1596,10 @@
         fontSize: 18,
         fill: 0x444444,
       });
+      this.signInStyle = signInStyle;
       
       // Create Google sign in logo
-      let signInLogo = new PIXI.Sprite(
-        1 ? PIXI.Assets.get("google-logo") : PIXI.Assets.get("google-logo")
-      );
+      let signInLogo = new PIXI.Sprite(PIXI.Assets.get("google-logo"));
       signInLogo.anchor.set(0.5);
       signInLogo.scale.set((scaleBanner / 0.5) * 0.2);
       this.objects.push(signInLogo);
@@ -1613,6 +1612,7 @@
         this.app.renderer.height / 2 + banner.height / 5 * 1.5
       );
       this.objects.push(signInText);
+      this.signInText = signInText;
 
       // Adjust logo position
       signInLogo.position.set(
@@ -1632,11 +1632,12 @@
       );
       makeInteractive(signInBg);
       signInBg.on("pointerdown", () => {
+          // If user account already synced to gmail, do nothing
+          if(userData && userData.email) return;
           // Disable the button temporarily
           console.log('click')
           signInBg.interactive = false;
           getGoogleAuthURL();
-          //alert('z')
           // Re-enable the button after 1 second (1000ms)
           setTimeout(() => {
               signInBg.interactive = true;
@@ -1648,10 +1649,6 @@
       this.container.addChild(signInText);
       this.container.addChild(signInLogo);
 
-
-
-
-      
 
       // Create back button
       let backButton = new PIXI.Sprite(PIXI.Assets.get("close-button"));
@@ -1668,6 +1665,11 @@
       });
       this.objects.push(backButton);
       this.container.addChild(backButton);
+    }
+
+    syncSuccess(email) {
+      this.signInStyle.fontSize = 11;
+      this.signInText.text = "Synced to " + email;
     }
 
     show() {
@@ -4063,6 +4065,10 @@
           userCompletedLevel = userData.gameLevel;
           window.localStorage.setItem("level", userCompletedLevel);
         }
+
+        if(userData.email && settingScene){  
+            settingScene.syncSuccess(userData.email);
+        }
         break;
       /*case "test-alert":
         alert("test received");
@@ -4080,10 +4086,9 @@
         alert(e.detail.data.fileData);
         showTestSprite(e.detail.data.fileData);
         break;
-      case "bind-success":
-        //alert("s received" + JSON.stringify(e.detail.data));
-        //requestUserData();
-        break;
+      /*case "bind-success":
+        if(settingScene && userData.email) settingScene.syncSuccess(userData.email);
+        break;*/
       /*case "bind-fail":
         alert("f received" + JSON.stringify(e.detail.data));
         break;
