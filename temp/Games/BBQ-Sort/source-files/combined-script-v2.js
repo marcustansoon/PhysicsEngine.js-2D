@@ -45,6 +45,11 @@
               "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/firework-2.gif"
           },
           {
+            alias: "confetti",
+            src:
+              "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/confetti.gif"
+          },
+          {
             alias: "raindrop",
             src:
               "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/raindrop.gif"
@@ -3358,18 +3363,36 @@
       this.backButton = backButton;
       this.objects.push(backButton);
       this.container.addChild(backButton);
-
+      
       // Add firework
       this.container.addChild(gifs["firework"]);
+      gifs["firework"].anchor.set(0.5);
+      gifs["firework"].position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
+      gifs["firework"].visible = false;
+      
+      // Add confetti
+      this.container.addChild(gifs["confetti"]);
+      gifs["confetti"].anchor.set(0.5);
+      gifs["confetti"].position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
+      gifs["confetti"].visible = false;
     }
 
     show() {
       this.app.stage.addChild(this.container);
-      gifs["firework"].play();
+      if(Math.random() > 0.5){
+        gifs["confetti"].play();
+        gifs["confetti"].visible = true;
+      } else {
+        gifs["firework"].play();
+        gifs["firework"].visible = true;
+      }
     }
 
     hide() {
+      gifs["confetti"].stop();
+      gifs["confetti"].visible = false;
       gifs["firework"].stop();
+      gifs["firework"].visible = false;
       this.app.stage.removeChild(this.container);
     }
 
