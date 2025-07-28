@@ -1,0 +1,86 @@
+<script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.6.2/dist/dotlottie-wc.js" type="module"></script>
+<dotlottie-wc src="https://lottie.host/0235ec03-afd5-484e-bf59-432b546703b1/p7R8NioXRd.lottie" style="width: 300px;height: 300px" speed="1" autoplay loop></dotlottie-wc>
+
+<script>
+// script for jszip
+const script = document.createElement('script');
+script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+document.head.appendChild(script);
+script.onload = () => console.log('JSZip loaded');
+
+
+let canvas;
+setTimeout(()=>{
+const element = document.querySelector('dotlottie-wc');
+const shadowRoot = element.shadowRoot;
+canvas = shadowRoot.querySelector('canvas');
+
+
+
+// capture images
+/*
+(async () => {
+
+  const captureInterval = 100; // 0.1 seconds
+  const totalDuration = 21000; // 21 seconds
+  const totalFrames = totalDuration / captureInterval;
+
+  const frames = []; // to store blobs
+
+  const captureFrame = () => {
+    return new Promise(resolve => {
+      canvas.toBlob(blob => {
+        frames.push(blob);
+        resolve();
+      }, 'image/png');
+    });
+  };
+
+  for (let i = 0; i < totalFrames; i++) {
+    await captureFrame();
+    await new Promise(r => setTimeout(r, captureInterval));
+  }
+
+  console.log(`Captured ${frames.length} frames.`);
+
+  // frames now contains all your PNG blobs
+  // You can use them as you want — e.g., create a GIF, or zip and download them
+  window.capturedFrames = frames; // optionally expose globally
+
+  alert('Frames captured silently and stored in memory as blobs.');
+
+  // Example: To preview first frame in console:
+  // const url = URL.createObjectURL(frames[0]);
+  // window.open(url);
+})();
+*/
+
+
+
+//download 
+/*
+(async () => {
+  if (!window.capturedFrames) {
+    alert('No captured frames found. Run capture script first.');
+    return;
+  }
+
+  const zip = new JSZip();
+  window.capturedFrames.forEach((blob, i) => {
+    zip.file(`canvas-frame-${i.toString().padStart(3, '0')}.png`, blob);
+  });
+
+  const content = await zip.generateAsync({ type: 'blob' });
+
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(content);
+  a.download = 'canvas-frames.zip';
+  a.click();
+
+  URL.revokeObjectURL(a.href);
+})();
+*/
+
+
+},2000)
+</script>
