@@ -47,14 +47,14 @@
             alias: "confetti",
             src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/confetti.gif"
           },
-          {
+          /*{
             alias: "circular-confetti",
             src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/circular-confetti.gif"
-          },
-          {
+          },*/
+          /*{
             alias: "completion-confetti",
             src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/completion-confetti.gif"
-          },
+          },*/
           {
             alias: "raindrop",
             src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/raindrop.gif"
@@ -864,10 +864,10 @@
     }	
     
     setupGifs() {
-      gifs['circular-confetti'].loop = false;
+      /*gifs['circular-confetti'].loop = false;
       gifs['circular-confetti'].play();
       gifs['circular-confetti'].anchor.set(0.5);
-      gifs['circular-confetti'].visible = false;
+      gifs['circular-confetti'].visible = false;*/
       
       gifs["firework"].anchor.set(0.5);
       gifs["firework"].visible = false;
@@ -3085,7 +3085,7 @@
     }
 
     hide() {
-      this.hideBubleConfettiEffect();
+      //this.hideBubleConfettiEffect();
       this.app.stage.removeChild(this.container);
     }
 
@@ -3229,7 +3229,7 @@
             if (
               targetSprite.getTopSpriteInfo().length === this.maxFoodPerStick
             ) {
-              this.showBubleConfettiEffect(targetSprite.stick.obj.x, targetSprite.stick.obj.y)
+              //this.showBubleConfettiEffect(targetSprite.stick.obj.x, targetSprite.stick.obj.y)
               targetSprite.setCompletion();
             }
             break;
