@@ -58,6 +58,10 @@
           {
             alias: "raindrop",
             src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/raindrop.gif"
+          },
+          {
+            alias: "raindrop-effect-2",
+            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/raindrop-effect-2.gif"
           }
         ],
         images: [
@@ -870,6 +874,12 @@
 
       gifs["confetti"].anchor.set(0.5);
       gifs["confetti"].visible = false;
+
+      gifs["raindrop"].anchor.set(0.5);
+      gifs["raindrop"].visible = false;
+			
+      gifs["raindrop-effect-2"].anchor.set(0.5);
+      gifs["raindrop-effect-2"].visible = false;
     }
 
     setCompletion() {
@@ -3691,20 +3701,34 @@
       this.objects.push(backButton);
       this.container.addChild(backButton);
 
-      // Add raindrop
+      // Add raindrop effect 1
       this.container.addChild(gifs["raindrop"]);
+			gifs["raindrop"].position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);      
+			
+			// Add raindrop effect 2
+      this.container.addChild(gifs["raindrop-effect-2"]);
+      gifs["raindrop-effect-2"].position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
     }
 
     show() {
       this.app.stage.addChild(this.container);
-      gifs["raindrop"].play();
+      if(Math.random() > 0.5){
+        gifs["raindrop"].play();
+        gifs["raindrop"].visible = true;
+      } else {
+        gifs["raindrop-effect-2"].play();
+        gifs["raindrop-effect-2"].visible = true;
+      }
       this.banner.texture = PIXI.Assets.get(
         this.banners[Math.floor(this.banners.length * Math.random())]
       );
     }
 
-    hide() {
+    hide() {      
+			gifs["raindrop-effect-2"].stop();
+      gifs["raindrop-effect-2"].visible = false;
       gifs["raindrop"].stop();
+      gifs["raindrop"].visible = false;
       this.app.stage.removeChild(this.container);
     }
 
