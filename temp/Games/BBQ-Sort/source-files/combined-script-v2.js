@@ -1635,7 +1635,6 @@
           // If user account already synced to gmail, do nothing
           if(userData && userData.email) return;
           // Disable the button temporarily
-          console.log('click')
           signInBg.interactive = false;
           getGoogleAuthURL();
           // Re-enable the button after 1 second (1000ms)
@@ -1648,6 +1647,11 @@
       this.container.addChild(signInBg);
       this.container.addChild(signInText);
       this.container.addChild(signInLogo);
+
+      // Check if user account already synced to any gmail
+      if(userData && userData.email) {
+		  this.syncSuccess(userData.email);
+      }
 
 
       // Create back button
