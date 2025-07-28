@@ -41,18 +41,23 @@
           // GIFs
           {
             alias: "firework",
-            src:
-              "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/firework-2.gif"
+            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/firework-2.gif"
           },
           {
             alias: "confetti",
-            src:
-              "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/confetti.gif"
+            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/confetti.gif"
+          },
+          {
+            alias: "circular-confetti",
+            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/circular-confetti.gif"
+          },
+          {
+            alias: "completion-confetti",
+            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/completion-confetti.gif"
           },
           {
             alias: "raindrop",
-            src:
-              "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/raindrop.gif"
+            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/raindrop.gif"
           }
         ],
         images: [
@@ -823,6 +828,9 @@
       this.loadingType = "Loading Fonts";
       await this.loadFonts();
 
+      // Initial gifs setup
+      this.setupGifs();
+
       // Preparation to load image assets
       let imagesRes = [];
       for (let temp = 0; temp < this.resourcesToBeLoad.images.length; temp++) {
@@ -849,6 +857,19 @@
       }
 
       this.setCompletion();
+    }	
+    
+    setupGifs() {
+      gifs['circular-confetti'].loop = false;
+      gifs['circular-confetti'].play();
+      gifs['circular-confetti'].anchor.set(0.5);
+      gifs['circular-confetti'].visible = false;
+      
+      gifs["firework"].anchor.set(0.5);
+      gifs["firework"].visible = false;
+
+      gifs["confetti"].anchor.set(0.5);
+      gifs["confetti"].visible = false;
     }
 
     setCompletion() {
@@ -3031,7 +3052,24 @@
       this.container.addChild(this.rightCloud);
     }
 
+    showBubleConfettiEffect(x, y) {
+      // Only add into container if not inside
+      if(!this.container.children.includes(gifs['circular-confetti']))
+        this.container.addChild(gifs['circular-confetti']);
+      gifs['circular-confetti'].position.set(x, y);
+      gifs['circular-confetti'].visible = true;
+      if(gifs['circular-confetti'].playing)
+        gifs['circular-confetti'].currentFrame = 0;
+      gifs['circular-confetti'].play();
+    }
+    
+    hideBubleConfettiEffect() {
+      gifs['circular-confetti'].visible = false;
+      this.container.removeChild(gifs['circular-confetti']);
+    }
+
     hide() {
+      this.hideBubleConfettiEffect();
       this.app.stage.removeChild(this.container);
     }
 
@@ -3175,6 +3213,7 @@
             if (
               targetSprite.getTopSpriteInfo().length === this.maxFoodPerStick
             ) {
+              this.showBubleConfettiEffect(targetSprite.stick.obj.x, targetSprite.stick.obj.y)
               targetSprite.setCompletion();
             }
             break;
@@ -3366,15 +3405,11 @@
       
       // Add firework
       this.container.addChild(gifs["firework"]);
-      gifs["firework"].anchor.set(0.5);
       gifs["firework"].position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
-      gifs["firework"].visible = false;
       
       // Add confetti
       this.container.addChild(gifs["confetti"]);
-      gifs["confetti"].anchor.set(0.5);
       gifs["confetti"].position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
-      gifs["confetti"].visible = false;
     }
 
     show() {
