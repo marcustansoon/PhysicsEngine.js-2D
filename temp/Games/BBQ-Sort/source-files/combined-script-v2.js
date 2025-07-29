@@ -44,8 +44,8 @@
             src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/firework-2-optimized-resized.gif"
           },
           {
-            alias: "confetti",
-            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/confetti.gif"
+            alias: "confetti-or",
+            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/confetti-optimized-resized.gif"
           },
           /*{
             alias: "circular-confetti",
@@ -872,8 +872,8 @@
       gifs["firework-or"].anchor.set(0.5);
       gifs["firework-or"].visible = false;
 
-      gifs["confetti"].anchor.set(0.5);
-      gifs["confetti"].visible = false;
+      gifs["confetti-or"].anchor.set(0.5);
+      gifs["confetti-or"].visible = false;
 
       gifs["raindrop"].anchor.set(0.5);
       gifs["raindrop"].visible = false;
@@ -3424,15 +3424,15 @@
       gifs["firework-or"].position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
       
       // Add confetti
-      this.container.addChild(gifs["confetti"]);
-      gifs["confetti"].position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
+      this.container.addChild(gifs["confetti-or"]);
+      gifs["confetti-or"].position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
     }
 
     show() {
       this.app.stage.addChild(this.container);
       if(Math.random() > 0.5){
-        gifs["confetti"].play();
-        gifs["confetti"].visible = true;
+        gifs["confetti-or"].play();
+        gifs["confetti-or"].visible = true;
       } else {
         gifs["firework-or"].play();
         gifs["firework-or"].visible = true;
@@ -3440,8 +3440,8 @@
     }
 
     hide() {
-      gifs["confetti"].stop();
-      gifs["confetti"].visible = false;
+      gifs["confetti-or"].stop();
+      gifs["confetti-or"].visible = false;
       gifs["firework-or"].stop();
       gifs["firework-or"].visible = false;
       this.app.stage.removeChild(this.container);
