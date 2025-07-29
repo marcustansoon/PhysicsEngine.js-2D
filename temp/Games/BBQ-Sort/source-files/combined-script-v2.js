@@ -40,8 +40,8 @@
         gifs: [
           // GIFs
           {
-            alias: "firework",
-            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/firework-2.gif"
+            alias: "firework-or",
+            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/firework-2-optimized-resized.gif"
           },
           {
             alias: "confetti",
@@ -869,8 +869,8 @@
       gifs['circular-confetti'].anchor.set(0.5);
       gifs['circular-confetti'].visible = false;*/
       
-      gifs["firework"].anchor.set(0.5);
-      gifs["firework"].visible = false;
+      gifs["firework-op"].anchor.set(0.5);
+      gifs["firework-op"].visible = false;
 
       gifs["confetti"].anchor.set(0.5);
       gifs["confetti"].visible = false;
@@ -3420,8 +3420,8 @@
       this.container.addChild(backButton);
       
       // Add firework
-      this.container.addChild(gifs["firework"]);
-      gifs["firework"].position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
+      this.container.addChild(gifs["firework-op"]);
+      gifs["firework-op"].position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);
       
       // Add confetti
       this.container.addChild(gifs["confetti"]);
@@ -3434,16 +3434,16 @@
         gifs["confetti"].play();
         gifs["confetti"].visible = true;
       } else {
-        gifs["firework"].play();
-        gifs["firework"].visible = true;
+        gifs["firework-op"].play();
+        gifs["firework-op"].visible = true;
       }
     }
 
     hide() {
       gifs["confetti"].stop();
       gifs["confetti"].visible = false;
-      gifs["firework"].stop();
-      gifs["firework"].visible = false;
+      gifs["firework-op"].stop();
+      gifs["firework-op"].visible = false;
       this.app.stage.removeChild(this.container);
     }
 
