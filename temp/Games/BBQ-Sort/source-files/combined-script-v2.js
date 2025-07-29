@@ -832,9 +832,6 @@
       this.loadingType = "Loading Fonts";
       await this.loadFonts();
 
-      // Initial gifs setup
-      this.setupGifs();
-
       // Preparation to load image assets
       let imagesRes = [];
       for (let temp = 0; temp < this.resourcesToBeLoad.images.length; temp++) {
@@ -860,6 +857,9 @@
         );
       }
 
+      // Initial gifs setup
+      this.setupGifs();
+	    
       this.setCompletion();
     }	
     
