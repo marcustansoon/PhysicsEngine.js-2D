@@ -871,6 +871,7 @@
       
       gifs["firework-or"].anchor.set(0.5);
       gifs["firework-or"].visible = false;
+      gifs["firework-or"].stop();
       gifs['firework-or'].scale.set(
         Math.max(
           this.app.renderer.width / gifs['firework-or'].width,
@@ -880,6 +881,7 @@
 
       gifs["confetti-or"].anchor.set(0.5);
       gifs["confetti-or"].visible = false;
+      gifs["confetti-or"].stop();
       gifs['confetti-or'].scale.set(
         Math.max(
           this.app.renderer.width / gifs['confetti-or'].width,
@@ -889,6 +891,13 @@
 
       gifs["raindrop"].anchor.set(0.5);
       gifs["raindrop"].visible = false;
+      gifs["raindrop"].stop();
+      gifs['raindrop'].scale.set(
+        Math.max(
+          this.app.renderer.width / gifs['raindrop'].width,
+          this.app.renderer.height / gifs['raindrop'].height
+        )
+      )
 			
       //gifs["raindrop-effect-2"].anchor.set(0.5);
       //gifs["raindrop-effect-2"].visible = false;
@@ -3715,7 +3724,7 @@
 
       // Add raindrop effect 1
       this.container.addChild(gifs["raindrop"]);
-	  gifs["raindrop"].position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);      
+			gifs["raindrop"].position.set(this.app.renderer.width / 2, this.app.renderer.height / 2);      
 			
 			// Add raindrop effect 2
       //this.container.addChild(gifs["raindrop-effect-2"]);
