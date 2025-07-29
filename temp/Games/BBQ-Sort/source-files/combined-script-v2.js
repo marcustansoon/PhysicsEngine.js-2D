@@ -51,10 +51,6 @@
             alias: "stick-completion-confetti",
             src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/stick-completion-confetti.gif"
           },
-          /*{
-            alias: "completion-confetti",
-            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/completion-confetti.gif"
-          },*/
           {
             alias: "raindrop",
             src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/raindrop.gif"
