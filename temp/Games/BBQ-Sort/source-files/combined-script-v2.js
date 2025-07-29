@@ -871,9 +871,21 @@
       
       gifs["firework-or"].anchor.set(0.5);
       gifs["firework-or"].visible = false;
+      gifs['firework-or'].scale.set(
+        Math.max(
+          this.app.renderer.width / gifs['firework-or'].width,
+          this.app.renderer.height / gifs['firework-or'].height
+        )
+      )
 
       gifs["confetti-or"].anchor.set(0.5);
       gifs["confetti-or"].visible = false;
+      gifs['confetti-or'].scale.set(
+        Math.max(
+          this.app.renderer.width / gifs['confetti-or'].width,
+          this.app.renderer.height / gifs['confetti-or'].height
+        )
+      )
 
       gifs["raindrop"].anchor.set(0.5);
       gifs["raindrop"].visible = false;
