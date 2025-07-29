@@ -47,10 +47,10 @@
             alias: "confetti-or",
             src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/confetti-optimized-resized.gif"
           },
-          /*{
-            alias: "circular-confetti",
-            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/circular-confetti.gif"
-          },*/
+          {
+            alias: "stick-completion-confetti",
+            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/stick-completion-confetti.gif"
+          },
           /*{
             alias: "completion-confetti",
             src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/completion-confetti.gif"
@@ -864,10 +864,10 @@
     }	
     
     setupGifs() {
-      /*gifs['circular-confetti'].loop = false;
-      gifs['circular-confetti'].play();
-      gifs['circular-confetti'].anchor.set(0.5);
-      gifs['circular-confetti'].visible = false;*/
+      gifs['stick-completion-confetti'].loop = false;
+      gifs['stick-completion-confetti'].play();
+      gifs['stick-completion-confetti'].anchor.set(0.5);
+      gifs['stick-completion-confetti'].visible = false;
       
       gifs["firework-or"].anchor.set(0.5);
       gifs["firework-or"].visible = false;
@@ -3082,22 +3082,22 @@
 
     showBubleConfettiEffect(x, y) {
       // Only add into container if not inside
-      if(!this.container.children.includes(gifs['circular-confetti']))
-        this.container.addChild(gifs['circular-confetti']);
-      gifs['circular-confetti'].position.set(x, y);
-      gifs['circular-confetti'].visible = true;
-      if(gifs['circular-confetti'].playing)
-        gifs['circular-confetti'].currentFrame = 0;
-      gifs['circular-confetti'].play();
+      if(!this.container.children.includes(gifs['stick-completion-confetti']))
+        this.container.addChild(gifs['stick-completion-confetti']);
+      gifs['stick-completion-confetti'].position.set(x, y);
+      gifs['stick-completion-confetti'].visible = true;
+      if(gifs['stick-completion-confetti'].playing)
+        gifs['stick-completion-confetti'].currentFrame = 0;
+      gifs['stick-completion-confetti'].play();
     }
     
     hideBubleConfettiEffect() {
-      gifs['circular-confetti'].visible = false;
-      this.container.removeChild(gifs['circular-confetti']);
+      gifs['stick-completion-confetti'].visible = false;
+      this.container.removeChild(gifs['stick-completion-confetti']);
     }
 
     hide() {
-      //this.hideBubleConfettiEffect();
+      this.hideBubleConfettiEffect();
       this.app.stage.removeChild(this.container);
     }
 
@@ -3241,7 +3241,7 @@
             if (
               targetSprite.getTopSpriteInfo().length === this.maxFoodPerStick
             ) {
-              //this.showBubleConfettiEffect(targetSprite.stick.obj.x, targetSprite.stick.obj.y)
+              this.showBubleConfettiEffect(targetSprite.stick.obj.x, targetSprite.stick.obj.y)
               targetSprite.setCompletion();
             }
             break;
