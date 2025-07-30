@@ -3085,12 +3085,13 @@
       this.container.addChild(this.rightCloud);
     }
 
-    showBubleConfettiEffect(x, y) {
+    showBubleConfettiEffect(x, y, height) {
       // Only add into container if not inside
       if(!this.container.children.includes(gifs['stick-completion-confetti']))
         this.container.addChild(gifs['stick-completion-confetti']);
       gifs['stick-completion-confetti'].position.set(x, y);
       gifs['stick-completion-confetti'].visible = true;
+      gifs["stick-completion-confetti"].scale.set(parseFloat((height / gifs["stick-completion-confetti"].texture.height).toFixed(1)));
       if(gifs['stick-completion-confetti'].playing)
         gifs['stick-completion-confetti'].currentFrame = 0;
       gifs['stick-completion-confetti'].play();
@@ -3246,7 +3247,7 @@
             if (
               targetSprite.getTopSpriteInfo().length === this.maxFoodPerStick
             ) {
-              this.showBubleConfettiEffect(targetSprite.stick.obj.x, targetSprite.stick.obj.y)
+              this.showBubleConfettiEffect(targetSprite.stick.obj.x, targetSprite.stick.obj.y, targetSprite.stick.obj.height)
               targetSprite.setCompletion();
             }
             break;
