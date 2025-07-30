@@ -1446,6 +1446,7 @@
       let scaleX = this.app.renderer.width / settingTexture.width;
       let scaleY = this.app.renderer.height / settingTexture.height;
       let scale = Math.max(scaleX, scaleY);
+	  this.scale = scale;
 
       // Calculate font size
       let fontSize = Math.round((scale / 0.18) * 11 * 10) / 10;
@@ -1618,9 +1619,10 @@
 
 
       // Create style for Google Sign In text
+      fontSize = Math.round((scale / 0.18) * 11 * 10) / 10;
       const signInStyle = new PIXI.TextStyle({
         fontFamily: 'Arial',
-        fontSize: 18,
+        fontSize: fontSize,
         fill: 0x444444,
       });
       this.signInStyle = signInStyle;
@@ -1677,7 +1679,7 @@
 
       // Check if user account already synced to any gmail
       if(userData && userData.email) {
-		  this.syncSuccess(userData.email);
+	      this.syncSuccess(userData.email);
       }
 
 
@@ -1697,9 +1699,9 @@
       this.objects.push(backButton);
       this.container.addChild(backButton);
     }
-
+	  
     syncSuccess(email) {
-      this.signInStyle.fontSize = 11;
+      this.signInStyle.fontSize = Math.round((this.scale / 0.18) * 11 * 6) / 10;
       this.signInText.text = "Synced to " + email;
     }
 
