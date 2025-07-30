@@ -2896,10 +2896,35 @@
         let repeat = maxFoodPerStick;
         while (repeat--) allFoodNames.push(name);
       });
+			
       // Shuffle thrice
       this.shuffle(allFoodNames);
       this.shuffle(allFoodNames);
       this.shuffle(allFoodNames);
+			
+			while(1) {
+        let shouldShuffle = false
+        for(let index = 0; index < allFoodNames.length; index += maxFoodPerStick){
+          let firstElem = allFoodNames[index];
+          let allSame = true;
+          for(let i = index; i < index + maxFoodPerStick; i++){
+            if(allFoodNames[i] !== firstElem) {
+              allSame = false;
+              break;
+            }
+          }
+          if(allSame) {
+            shouldShuffle = true;
+            break;
+          }
+        }
+        if(shouldShuffle){
+					console.log('shuffling')
+          this.shuffle(allFoodNames);
+        } else {
+        	break;
+				}
+      }
 
       let startPositionX = 0,
         positionXCount = 0,
