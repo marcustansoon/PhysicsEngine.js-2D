@@ -4159,7 +4159,7 @@
 			if(!localAssets[e.detail.data.fileName].src || !localAssets[e.detail.data.fileName].base64String) {
 				throw new Error('Incorrect parameter');
 			}
-		} catch (e) {
+		} catch (err) {
 			localAssets[e.detail.data.fileName] = "";
 		}
         return;
