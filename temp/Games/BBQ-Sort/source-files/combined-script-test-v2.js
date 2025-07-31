@@ -49,7 +49,8 @@
           },
           {
             alias: "stick-completion-confetti",
-            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/stick-completion-confetti.gif"
+            //src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/stick-completion-confetti.gif",
+			src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/circular-confetti-compressed.gif"
           },
           {
             alias: "raindrop",
@@ -70,7 +71,7 @@
           {
             alias: "patty-running",
             src:
-              "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/patty-run.png"
+              "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/patty-run-compressed.png"
           },
           {
             alias: "star",
