@@ -70,7 +70,7 @@
           {
             alias: "patty-running",
             src:
-              "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/patty-run.png"
+              "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/patty-run-compressed.png"
           },
           {
             alias: "star",
@@ -480,7 +480,7 @@
             .then((base64String) => {
               storeGameAsset(
                 this.resourcesToBeLoad[param][index].alias + ".txt",
-                base64String
+				  JSON.stringify({'src': this.resourcesToBeLoad[param][index].src, 'base64String': base64String})
               );
               this.resourcesToBeLoad[param][index].base64String = base64String;
               processedCount++;
@@ -564,7 +564,7 @@
             clearInterval(interval);
             resolve(1);
           }
-        }, 50);
+        }, 60);
       });
     }
 
@@ -580,7 +580,7 @@
             clearInterval(interval);
             resolve(1);
           }
-        }, 50);
+        }, 60);
       });
     }
 
@@ -596,7 +596,7 @@
             clearInterval(interval);
             resolve(1);
           }
-        }, 50);
+        }, 60);
       });
     }
 
@@ -612,7 +612,7 @@
             clearInterval(interval);
             resolve(1);
           }
-        }, 50);
+        }, 60);
       });
     }
 
@@ -627,7 +627,7 @@
       return new Promise((resolve, reject) => {
         this.loadProgressCallback(Object.keys(localAssets).length / length);
         interval = setInterval(() => {
-          if (count >= 20 || Object.keys(localAssets).length === length) {
+          if (count >= 24 || Object.keys(localAssets).length === length) {
             clearInterval(interval);
             resolve(1);
             //if (count >= 20) alert("timeout");
@@ -642,9 +642,9 @@
       let count = 0;
       for (let index = 0; index < this.resourcesToBeLoad.gifs.length; index++) {
         let alias = this.resourcesToBeLoad.gifs[index].alias;
-        if (localAssets[alias + ".txt"]) {
-          this.resourcesToBeLoad.gifs[index].base64String =
-            localAssets[alias + ".txt"];
+		let src = this.resourcesToBeLoad.gifs[index].src;
+        if (localAssets[alias + ".txt"] && localAssets[alias + ".txt"].src === src) {
+          this.resourcesToBeLoad.gifs[index].base64String = localAssets[alias + ".txt"].base64String;
           count++;
         }
       }
@@ -654,9 +654,9 @@
         index++
       ) {
         let alias = this.resourcesToBeLoad.sounds[index].alias;
-        if (localAssets[alias + ".txt"]) {
-          this.resourcesToBeLoad.sounds[index].base64String =
-            localAssets[alias + ".txt"];
+		let src = this.resourcesToBeLoad.sounds[index].src;
+        if (localAssets[alias + ".txt"] && localAssets[alias + ".txt"].src === src) {
+          this.resourcesToBeLoad.sounds[index].base64String = localAssets[alias + ".txt"].base64String;
           count++;
         }
       }
@@ -666,9 +666,9 @@
         index++
       ) {
         let alias = this.resourcesToBeLoad.images[index].alias;
-        if (localAssets[alias + ".txt"]) {
-          this.resourcesToBeLoad.images[index].base64String =
-            localAssets[alias + ".txt"];
+		let src = this.resourcesToBeLoad.images[index].src;
+        if (localAssets[alias + ".txt"] && localAssets[alias + ".txt"].src === src) {
+          this.resourcesToBeLoad.images[index].base64String = localAssets[alias + ".txt"].base64String;
           count++;
         }
       }
@@ -678,9 +678,9 @@
         index++
       ) {
         let alias = this.resourcesToBeLoad.fonts[index].alias;
-        if (localAssets[alias + ".txt"]) {
-          this.resourcesToBeLoad.fonts[index].base64String =
-            localAssets[alias + ".txt"];
+		let src = this.resourcesToBeLoad.fonts[index].src;
+        if (localAssets[alias + ".txt"] && localAssets[alias + ".txt"].src === src) {
+          this.resourcesToBeLoad.fonts[index].base64String = localAssets[alias + ".txt"].base64String;
           count++;
         }
       }
@@ -4153,7 +4153,14 @@
           !e.detail.data.fileName
         )
           return;
-        localAssets[e.detail.data.fileName] = e.detail.data.fileData;
+		try {
+	        localAssets[e.detail.data.fileName] = JSON.parse(e.detail.data.fileData);
+			if(!localAssets[e.detail.data.fileName].src || !localAssets[e.detail.data.fileName].base64String) {
+				throw new Error('Incorrect parameter');
+			}
+		} catch (err) {
+			localAssets[e.detail.data.fileName] = "";
+		}
         return;
         alert("received" + e.detail.data.fileName);
         alert(e.detail.data.fileData);
