@@ -49,7 +49,7 @@
           },
           {
             alias: "stick-completion-confetti",
-            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/stick-completion-confetti.gif"
+            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/stick-completion-confetti.gif",
           },
           {
             alias: "raindrop",
@@ -62,6 +62,10 @@
         ],
         images: [
           // Scene related images
+          {
+            alias: "button-bg-white",
+            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/button-bg-white.png"
+          },
           {
             alias: "bg-main-menu-button",
             src:
@@ -85,7 +89,7 @@
           {
             alias: "left-button",
             src:
-              "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/left-button.png"
+              "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/left-button-compressed.png"
           },
           {
             alias: "right-arrow",
@@ -95,7 +99,7 @@
           {
             alias: "close-button",
             src:
-              "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/close-button-3.png"
+              "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/close-button-compressed.png"
           },
           {
             alias: "banner",
@@ -166,7 +170,7 @@
           {
             alias: "wooden-banner",
             src:
-              "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/wooden-banner-3.png"
+              "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/wooden-banner-compressed.png"
           },
           {
             alias: "light-rotate-2",
@@ -1090,7 +1094,7 @@
         PIXI.Assets.get("bg-main-menu-button")
       );
       bgTextPlay.anchor.set(0.5);
-      bgTextPlay.scale.set(floor((scale / 0.3) * 0.5, 2));
+      bgTextPlay.scale.set(floor((scale / 0.3) * 0.55, 2));
       bgTextPlay.position.set(
         this.app.screen.width / 2,
         this.app.screen.height / 2
@@ -1116,7 +1120,7 @@
         PIXI.Assets.get("bg-main-menu-button")
       );
       bgTextSetting.anchor.set(0.5);
-      bgTextSetting.scale.set(floor((scale / 0.3) * 0.5, 2));
+      bgTextSetting.scale.set(floor((scale / 0.3) * 0.55, 2));
       bgTextSetting.position.set(
         this.app.screen.width / 2,
         this.app.screen.height / 2
@@ -1141,7 +1145,7 @@
         PIXI.Assets.get("bg-main-menu-button")
       );
       bgTextQuit.anchor.set(0.5);
-      bgTextQuit.scale.set(floor((scale / 0.3) * 0.5, 2));
+      bgTextQuit.scale.set(floor((scale / 0.3) * 0.55, 2));
       bgTextQuit.position.set(
         this.app.screen.width / 2,
         this.app.screen.height / 2
@@ -1341,8 +1345,8 @@
       // Create left and right button
       let leftArrow = new PIXI.Sprite(PIXI.Assets.get("left-button"));
       leftArrow.anchor.set(0.5);
-      leftArrow.scale.set(floor((scaleBanner / 0.67) * 0.25, 2));
-      leftArrow.scale.x *= -1; // Flip image
+      leftArrow.scale.set(floor((scaleBanner / 0.67) * 0.35, 2));
+      leftArrow.scale.x *= 1;
       leftArrow.position.set(
         this.app.screen.width / 5,
         banner.y + floor(banner.height * 0.5, 2)
@@ -1358,7 +1362,8 @@
 
       let rightArrow = new PIXI.Sprite(PIXI.Assets.get("left-button"));
       rightArrow.anchor.set(0.5);
-      rightArrow.scale.set(floor((scaleBanner / 0.67) * 0.25, 2));
+      rightArrow.scale.set(floor((scaleBanner / 0.67) * 0.35, 2));
+      rightArrow.scale.x *= -1;
       rightArrow.position.set(
         (this.app.screen.width / 5) * 4,
         banner.y + floor(banner.height * 0.5, 2)
@@ -1375,7 +1380,7 @@
       // Create back button
       let backButton = new PIXI.Sprite(PIXI.Assets.get("close-button"));
       backButton.anchor.set(0.5);
-      backButton.scale.set(floor((scaleBanner / 0.67) * 0.25, 2));
+      backButton.scale.set(floor((scaleBanner / 0.67) * 0.35, 2));
       backButton.position.set(
         (this.app.screen.width / 6) * 5,
         banner.y - floor(banner.height * 0.5, 2)
@@ -1686,7 +1691,7 @@
       // Create back button
       let backButton = new PIXI.Sprite(PIXI.Assets.get("close-button"));
       backButton.anchor.set(0.5);
-      backButton.scale.set(floor((scaleBanner / 0.67) * 0.25, 2));
+      backButton.scale.set(floor((scaleBanner / 0.67) * 0.35, 2));
       backButton.position.set(
         (this.app.screen.width / 6) * 5,
         banner.y - floor(banner.height * 0.5, 2)
@@ -2287,10 +2292,10 @@
       // Level banner
       const levelBanner = new PIXI.Sprite(PIXI.Assets.get("wooden-banner"));
       levelBanner.anchor.set(0.5);
-      levelBanner.scale.set(floor((scale / 0.25) * 0.15, 2));
+      levelBanner.scale.set(floor((scale / 0.25) * 0.2, 2));
       levelBanner.position.set(
         this.app.screen.width / 2,
-        levelBanner.height / 2
+        levelBanner.height / 2 * 1.2
       );
       this.objects.push(levelBanner);
       this.container.addChild(levelBanner);
@@ -2308,7 +2313,7 @@
       settingIcon.scale.set(floor((scale / 0.45) * 0.16, 2));
       settingIcon.position.set(
         (this.app.screen.width * 5) / 6,
-        levelBanner.height / 2
+        levelBanner.height / 2 * 1.2
       );
       makeInteractive(settingIcon);
       settingIcon.on("pointerdown", () => {
@@ -2975,7 +2980,7 @@
       // Create back button
       let backButton = new PIXI.Sprite(PIXI.Assets.get("close-button"));
       backButton.anchor.set(0.5);
-      backButton.scale.set(floor((scaleBanner / 0.67) * 0.25, 2));
+      backButton.scale.set(floor((scaleBanner / 0.67) * 0.35, 2));
       backButton.position.set(
         (this.app.screen.width / 6) * 5,
         banner.y - floor(banner.height * 0.5, 2)
@@ -2990,11 +2995,11 @@
 
       // Create bg for text restart
       const bgTextRestart = new PIXI.Sprite(
-        PIXI.Assets.get("bg-main-menu-button")
+        PIXI.Assets.get("button-bg-white")
       );
       bgTextRestart.anchor.set(0.5);
       bgTextRestart.alpha = 1;
-      bgTextRestart.scale.set(floor((scale / 0.46) * 0.5, 2));
+      bgTextRestart.scale.set(floor((scale / 0.46) * 0.55, 2));
       bgTextRestart.position.set(banner.x, banner.y - bgTextRestart.height);
       makeInteractive(bgTextRestart);
       bgTextRestart.on("pointerdown", () => {
@@ -3013,11 +3018,11 @@
 
       // Create bg for text quit
       const bgTextQuit = new PIXI.Sprite(
-        PIXI.Assets.get("bg-main-menu-button")
+        PIXI.Assets.get("button-bg-white")
       );
       bgTextQuit.anchor.set(0.5);
       bgTextQuit.alpha = 1;
-      bgTextQuit.scale.set(floor((scale / 0.46) * 0.5, 2));
+      bgTextQuit.scale.set(floor((scale / 0.46) * 0.55, 2));
       bgTextQuit.position.set(banner.x, banner.y + bgTextQuit.height);
       makeInteractive(bgTextQuit);
       bgTextQuit.on("pointerdown", () => {
@@ -3373,7 +3378,7 @@
       let scaleBanner = Math.min(scaleBannerX, scaleBannerY);
       this.scaleBanner = scaleBanner;
 
-      // Add lights
+      // Add rotating lights
       let light1 = new PIXI.Sprite(PIXI.Assets.get("light-rotate-1"));
       light1.anchor.set(0.5);
       light1.alpha = 0;
@@ -3417,12 +3422,11 @@
       );
       bgTextPlay.anchor.set(0.5);
       bgTextPlay.alpha = 0;
-      bgTextPlay.scale.set(floor((scale / 0.46) * 0.5, 2));
+      bgTextPlay.scale.set(floor((scale / 0.46) * 0.55, 2));
       bgTextPlay.position.set(
-        this.app.screen.width / 2,
-        this.app.screen.height / 2 + (levelCompletionBanner.width * 2) / 3
+        Math.floor(this.app.screen.width / 2),
+        Math.floor(this.app.screen.height / 4 * 3)
       );
-      bgTextPlay.y -= (scale / 0.46) * 55;
       makeInteractive(bgTextPlay);
       bgTextPlay.on("pointerdown", () => {
         soundEffectPlay("game-start-sound");
@@ -3445,10 +3449,10 @@
       let backButton = new PIXI.Sprite(PIXI.Assets.get("close-button"));
       backButton.anchor.set(0.5);
       backButton.alpha = 0;
-      backButton.scale.set(floor((scale / 0.46) * 0.25, 2));
+      backButton.scale.set(floor((scale / 0.46) * 0.35, 2));
       backButton.position.set(
-        (this.app.screen.width / 6) * 5,
-        levelCompletionBanner.y - floor(levelCompletionBanner.height * 0.5, 2)
+        Math.floor((this.app.screen.width / 6) * 5),
+        Math.floor(this.app.screen.height / 4 * 1)
       );
       makeInteractive(backButton);
       backButton.on("pointerdown", () => {
@@ -3699,12 +3703,11 @@
       );
       bgTextPlay.anchor.set(0.5);
       bgTextPlay.alpha = 0;
-      bgTextPlay.scale.set(floor((scale / 0.46) * 0.5, 2));
+      bgTextPlay.scale.set(floor((scale / 0.46) * 0.55, 2));
       bgTextPlay.position.set(
-        this.app.screen.width / 2,
-        this.app.screen.height / 2 + (levelFailBanner.width * 2) / 3
+        Math.floor(this.app.screen.width / 2),
+        Math.floor(this.app.screen.height / 4 * 3)
       );
-      bgTextPlay.y -= (scale / 0.46) * 55;
       makeInteractive(bgTextPlay);
       bgTextPlay.on("pointerdown", () => {
         soundEffectPlay("game-restart-sound");
@@ -3727,10 +3730,10 @@
       let backButton = new PIXI.Sprite(PIXI.Assets.get("close-button"));
       backButton.anchor.set(0.5);
       backButton.alpha = 0;
-      backButton.scale.set(floor((scale / 0.46) * 0.25, 2));
+      backButton.scale.set(floor((scale / 0.46) * 0.35, 2));
       backButton.position.set(
-        (this.app.screen.width / 6) * 5,
-        levelFailBanner.y - floor(levelFailBanner.height * 0.5, 2)
+        Math.floor((this.app.screen.width / 6) * 5),
+        Math.floor(this.app.screen.height / 4 * 1)
       );
       makeInteractive(backButton);
       backButton.on("pointerdown", () => {
