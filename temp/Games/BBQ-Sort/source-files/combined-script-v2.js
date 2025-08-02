@@ -49,7 +49,7 @@
           },
           {
             alias: "stick-completion-confetti",
-            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/stick-completion-confetti.gif",
+            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/stick-completion-confetti.gif"
           },
           {
             alias: "raindrop",
@@ -62,6 +62,10 @@
         ],
         images: [
           // Scene related images
+          {
+            alias: "wooden-caption-banner",
+            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/caption-banner-compressed.png"
+          },
           {
             alias: "button-bg-white",
             src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/temp/button-bg-white.png"
@@ -1235,6 +1239,17 @@
         wordWrapWidth: 440,
         letterSpacing: 2,
         lineJoin: "round"
+      }),
+      captionStyle = new PIXI.TextStyle({
+        fontFamily: "chunkfive-regular",
+        fontSize: fontSize * 1.15,
+        fill: "#000000",
+        dropShadow: false,
+        fontWeight: "normal",
+        wordWrap: true,
+        wordWrapWidth: 440,
+        letterSpacing: 2,
+        lineJoin: "round"
       });
 
       // Create blur filter
@@ -1284,6 +1299,50 @@
       this.objects.push(banner);
       this.container.addChild(banner);
 
+
+
+
+      // Create caption wooden banner
+      let captionBannerTexture = PIXI.Assets.get("wooden-caption-banner");
+      let captionBanner = new PIXI.Sprite(captionBannerTexture);
+      captionBanner.anchor.set(0.5);
+      captionBanner.scale.set(scaleBanner * 0.5);
+      captionBanner.position.set(
+        this.app.screen.width / 2,
+        Math.floor((this.app.screen.height - banner.height) / 2)
+      );
+      this.objects.push(captionBanner);
+      this.container.addChild(captionBanner);
+
+      
+      // // Create text inside the caption banner
+      // let captionBBQStick = new PIXI.Sprite(PIXI.Assets.get("mini-bbq-stick"));
+      // captionBBQStick.scale.set(scaleBanner * 0.6)
+      // captionBBQStick.anchor.set(0.5);
+      // this.objects.push(captionBBQStick);
+      // this.container.addChild(captionBBQStick);
+
+      // let captionText = new PIXI.Text('x1', captionStyle);
+      // captionText.anchor.set(0.5);
+      // this.objects.push(captionText);
+      // this.container.addChild(captionText);
+      
+      // captionText.position.set(
+      //   Math.floor(
+      //     this.app.screen.width / 2 + (captionText.width + captionBBQStick.width) / 2 - captionText.width / 2
+      //     ), Math.floor(captionBanner.y - banner.height * 0.02)
+      // );
+
+      // captionBBQStick.position.set(
+      //   this.app.screen.width / 2 - ((captionText.width + captionBBQStick.width) / 2 - captionBBQStick.width / 2),
+      //   Math.floor(captionBanner.y - banner.height * 0.02));
+
+
+
+
+
+
+
       let levelSelectionBoxTexture = PIXI.Assets.get("patty-running");
       let scaleBoxX =
           this.app.renderer.width / 5 / levelSelectionBoxTexture.width,
@@ -1295,6 +1354,7 @@
       let startPositionY = -1.3;
       let startPositionX = -1.3;
       let currentPageDisplayCount = 0;
+
       for (let level = 0; level < 136; level++) {
         // Only display a maximum of 12 levels on a page
         if (currentPageDisplayCount >= 9) {
@@ -1334,10 +1394,46 @@
         this.objects.push(text);
         this.container.addChild(text);
 
-        this.levelSelectionPages[this.levelSelectionPages.length - 1].push({
-          levelSprite: box,
-          textSprite: text
-        });
+        // Create caption logo and caption text in caption wooden banner
+        if(currentPageDisplayCount === 0) {
+              
+          // Create logo inside the caption wooden banner
+          /*let captionBBQStick = new PIXI.Sprite(PIXI.Assets.get("mini-bbq-stick"));
+          captionBBQStick.scale.set(scaleBanner * 0.6)
+          captionBBQStick.anchor.set(0.5);
+          this.objects.push(captionBBQStick);
+          this.container.addChild(captionBBQStick);*/
+
+          // Create caption text inside caption wooden banner
+          let captionText = new PIXI.Text('Level ' + this.levelSelectionPages.length, captionStyle);
+          captionText.anchor.set(0.5);
+          this.objects.push(captionText);
+          this.container.addChild(captionText);
+          
+          // Position both caption text and logo to be centered of the wooden banner
+          captionText.position.set(
+            Math.floor(
+              this.app.screen.width / 2
+              ), Math.floor(captionBanner.y - banner.height * 0.02)
+          );
+
+          /*captionBBQStick.position.set(
+            this.app.screen.width / 2 - ((captionText.width + captionBBQStick.width) / 2 - captionBBQStick.width / 2),
+            Math.floor(captionBanner.y - banner.height * 0.02)
+          );*/
+
+          this.levelSelectionPages[this.levelSelectionPages.length - 1].push({
+            levelSprite: box,
+            textSprite: text,
+            captionText: captionText,
+            //captionBBQStick: captionBBQStick,
+          });
+        } else {
+          this.levelSelectionPages[this.levelSelectionPages.length - 1].push({
+            levelSprite: box,
+            textSprite: text
+          });
+        }
 
         currentPageDisplayCount++;
       }
@@ -1392,6 +1488,10 @@
       });
       this.objects.push(backButton);
       this.container.addChild(backButton);
+
+
+
+
     }
 
     show() {
@@ -1418,9 +1518,17 @@
           if (this.currentSelectedPage === page) {
             elem.textSprite.visible = true;
             elem.levelSprite.visible = true;
+            if(elem.captionText) {
+              elem.captionText.visible = true;
+              //elem.captionBBQStick.visible = true;
+            }
           } else {
             elem.textSprite.visible = false;
             elem.levelSprite.visible = false;
+            if(elem.captionText) {
+              elem.captionText.visible = false;
+              //elem.captionBBQStick.visible = false;
+            }
           }
           if (elem.levelSprite.level <= userCompletedLevel) {
             elem.levelSprite.tint = "#ffffff";
