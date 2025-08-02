@@ -64,10 +64,6 @@
         images: [
           // Scene related images
           {
-            alias: "mini-bbq-stick",
-            src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/mini-bbq-stick.png"
-          },
-          {
             alias: "wooden-caption-banner",
             src: "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/caption-banner-compressed.png"
           },
@@ -1403,14 +1399,14 @@
         if(currentPageDisplayCount === 0) {
               
           // Create logo inside the caption wooden banner
-          let captionBBQStick = new PIXI.Sprite(PIXI.Assets.get("mini-bbq-stick"));
+          /*let captionBBQStick = new PIXI.Sprite(PIXI.Assets.get("mini-bbq-stick"));
           captionBBQStick.scale.set(scaleBanner * 0.6)
           captionBBQStick.anchor.set(0.5);
           this.objects.push(captionBBQStick);
-          this.container.addChild(captionBBQStick);
+          this.container.addChild(captionBBQStick);*/
 
           // Create caption text inside caption wooden banner
-          let captionText = new PIXI.Text('x' + this.levelSelectionPages.length, captionStyle);
+          let captionText = new PIXI.Text('Level ' + this.levelSelectionPages.length, captionStyle);
           captionText.anchor.set(0.5);
           this.objects.push(captionText);
           this.container.addChild(captionText);
@@ -1418,20 +1414,20 @@
           // Position both caption text and logo to be centered of the wooden banner
           captionText.position.set(
             Math.floor(
-              this.app.screen.width / 2 + (captionText.width + captionBBQStick.width) / 2 - captionText.width / 2
+              this.app.screen.width / 2
               ), Math.floor(captionBanner.y - banner.height * 0.02)
           );
 
-          captionBBQStick.position.set(
+          /*captionBBQStick.position.set(
             this.app.screen.width / 2 - ((captionText.width + captionBBQStick.width) / 2 - captionBBQStick.width / 2),
             Math.floor(captionBanner.y - banner.height * 0.02)
-          );
+          );*/
 
           this.levelSelectionPages[this.levelSelectionPages.length - 1].push({
             levelSprite: box,
             textSprite: text,
             captionText: captionText,
-            captionBBQStick: captionBBQStick,
+            //captionBBQStick: captionBBQStick,
           });
         } else {
           this.levelSelectionPages[this.levelSelectionPages.length - 1].push({
@@ -1525,14 +1521,14 @@
             elem.levelSprite.visible = true;
             if(elem.captionText) {
               elem.captionText.visible = true;
-              elem.captionBBQStick.visible = true;
+              //elem.captionBBQStick.visible = true;
             }
           } else {
             elem.textSprite.visible = false;
             elem.levelSprite.visible = false;
             if(elem.captionText) {
               elem.captionText.visible = false;
-              elem.captionBBQStick.visible = false;
+              //elem.captionBBQStick.visible = false;
             }
           }
           if (elem.levelSprite.level <= userCompletedLevel) {
