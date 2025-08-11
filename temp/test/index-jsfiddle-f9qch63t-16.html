@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PixiJS Playground</title>
+
+  <style>
+    body,
+      html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+      }
+  </style>
+
+  
+</head>
+<body>
+  <!-- Load PixiJS library -->
+    <script src="https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/Games/BBQ-Sort/source-files/pixi.min.js"></script>
+    <script src="https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/Games/BBQ-Sort/source-files/pixi-sound.js"></script>
+    <script src="https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/Games/BBQ-Sort/source-files/pixi-gif.js"></script>
+  
+
+  <script>
+    (async () => {
+  /*********************PIXI***********************/
+  // Create a new application
+  const app = new PIXI.Application();
+
+  // Initialize the application
+  await app.init({
+    background: "#000",
+    resizeTo: window,
+  });
+
+  // Append the application canvas to the document body
+  document.body.appendChild(app.canvas);
+  /*********************PIXI***********************/
+
+  // Create a container and add it to the stage
+  let container = new PIXI.Container();
+  app.stage.addChild(container);
+
+  // Load the sprite sheet
+  PIXI.Assets.add({
+    alias: "car",
+    src: "https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/test/car.json",
+  });
+  const sheet = await PIXI.Assets.load("car");
+  const textures = Object.values(sheet.textures); // Grab all textures
+  let sprite = new PIXI.AnimatedSprite(textures);
+  sprite.anchor.set(0.5);
+  sprite.scale.set(0.4)
+  sprite.x = app.screen.width / 2; // Center sprite horizontally
+  sprite.y = app.screen.height / 2; // Center sprite vertically
+  sprite.animationSpeed = 0.5; // Set animation speed for clarity
+  container.addChild(sprite); // Add sprite to container
+  sprite.play(); // Start animation
+
+
+
+
+
+
+
+
+function drawRectangle (width, height) {
+  let graphics = new PIXI.Graphics();
+  return graphics
+    .rect(-width / 2, - height / 2, width, height)
+    .fill({ color: 0xffffff }) 
+}
+
+// Left tyre
+let leftTyre = drawRectangle(5, 5);
+leftTyre.x = sprite.x - sprite.width / 2  + 20;
+leftTyre.y = app.screen.height / 2 + sprite.height / 2 - 0;
+container.addChild(leftTyre);
+
+// Right tyre
+let rightTyre = drawRectangle(5, 5);
+rightTyre.x = sprite.x + sprite.width / 2  - 20;
+rightTyre.y = app.screen.height / 2 + sprite.height / 2 - 0;
+container.addChild(rightTyre);
+
+
+let grounds = [];
+
+// Draw ground 1
+let ground1 = drawRectangle(50, 2);
+ground1.x = sprite.x//sprite.x;
+ground1.y = sprite.y//sprite.y + sprite.height / 2;
+
+ground1.h = 0;
+
+grounds.push(ground1);
+container.addChild(ground1);
+
+
+
+
+
+const pathWidth = 50;
+/*
+// Draw ground 2
+let heightAboveGround = 50;
+let heightDifference = heightAboveGround - 0;
+let actualWidth = Math.hypot(pathWidth, heightAboveGround);
+
+
+let ground2 = drawRectangle(actualWidth, 2);
+// Calculate radian
+let rad = Math.atan2(heightAboveGround, pathWidth);
+ground2.rotation = rad;
+
+actualHeight = Math.sqrt(actualWidth * actualWidth - 50*50)
+
+// Calculate path
+ground2.x = ground1.x - pathWidth;
+//ground2.y = ground1.y - heightAboveGround / 2
+if(ground2.rotation >= 0 && ground1.rotation < 0)
+  ground2.y = ground1.y + heightAboveGround / 2 - actualHeight / 2
+else if(ground2.rotation >= 0 && ground1.rotation >= 0){
+  ground2.y = ground1.y - heightAboveGround / 2;
+}else
+  ground2.y = ground1.y + heightAboveGround / 2
+
+ground2.h = heightDifference
+
+grounds.push(ground2)
+container.addChild(ground2);
+
+console.log(Math.sin(ground2.rotation) * actualWidth / 2)
+
+
+// Draw ground 3
+heightAboveGround = 75;
+heightDifference = heightAboveGround - 50;
+actualWidth = Math.hypot(50, heightDifference);
+let ground3 = drawRectangle(actualWidth, 2);
+
+
+rad = Math.atan2(heightDifference, 50);
+ground3.rotation = rad;
+
+actualHeight = Math.sqrt(actualWidth * actualWidth - 50*50)
+previousActualHeight = Math.sqrt(ground2.width * ground2.width - 50*50)
+
+ground3.x = ground2.x - 50;
+//ground3.y = ground2.y - heightAboveGround / 2
+if(ground3.rotation >= 0 && ground2.rotation < 0)
+  ground3.y = ground2.y + heightAboveGround / 2 - actualHeight / 2
+else if(ground2.rotation >= 0 && ground3.rotation >= 0){
+  ground3.y = ground2.y - previousActualHeight / 2 - actualHeight / 2
+}else
+  ground3.y = ground2.y + heightAboveGround / 2
+
+ground3.h = heightDifference
+
+grounds.push(ground3)
+container.addChild(ground3);
+
+
+
+// Draw ground 4
+heightAboveGround = 25;
+heightDifference = heightAboveGround - 75;
+actualWidth = Math.hypot(50, heightDifference);
+let ground4 = drawRectangle(actualWidth, 2);
+
+
+rad = Math.atan2(heightDifference, 50);
+ground4.rotation = rad;
+
+actualHeight = Math.sqrt(actualWidth * actualWidth - 50*50)
+
+ground4.x = ground3.x - 50;
+if(ground4.rotation >= 0 && ground3.rotation < 0)
+  ground4.y = ground3.y + heightAboveGround / 2 - actualHeight / 2
+else
+  ground4.y = ground3.y + heightAboveGround / 2
+
+ground4.h = heightDifference
+
+grounds.push(ground4)
+container.addChild(ground4);
+
+
+
+
+// Draw ground 5; prev height is 25
+heightAboveGround = 50;
+heightDifference = heightAboveGround - 25;
+actualWidth = Math.hypot(50, heightDifference);
+let ground5 = drawRectangle(actualWidth, 2);
+
+rad = Math.atan2(heightDifference, 50);
+ground5.rotation = rad;
+
+actualHeight = Math.sqrt(actualWidth * actualWidth - 50*50)
+
+ground5.x = ground4.x - 50;
+if(ground5.rotation >= 0 && ground4.rotation < 0)
+  ground5.y = ground4.y + heightAboveGround / 2 - actualHeight / 2
+else
+  ground5.y = ground4.y + heightAboveGround / 2
+
+
+ground5.h = heightDifference
+
+grounds.push(ground5)
+container.addChild(ground5);
+
+
+
+
+// Ground 6
+heightAboveGround = 25;
+heightDifference = heightAboveGround - 50;
+actualWidth = Math.hypot(50, heightDifference);
+let ground6 = drawRectangle(actualWidth, 2);
+
+rad = Math.atan2(heightDifference, 50);
+ground6.rotation = rad;
+
+actualHeight = Math.sqrt(actualWidth * actualWidth - 50*50)
+
+ground6.x = ground5.x - 50;
+if(ground6.rotation >= 0 && ground5.rotation < 0)
+  ground6.y = ground5.y + heightAboveGround / 2 - actualHeight / 2
+else if(ground6.rotation >= 0 && ground5.rotation >= 0){
+  ground6.y = ground5.y - heightAboveGround / 2;
+}else if(ground6.rotation < 0 && ground5.rotation >= 0){
+  ground6.y = ground5.y - heightAboveGround / 2 + actualHeight / 2
+}else{
+  ground6.y = ground5.y + heightAboveGround / 2;
+}
+
+
+ground6.h = heightDifference
+
+grounds.push(ground6)
+container.addChild(ground6);
+
+
+
+// Ground 7
+heightAboveGround = 10;
+heightDifference = heightAboveGround - 25;
+actualWidth = Math.hypot(50, heightDifference);
+let ground7 = drawRectangle(actualWidth, 2);
+
+rad = Math.atan2(heightDifference, 50);
+ground7.rotation = rad;
+
+actualHeight = Math.sqrt(actualWidth * actualWidth - 50*50)
+previousActualHeight = Math.sqrt(ground6.width * ground6.width - 50*50)
+
+ground7.x = ground6.x - 50;
+if(ground7.rotation >= 0 && ground6.rotation < 0)
+  ground7.y = ground6.y + heightAboveGround / 2 - actualHeight / 2
+else if(ground7.rotation >= 0 && ground6.rotation >= 0){
+  ground7.y = ground6.y - heightAboveGround / 2;
+}else if(ground7.rotation < 0 && ground6.rotation >= 0){
+  //ground7.y = ground6.y - heightAboveGround / 2 + //actualHeight / 2
+
+    ground7.y = ground6.y - previousActualHeight / 2 - actualHeight / 2
+}else{
+  //ground7.y = ground6.y + actualHeight;
+  ground7.y = ground6.y + previousActualHeight / 2 + actualHeight / 2
+}
+
+
+ground7.h = heightDifference
+
+grounds.push(ground7)
+container.addChild(ground7);
+
+
+
+*/
+
+
+
+
+
+
+
+
+let heightAboveGroundArr = [0, 15, 50, 75, 125];
+let previousGround = {
+  x: app.screen.width / 2, 
+  y: app.screen.height / 2,
+  rotation: 0,
+  previousActualHeight: 0,
+  };
+for(let index = 1; index < heightAboveGroundArr.length; index++){
+  let heightAboveGround = heightAboveGroundArr[index];
+  let heightDifference = heightAboveGround - heightAboveGroundArr[index - 1];
+  let actualWidth = Math.hypot(50, heightDifference);
+  let ground = drawRectangle(actualWidth, 2);
+
+
+  let rad = Math.atan2(heightDifference, 50);
+  ground.rotation = rad;
+
+  let actualHeight = Math.sqrt(actualWidth * actualWidth - 50 * 50)
+  // let previousActualHeight = Math.sqrt(ground6.width * ground6.width - 50 * 50)
+
+  ground.x = previousGround.x - 50;
+
+  if(ground.rotation >= 0 && previousGround.rotation < 0)
+    ground.y = previousGround.y + previousGround.previousActualHeight / 2 - actualHeight / 2
+  else if(ground.rotation >= 0 && previousGround.rotation >= 0){
+    ground.y = previousGround.y - previousGround.previousActualHeight / 2- actualHeight / 2
+  }else if(ground.rotation < 0 && previousGround.rotation >= 0){console.log('asd')
+      ground.y = previousGround.y - previousGround.previousActualHeight / 2 + actualHeight / 2
+  }else{
+    ground.y = previousGround.y + previousGround.previousActualHeight / 2 + actualHeight / 2;
+  } 
+
+
+
+  ground.h = heightDifference
+  ground.heightAboveGround = heightAboveGround;
+
+  previousGround.x = ground.x
+  previousGround.y = ground.y
+  previousGround.rotation = ground.rotation
+  previousGround.previousActualHeight = actualHeight
+
+  
+  grounds.push(ground)
+  container.addChild(ground);
+}
+
+
+
+
+
+function beast(){
+
+  // Move first tile to the last 
+  let ground = grounds.shift();
+  grounds.push(ground);
+
+  // Move the ground
+  let lastGround = grounds[grounds.length - 2];
+  ground.x = lastGround.x - 50;
+
+  // Random height
+  let heightAboveGround = Math.round(Math.random()*25)
+  ;
+  console.log(heightAboveGround, lastGround.heightAboveGround)
+  if(!lastGround.heightAboveGround) lastGround.heightAboveGround = 0
+  let heightDifference = heightAboveGround - lastGround.heightAboveGround;
+  
+  actualWidth = Math.hypot(50, heightDifference);
+
+  ground.width = actualWidth
+
+  let rad = Math.atan2(heightDifference, 50);
+  ground.rotation = rad;
+
+
+let actualHeight = Math.sqrt(actualWidth * actualWidth - 50 * 50)
+let previousActualHeight = Math.sqrt(lastGround.width * lastGround.width - 50*50)
+
+  if(ground.rotation >= 0 && lastGround.rotation < 0)
+    ground.y = lastGround.y + previousActualHeight / 2 - actualHeight / 2
+  else if(ground.rotation >= 0 && lastGround.rotation >= 0){
+    ground.y = lastGround.y - previousActualHeight / 2 - actualHeight / 2;
+  }else if(ground.rotation < 0 && lastGround.rotation >= 0){
+      ground.y = lastGround.y - previousActualHeight / 2 + actualHeight / 2
+  }else{
+    ground.y = lastGround.y + previousActualHeight / 2 + actualHeight / 2;
+  } 
+
+  ground.h = heightDifference
+  ground.heightAboveGround = heightAboveGround
+  
+}
+
+// beast();
+
+
+
+let keys = {};
+
+window.addEventListener("keydown", (e) => {
+  keys[e.code] = true;
+});
+window.addEventListener("keyup", (e) => {
+  keys[e.code] = false;
+});
+
+let moveSpeed = 2,
+globalGroundIndex = 0;
+
+app.ticker.add(() => {
+
+  if(globalGroundIndex === 3){
+    beast()
+    //console.log('beast')
+  }
+    
+  // Move left/right regardless of landed
+  if (keys["ArrowLeft"] || keys["KeyA"]) {
+    //leftTyre.x -= moveSpeed;
+    //rightTyre.x -= moveSpeed;
+    //sprite.x -= moveSpeed;
+    grounds.forEach(ground => {
+      ground.x += moveSpeed;
+    })
+  }
+  if (keys["ArrowRight"] || keys["KeyD"]) {
+    //leftTyre.x += moveSpeed;
+    //rightTyre.x += moveSpeed;
+    //sprite.x += moveSpeed
+    grounds.forEach(ground => {
+      ground.x -= moveSpeed;
+    })
+  }
+
+  // Align car to the center of the screen
+  if(sprite.y < app.screen.height / 2 - 10){
+    grounds.forEach(ground => {
+      ground.y++;
+    })
+  }else if(sprite.y > app.screen.height / 2 + 10){
+    grounds.forEach(ground => {
+      ground.y--;
+    })
+  }
+
+
+  // Check tyres
+  for(let index = 0; index < grounds.length; index++){
+    // Left tyre adjustion
+    if(leftTyre.x >= grounds[index].x - 25 && leftTyre.x <= grounds[index].x + 25){
+       let rightPoint = grounds[index].x + 25;
+       let leftPoint = leftTyre.x;
+
+       let bottomLength = Math.abs(rightPoint - leftPoint);
+       
+       let o = Math.tan(grounds[index].rotation) * bottomLength;
+      
+      leftTyre.y = grounds[index].y + grounds[index].h / 2 - o
+
+      globalGroundIndex = index;
+    }
+    // Right tyre adjustion
+    if(rightTyre.x >= grounds[index].x - 25 && rightTyre.x <= grounds[index].x + 25){
+
+       let rightPoint = grounds[index].x + 25;
+       let leftPoint = rightTyre.x;
+
+       let bottomLength = Math.abs(rightPoint - leftPoint);
+       let o = Math.tan(grounds[index].rotation) * bottomLength;
+       
+       rightTyre.y = grounds[index].y + grounds[index].h / 2 - o
+    }
+
+  }
+  let angle = Math.atan2(leftTyre.y - rightTyre.y, leftTyre.x - rightTyre.x);
+  sprite.rotation = angle + Math.PI
+  sprite.y = (leftTyre.y + rightTyre.y) / 2 - sprite.height / 2;
+});
+
+
+})();
+  </script>
+</body>
+</html>
