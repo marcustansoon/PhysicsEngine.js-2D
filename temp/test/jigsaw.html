@@ -1,53 +1,111 @@
 
-<canvas id="myCanvas" width="250" height="250"></canvas>
+<canvas id="myCanvas" width="1000" height="1000"></canvas>
 
 <script>
-const imageUrl = "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/Games/BBQ-Sort/media/cucumber-slice.png";
+const imageUrl = "https://upload.wikimedia.org/wikipedia/commons/9/9a/538514-500x500.jpg";
 const canvas = document.getElementById("myCanvas");
 const ctx = canvas.getContext("2d");
 
 function drawJigsawPath(ctx, size, tabSize, type) {
+    console.log(size, tabSize)
+    
     ctx.beginPath();
-    ctx.moveTo(0, 0); // Top-left corner
+    ctx.moveTo(tabSize, tabSize); // Top-left corner
 
     // Top edge (straight)
-    ctx.lineTo(size, 0);
-
-    // Right edge with tab (protrusion)
-    ctx.lineTo(size, size/2 - tabSize);
-    ctx.bezierCurveTo(
-        size + tabSize, size/2 - tabSize, // Control point 1
-        size + tabSize, size/2 + tabSize, // Control point 2
-        size, size/2 + tabSize            // End point
-    );
-    ctx.lineTo(size, size);
-
+    //ctx.lineTo(size+tabSize+tabSize, 0);
+	
+      ctx.lineTo(size, size/2 - tabSize);
+      ctx.bezierCurveTo(
+    size - tabSize, size/2 + tabSize, // Control point 1: y = size/2 + tabSize
+    size - tabSize, size/2 - tabSize, // Control point 2: y = size/2 - tabSize
+    size, size/2 - tabSize            // End point: y = size/2 - tabSize
+);
+      ctx.lineTo(size+tabSize+tabSize, 0);
+    
+    /*if(type.includes('right-protrusion-inward')){
+      // Right edge with tab (protrusion)
+      ctx.lineTo(size, size/2 - tabSize);
+      ctx.bezierCurveTo(
+          size - tabSize, size/2 - tabSize, // Control point 1
+          size - tabSize, size/2 + tabSize, // Control point 2
+          size, size/2 + tabSize            // End point
+      );
+      ctx.lineTo(size, size);
+	}else if(type.includes('right-protrusion-outward')){
+      // Right edge with tab (protrusion)
+      ctx.lineTo(size, size/2 - tabSize);
+      ctx.bezierCurveTo(
+          size + tabSize, size/2 - tabSize, // Control point 1
+          size + tabSize, size/2 + tabSize, // Control point 2
+          size, size/2 + tabSize            // End point
+      );
+      ctx.lineTo(size, size);
+    }else {
+      ctx.lineTo(size, size);
+    }*/
+      ctx.lineTo(size+tabSize+tabSize, size+tabSize+tabSize);
 	
     // Draw bottom curve
-    ctx.lineTo(size/2 + tabSize, size);
-    ctx.bezierCurveTo(
-        size/2 + tabSize, size + tabSize, // Control point 1 (below edge)
-        size/2 - tabSize, size + tabSize, // Control point 2 (below edge)
-        size/2 - tabSize, size            // End point (halfway across bottom)
-    );
-    // Bottom edge (straight)
-    ctx.lineTo(0, size);
+    /*if(type.includes('bottom-protrusion-inward')){
+      ctx.lineTo(size/2 + tabSize, size);
+      ctx.bezierCurveTo(
+          size/2 + tabSize, size - tabSize, // Control point 1 (below edge)
+          size/2 - tabSize, size - tabSize, // Control point 2 (below edge)
+          size/2 - tabSize, size            // End point (halfway across bottom)
+      );
+      // Bottom edge (straight)
+      ctx.lineTo(0, size);
+    }else if(type.includes('bottom-protrusion-outward')) {
+      ctx.lineTo(size/2 + tabSize, size);
+      ctx.bezierCurveTo(
+          size/2 + tabSize, size + tabSize, // Control point 1 (below edge)
+          size/2 - tabSize, size + tabSize, // Control point 2 (below edge)
+          size/2 - tabSize, size            // End point (halfway across bottom)
+      );
+      // Bottom edge (straight)
+      ctx.lineTo(0, size);
+    } else {
+      ctx.lineTo(0, size);
+    }*/
+      ctx.lineTo(0, size+tabSize+tabSize);
 
     // Left edge with socket (indentation)
-    ctx.lineTo(0, size/2 + tabSize);
-    ctx.bezierCurveTo(
-        -tabSize, size/2 + tabSize, // Control point 1
-        -tabSize, size/2 - tabSize, // Control point 2
-        0, size/2 - tabSize         // End point
-    );
-    ctx.lineTo(0, 0);
+    /*if(type.includes('left-protrusion-outward')){
+      ctx.lineTo(0, size/2 + tabSize);
+      ctx.bezierCurveTo(
+          -tabSize, size/2 + tabSize, // Control point 1
+          -tabSize, size/2 - tabSize, // Control point 2
+          0, size/2 - tabSize         // End point
+      );
+      ctx.lineTo(0, 0);
+    }else if(type.includes('left-protrusion-inward')){
+      ctx.lineTo(0, size/2 + tabSize);
+      ctx.bezierCurveTo(
+          -tabSize, size/2 + tabSize, // Control point 1
+          -tabSize, size/2 - tabSize, // Control point 2
+          0, size/2 - tabSize         // End point
+      );
+      ctx.lineTo(0, 0);
+    }else{
+      ctx.lineTo(0, size/2 + tabSize);
+      ctx.bezierCurveTo(
+          -tabSize, size/2 + tabSize, // Control point 1
+          -tabSize, size/2 - tabSize, // Control point 2
+          0, size/2 - tabSize         // End point
+      );
+      ctx.lineTo(0, 0);
+    }*/
+      ctx.lineTo(0, 0);
 
     ctx.closePath();
 }
 
 
-// outline
 
+
+
+// outline
 function drawJigsawPathOutline(ctx, size, tabSize, type) {
     ctx.beginPath();
     
@@ -67,22 +125,22 @@ function drawJigsawPathOutline(ctx, size, tabSize, type) {
 
 	
     // Draw bottom curve
-    ctx.lineTo(size/2 + tabSize, size);
+    /*ctx.lineTo(size/2 + tabSize, size);
     ctx.bezierCurveTo(
         size/2 + tabSize, size + tabSize + 0, // Control point 1 (below edge)
         size/2 - tabSize, size + tabSize + 0, // Control point 2 (below edge)
         size/2 - tabSize, size            // End point (halfway across bottom)
-    );
+    );*/
     // Bottom edge (straight)
     ctx.lineTo(0, size);
 
     // Left edge with socket (indentation)
-    ctx.lineTo(0, size/2 + tabSize);
+    /*ctx.lineTo(0, size/2 + tabSize);
     ctx.bezierCurveTo(
         -tabSize, size/2 + tabSize + 0, // Control point 1
         -tabSize, size/2 - tabSize + 0, // Control point 2
         0, size/2 - tabSize         // End point
-    );
+    );*/
     ctx.lineTo(0, 0);
 
     ctx.closePath();
@@ -101,12 +159,13 @@ img.onload = function() {
 
     // Save context to avoid state issues
     ctx.save();
+ctx.translate(80, 0); // Move position
 
     // Clear canvas to avoid overlap
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw jigsaw path for clipping
-    drawJigsawPath(ctx, pieceSize, tabSize);
+    drawJigsawPath(ctx, pieceSize, tabSize, ['right-protrusion-outward', 'bottom-protrusion-outward']);
 
     // Fill shape for visibility (debugging)
     ctx.fillStyle = "rgba(255, 0, 0, 0.2)"; // Light red fill
@@ -116,24 +175,29 @@ img.onload = function() {
     ctx.clip();
 
     // Draw image, starting at top-left of jigsaw shape
-    const sourceSize = pieceSize + tabSize; // Source matches shape's max width
+    const sourceSize = pieceSize + tabSize + tabSize; // Source matches shape's max width
     ctx.drawImage(
         img,
-        0, 0, sourceSize, sourceSize, // Source: square from image top-left
-        0, 0, pieceSize + tabSize, pieceSize + tabSize // Destination: align top-left, cover tab
+        50, 50, sourceSize, sourceSize, // Source: square from image top-left
+        0, 0, sourceSize, sourceSize // Destination: align top-left, cover tab
     );
     
     ctx.restore();
     
     
-    
+    ctx.drawImage(
+        img,
+        50, 50, sourceSize, sourceSize, // Source: square from image top-left
+        0, 0, sourceSize, sourceSize // Destination: align top-left, cover tab
+    );
+    /*
     
     
 // Draw outline for second piece
 ctx.save();
 
-ctx.translate(45, 45); // Move position
-drawJigsawPathOutline(ctx, pieceSize, tabSize);
+ctx.translate(60, 60); // Move position
+drawJigsawPathOutline(ctx, pieceSize, tabSize, []);
     ctx.strokeStyle = "black";
             ctx.lineWidth = 2;
     ctx.stroke();
@@ -143,19 +207,33 @@ ctx.restore();
 
 // Draw second piece
 ctx.save();
-ctx.translate(44, 44); // Move position
-drawJigsawPath(ctx, pieceSize, tabSize);
+ctx.translate(59, 59); // Move position
+drawJigsawPath(ctx, pieceSize, tabSize, ['right-protrusion-outward', 'bottom-protrusion-outward', 'left-protrusion-inward']);
     ctx.fillStyle = "rgba(255, 0, 0, 0.2)"; // Light red fill
     ctx.fill();
 ctx.clip();
-ctx.drawImage(img, 0, 0, sourceSize, sourceSize, 0, 0, pieceSize + tabSize, pieceSize + tabSize);
+ctx.drawImage(img, 50, 50, sourceSize-tabSize, sourceSize-tabSize, 0-tabSize, 0-tabSize, pieceSize + tabSize, pieceSize + tabSize);
 ctx.restore();
     
-    
-    
-    
-    
-    // Image 2
+  */
+  
+  
+  function getSectionBase64(sourceCanvas, x, y, w, h) {
+    const tempCanvas = document.createElement("canvas");
+    tempCanvas.width = w;
+    tempCanvas.height = h;
+    const tempCtx = tempCanvas.getContext("2d");
+
+    // Copy section of source canvas into new canvas
+    tempCtx.drawImage(sourceCanvas, x, y, w, h, 0, 0, w, h);
+
+    // Convert to Base64 PNG
+    return tempCanvas.toDataURL("image/png");
+}
+
+// Example usage:
+const base64Image = getSectionBase64(canvas, 59, 59, pieceSize + tabSize, pieceSize + tabSize);
+console.log(base64Image);
     
 };
 
