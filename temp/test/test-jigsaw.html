@@ -27,7 +27,7 @@
 <script src="https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/test/pixi-filters.js"></script>
 
   <script>
-    (async () => {
+ (async () => {
   /*********************PIXI Setup***********************/
   const app = new PIXI.Application();
   await app.init({
@@ -50,18 +50,22 @@
   const cols = 16;
   const rows = 16;
 
+  // Create shared filters ONCE
+  const normalOutline = new PIXI.filters.OutlineFilter(2, 0x000000);
+  const selectedOutline = new PIXI.filters.OutlineFilter(4, 0xff0000);
+
   let index = 0;
   for (let row = 0; row < rows; row++) {
     for (let col = 0; col < cols; col++) {
       const sprite = new PIXI.Sprite(textures[index]);
       sprite.anchor.set(0.5);
-      sprite.x = col * pieceSize + pieceSize / 2;
-      sprite.y = row * pieceSize + pieceSize / 2;
+      sprite.x = col * (96 - 20 - 5) + (96-20) / 2;
+      sprite.y = row * (96 - 20 - 5) + (96-20) / 2;
       sprite.row = row;
       console.log(sprite.width, sprite.height);
       sprite.col = col;
         
-      sprite.filters = [new PIXI.filters.OutlineFilter(2, 0x0)];
+      //sprite.filters = [normalOutline];
       makeDraggable(sprite);
       container.addChild(sprite);
       index++;
@@ -69,8 +73,8 @@
   }
 
   // Center the container on screen
-  container.x = (app.renderer.width - container.width) / 2;
-  container.y = (app.renderer.height - container.height) / 2;
+  //container.x = (app.renderer.width - container.width) / 2;
+  //container.y = (app.renderer.height - container.height) / 2;
 
 
 
@@ -87,6 +91,8 @@ function makeDraggable(sprite) {
     // bring piece to top
     sprite.parent.addChild(sprite);
 
+    //sprite.filters = [selectedOutline];
+
     // store offset so drag feels natural
     offset.x = e.global.x - sprite.x;
     offset.y = e.global.y - sprite.y;
@@ -101,6 +107,7 @@ function makeDraggable(sprite) {
 
   sprite.on("pointerup", () => {
     dragging = false;
+    //sprite.filters = [normalOutline];
   });
 
   sprite.on("pointerupoutside", () => {
