@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create a jigsaw puzzle with interactive pieces</title>
+
+  <style>
+    body,
+      html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+      }
+  </style>
+
+  
+</head>
+<body>
+  <!-- Load PixiJS library -->
+    <script src="https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/Games/BBQ-Sort/source-files/pixi.min.js"></script>
+  
+<script src="https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/test/pixi-filters.js"></script>
+
+  <script>
+    (async () => {
+  /*********************PIXI Setup***********************/
+  const app = new PIXI.Application();
+  await app.init({
+    background: '#F7F2EE',
+    resizeTo: window,
+  });
+  document.body.appendChild(app.canvas);
+
+  const container = new PIXI.Container();
+  app.stage.addChild(container);
+
+  /*********************Load Spritesheet***********************/
+  const sheet = await PIXI.Assets.load('https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/test/jigsaw.json');
+
+  // Extract all textures from the loaded sheet
+  const textures = Object.values(sheet.textures);
+
+  /*********************Create Puzzle Pieces***********************/
+  const pieceSize = 96; // width/height of each piece
+  const cols = 16;
+  const rows = 16;
+
+  let index = 0;
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const sprite = new PIXI.Sprite(textures[index]);
+      sprite.anchor.set(0.5);
+      sprite.x = col * pieceSize + pieceSize / 2;
+      sprite.y = row * pieceSize + pieceSize / 2;
+      sprite.row = row;
+      console.log(sprite.width, sprite.height);
+      sprite.col = col;
+        
+      sprite.filters = [new PIXI.filters.OutlineFilter(2, 0x0)];
+      makeDraggable(sprite);
+      container.addChild(sprite);
+      index++;
+    }
+  }
+
+  // Center the container on screen
+  container.x = (app.renderer.width - container.width) / 2;
+  container.y = (app.renderer.height - container.height) / 2;
+
+
+
+function makeDraggable(sprite) {
+  sprite.eventMode = "dynamic"; // enable interaction
+  sprite.cursor = "pointer";    // show pointer on hover
+
+  let dragging = false;
+  let offset = { x: 0, y: 0 };
+
+  sprite.on("pointerdown", (e) => {
+    dragging = true;
+
+    // bring piece to top
+    sprite.parent.addChild(sprite);
+
+    // store offset so drag feels natural
+    offset.x = e.global.x - sprite.x;
+    offset.y = e.global.y - sprite.y;
+  });
+
+  sprite.on("pointermove", (e) => {
+    if (dragging) {
+      sprite.x = e.global.x - offset.x;
+      sprite.y = e.global.y - offset.y;
+    }
+  });
+
+  sprite.on("pointerup", () => {
+    dragging = false;
+  });
+
+  sprite.on("pointerupoutside", () => {
+    dragging = false;
+  });
+}
+
+
+})();
+
+  </script>
+</body>
+</html>
