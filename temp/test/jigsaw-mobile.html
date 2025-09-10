@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create a jigsaw puzzle with interactive pieces</title>
+
+  <style>
+    body,
+      html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+      }
+  </style>
+
+  
+</head>
+<body>
+  <!-- Load PixiJS library -->
+<script src="https://marcustansoon.github.io/PhysicsEngine.js-2D/temp/Games/BBQ-Sort/source-files/pixi.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/test/pixi-filters.js"></script>
+
+
+  <script>
+    (async () => {
+  /*********************PIXI Setup***********************/
+  const app = new PIXI.Application();
+  await app.init({
+    background: "#000000",
+    resizeTo: window,
+  });
+  document.body.appendChild(app.canvas);
+
+  const container = new PIXI.Container();
+  const panelContainer = new PIXI.Container();
+  const boardContainer = new PIXI.Container();
+  const uncompletedBoardContainer = new PIXI.Container();
+  app.stage.addChild(container);
+
+  
+  app.stage.addChild(boardContainer);
+  app.stage.addChild(uncompletedBoardContainer);
+  app.stage.addChild(panelContainer);
+
+
+
+// Add reference puzzle image
+let puzzleImageTexture = await PIXI.Assets.load("https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/test/puzzle-1.png");
+  let puzzleImage = new PIXI.Sprite(puzzleImageTexture);
+  puzzleImage.alpha = 0.5;
+  puzzleImage.scale.set(0.25);
+  puzzleImage.anchor.set(0.5);
+  puzzleImage.position.set(app.screen.width / 2, app.screen.height / 2);
+
+
+  // Draw board
+  let boardGraphics = new PIXI.Graphics();
+  boardGraphics.beginFill(0xf8e0bb);
+  let boardWidth = puzzleImage.width * 2;
+  let boardHeight = puzzleImage.height * 2;
+  boardGraphics.drawRoundedRect(
+    -boardWidth / 2, // x position
+    -boardHeight / 2, // y position
+    boardWidth, // width
+    boardHeight, // height
+    20, // corner radius
+  );
+  boardGraphics.endFill();
+  boardGraphics.alpha = 0.2;
+  boardGraphics.x = app.screen.width / 2;
+  boardGraphics.y = app.screen.height / 2;
+
+  // Add to stage
+  boardContainer.addChild(boardGraphics);
+  boardContainer.addChild(puzzleImage);
+
+  // Enable interaction on the container
+  boardContainer.interactive = true;
+  boardContainer.buttonMode = true;
+
+// Variables to keep track of dragging
+let isDragging = false;
+let offsetX = 0;
+let offsetY = 0;
+
+const boardContainerClampX = (boardGraphics.width - app.screen.width) / 2;
+const boardContainerClampY = (boardGraphics.height - app.screen.height) / 2;
+
+// Add event listeners for dragging
+boardContainer.on('pointerdown', (event) => {
+    // Start dragging
+    isDragging = true;
+
+    // Get the mouse position relative to the container
+    const position = event.data.getLocalPosition(boardContainer);
+    offsetX = position.x;
+    offsetY = position.y;
+});
+
+boardContainer.on('pointermove', (event) => {
+    if (isDragging) {
+        // Update container's position based on mouse movement
+        const position = event.data.getLocalPosition(boardContainer.parent);
+        let tempX = position.x - offsetX;
+        let tempY = position.y - offsetY;
+        boardContainer.x = clamp(tempX, -boardContainerClampX, boardContainerClampX);
+        boardContainer.y = clamp(tempY, -boardContainerClampY, boardContainerClampY);
+    }
+});
+
+boardContainer.on('pointerup', () => {
+    // Stop dragging
+    isDragging = false;
+});
+
+boardContainer.on('pointerupoutside', () => {
+    // Stop dragging if pointer is released outside of the container
+    isDragging = false;
+});
+
+
+
+  
+
+  /*********************Load Spritesheet***********************/
+  const sheet = await PIXI.Assets.load(
+    "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/test/puzzle-11.json",
+  );
+
+  // Extract all textures from the loaded sheet
+  const textures = Object.values(sheet.textures);
+
+
+// Add puzzle jigsaw 1
+  const jigsaw1 = new PIXI.Sprite(textures[0]);
+  jigsaw1.scale.set(0.25);
+  jigsaw1.position.set(50,50);
+  jigsaw1.anchor.set(0.5);
+  makeDraggable(jigsaw1);
+  uncompletedBoardContainer.addChild(jigsaw1);
+
+  
+// Add puzzle jigsaw 1
+  const jigsaw2 = new PIXI.Sprite(textures[1]);
+  jigsaw2.scale.set(0.25);
+  jigsaw2.position.set(50,50);
+  jigsaw2.anchor.set(0.5);
+  makeDraggable(jigsaw2);
+  uncompletedBoardContainer.addChild(jigsaw2);
+
+
+  return;
+
+
+
+
+
+
+
+  /*********************Create Puzzle Pieces***********************/
+  const pieceSize = 200; // width/height of each piece
+  const cols = 4;
+  const rows = 4;
+
+  // Create shared filters ONCE
+  const normalOutline = new PIXI.filters.OutlineFilter(2, 0x000000);
+  const selectedOutline = new PIXI.filters.OutlineFilter(4, 0xff0000);
+
+  let index = 0;
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const sprite = new PIXI.Sprite(textures[index]);
+      sprite.anchor.set(0.5);
+      sprite.x = col * (250 - 50 - 1) + (250 - 50) / 2;
+      sprite.y = row * (250 - 50 - 1) + (250 - 50) / 2;
+      sprite.row = row;
+      console.log(sprite.width, sprite.height);
+      sprite.col = col;
+
+      sprite.filters = [normalOutline];
+      makeDraggable(sprite);
+      //container.addChild(sprite);
+      index++;
+    }
+  }
+
+  // Create graphics object
+  const graphics = new PIXI.Graphics();
+
+  // Draw a rounded rectangle
+  graphics.beginFill(0xf8e0bb); // blue fill
+  //graphics.lineStyle(5, 0xffffff);     // white border
+
+  let width = app.screen.width * 0.8;
+  let height = app.screen.height * 0.2;
+
+  graphics.drawRoundedRect(
+    -width / 2, // x position
+    -height / 2, // y position
+    width, // width
+    height, // height
+    20, // corner radius
+  );
+  graphics.endFill();
+
+  graphics.x = app.screen.width / 2;
+  graphics.y = (app.screen.height / 5) * 4;
+
+  // Add to stage
+  container.addChild(graphics);
+
+  // Padding
+  //let scale = 
+
+  const sprite = new PIXI.Sprite(textures[0]);
+  makeDraggable(sprite);
+  sprite.scale.set(0.5);
+  sprite.position.set(50,50);
+  sprite.anchor.set(0.5);
+  container.addChild(sprite);
+
+  
+  const sprite2 = new PIXI.Sprite(textures[1]);
+  makeDraggable(sprite2);
+  sprite2.scale.set(0.25);
+  sprite2.position.set(50,50);
+  sprite.anchor.set(0.5);
+  container.addChild(sprite2);
+
+  let panelScale = 0.25,
+  boardScale = 0.5;
+  let globalDrag = false;
+
+  function makeDraggable(sprite) {
+    sprite.eventMode = "dynamic"; // enable interaction
+    sprite.cursor = "pointer"; // show pointer on hover
+
+    let dragging = false;
+    let offset = { x: 0, y: 0 };
+
+    sprite.on("pointerdown", (e) => {
+      dragging = true;
+
+      // bring piece to top
+      sprite.parent.addChild(sprite);
+
+      //sprite.filters = [selectedOutline];
+
+      // store offset so drag feels natural
+      offset.x = e.global.x - sprite.x;
+      offset.y = e.global.y - sprite.y;
+    });
+
+    sprite.on("pointermove", (e) => {
+      if (dragging) {
+        sprite.x = e.global.x - offset.x;
+        sprite.y = e.global.y - offset.y;
+      }
+    });
+
+    sprite.on("pointerup", () => {
+      dragging = false;
+      //sprite.filters = [normalOutline];
+    });
+
+    sprite.on("pointerupoutside", () => {
+      dragging = false;
+    });
+  }
+
+  app.ticker.add((time) => {
+    // Continuously rotate the container!
+    // * use delta to create frame-independent transform *
+    //container.rotation -= 0.01 * time.deltaTime;
+    if(!globalDrag){
+      if(sprite.scale.x > panelScale){
+            //sprite.scale.set(sprite.scale.y - 0.01);
+      }else if(sprite.scale.x < panelScale){
+           // sprite.scale.set(sprite.scale.y + 0.01);
+      }
+   }else{
+      if(sprite.scale.x > boardScale){
+            //sprite.scale.set(sprite.scale.y - 0.01);
+      }else if(sprite.scale.x < boardScale){
+            //sprite.scale.set(sprite.scale.y + 0.01);
+      }
+    }
+  });
+})();
+
+
+function clamp(value, min, max) {
+    return Math.min(Math.max(value, min), max);
+}
+
+  </script>
+</body>
+</html>
