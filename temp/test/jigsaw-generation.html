@@ -1,0 +1,458 @@
+<canvas id="myCanvas" width="0" height="0"></canvas>
+<style>
+  * {
+  padding: 0px;
+  margin: 0px;
+}
+</style>
+<script>
+  
+const imageUrl = "https://cdn.jsdelivr.net/gh/marcustansoon/PhysicsEngine.js-2D@master/temp/test/puzzle-1.png";
+
+const canvas = document.getElementById("myCanvas");
+const ctx = canvas.getContext("2d");
+
+function drawJigsawPath(ctx, size, tabSize, type) {
+  console.log(size, tabSize)
+
+  ctx.beginPath();
+  ctx.moveTo(tabSize, tabSize); // Top-left corner
+
+  let startX = tabSize;
+  let startY = tabSize;
+  let endX = size + tabSize;
+  let endY = tabSize;
+  let midX = (startX + endX) / 2;
+
+  // Curved inward (concave) at the top
+  // Draw top curve
+  if (type.includes('top-protrusion-outward')) {
+    ctx.lineTo(midX - tabSize, tabSize);
+    ctx.bezierCurveTo(
+      midX - tabSize, startY - tabSize,
+      midX + tabSize, startY - tabSize,
+      midX + tabSize, endY
+    );
+  } else if (type.includes('top-protrusion-inward')) {
+    ctx.lineTo(midX - tabSize, tabSize);
+    ctx.bezierCurveTo(
+      midX - tabSize, startY + tabSize,
+      midX + tabSize, startY + tabSize,
+      midX + tabSize, endY
+    );
+  } else {
+    ctx.lineTo(midX - tabSize, tabSize);
+  }
+
+  // Toward top-right point
+  ctx.lineTo(size + tabSize, tabSize);
+
+  // Draw right curve
+  if (type.includes('right-protrusion-inward')) {
+    ctx.lineTo(size + 1 * tabSize, midX - tabSize);
+    ctx.bezierCurveTo(
+      size + tabSize - tabSize, (size + tabSize * 2) / 2 - tabSize,
+      size + tabSize - tabSize, (size + tabSize * 2) / 2 + tabSize,
+      size + tabSize, (size + tabSize * 2) / 2 + tabSize
+    );
+  } else if (type.includes('right-protrusion-outward')) {
+    ctx.lineTo(size + 1 * tabSize, midX - tabSize);
+    ctx.bezierCurveTo(
+      size + tabSize + tabSize, (size + tabSize * 2) / 2 - tabSize,
+      size + tabSize + tabSize, (size + tabSize * 2) / 2 + tabSize,
+      size + tabSize, (size + tabSize * 2) / 2 + tabSize
+    );
+  } else {
+    ctx.lineTo(size + 1 * tabSize, midX - tabSize);
+  }
+
+  // Toward right-bottom point
+  ctx.lineTo(size + tabSize, size + tabSize);
+
+  // Draw bottom curve
+  if (type.includes('bottom-protrusion-outward')) {
+    ctx.lineTo((size + tabSize + tabSize) / 2 + tabSize, size + tabSize);
+    ctx.bezierCurveTo(
+      (size + tabSize + tabSize) / 2 + tabSize, size + tabSize + tabSize,
+      (size + tabSize + tabSize) / 2 - tabSize, size + tabSize + tabSize,
+      (size + tabSize + tabSize) / 2 - tabSize, size + tabSize
+    );
+  } else if (type.includes('bottom-protrusion-inward')) {
+    ctx.lineTo((size + tabSize + tabSize) / 2 + tabSize, size + tabSize);
+    ctx.bezierCurveTo(
+      (size + tabSize + tabSize) / 2 + tabSize, size + tabSize - tabSize,
+      (size + tabSize + tabSize) / 2 - tabSize, size + tabSize - tabSize,
+      (size + tabSize + tabSize) / 2 - tabSize, size + tabSize
+    );
+  } else {
+    ctx.lineTo((size + tabSize + tabSize) / 2 + tabSize, size + tabSize);
+  }
+
+
+  // Draw bottom-right point
+  ctx.lineTo(tabSize, size + tabSize);
+
+  // Draw left curve
+  if (type.includes('left-protrusion-outward')) {
+    ctx.lineTo(tabSize, (size + 2 * tabSize) / 2 + tabSize);
+    ctx.bezierCurveTo(
+      tabSize - tabSize, (size + tabSize + tabSize) / 2 + tabSize,
+      tabSize - tabSize, (size + tabSize + tabSize) / 2 - tabSize,
+      tabSize, (size + tabSize + tabSize) / 2 - tabSize
+    );
+  } else if (type.includes('left-protrusion-inward')) {
+    ctx.lineTo(tabSize, (size + 2 * tabSize) / 2 + tabSize);
+    ctx.bezierCurveTo(
+      tabSize + tabSize, (size + tabSize + tabSize) / 2 + tabSize,
+      tabSize + tabSize, (size + tabSize + tabSize) / 2 - tabSize,
+      tabSize, (size + tabSize + tabSize) / 2 - tabSize
+    );
+  } else {
+    ctx.lineTo(tabSize, (size + 2 * tabSize) / 2 + tabSize);
+  }
+
+  // Draw top-left point
+  ctx.lineTo(tabSize, tabSize);
+
+  ctx.closePath();
+}
+
+
+
+
+
+
+
+
+const img = new Image();
+img.crossOrigin = "anonymous";
+img.src = imageUrl;
+
+img.onload = function () {
+  console.log("Image loaded successfully:", img.width, img.height); // Debug image load
+
+  
+  // Width & Height: 1000
+  // Assume to produce 4 pieces of jigsaw
+  // 1000 / 4 = 250 px
+  const pieces = 4;
+  const pieceSize = 250;
+  const tabSize = 25; // Visible tab/socket
+
+
+
+
+  let initialX = 0, initialY = 0, gapBetweenJigsaw = 0;
+    
+
+let size = (pieceSize + tabSize + tabSize) * pieces + pieces * gapBetweenJigsaw
+console.log(size)
+canvas.height = size
+canvas.width = size
+
+  let rightProtrusion = false, leftProtrusion = true,
+  bottomProtrusion = false, topProtrusion = true;
+
+for (let rowNo = 0; rowNo < pieces; rowNo++) {
+  rightProtrusion = !rightProtrusion;
+  leftProtrusion = !leftProtrusion;
+  bottomProtrusion = !bottomProtrusion;
+  topProtrusion = !topProtrusion;
+  for (let columnNo = 0; columnNo < pieces; columnNo++) {
+
+    // Save context to avoid state issues
+    ctx.save();
+    ctx.translate(initialX + columnNo * (pieceSize + tabSize + tabSize + gapBetweenJigsaw), initialY + rowNo * (pieceSize + tabSize + tabSize + gapBetweenJigsaw)); // Move position
+
+    // Clear canvas to avoid overlap
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Draw jigsaw path for clipping
+    let protrusionArr = [];
+
+    if(columnNo !== pieces - 1){
+      if(rightProtrusion){
+        protrusionArr.push('right-protrusion-outward');
+      } else {
+        protrusionArr.push('right-protrusion-inward');
+      }
+    }
+    rightProtrusion = !rightProtrusion;
+
+    if(columnNo !== 0){
+      if(leftProtrusion) {
+        protrusionArr.push('left-protrusion-inward');
+      } else {
+        protrusionArr.push('left-protrusion-outward');
+      }
+    }
+    leftProtrusion = !leftProtrusion;
+    
+    if(rowNo !== pieces - 1){
+      if(bottomProtrusion) {
+        protrusionArr.push('bottom-protrusion-inward');
+      } else {
+        protrusionArr.push('bottom-protrusion-outward');
+      }
+    }
+    bottomProtrusion = !bottomProtrusion;
+    
+    if(rowNo !== 0){
+      if(topProtrusion) {
+        protrusionArr.push('top-protrusion-outward');
+      } else {
+        protrusionArr.push('top-protrusion-inward');
+      }
+    }
+    topProtrusion = !topProtrusion;
+
+
+    drawJigsawPath(ctx, pieceSize, tabSize, protrusionArr);
+    // Fill shape for visibility (debugging)
+    //ctx.fillStyle = "rgba(255, 0, 0, 0.2)"; // Light red fill
+    //ctx.fill();
+    // Clip to jigsaw shape
+    ctx.clip();
+    // Draw image for first column
+    if (columnNo === 0){
+      if(rowNo)
+        ctx.drawImage(
+          img,
+          pieceSize * columnNo, // X
+          rowNo * pieceSize - tabSize, // Y
+          pieceSize + tabSize, pieceSize + tabSize + tabSize, // Width, Height
+          tabSize, // X
+          0, // Y
+          pieceSize + tabSize, pieceSize + tabSize + tabSize // Width, Height
+        );
+        // First row
+        else
+        ctx.drawImage(
+          img,
+          pieceSize * columnNo, rowNo * pieceSize, pieceSize + tabSize, pieceSize + tabSize,
+          tabSize, tabSize, pieceSize + tabSize, pieceSize + tabSize
+        );
+
+    // Draw image for the last column
+    }else if(columnNo === pieces - 1){
+      if(rowNo)
+      ctx.drawImage(
+        img,
+        pieceSize * columnNo - tabSize, 
+        rowNo * pieceSize - tabSize, 
+        pieceSize + tabSize, pieceSize + tabSize + tabSize,
+        0, 
+        0, 
+        pieceSize + tabSize, pieceSize + tabSize + tabSize
+      );
+      else
+      // First row
+      ctx.drawImage(
+        img,
+        pieceSize * columnNo - tabSize, rowNo * pieceSize, pieceSize + tabSize, pieceSize + tabSize,
+        0, tabSize, pieceSize + tabSize, pieceSize + tabSize
+      );
+    }
+    else {
+      if(rowNo)
+        ctx.drawImage(
+          img,
+          pieceSize * columnNo - tabSize, 
+          rowNo * pieceSize - tabSize, 
+          pieceSize + tabSize + tabSize, pieceSize + tabSize + tabSize,
+          0, 
+          0, 
+          pieceSize + tabSize + tabSize, pieceSize + tabSize + tabSize
+        );
+      else
+        // First row
+        ctx.drawImage(
+          img,
+          pieceSize * columnNo - tabSize, rowNo * pieceSize, pieceSize + tabSize + tabSize, pieceSize + tabSize,
+          0, tabSize, pieceSize + tabSize + tabSize, pieceSize + tabSize
+        );
+    }
+    ctx.restore();
+
+  }
+  }
+
+  
+  let url = canvas.toDataURL("image/png");
+  console.log(url)
+
+
+//setTimeout(()=>{
+
+  
+/*
+  let base64Image2 = getSectionBase64(canvas, 0, 0, size, size);
+  console.log(base64Image2);
+  
+}, 5000)*/
+  return;
+
+
+  // Draw second piece
+  ctx.save();
+  ctx.translate(50 + pieceSize, 50); // Move position
+  // Draw jigsaw path for clipping
+  drawJigsawPath(ctx, pieceSize, tabSize, ['top-protrusion-outward', 'left-protrusion-outward', 'bottom-protrusion-outward', 'right-protrusion-outward']);
+  // Fill shape for visibility (debugging)
+  //ctx.fillStyle = "rgba(255, 0, 0, 0.2)"; // Light red fill
+  //ctx.fill();
+  // Clip to jigsaw shape
+  ctx.clip();
+  ctx.drawImage(
+    img,
+    pieceSize, 380, pieceSize + tabSize + tabSize, pieceSize + tabSize, // Source: square from image top-left
+    tabSize, tabSize, pieceSize + tabSize + tabSize, pieceSize + tabSize // Destination: align top-left, cover tab
+  );
+  ctx.restore();
+
+  return;
+  // Third piece
+  ctx.save();
+  ctx.translate(150, 0); // Move position
+  // Draw jigsaw path for clipping
+  drawJigsawPath(ctx, pieceSize, tabSize, []);
+  // Fill shape for visibility (debugging)
+  //ctx.fillStyle = "rgba(255, 0, 0, 0.2)"; // Light red fill
+  //ctx.fill();
+  // Clip to jigsaw shape
+  ctx.clip();
+  ctx.drawImage(
+    img,
+    100 - tabSize, 0, pieceSize + tabSize, pieceSize + tabSize, // Source: square from image top-left
+    0, 10, pieceSize + tabSize, pieceSize + tabSize // Destination: align top-left, cover tab
+  );
+  ctx.restore();
+
+
+  // Draw fourth piece at the new row
+  /*ctx.save();
+  ctx.translate(50, 50); // Move position
+  // Draw jigsaw path for clipping
+  drawJigsawPath(ctx, pieceSize, tabSize, []);
+  // Fill shape for visibility (debugging)
+  ctx.fillStyle = "rgba(255, 125, 0, 0.2)"; // Light red fill
+  ctx.fill();
+  // Clip to jigsaw shape
+  ctx.clip();
+  ctx.drawImage(
+      img,
+      0, 50 - tabSize, pieceSize + tabSize, pieceSize + tabSize, // Source: square from image top-left
+      10, 0, pieceSize + tabSize, pieceSize + tabSize // Destination: align top-left, cover tab
+  );
+  ctx.restore();*/
+
+  // Draw fifth
+  ctx.save();
+  ctx.translate(100, 50); // Move position
+  // Draw jigsaw path for clipping
+  drawJigsawPath(ctx, pieceSize, tabSize, ['top-protrusion-outward']);
+  // Fill shape for visibility (debugging)
+  ctx.fillStyle = "rgba(255, 125, 0, 0.2)"; // Light red fill
+  ctx.fill();
+  // Clip to jigsaw shape
+  ctx.clip();
+  ctx.drawImage(
+    img,
+    50 - tabSize, 50 - tabSize, pieceSize + tabSize + tabSize, pieceSize + tabSize, // Source: square from image top-left
+    0, 0, pieceSize + tabSize + tabSize, pieceSize + tabSize // Destination: align top-left, cover tab
+  );
+  ctx.restore();
+
+
+
+  // Draw sixth
+  ctx.save();
+  ctx.translate(150, 50); // Move position
+  // Draw jigsaw path for clipping
+  drawJigsawPath(ctx, pieceSize, tabSize, []);
+  // Fill shape for visibility (debugging)
+  //ctx.fillStyle = "rgba(255, 125, 0, 0.2)"; // Light red fill
+  //ctx.fill();
+  // Clip to jigsaw shape
+  ctx.clip();
+  ctx.drawImage(
+    img,
+    100 - tabSize, 50 - tabSize, pieceSize + tabSize, pieceSize + tabSize, // Source: square from image top-left
+    0, 0, pieceSize + tabSize, pieceSize + tabSize // Destination: align top-left, cover tab
+  );
+  ctx.restore();
+
+  /*ctx.drawImage(
+      img,
+      50, 50, sourceSize, sourceSize, // Source: square from image top-left
+      0, 0, sourceSize, sourceSize // Destination: align top-left, cover tab
+  );*/
+
+
+  for (let x = 0; x < 3; x++) {
+    for (let y = 0; y < 2; y++) {
+      ctx.drawImage(
+        img,
+        50 * x, 50 * y, 50, 50, // Source: square from image top-left
+        200 + x * 50, 200 + y * 50, 50, 50 // Destination: align top-left, cover tab
+      );
+    }
+  }
+
+  /*
+  
+  
+// Draw outline for second piece
+ctx.save();
+
+ctx.translate(60, 60); // Move position
+drawJigsawPathOutline(ctx, pieceSize, tabSize, []);
+  ctx.strokeStyle = "black";
+          ctx.lineWidth = 2;
+  ctx.stroke();
+ctx.clip();
+
+ctx.restore();
+
+// Draw second piece
+ctx.save();
+ctx.translate(59, 59); // Move position
+drawJigsawPath(ctx, pieceSize, tabSize, ['right-protrusion-outward', 'bottom-protrusion-outward', 'left-protrusion-inward']);
+  ctx.fillStyle = "rgba(255, 0, 0, 0.2)"; // Light red fill
+  ctx.fill();
+ctx.clip();
+ctx.drawImage(img, 50, 50, sourceSize-tabSize, sourceSize-tabSize, 0-tabSize, 0-tabSize, pieceSize + tabSize, pieceSize + tabSize);
+ctx.restore();
+  
+*/
+
+
+function getSectionBase64(img, x, y, width, height) {
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+
+  document.body.appendChild(canvas)
+
+  // Crop from (x, y) with size (width, height)
+  ctx.drawImage(
+    img,         // source image
+    x, y, width, height, // source crop rectangle
+    0, 0, width, height  // destination rectangle
+  );
+
+  return canvas.toDataURL("image/png");
+}
+
+
+  // Example usage:
+  const base64Image = getSectionBase64(canvas, 0, 0, (pieceSize + tabSize + tabSize) * pieces, (pieceSize + tabSize + tabSize) * pieces);
+  console.log(base64Image);
+
+};
+
+img.onerror = function () {
+  console.error("Failed to load image:", imageUrl);
+};
+</script>
