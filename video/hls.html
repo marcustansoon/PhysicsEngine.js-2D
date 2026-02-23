@@ -121,15 +121,17 @@
     
     async function sendMessage(){
       await fetch(
-        "https://blue-math-f85d.lenztan09.workers.dev/",
+        "https://blue-math-f85d.lenztan09.workers.dev/?key=" + randomSixDigit,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            value: document.getElementById('message').value,
-            timestamp: Date.now()
+            value: {
+            	action: document.getElementById('message').value, 
+            	timestamp: Date.now()
+            },
           })
         }
       );
@@ -137,10 +139,14 @@
 
     function readMessage(){
 		fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=" + randomSixDigit).then(d=>d.json()).then(d => {
-			if(!d.value || !d.timestamp) return;
+			if(!d || !d.timestamp || !d.action) return;
 			if(latestMessageTimestamp == d.timestamp) return;
 
 			
+			// To do action here
+            alert(d.action)
+
+			latestMessageTimestamp = d.timestamp;
 			
 		}).catch(e => {
         	console.error(e);
@@ -148,6 +154,14 @@
     }
     
     let com = setInterval(readMessage, 10000);
+
+
+
+
+
+
+
+
 
 // Check if HLS.js is supported
 if (Hls.isSupported()) {
@@ -176,6 +190,12 @@ if (Hls.isSupported()) {
         if (video.requestFullscreen) video.requestFullscreen();
       }
     });*/
+  
+  
+  
+  
+  
+  
   
   
     var hls = new Hls();
