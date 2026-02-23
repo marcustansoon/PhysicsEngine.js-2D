@@ -52,6 +52,24 @@
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest">
   </script>
   <script>
+(function () {
+  const originalOpen = XMLHttpRequest.prototype.open;
+
+  XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
+    if (method.toUpperCase() === "GET" && url.includes("url.com")) {
+
+      const newUrl =
+        "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?url=" +
+        encodeURIComponent(url);
+
+      console.log("XHR Redirect:", url, "→", newUrl);
+
+      arguments[1] = newUrl; // replace URL
+    }
+
+    return originalOpen.apply(this, arguments);
+  };
+})();
 
 // Check if HLS.js is supported
 if (Hls.isSupported()) {
@@ -59,7 +77,7 @@ if (Hls.isSupported()) {
     var hls = new Hls();
 
     // Replace with your actual HLS stream URL
-    var streamUrl = 'https://p.10020.workers.dev/thunderleaf12.online/file2/GSY77jpcftrExmTqD9I6YXthvYLhyjVkQsYmsY1zIwdZ~h8PuV~TTP23qXFbgAVpr3BnYDT86Qm4bQ0vtgaPeyEC32zaCyrT6m9sTqYIdw~tWu7UE9shlHrskaZszWrpGDu4U0FPuEXusBycsjttyB~MtpxxKq2KesIUyK1dbB0=/MTA4MA==/aW5kZXgubTN1OA==.m3u8'; // Example: 'https://example.com/video.m3u8'
+    var streamUrl = 'https://p.10020.workers.dev/skyember44.online/file2/GSY77jpcftrExmTqD9I6YXthvYLhyjVkQsYmsY1zIwdZ~h8PuV~TTP23qXFbgAVpr3BnYDT86Qm4bQ0vtgaPeyEC32zaCyrT6m9sTqYIdw~tWu7UE9shlHrskaZszWrpGDu4U0FPuEXusBycsjttyB~MtpxxKq2KesIUyK1dbB0=/MTA4MA==/aW5kZXgubTN1OA==.m3u8'; // Example: 'https://example.com/video.m3u8'
 
     // Load HLS stream
     hls.loadSource(streamUrl);
