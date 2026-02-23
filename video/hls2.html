@@ -48,10 +48,28 @@
     <button class="btn" id="decrease-subtitle-size">Decrease Subtitle Size</button>
     <div>Subtitle Size: <span id="subtitle-size-display">16px</span></div>
   </div>
-  
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest">
   </script>
   <script>
+(function () {
+  const originalOpen = XMLHttpRequest.prototype.open;
+
+  XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
+    if (method.toUpperCase() === "GET" && url.includes("url.com")) {
+
+      const newUrl =
+        "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?url=" +
+        encodeURIComponent(url);
+
+      console.log("XHR Redirect:", url, "→", newUrl);
+
+      arguments[1] = newUrl; // replace URL
+    }
+
+    return originalOpen.apply(this, arguments);
+  };
+})();
+    
 /*
 // Check if HLS.js is supported
 if (Hls.isSupported()) {
