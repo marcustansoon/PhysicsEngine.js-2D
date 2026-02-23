@@ -52,18 +52,34 @@
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest">
   </script>
   <script>
+    let domain = "";
 (function () {
   const originalOpen = XMLHttpRequest.prototype.open;
 
   XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
     if (method.toUpperCase() === "GET" && url.includes("workers.dev")) {
-
+      
+      const fullUrl = new URL(url, window.location.href);
+      const origin = fullUrl.origin;
+      domain = origin;
+      console.log('domain: ' + origin);
+      
       const newUrl =
         "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?url=" +
         encodeURIComponent(url);
 
       console.log("XHR Redirect:", url, "→", newUrl);
 
+      arguments[1] = newUrl; // replace URL
+    }
+
+    if (method.toUpperCase() === "GET" && !url.includes("https://") && domain) {
+      // append domain
+      
+      const newUrl =
+        "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?url=" +
+        encodeURIComponent(domain + url);
+      console.log("XHR2 Redirect:", url, "→", newUrl);
       arguments[1] = newUrl; // replace URL
     }
 
