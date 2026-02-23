@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>HLS.js</title>
   <style>
-    #subtitle-controls, #delay-controls {
+   	.subtitle-controls, .delay-controls {
       margin-top: 10px;
       text-align: center;
     }
@@ -37,23 +37,27 @@
 
 
   
-  <div id="delay-controls">
+  <div class="delay-controls">
     <button class="btn" id="increase-delay" tabindex="1">Increase Subtitle Delay</button>
     <button class="btn" id="decrease-delay" tabindex="2">Decrease Subtitle Delay</button>
     <div>Subtitle Delay: <span id="subtitle-delay-display">0.0s</span></div>
   </div>
   
   
-  <div id="subtitle-controls">
+  <div class="subtitle-controls">
     <button class="btn" id="increase-subtitle-size" tabindex="3">Increase Subtitle Size</button>
     <button class="btn" id="decrease-subtitle-size" tabindex="4">Decrease Subtitle Size</button>
     <div>Subtitle Size: <span id="subtitle-size-display">16px</span></div>
   </div>
   
-  <div id="subtitle-controls">
-  
+  <div class="subtitle-controls">
   <input type="number" id="connect-number" name="connect-number"><br><br>
     <button class="btn" tabindex="5" onclick="connect()">Connect</button>
+  </div>
+  
+  <div class="subtitle-controls" id="message-area" style="display:none;">
+  <input type="text" id="message" name="message"><br><br>
+    <button class="btn" tabindex="6" onclick="sendMessage()">Send Message</button>
   </div>
     
     
@@ -105,24 +109,41 @@
     const randomSixDigit = Math.floor(100000 + Math.random() * 900000);
     document.getElementById('number').innerHTML = randomSixDigit;
     
-    let connectingNumber;
+    let connectingNumber, latestMessageTimestamp = 0;
     
     function connect(){
         if(!document.getElementById('connect-number').value) return;
-        
         connectingNumber = document.getElementById('connect-number').value;
-        
+        document.getElementById('message-area').style.display="block";
     }
     
     
     
-    function sendMessage(){
-      
+    async function sendMessage(){
+      await fetch(
+        "https://blue-math-f85d.lenztan09.workers.dev/?key=" + randomSixDigit,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            value: document.getElementById('message').value,
+            timestamp: Date.now()
+          })
+        }
+      );
     }
 
     function readMessage(){
-		fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=" + randomSixDigit).then(d=>d.json()).then(alert).catch(e => {
-        console.log(e)
+		fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=" + randomSixDigit).then(d=>d.json()).then(d => {
+			if(!d.value || !d.timestamp) return;
+			if(latestMessageTimestamp == d.timestamp) return;
+
+			
+			
+		}).catch(e => {
+        	console.error(e);
         })
     }
     
