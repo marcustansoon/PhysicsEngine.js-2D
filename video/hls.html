@@ -100,14 +100,14 @@ if (Hls.isSupported()) {
     video.muted = true;
     video.playsInline = true;
   
-    setTimeout(()=>{
+    /*setTimeout(()=>{
       video.play().catch(err => console.log(err));
-    }, 10000);
+    }, 10000);*/
   
-    setTimeout(()=>{
+    /*setTimeout(()=>{
       // Request fullscreen
       if (video.requestFullscreen) video.requestFullscreen();
-    }, 12000);
+    }, 12000);*/
   
     
     // listen for "Enter" key from remote
@@ -115,6 +115,7 @@ if (Hls.isSupported()) {
       if (["Enter","DPAD_CENTER"].includes(e.key)) {
         video.muted = false; 
         video.play().catch(()=>{});
+        if (video.requestFullscreen) video.requestFullscreen();
       }
     });
   
