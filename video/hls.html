@@ -93,18 +93,20 @@
 // Check if HLS.js is supported
 if (Hls.isSupported()) {
     var video = document.getElementById('video');
-
-    //setTimeout(()=>{video.play();}, 10000);
-    //setTimeout(()=>{video.requestFullscreen();}, 12000);
   
     // autoplay muted first
     video.autoplay = true;
     video.muted = true;
     video.playsInline = true;
   
-    // Request fullscreen
-    if (video.requestFullscreen) video.requestFullscreen();
-    video.play().catch(err => console.log(err));
+    setTimeout(()=>{
+      video.play().catch(err => console.log(err));
+    }, 10000);
+  
+    setTimeout(()=>{
+      // Request fullscreen
+      if (video.requestFullscreen) video.requestFullscreen();
+    }, 12000);
   
     
     // listen for "Enter" key from remote
