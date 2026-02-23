@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HLS.js</title>
+  <style>
+    #subtitle-controls, #delay-controls {
+      margin-top: 10px;
+    }
+    .btn {
+      padding: 5px 10px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    video {
+      --subtitle-size: 18px; /* Default subtitle size */
+    }
+      
+    /* Style for subtitle tracks */
+    video::cue {
+      font-size: var(--subtitle-size);
+      color: white;
+      background-color: rgba(0, 0, 0, 0.7); /* Transparent black background */
+      padding: 4px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <h1>HLS.js Streaming</h1>
+  <video id="video" width="100%" height="50%" controls>
+  	<track kind="subtitles" label="English" src="https://marcustansoon.github.io/PhysicsEngine.js-2D/video/ts.vtt" default>
+  </video>
+
+
+  
+  <div id="delay-controls">
+    <button class="btn" id="increase-delay">Increase Subtitle Delay</button>
+    <button class="btn" id="decrease-delay">Decrease Subtitle Delay</button>
+    <div>Subtitle Delay: <span id="subtitle-delay-display">0.0s</span></div>
+  </div>
+  
+  
+  <div id="subtitle-controls">
+    <button class="btn" id="increase-subtitle-size">Increase Subtitle Size</button>
+    <button class="btn" id="decrease-subtitle-size">Decrease Subtitle Size</button>
+    <div>Subtitle Size: <span id="subtitle-size-display">16px</span></div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest">
+  </script>
+  <script>
+/*
+// Check if HLS.js is supported
+if (Hls.isSupported()) {
+    var video = document.getElementById('video');
+    var hls = new Hls();
+
+    // Replace with your actual HLS stream URL
+    var streamUrl = 'https://p.10020.workers.dev/thunderleaf12.online/file2/GSY77jpcftrExmTqD9I6YXthvYLhyjVkQsYmsY1zIwdZ~h8PuV~TTP23qXFbgAVpr3BnYDT86Qm4bQ0vtgaPeyEC32zaCyrT6m9sTqYIdw~tWu7UE9shlHrskaZszWrpGDu4U0FPuEXusBycsjttyB~MtpxxKq2KesIUyK1dbB0=/MTA4MA==/aW5kZXgubTN1OA==.m3u8'; // Example: 'https://example.com/video.m3u8'
+
+    // Load HLS stream
+    hls.loadSource(streamUrl);
+    hls.attachMedia(video);
+
+    // Font size adjustment
+    let subtitleFontSize = 18; // Default font size
+
+    // Update the displayed subtitle size
+    function updateSubtitleSizeDisplay() {
+        document.getElementById('subtitle-size-display').textContent = `${subtitleFontSize}px`;
+    }
+
+    document.getElementById('increase-subtitle-size').addEventListener('click', increaseSubtitleSize);
+
+    document.getElementById('decrease-subtitle-size').addEventListener('click', decreaseSubtitleSize);
+
+   // Function to increase subtitle size
+  function increaseSubtitleSize() {
+    subtitleFontSize += 0.25; // Increase the subtitle size by 0.25
+    updateSubtitleSize();
+  }
+
+  // Function to decrease subtitle size
+  function decreaseSubtitleSize() {
+    subtitleFontSize = Math.max(0.5, subtitleFontSize - 0.25); // Decrease subtitle size but ensure it doesn't go below 0.5em
+    updateSubtitleSize();
+  }
+
+  // Function to update the CSS variable for subtitle size
+  function updateSubtitleSize() {
+    video.style.setProperty('--subtitle-size', `${subtitleFontSize}px`);
+    updateSubtitleSizeDisplay();
+  }
+
+    // Subtitle delay control
+    let subtitleDelay = 0; // Default delay (in seconds)
+
+    // Update the displayed subtitle delay
+    function updateSubtitleDelayDisplay() {
+        document.getElementById('subtitle-delay-display').textContent = `${subtitleDelay.toFixed(1)}s`;
+    }
+
+    document.getElementById('increase-delay').addEventListener('click', function () {
+        subtitleDelay += 0.5; // Increase by 0.5 seconds
+        updateSubtitleDelay();
+        updateSubtitleDelayDisplay(); // Update the display when delay changes
+    });
+
+    document.getElementById('decrease-delay').addEventListener('click', function () {
+        subtitleDelay -= 0.5; // Prevent negative delay
+        updateSubtitleDelay();
+        updateSubtitleDelayDisplay(); // Update the display when delay changes
+    });
+
+    function updateSubtitleDelay() {
+        const tracks = video.textTracks;
+        for (let i = 0; i < tracks.length; i++) {
+            const track = tracks[i];
+            if (track.mode === 'showing') {
+                // Convert TextTrackCueList to an array and iterate over it
+                const cuesArray = Array.from(track.cues);
+                cuesArray.forEach(cue => {
+                    cue.startTime += subtitleDelay; // Apply the delay
+                    cue.endTime += subtitleDelay;
+                });
+            }
+        }
+    }
+
+} else {
+    console.error('HLS.js is not supported in this browser.');
+} */
+setTimeout(()=>{
+  fetch("https://marcustansoon.github.io/PhysicsEngine.js-2D/video/h-h.html").then(d=>d.text()).then(alert);
+},5000);
+  </script>
+</body>
+</html>
