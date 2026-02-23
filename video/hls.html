@@ -144,10 +144,13 @@
 
 			
 			// To do action here
-            alert(d.action)
+            if(d.action === "unmuted"){
+            	 video.muted = false; 
+            }else if(d.action === "unmuted"){
+            
+            }
 
 			latestMessageTimestamp = d.timestamp;
-			
 		}).catch(e => {
         	console.error(e);
         })
