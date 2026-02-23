@@ -130,12 +130,18 @@
 
 
 
+    var video = document.getElementById('video');
+	video.addEventListener('loadedmetadata', () => {alert('a')
+	    for (let i = 0; i < video.textTracks.length; i++) {
+	        video.textTracks[i].mode = 'showing';
+	    }
+	});
+
 
 
 
 // Check if HLS.js is supported
 if (Hls.isSupported()) {
-    var video = document.getElementById('video');
   
     // autoplay muted first
     video.autoplay = true;
