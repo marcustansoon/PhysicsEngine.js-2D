@@ -53,45 +53,50 @@
   </script>
   <script>
     let domain = "";
-(function () {
-  const originalOpen = XMLHttpRequest.prototype.open;
-
-  XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
-    if (method.toUpperCase() === "GET" && url.includes("m3u8")) {
-      
-      const fullUrl = new URL(url, window.location.href);
-      const origin = fullUrl.origin;
-      domain = origin;
-      console.log('domain: ' + origin);
-      
-      const newUrl =
-        "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?url=" +
-        encodeURIComponent(url);
-
-      console.log("XHR Redirect:", url, "→", newUrl);
-
-      arguments[1] = newUrl; // replace URL
-    } else if (method.toUpperCase() === "GET" && url.includes("github.io") && !url.includes("hls.html") && domain) {
-      // Convert relative URLs to absolute URLs
-      const fullUrl = new URL(url, window.location.href);
-
-      // Replace the domain with your custom domain
-      const alteredURL = domain + fullUrl.pathname + fullUrl.search + fullUrl.hash;
-        
-      const newUrl =
-        "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?url=" +
-        encodeURIComponent(alteredURL);
-      console.log("XHR2 Redirect:", url, "→", newUrl);
-      arguments[1] = newUrl; // replace URL
-    }
-
-    return originalOpen.apply(this, arguments);
-  };
-})();
+    (function () {
+      const originalOpen = XMLHttpRequest.prototype.open;
+    
+      XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
+        // Check for m3u8 url
+        if (method.toUpperCase() === "GET" && url.includes("m3u8")) {
+          
+          const fullUrl = new URL(url, window.location.href);
+          const origin = fullUrl.origin;
+          domain = origin;
+          console.log('domain: ' + origin);
+          
+          const newUrl =
+            "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?url=" +
+            encodeURIComponent(url);
+    
+          console.log("XHR Redirect:", url, "→", newUrl);
+    
+          arguments[1] = newUrl; // replace URL
+        } else if (method.toUpperCase() === "GET" && url.includes("github.io") && !url.includes("hls.html") && domain) {
+          // Convert relative URLs to absolute URLs
+          const fullUrl = new URL(url, window.location.href);
+    
+          // Replace the domain with your custom domain
+          const alteredURL = domain + fullUrl.pathname + fullUrl.search + fullUrl.hash;
+            
+          const newUrl =
+            "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?url=" +
+            encodeURIComponent(alteredURL);
+          console.log("XHR2 Redirect:", url, "→", newUrl);
+          arguments[1] = newUrl; // replace URL
+        }
+    
+        return originalOpen.apply(this, arguments);
+      };
+    })();
 
 // Check if HLS.js is supported
 if (Hls.isSupported()) {
     var video = document.getElementById('video');
+
+    setTimeout(()=>{video.play();}, 10000);
+    setTimeout(()=>{video.requestFullscreen();}, 12000);
+  
     var hls = new Hls();
 
     // Replace with your actual HLS stream URL
@@ -169,6 +174,8 @@ if (Hls.isSupported()) {
 } else {
     console.error('HLS.js is not supported in this browser.');
 }
+
+    
 
   </script>
 </body>
