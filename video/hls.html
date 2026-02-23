@@ -110,10 +110,10 @@ if (Hls.isSupported()) {
   
     
     // listen for "Enter" key from remote
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Enter" || e.key === " " || e.key === "DPAD_CENTER") {
-        if (video.muted) video.muted = false; // unmute
-        video.play().catch(err => console.log(err));
+    document.addEventListener("keydown", e => {
+      if (["Enter","DPAD_CENTER"].includes(e.key)) {
+        video.muted = false; 
+        video.play().catch(()=>{});
       }
     });
   
