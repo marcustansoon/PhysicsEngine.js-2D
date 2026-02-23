@@ -56,7 +56,7 @@
   </div>
   
   <div class="subtitle-controls" id="message-area" style="display:none;">
-  <input type="text" id="message" name="message"><span>Ex: goto:123 unmuted</span><br><br>
+  <input type="text" id="message" name="message"><span> Ex: goto:123 unmuted bgcolor:black</span><br><br>
     <button class="btn" tabindex="6" onclick="sendMessage()">Send Message</button>
   </div>
     
@@ -142,13 +142,17 @@
 			if(!d || !d.timestamp || !d.action) return;
 			if(latestMessageTimestamp == d.timestamp) return;
 
+			d.action = d.action.toLowerCase();
 			
 			// To do action here
             if(d.action === "unmuted"){
             	 video.muted = false; 
             }else if(d.action.includes("goto:")){
             	video.currentTime = parseInt(d.action.replace("goto:",""));
+            }else if(d.action.includes("bgcolor:")){
+				document.body.style.backgroundColor = d.action.replace("bgcolor:","");
             }
+
 
 			latestMessageTimestamp = d.timestamp;
 		}).catch(e => {
@@ -281,6 +285,9 @@ if (Hls.isSupported()) {
 
     
 
+
+
+	  
   </script>
 </body>
 </html>
