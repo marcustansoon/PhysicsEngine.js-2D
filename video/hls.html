@@ -111,13 +111,13 @@ if (Hls.isSupported()) {
   
     
     // listen for "Enter" key from remote
-    document.addEventListener("keydown", e => {
+    /*document.addEventListener("keydown", e => {
       if (["Enter","DPAD_CENTER"].includes(e.key)) {
         video.muted = false; 
         video.play().catch(()=>{});
         if (video.requestFullscreen) video.requestFullscreen();
       }
-    });
+    });*/
   
   
     var hls = new Hls();
