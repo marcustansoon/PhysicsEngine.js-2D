@@ -94,8 +94,27 @@
 if (Hls.isSupported()) {
     var video = document.getElementById('video');
 
-    setTimeout(()=>{video.play();}, 10000);
-    setTimeout(()=>{video.requestFullscreen();}, 12000);
+    //setTimeout(()=>{video.play();}, 10000);
+    //setTimeout(()=>{video.requestFullscreen();}, 12000);
+  
+    // autoplay muted first
+    video.autoplay = true;
+    video.muted = true;
+    video.playsInline = true;
+  
+    // Request fullscreen
+    if (video.requestFullscreen) video.requestFullscreen();
+    video.play().catch(err => console.log(err));
+  
+    
+    // listen for "Enter" key from remote
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " " || e.key === "DPAD_CENTER") {
+        if (video.muted) video.muted = false; // unmute
+        video.play().catch(err => console.log(err));
+      }
+    });
+  
   
     var hls = new Hls();
 
