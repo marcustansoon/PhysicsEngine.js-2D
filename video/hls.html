@@ -51,12 +51,14 @@
   </div>
   
   <div class="subtitle-controls">
-  <input type="number" id="connect-number" name="connect-number"><br><br>
-    <button class="btn" tabindex="5" onclick="connect()">Connect</button>
+	  Device ID: <input type="number" id="connect-number" name="connect-number"><br><br>
+    <button class="btn" tabindex="5" onclick="connectToOtherDevice()">Connect to Device</button>
   </div>
   
   <div class="subtitle-controls" id="message-area" style="display:none;">
-  <input type="text" id="message" name="message"><span> Ex: goto:123 unmuted bgcolor:black</span><br><br>
+  Message to : <input type="text" id="message" name="message">
+	  <br><small> Commands: goto:123 unmuted bgcolor:black</small>
+	  <br><br>
     <button class="btn" tabindex="6" onclick="sendMessage()">Send Message</button>
   </div>
     
@@ -65,6 +67,8 @@
   </script>
   <script>
     let domain = "";
+
+	  // Overwrite existing XHR request
     (function () {
       const originalOpen = XMLHttpRequest.prototype.open;
     
@@ -105,20 +109,23 @@
 
 
 
-	// Set random ID
+	// Set random ID for self
     const randomSixDigit = Math.floor(100000 + Math.random() * 900000);
+	// Show self random ID
     document.getElementById('number').innerHTML = randomSixDigit;
-    
+
+	
     let connectingNumber, latestMessageTimestamp = 0;
-    
-    function connect(){
+	// Connect to another device handler
+    function connectToOtherDevice(){
+		// Make sure 
         if(!document.getElementById('connect-number').value) return;
         connectingNumber = document.getElementById('connect-number').value;
         document.getElementById('message-area').style.display="block";
     }
     
     
-    
+    // Send message to other device
     async function sendMessage(){
       await fetch(
         "https://blue-math-f85d.lenztan09.workers.dev/?key=" + connectingNumber,
@@ -137,6 +144,7 @@
       );
     }
 
+	// Read incoming message for self
     function readMessage(){
 		fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=" + randomSixDigit).then(d=>d.json()).then(d => {
 			if(!d || !d.timestamp || !d.action) return;
@@ -144,7 +152,7 @@
 
 			d.action = d.action.toLowerCase();
 			
-			// To do action here
+			// Check actions
             if(d.action === "unmuted"){
             	 video.muted = false; 
             }else if(d.action.includes("goto:")){
@@ -160,20 +168,21 @@
         })
     }
     
-    let com = setInterval(readMessage, 12000);
+    let communicationInterval = setInterval(readMessage, 12000);
 
 
+    var video = document.getElementById('video');
 
-
-
-
-
+	// Show VTT Subtitle after loading is successful
+	video.addEventListener('loadedmetadata', () => {
+	    for (let i = 0; i < video.textTracks.length; i++) {
+	        video.textTracks[i].mode = 'showing';
+	    }
+	});
 
 
 // Check if HLS.js is supported
 if (Hls.isSupported()) {
-    var video = document.getElementById('video');
-  
     // autoplay muted first
     video.autoplay = true;
     video.muted = true;
