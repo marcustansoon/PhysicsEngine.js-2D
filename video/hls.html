@@ -293,7 +293,15 @@ if (Hls.isSupported()) {
 }
 
     
+function receiveMessageFromFlutter(msg) {
+    console.log("Flutter says: " + msg);
+    alert("Flutter says: " + msg);
+}
 
+	  setTimeout(()=>{
+		  if(window && window.flutter_inappwebview && window.flutter_inappwebview.callHandler) 
+		  window.flutter_inappwebview.callHandler('sendMessageToFlutter', 'Hello Flutter!');
+	  }, 15000);
 
 
 	  
