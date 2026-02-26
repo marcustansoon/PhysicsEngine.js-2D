@@ -297,6 +297,17 @@ async function receiveMessageFromFlutter(msg) {
 		}else if(message.action === "start"){
 			alert('startstream');
 			startStream(m3u8URL);
+		}else if(message.action === "run"){
+
+		    hls = new Hls();
+		
+		    // Replace with your actual HLS stream URL
+		    var streamUrl = 'https://p.10020.workers.dev/skyember44.online/file2/GSY77jpcftrExmTqD9I6YXthvYLhyjVkQsYmsY1zIwdZ~h8PuV~TTP23qXFbgAVpr3BnYDT86Qm4bQ0vtgaPeyEC32zaCyrT6m9sTqYIdw~tWu7UE9shlHrskaZszWrpGDu4U0FPuEXusBycsjttyB~MtpxxKq2KesIUyK1dbB0=/MTA4MA==/aW5kZXgubTN1OA==.m3u8'; // Example: 'https://example.com/video.m3u8'
+		
+		    // Load HLS stream
+		    hls.loadSource(streamUrl);
+		    hls.attachMedia(video);
+
 		}
 	} catch(e) {
 		console.error(e);
