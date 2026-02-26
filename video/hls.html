@@ -30,52 +30,28 @@
   </style>
 </head>
 <body style="min-height: 1500px;">
-  <h1>HLS.js Streaming <span id="number"></span></h1>
-  <video id="video" width="100%" height="50%" controls autoplay muted playsinline>
-  	<track kind="subtitles" label="English" src="https://marcustansoon.github.io/PhysicsEngine.js-2D/video/ts.vtt" default>
-  </video>
-
-
-  
-  <div class="delay-controls">
-    <button class="btn" id="increase-delay" tabindex="1">Increase Subtitle Delay</button>
-    <button class="btn" id="decrease-delay" tabindex="2">Decrease Subtitle Delay</button>
-    <div>Subtitle Delay: <span id="subtitle-delay-display">0.0s</span></div>
-  </div>
-  
-  
-  <div class="subtitle-controls">
-    <button class="btn" id="increase-subtitle-size" tabindex="3">Increase Subtitle Size</button>
-    <button class="btn" id="decrease-subtitle-size" tabindex="4">Decrease Subtitle Size</button>
-    <div>Subtitle Size: <span id="subtitle-size-display">16px</span></div>
-  </div>
-  
-  <div class="subtitle-controls">
-	  Device ID: <input type="number" id="connect-number" name="connect-number"><br><br>
-    <button class="btn" tabindex="5" onclick="connectToOtherDevice()">Connect to Device</button>
-  </div>
-  
-  <div class="subtitle-controls" id="message-area" style="display:none;">
-  Message to : <input type="text" id="message" name="message">
-	  <br><small> Commands: goto:123 unmuted bgcolor:black</small>
-	  <br><br>
-    <button class="btn" tabindex="6" onclick="sendMessage()">Send Message</button>
-  </div>
-    
-    
-  <script src="https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.js">
-  </script>
+  <video id="video" width="100%" height="50%" controls autoplay muted playsinline></video>
+  <h2 style="height: 100vh; text-align: center; display: flex; align-items: center;">HLS is not supported in this device</h2>
+  <script src="https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.js"></script>
   <script>
     let domain = "";
+	let m3u8URL = "";
+    let video = document.getElementById('video');
+	let hls;
+	const is_HLS_supported = Hls.isSupported();
+	const tracks = {};
 
-	  // Overwrite existing XHR request
+	if(!is_HLS_supported){
+		video.style.display = "none";
+	}
+
+	// Overwrite existing XHR request
     (function () {
       const originalOpen = XMLHttpRequest.prototype.open;
     
       XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
-        // Check for m3u8 url
-        if (method.toUpperCase() === "GET" && url.includes("m3u8")) {
-          
+        // Check for m3u8 URL (example: https://example.com/video.m3u8)
+        if (method.toUpperCase() === "GET" && url.includes(".m3u8")) {
           const fullUrl = new URL(url, window.location.href);
           const origin = fullUrl.origin;
           domain = origin;
@@ -88,6 +64,7 @@
           console.log("XHR Redirect:", url, "→", newUrl);
     
           arguments[1] = newUrl; // replace URL
+		// Detect m3u8 segments without 'https://'  (example: example.com/video.ts)
         } else if (method.toUpperCase() === "GET" && url.includes("github.io") && !url.includes("hls.html") && domain) {
           // Convert relative URLs to absolute URLs
           const fullUrl = new URL(url, window.location.href);
@@ -98,7 +75,9 @@
           const newUrl =
             "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?url=" +
             encodeURIComponent(alteredURL);
+			
           console.log("XHR2 Redirect:", url, "→", newUrl);
+			
           arguments[1] = newUrl; // replace URL
         }
     
@@ -110,23 +89,23 @@
 
 
 	// Set random ID for self
-    const randomSixDigit = Math.floor(100000 + Math.random() * 900000);
+    //const randomSixDigit = Math.floor(100000 + Math.random() * 900000);
 	// Show self random ID
-    document.getElementById('number').innerHTML = randomSixDigit;
+    //document.getElementById('number').innerHTML = randomSixDigit;
 
 	
-    let connectingNumber, latestMessageTimestamp = 0;
+    //let connectingNumber, latestMessageTimestamp = 0;
 	// Connect to another device handler
-    function connectToOtherDevice(){
+    /*function connectToOtherDevice(){
 		// Make sure 
         if(!document.getElementById('connect-number').value) return;
         connectingNumber = document.getElementById('connect-number').value;
         document.getElementById('message-area').style.display="block";
-    }
+    }*/
     
     
     // Send message to other device
-    async function sendMessage(){
+    /*async function sendMessage(){
       await fetch(
         "https://blue-math-f85d.lenztan09.workers.dev/?key=" + connectingNumber,
         {
@@ -142,10 +121,10 @@
           })
         }
       );
-    }
+    }*/
 
 	// Read incoming message for self
-    function readMessage(){
+   /* function readMessage(){
 		fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=" + randomSixDigit).then(d=>d.json()).then(d => {
 			if(!d || !d.timestamp || !d.action) return;
 			if(latestMessageTimestamp == d.timestamp) return;
@@ -166,145 +145,258 @@
 		}).catch(e => {
         	console.error(e);
         })
-    }
+    }*/
     
-    let communicationInterval = setInterval(readMessage, 12000);
+   // let communicationInterval = setInterval(readMessage, 12000);
 
+	function startStream(streamUrl){
+		// Check if HLS.js is supported
+		if (!is_HLS_supported) {
+			return;
+		}
 
-    var video = document.getElementById('video');
+		// Clean up previous hls
+		destroyStream();
+		
+	    // Set video parameter as autoplay and muted
+	    video.autoplay = true;
+	    video.muted = true;
+	    video.playsInline = true;
 
-	// Show VTT Subtitle after loading is successful
-	video.addEventListener('loadedmetadata', () => {
-	    for (let i = 0; i < video.textTracks.length; i++) {
-	        video.textTracks[i].mode = 'showing';
-	    }
-	});
-
+		// Create HLS instance
+    	hls = new Hls();
+		
+	    // Load HLS stream
+	    hls.loadSource(streamUrl);
+	    hls.attachMedia(video);
+	}
+	  
+	function destroyStream(){
+		// Clean up previous hls
+		if (hls) {
+		  hls.detachMedia(); 
+		  hls.destroy();
+		  hls = null;
+		}
+	}
 
 // Check if HLS.js is supported
-if (Hls.isSupported()) {
-    // autoplay muted first
-    video.autoplay = true;
-    video.muted = true;
-    video.playsInline = true;
+// if (Hls.isSupported()) {
+//     // Set video parameter as autoplay and muted
+//     video.autoplay = true;
+//     video.muted = true;
+//     video.playsInline = true;
   
-    /*setTimeout(()=>{
-      video.play().catch(err => console.log(err));
-    }, 10000);*/
-  
-    /*setTimeout(()=>{
-      // Request fullscreen
-      if (video.requestFullscreen) video.requestFullscreen();
-    }, 12000);*/
-  
-    
-    // listen for "Enter" key from remote
-    /*document.addEventListener("keydown", e => {
-      if (["Enter","DPAD_CENTER"].includes(e.key)) {
-        video.muted = false; 
-        video.play().catch(()=>{});
-        if (video.requestFullscreen) video.requestFullscreen();
-      }
-    });*/
-  
-  
-  
-  
-  
-  
-  
-  
-    var hls = new Hls();
+//     var hls = new Hls();
 
-    // Replace with your actual HLS stream URL
-    var streamUrl = 'https://p.10020.workers.dev/skyember44.online/file2/GSY77jpcftrExmTqD9I6YXthvYLhyjVkQsYmsY1zIwdZ~h8PuV~TTP23qXFbgAVpr3BnYDT86Qm4bQ0vtgaPeyEC32zaCyrT6m9sTqYIdw~tWu7UE9shlHrskaZszWrpGDu4U0FPuEXusBycsjttyB~MtpxxKq2KesIUyK1dbB0=/MTA4MA==/aW5kZXgubTN1OA==.m3u8'; // Example: 'https://example.com/video.m3u8'
+//     // Replace with your actual HLS stream URL
+//     var streamUrl = m3u8URL; // Example: 'https://example.com/video.m3u8'
 
-    // Load HLS stream
-    hls.loadSource(streamUrl);
-    hls.attachMedia(video);
+//     // Load HLS stream
+//     hls.loadSource(streamUrl);
+//     hls.attachMedia(video);
 
-    // Font size adjustment
-    let subtitleFontSize = 18; // Default font size
+//     // Font size adjustment
+//     let subtitleFontSize = 18; // Default font size
 
-    // Update the displayed subtitle size
-    function updateSubtitleSizeDisplay() {
-        document.getElementById('subtitle-size-display').textContent = `${subtitleFontSize}px`;
-    }
+//     // Update the displayed subtitle size
+//     function updateSubtitleSizeDisplay() {
+//         document.getElementById('subtitle-size-display').textContent = `${subtitleFontSize}px`;
+//     }
 
-    document.getElementById('increase-subtitle-size').addEventListener('click', increaseSubtitleSize);
+//     document.getElementById('increase-subtitle-size').addEventListener('click', increaseSubtitleSize);
 
-    document.getElementById('decrease-subtitle-size').addEventListener('click', decreaseSubtitleSize);
+//     document.getElementById('decrease-subtitle-size').addEventListener('click', decreaseSubtitleSize);
 
-   // Function to increase subtitle size
-  function increaseSubtitleSize() {
-    subtitleFontSize += 0.25; // Increase the subtitle size by 0.25
-    updateSubtitleSize();
-  }
+//    // Function to increase subtitle size
+//   function increaseSubtitleSize() {
+//     subtitleFontSize += 0.25; // Increase the subtitle size by 0.25
+//     updateSubtitleSize();
+//   }
 
-  // Function to decrease subtitle size
-  function decreaseSubtitleSize() {
-    subtitleFontSize = Math.max(0.5, subtitleFontSize - 0.25); // Decrease subtitle size but ensure it doesn't go below 0.5em
-    updateSubtitleSize();
-  }
+//   // Function to decrease subtitle size
+//   function decreaseSubtitleSize() {
+//     subtitleFontSize = Math.max(0.5, subtitleFontSize - 0.25); // Decrease subtitle size but ensure it doesn't go below 0.5em
+//     updateSubtitleSize();
+//   }
 
-  // Function to update the CSS variable for subtitle size
-  function updateSubtitleSize() {
-    video.style.setProperty('--subtitle-size', `${subtitleFontSize}px`);
-    updateSubtitleSizeDisplay();
-  }
+//   // Function to update the CSS variable for subtitle size
+//   function updateSubtitleSize() {
+//     video.style.setProperty('--subtitle-size', `${subtitleFontSize}px`);
+//     updateSubtitleSizeDisplay();
+//   }
 
-    // Subtitle delay control
-    let subtitleDelay = 0; // Default delay (in seconds)
+//     // Subtitle delay control
+//     let subtitleDelay = 0; // Default delay (in seconds)
 
-    // Update the displayed subtitle delay
-    function updateSubtitleDelayDisplay() {
-        document.getElementById('subtitle-delay-display').textContent = `${subtitleDelay.toFixed(1)}s`;
-    }
+//     // Update the displayed subtitle delay
+//     function updateSubtitleDelayDisplay() {
+//         document.getElementById('subtitle-delay-display').textContent = `${subtitleDelay.toFixed(1)}s`;
+//     }
 
-    document.getElementById('increase-delay').addEventListener('click', function () {
-        subtitleDelay += 0.5; // Increase by 0.5 seconds
-        updateSubtitleDelay();
-        updateSubtitleDelayDisplay(); // Update the display when delay changes
-    });
+//     document.getElementById('increase-delay').addEventListener('click', function () {
+//         subtitleDelay += 0.5; // Increase by 0.5 seconds
+//         updateSubtitleDelay();
+//         updateSubtitleDelayDisplay(); // Update the display when delay changes
+//     });
 
-    document.getElementById('decrease-delay').addEventListener('click', function () {
-        subtitleDelay -= 0.5; // Prevent negative delay
-        updateSubtitleDelay();
-        updateSubtitleDelayDisplay(); // Update the display when delay changes
-    });
+//     document.getElementById('decrease-delay').addEventListener('click', function () {
+//         subtitleDelay -= 0.5; // Prevent negative delay
+//         updateSubtitleDelay();
+//         updateSubtitleDelayDisplay(); // Update the display when delay changes
+//     });
 
-    function updateSubtitleDelay() {
-        const tracks = video.textTracks;
-        for (let i = 0; i < tracks.length; i++) {
-            const track = tracks[i];
-            if (track.mode === 'showing') {
-                // Convert TextTrackCueList to an array and iterate over it
-                const cuesArray = Array.from(track.cues);
-                cuesArray.forEach(cue => {
-                    cue.startTime += subtitleDelay; // Apply the delay
-                    cue.endTime += subtitleDelay;
-                });
-            }
-        }
-    }
+//     function updateSubtitleDelay() {
+//         const tracks = video.textTracks;
+//         for (let i = 0; i < tracks.length; i++) {
+//             const track = tracks[i];
+//             if (track.mode === 'showing') {
+//                 // Convert TextTrackCueList to an array and iterate over it
+//                 const cuesArray = Array.from(track.cues);
+//                 cuesArray.forEach(cue => {
+//                     cue.startTime += subtitleDelay; // Apply the delay
+//                     cue.endTime += subtitleDelay;
+//                 });
+//             }
+//         }
+//     }
 
-} else {
-    console.error('HLS.js is not supported in this browser.');
-}
+// } else {
+//     console.error('HLS.js is not supported in this browser.');
+// }
 
     
-function receiveMessageFromFlutter(msg) {
-    console.log("Flutter says: " + msg);
+async function receiveMessageFromFlutter(msg) {
     alert("Flutter says: " + msg);
+	if(!msg) return;
+
+	try{
+		let message = JSON.parse(msg);
+		if(!message.action) return;
+		if(msg.action === "addSubtitle" && msg.data && msg.label && msg.language){
+			tracks[msg.label] = addSubtitleFromVttString(msg.data, msg.label, msg.language);
+		}else if(msg.action === "play"){
+			video.play();
+		}else if(msg.action === "unmute"){
+			video.muted = false;
+		}else if(msg.action === "mute"){
+			video.muted = true;
+		}else if(msg.action === "pause"){
+			video.pause();
+		}else if(msg.action === "setm3u8url" && msg.data){
+			m3u8URL = msg.data;
+		}else if(msg.action === "setsubtitleurl" && msg.url){
+			let content = await fetchSubtitleFromURL(msg.url);
+			if(!content) return;
+			tracks['English'] = addSubtitleFromVttString(content, 'English', 'en');
+		}else if(msg.action === "start"){
+			startStream(m3u8URL);
+		}
+	} catch(e) {
+		console.error(e);
+	}
+	
 }
 
-	  setTimeout(()=>{
-		  if(window && window.flutter_inappwebview && window.flutter_inappwebview.callHandler) 
-		  window.flutter_inappwebview.callHandler('sendMessageToFlutter', 'Hello Flutter!');
-	  }, 15000);
+/*setTimeout(()=>{
+	if(window && window.flutter_inappwebview && window.flutter_inappwebview.callHandler) 
+	window.flutter_inappwebview.callHandler('sendMessageToFlutter', 'Hello Flutter!');
+}, 15000);*/
+
+async function fetchSubtitleFromURL(url) {
+  try {
+    const sURL =
+            "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?isSubtitle=true&url=" +
+            encodeURIComponent(url);
+    const response = await fetch(sURL);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const vttText = await response.text();
+    console.log(vttText);
+
+    return vttText;
+  } catch (error) {
+    console.error('Error loading VTT:', error);
+	return null;
+  }
+}
 
 
+ function addSubtitleFromVttString(vttString, label = 'English', language = 'en', kind = 'subtitles') {
+  // 1. Create the track (hidden at first is fine – change to 'showing' when you want to display)
+  const track = video.addTextTrack(kind, label, language);
+	 
+	// Important: start hidden (preload, but not visible)
+  	track.mode = 'hidden';
+
+  // 2. Very simple but effective VTT parser
+  const lines = vttString.split(/\r?\n/);
+  let i = 0;
+
+  // Skip header until we find a blank line (WEBVTT + optional metadata)
+  while (i < lines.length && lines[i].trim() !== '') {
+    i++;
+  }
+  i++; // skip the blank line after header
+
+  while (i < lines.length) {
+    let line = lines[i].trim();
+
+    // Skip empty lines, NOTE blocks, STYLE blocks, etc.
+    if (!line || line.startsWith('NOTE') || line.startsWith('STYLE') || line.startsWith('REGION')) {
+      i++;
+      continue;
+    }
+
+    // Timestamp line: 00:00:01.000 --> 00:00:04.000  (optional settings after)
+    if (/^\d{2}:\d{2}:\d{2}\.\d{3}\s-->\s\d{2}:\d{2}:\d{2}\.\d{3}/.test(line)) {
+      const parts = line.split(/\s+/);
+      const startStr = parts[0];
+      const endStr   = parts[2];   // parts[1] is -->
+
+      const start = vttTimeToSeconds(startStr);
+      const end   = vttTimeToSeconds(endStr);
+
+      // Collect cue text (all following non-empty lines until blank line)
+      let text = '';
+      i++;
+      while (i < lines.length && lines[i].trim() !== '') {
+        if (text) text += '\n';
+        text += lines[i].trim();
+        i++;
+      }
+
+      if (text && !isNaN(start) && !isNaN(end) && start < end) {
+        const cue = new VTTCue(start, end, text);
+        // Optional: customize cue appearance
+        // cue.align     = 'middle';
+        // cue.position  = 'auto';
+        // cue.line      = 'auto';
+        track.addCue(cue);
+      }
+    } else {
+      i++;
+    }
+	
 	  
+  }
+	return track;  // ← return it so you can store references if needed
+ }
+
+function vttTimeToSeconds(timeStr) {
+  const parts = timeStr.split(':');
+  let sec = 0;
+  if (parts.length === 3) {
+    sec += parseInt(parts[0], 10) * 3600;
+    sec += parseInt(parts[1], 10) * 60;
+    sec += parseFloat(parts[2]);
+  }
+  return sec;
+}
+
   </script>
 </body>
 </html>
