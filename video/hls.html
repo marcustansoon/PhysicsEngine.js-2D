@@ -293,9 +293,8 @@ async function receiveMessageFromFlutter(msg) {
 		}else if(message.action === "setsubtitleurl" && message.url && message.label && message.language){
 			let content = await fetchSubtitleFromURL(message.url);
 			if(!content) return;
-			tracks[message.label.toLowerCase()] = addSubtitleFromVttString(content, message.label, message.language);
+			tracks[message.label.toLowerCase()] = addSubtitleFromVttString(content, message.label.toLowerCase(), message.language);
 		}else if(message.action === "showsubtitle" && message.label){
-			alert('hi');
 			showSubtitles(message.label);
 		}else if(message.action === "hidesubtitle"){
 			hideAllSubtitles();
@@ -423,7 +422,7 @@ function vttTimeToSeconds(timeStr) {
 }
 
 	function showSubtitles(label) {
-		  let targetTrack = tracksByLang[label.toLowerCase()];
+		  let targetTrack = tracks[label.toLowerCase()];
 		  
 		  // Hide all subtitles
 		hideAllSubtitles();
@@ -432,7 +431,6 @@ function vttTimeToSeconds(timeStr) {
 		  
 		  // Show the chosen one
   		 targetTrack.mode = 'showing';
-		alert('showing');
 	  }
 
 function hideAllSubtitles() {
