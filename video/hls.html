@@ -269,6 +269,7 @@
     
 async function receiveMessageFromFlutter(msg) {
 	if(!msg) return;
+	alert(msg);
 	try{
 		let message = JSON.parse(msg);
 		if(!message.action) return;
@@ -284,6 +285,7 @@ async function receiveMessageFromFlutter(msg) {
 			video.pause();
 		}else if(message.action === "setstreamurl" && message.url){
 			m3u8URL = message.url;
+			alert(m3u8URL);
 		}else if(message.action === "setsubtitleurl" && message.url, && message.label && message.language){
 			let content = await fetchSubtitleFromURL(message.url);
 			if(!content) return;
@@ -293,6 +295,7 @@ async function receiveMessageFromFlutter(msg) {
 		}else if(message.action === "hidesubtitle"){
 			hideAllSubtitles();
 		}else if(message.action === "start"){
+			alert('start');
 			startStream(m3u8URL);
 		}
 	} catch(e) {
