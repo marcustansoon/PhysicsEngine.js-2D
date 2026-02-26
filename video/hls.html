@@ -32,6 +32,9 @@
 <body style="min-height: 1500px;">
   <video id="video" width="100%" height="50%" controls autoplay muted playsinline></video>
   <h2 id="not-supported" style="height: 100vh; text-align: center; display: none; align-items: center;">HLS is not supported in this device</h2>
+
+	<div id="log"></div>
+	
   <script src="https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.js"></script>
   <script>
     let domain = "";
@@ -62,7 +65,8 @@
             "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?url=" +
             encodeURIComponent(url);
     
-          console.log("XHR Redirect:", url, "→", newUrl);
+          	console.log("XHR Redirect:", url, "→", newUrl);
+			document.getElementById('log').innerHTML += `<div>${url} -> ${newUrl}</div>`;
     
           arguments[1] = newUrl; // replace URL
 		// Detect m3u8 segments without 'https://'  (example: example.com/video.ts)
@@ -78,6 +82,7 @@
             encodeURIComponent(alteredURL);
 			
           console.log("XHR2 Redirect:", url, "→", newUrl);
+		  document.getElementById('log').innerHTML += `<div>${url} -> ${newUrl}</div>`;
 			
           arguments[1] = newUrl; // replace URL
         }
@@ -145,6 +150,7 @@
 			latestMessageTimestamp = d.timestamp;
 		}).catch(e => {
         	console.error(e);
+			document.getElementById('log').innerHTML += `<div>err: ${e}</div>`;
         })
     }*/
     
@@ -311,14 +317,18 @@ async function receiveMessageFromFlutter(msg) {
 		}
 	} catch(e) {
 		console.error(e);
+		document.getElementById('log').innerHTML += `<div>err: ${e}</div>`;
 	}
 	
 }
 
-/*setTimeout(()=>{
-	if(window && window.flutter_inappwebview && window.flutter_inappwebview.callHandler) 
-	window.flutter_inappwebview.callHandler('sendMessageToFlutter', 'Hello Flutter!');
-}, 15000);*/
+setTimeout(()=>{
+	if(!window || !window.flutter_inappwebview || !window.flutter_inappwebview.callHandler) {
+		// receiveMessageFromFlutter({'action':'run'})
+	}
+	return;
+	// window.flutter_inappwebview.callHandler('sendMessageToFlutter', 'Hello Flutter!');
+}, 10000);
 
 async function fetchSubtitleFromURL(url) {
   try {
