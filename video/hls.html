@@ -282,12 +282,12 @@ async function receiveMessageFromFlutter(msg) {
 			video.muted = true;
 		}else if(message.action === "pause"){
 			video.pause();
-		}else if(message.action === "setm3u8url" && message.data){
-			m3u8URL = message.data;
-		}else if(message.action === "setsubtitleurl" && message.url){
+		}else if(message.action === "setstreamurl" && message.url){
+			m3u8URL = message.url;
+		}else if(message.action === "setsubtitleurl" && message.url, && message.label && message.language){
 			let content = await fetchSubtitleFromURL(message.url);
 			if(!content) return;
-			tracks['English'] = addSubtitleFromVttString(content, 'English', 'en');
+			tracks[message.label.toLowerCase()] = addSubtitleFromVttString(content, message.label, message.language);
 		}else if(message.action === "start"){
 			startStream(m3u8URL);
 		}
@@ -329,7 +329,7 @@ async function fetchSubtitleFromURL(url) {
   const track = video.addTextTrack(kind, label, language);
 	 
 	// Important: start hidden (preload, but not visible)
-  	track.mode = 'hidden';
+  track.mode = 'hidden';
 
   // 2. Very simple but effective VTT parser
   const lines = vttString.split(/\r?\n/);
@@ -382,7 +382,7 @@ async function fetchSubtitleFromURL(url) {
 	
 	  
   }
-	return track;  // ← return it so you can store references if needed
+	return track; 
  }
 
 function vttTimeToSeconds(timeStr) {
@@ -394,6 +394,27 @@ function vttTimeToSeconds(timeStr) {
     sec += parseFloat(parts[2]);
   }
   return sec;
+}
+
+	function showSubtitles(label) {
+		  let targetTrack = tracksByLang[label.toLowerCase()];
+		  
+		  // Hide all subtitles
+		hideAllSubtitles();
+
+		  if(!targetTrack) return;
+		  
+		  // Show the chosen one
+  		 targetTrack.mode = 'showing';
+	  }
+
+function hideAllSubtitles() {
+  for (const track of video.textTracks) {
+    if (track.kind === 'subtitles' || track.kind === 'captions') {
+      track.mode = 'hidden';
+    }
+  }
+  console.log("All subtitles hidden");
 }
 
   </script>
