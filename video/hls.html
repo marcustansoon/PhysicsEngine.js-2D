@@ -268,29 +268,27 @@
 
     
 async function receiveMessageFromFlutter(msg) {
-    alert("Flutter says: " + msg);
 	if(!msg) return;
-
 	try{
 		let message = JSON.parse(msg);
 		if(!message.action) return;
-		if(msg.action === "addSubtitle" && msg.data && msg.label && msg.language){
-			tracks[msg.label] = addSubtitleFromVttString(msg.data, msg.label, msg.language);
-		}else if(msg.action === "play"){
+		if(message.action === "addSubtitle" && message.data && message.label && message.language){
+			tracks[message.label] = addSubtitleFromVttString(message.data, message.label, message.language);
+		}else if(message.action === "play"){
 			video.play();
-		}else if(msg.action === "unmute"){
+		}else if(message.action === "unmute"){
 			video.muted = false;
-		}else if(msg.action === "mute"){
+		}else if(message.action === "mute"){
 			video.muted = true;
-		}else if(msg.action === "pause"){
+		}else if(message.action === "pause"){
 			video.pause();
-		}else if(msg.action === "setm3u8url" && msg.data){
-			m3u8URL = msg.data;
-		}else if(msg.action === "setsubtitleurl" && msg.url){
-			let content = await fetchSubtitleFromURL(msg.url);
+		}else if(message.action === "setm3u8url" && message.data){
+			m3u8URL = message.data;
+		}else if(message.action === "setsubtitleurl" && message.url){
+			let content = await fetchSubtitleFromURL(message.url);
 			if(!content) return;
 			tracks['English'] = addSubtitleFromVttString(content, 'English', 'en');
-		}else if(msg.action === "start"){
+		}else if(message.action === "start"){
 			startStream(m3u8URL);
 		}
 	} catch(e) {
