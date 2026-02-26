@@ -55,7 +55,7 @@
     
       XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
         // Check for m3u8 URL (example: https://example.com/video.m3u8)
-        if (method.toUpperCase() === "GET" && url.includes(".m3u8")) {
+        if (method.toUpperCase() === "GET" /*&& url.includes(".m3u8")*/) {
 
 			const resolved = new URL(url, m3u8URL);
           
