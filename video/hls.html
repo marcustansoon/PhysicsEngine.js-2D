@@ -323,6 +323,7 @@ async function fetchSubtitleFromURL(url) {
     const vttText = await response.text();
     console.log(vttText);
 
+	  alert(vttText)
     return vttText;
   } catch (error) {
     console.error('Error loading VTT:', error);
