@@ -271,7 +271,7 @@ async function receiveMessageFromFlutter(msg) {
 	if(!msg) return;
 	alert(msg);
 	try{
-		let message = JSON.parse(msg);
+		let message = msg;
 		if(!message.action) return;
 		if(message.action === "addSubtitle" && message.data && message.label && message.language){
 			tracks[message.label] = addSubtitleFromVttString(message.data, message.label, message.language);
@@ -295,7 +295,7 @@ async function receiveMessageFromFlutter(msg) {
 		}else if(message.action === "hidesubtitle"){
 			hideAllSubtitles();
 		}else if(message.action === "start"){
-			alert('start');
+			alert('startstream');
 			startStream(m3u8URL);
 		}
 	} catch(e) {
