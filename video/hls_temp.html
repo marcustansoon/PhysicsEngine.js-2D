@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HLS.js</title>
+  <style>
+   	.subtitle-controls, .delay-controls {
+      margin-top: 10px;
+      text-align: center;
+    }
+    .btn {
+      padding: 5px 10px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+
+    video {
+      --subtitle-size: 18px; /* Default subtitle size */
+    }
+      
+    /* Style for subtitle tracks */
+    video::cue {
+      font-size: var(--subtitle-size);
+      color: white;
+      background-color: rgba(0, 0, 0, 0.7); /* Transparent black background */
+      padding: 4px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body style="min-height: 1500px;background-color: black;">
+  <video id="video" width="100%" height="50%" controls autoplay muted playsinline></video>
+  <h2 id="not-supported" style="height: 100vh; text-align: center; display: none; align-items: center;">HLS is not supported in this device</h2>
+
+	<div id="log" style="color:white;"></div>
+	
+  <script src="https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.js"></script>
+  <script>
+    let domain = "";
+	let m3u8URL = "";
+    let video = document.getElementById('video');
+	let hls;
+	const is_HLS_supported = Hls.isSupported();
+	const tracks = {};
+
+	if(!is_HLS_supported){
+		video.style.display = "none";
+		document.getElementById('not-supported').style.display = 'flex';
+	}
+
+
+
+
+
+	// Set random ID for self
+    //const randomSixDigit = Math.floor(100000 + Math.random() * 900000);
+	// Show self random ID
+    //document.getElementById('number').innerHTML = randomSixDigit;
+
+	
+    //let connectingNumber, latestMessageTimestamp = 0;
+	// Connect to another device handler
+    /*function connectToOtherDevice(){
+		// Make sure 
+        if(!document.getElementById('connect-number').value) return;
+        connectingNumber = document.getElementById('connect-number').value;
+        document.getElementById('message-area').style.display="block";
+    }*/
+    
+    
+    // Send message to other device
+    /*async function sendMessage(){
+      await fetch(
+        "https://blue-math-f85d.lenztan09.workers.dev/?key=" + connectingNumber,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            value: {
+            	action: document.getElementById('message').value, 
+            	timestamp: Date.now()
+            },
+          })
+        }
+      );
+    }*/
+
+	// Read incoming message for self
+   /* function readMessage(){
+		fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=" + randomSixDigit).then(d=>d.json()).then(d => {
+			if(!d || !d.timestamp || !d.action) return;
+			if(latestMessageTimestamp == d.timestamp) return;
+
+			d.action = d.action.toLowerCase();
+			
+			// Check actions
+            if(d.action === "unmuted"){
+            	 video.muted = false; 
+            }else if(d.action.includes("goto:")){
+            	video.currentTime = parseInt(d.action.replace("goto:",""));
+            }else if(d.action.includes("bgcolor:")){
+				document.body.style.backgroundColor = d.action.replace("bgcolor:","");
+            }
+
+
+			latestMessageTimestamp = d.timestamp;
+		}).catch(e => {
+        	console.error(e);
+			document.getElementById('log').innerHTML += `<div>err: ${e}</div>`;
+        })
+    }*/
+    
+   // let communicationInterval = setInterval(readMessage, 12000);
+
+	function startStream(streamUrl){
+		// Check if HLS.js is supported
+		if (!is_HLS_supported) {
+			return;
+		}
+
+		// Clean up previous hls
+		destroyStream();
+		
+	    // Set video parameter as autoplay and muted
+	    video.autoplay = true;
+	    video.muted = true;
+	    video.playsInline = true;
+
+		// Create HLS instance
+    	hls = new Hls();
+		
+	    // Load HLS stream
+	    hls.loadSource(streamUrl);
+	    hls.attachMedia(video);
+	}
+	  
+	function destroyStream(){
+		// Clean up previous hls
+		if (hls) {
+		  hls.detachMedia(); 
+		  hls.destroy();
+		  hls = null;
+		}
+	}
+
+// Check if HLS.js is supported
+// if (Hls.isSupported()) {
+//     // Set video parameter as autoplay and muted
+//     video.autoplay = true;
+//     video.muted = true;
+//     video.playsInline = true;
+  
+//     var hls = new Hls();
+
+//     // Replace with your actual HLS stream URL
+//     var streamUrl = m3u8URL; // Example: 'https://example.com/video.m3u8'
+
+//     // Load HLS stream
+//     hls.loadSource(streamUrl);
+//     hls.attachMedia(video);
+
+//     // Font size adjustment
+//     let subtitleFontSize = 18; // Default font size
+
+//     // Update the displayed subtitle size
+//     function updateSubtitleSizeDisplay() {
+//         document.getElementById('subtitle-size-display').textContent = `${subtitleFontSize}px`;
+//     }
+
+//     document.getElementById('increase-subtitle-size').addEventListener('click', increaseSubtitleSize);
+
+//     document.getElementById('decrease-subtitle-size').addEventListener('click', decreaseSubtitleSize);
+
+//    // Function to increase subtitle size
+//   function increaseSubtitleSize() {
+//     subtitleFontSize += 0.25; // Increase the subtitle size by 0.25
+//     updateSubtitleSize();
+//   }
+
+//   // Function to decrease subtitle size
+//   function decreaseSubtitleSize() {
+//     subtitleFontSize = Math.max(0.5, subtitleFontSize - 0.25); // Decrease subtitle size but ensure it doesn't go below 0.5em
+//     updateSubtitleSize();
+//   }
+
+//   // Function to update the CSS variable for subtitle size
+//   function updateSubtitleSize() {
+//     video.style.setProperty('--subtitle-size', `${subtitleFontSize}px`);
+//     updateSubtitleSizeDisplay();
+//   }
+
+//     // Subtitle delay control
+//     let subtitleDelay = 0; // Default delay (in seconds)
+
+//     // Update the displayed subtitle delay
+//     function updateSubtitleDelayDisplay() {
+//         document.getElementById('subtitle-delay-display').textContent = `${subtitleDelay.toFixed(1)}s`;
+//     }
+
+//     document.getElementById('increase-delay').addEventListener('click', function () {
+//         subtitleDelay += 0.5; // Increase by 0.5 seconds
+//         updateSubtitleDelay();
+//         updateSubtitleDelayDisplay(); // Update the display when delay changes
+//     });
+
+//     document.getElementById('decrease-delay').addEventListener('click', function () {
+//         subtitleDelay -= 0.5; // Prevent negative delay
+//         updateSubtitleDelay();
+//         updateSubtitleDelayDisplay(); // Update the display when delay changes
+//     });
+
+//     function updateSubtitleDelay() {
+//         const tracks = video.textTracks;
+//         for (let i = 0; i < tracks.length; i++) {
+//             const track = tracks[i];
+//             if (track.mode === 'showing') {
+//                 // Convert TextTrackCueList to an array and iterate over it
+//                 const cuesArray = Array.from(track.cues);
+//                 cuesArray.forEach(cue => {
+//                     cue.startTime += subtitleDelay; // Apply the delay
+//                     cue.endTime += subtitleDelay;
+//                 });
+//             }
+//         }
+//     }
+
+// } else {
+//     console.error('HLS.js is not supported in this browser.');
+// }
+
+    
+async function receiveMessageFromFlutter(msg) {
+	if(!msg) return;
+	alert(msg);
+	try{
+		let message = msg;
+		if(!message.action) return;
+		if(message.action === "addSubtitle" && message.data && message.label && message.language){
+			tracks[message.label] = addSubtitleFromVttString(message.data, message.label, message.language);
+		}else if(message.action === "play"){
+			video.play();
+		}else if(message.action === "unmute"){
+			video.muted = false;
+		}else if(message.action === "mute"){
+			video.muted = true;
+		}else if(message.action === "pause"){
+			video.pause();
+		}else if(message.action === "setstreamurl" && message.url){
+			m3u8URL = message.url;
+			alert(m3u8URL);
+		}else if(message.action === "setsubtitleurl" && message.url && message.label && message.language){
+			let content = await fetchSubtitleFromURL(message.url);
+			if(!content) return;
+			tracks[message.label.toLowerCase()] = addSubtitleFromVttString(content, message.label, message.language);
+		}else if(message.action === "showsubtitle" && message.label){
+			showSubtitles(message.label);
+		}else if(message.action === "hidesubtitle"){
+			hideAllSubtitles();
+		}else if(message.action === "start"){
+			alert('startstream');
+			startStream(m3u8URL);
+		}else if(message.action === "run"){
+			alert('running');
+		    hls = new Hls();
+		
+		    // Replace with your actual HLS stream URL
+		    var streamUrl = 'https://p.10020.workers.dev/skyember44.online/file2/GSY77jpcftrExmTqD9I6YXthvYLhyjVkQsYmsY1zIwdZ~h8PuV~TTP23qXFbgAVpr3BnYDT86Qm4bQ0vtgaPeyEC32zaCyrT6m9sTqYIdw~tWu7UE9shlHrskaZszWrpGDu4U0FPuEXusBycsjttyB~MtpxxKq2KesIUyK1dbB0=/MTA4MA==/aW5kZXgubTN1OA==.m3u8'; // Example: 'https://example.com/video.m3u8'
+		
+		    // Load HLS stream
+		    hls.loadSource(streamUrl);
+		    hls.attachMedia(video);
+
+		}
+	} catch(e) {
+		console.error(e);
+		document.getElementById('log').innerHTML += `<div>err: ${e}</div>`;
+	}
+	
+}
+
+setTimeout(()=>{
+	if(!window || !window.flutter_inappwebview || !window.flutter_inappwebview.callHandler) {
+		// receiveMessageFromFlutter({'action':'run'})
+	}
+	return;
+	// window.flutter_inappwebview.callHandler('sendMessageToFlutter', 'Hello Flutter!');
+}, 10000);
+
+async function fetchSubtitleFromURL(url) {
+  try {
+    const sURL =
+            "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?isSubtitle=true&url=" +
+            encodeURIComponent(url);
+    const response = await fetch(sURL);
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const vttText = await response.text();
+    console.log(vttText);
+
+	  alert(vttText)
+    return vttText;
+  } catch (error) {
+    console.error('Error loading VTT:', error);
+	return null;
+  }
+}
+
+
+ function addSubtitleFromVttString(vttString, label = 'English', language = 'en', kind = 'subtitles') {
+  // 1. Create the track (hidden at first is fine – change to 'showing' when you want to display)
+  const track = video.addTextTrack(kind, label, language);
+	 
+	// Important: start hidden (preload, but not visible)
+  track.mode = 'hidden';
+
+  // 2. Very simple but effective VTT parser
+  const lines = vttString.split(/\r?\n/);
+  let i = 0;
+
+  // Skip header until we find a blank line (WEBVTT + optional metadata)
+  while (i < lines.length && lines[i].trim() !== '') {
+    i++;
+  }
+  i++; // skip the blank line after header
+
+  while (i < lines.length) {
+    let line = lines[i].trim();
+
+    // Skip empty lines, NOTE blocks, STYLE blocks, etc.
+    if (!line || line.startsWith('NOTE') || line.startsWith('STYLE') || line.startsWith('REGION')) {
+      i++;
+      continue;
+    }
+
+    // Timestamp line: 00:00:01.000 --> 00:00:04.000  (optional settings after)
+    if (/^\d{2}:\d{2}:\d{2}\.\d{3}\s-->\s\d{2}:\d{2}:\d{2}\.\d{3}/.test(line)) {
+      const parts = line.split(/\s+/);
+      const startStr = parts[0];
+      const endStr   = parts[2];   // parts[1] is -->
+
+      const start = vttTimeToSeconds(startStr);
+      const end   = vttTimeToSeconds(endStr);
+
+      // Collect cue text (all following non-empty lines until blank line)
+      let text = '';
+      i++;
+      while (i < lines.length && lines[i].trim() !== '') {
+        if (text) text += '\n';
+        text += lines[i].trim();
+        i++;
+      }
+
+      if (text && !isNaN(start) && !isNaN(end) && start < end) {
+        const cue = new VTTCue(start, end, text);
+        // Optional: customize cue appearance
+        // cue.align     = 'middle';
+        // cue.position  = 'auto';
+        // cue.line      = 'auto';
+        track.addCue(cue);
+      }
+    } else {
+      i++;
+    }
+	
+	  
+  }
+	return track; 
+ }
+
+function vttTimeToSeconds(timeStr) {
+  const parts = timeStr.split(':');
+  let sec = 0;
+  if (parts.length === 3) {
+    sec += parseInt(parts[0], 10) * 3600;
+    sec += parseInt(parts[1], 10) * 60;
+    sec += parseFloat(parts[2]);
+  }
+  return sec;
+}
+
+	function showSubtitles(label) {
+		  let targetTrack = tracksByLang[label.toLowerCase()];
+		  
+		  // Hide all subtitles
+		hideAllSubtitles();
+
+		  if(!targetTrack) return;
+		  
+		  // Show the chosen one
+  		 targetTrack.mode = 'showing';
+	  }
+
+function hideAllSubtitles() {
+  for (const track of video.textTracks) {
+    if (track.kind === 'subtitles' || track.kind === 'captions') {
+      track.mode = 'hidden';
+    }
+  }
+  console.log("All subtitles hidden");
+}
+
+  </script>
+</body>
+</html>
