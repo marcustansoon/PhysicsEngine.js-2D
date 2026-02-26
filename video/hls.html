@@ -286,7 +286,7 @@ async function receiveMessageFromFlutter(msg) {
 		}else if(message.action === "setstreamurl" && message.url){
 			m3u8URL = message.url;
 			alert(m3u8URL);
-		}else if(message.action === "setsubtitleurl" && message.url, && message.label && message.language){
+		}else if(message.action === "setsubtitleurl" && message.url && message.label && message.language){
 			let content = await fetchSubtitleFromURL(message.url);
 			if(!content) return;
 			tracks[message.label.toLowerCase()] = addSubtitleFromVttString(content, message.label, message.language);
