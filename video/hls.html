@@ -57,7 +57,6 @@
         // Check for m3u8 URL (example: https://example.com/video.m3u8)
         if (method.toUpperCase() === "GET" && url.includes(".m3u8")) {
 
-
 			const resolved = new URL(url, m3u8URL);
           
           const newUrl =
@@ -308,8 +307,9 @@ async function receiveMessageFromFlutter(msg) {
 		
 		    // Replace with your actual HLS stream URL
 		    //var streamUrl = 'https://p.10020.workers.dev/skyember44.online/file2/GSY77jpcftrExmTqD9I6YXthvYLhyjVkQsYmsY1zIwdZ~h8PuV~TTP23qXFbgAVpr3BnYDT86Qm4bQ0vtgaPeyEC32zaCyrT6m9sTqYIdw~tWu7UE9shlHrskaZszWrpGDu4U0FPuEXusBycsjttyB~MtpxxKq2KesIUyK1dbB0=/MTA4MA==/aW5kZXgubTN1OA==.m3u8'; // Example: 'https://example.com/video.m3u8'
-		var streamUrl = 'https://test-streams.mux.dev/x36xhzz/url_0/193039199_mp4_h264_aac_hd_7.m3u8'; // Example: 'https://example.com/video.m3u8'
-		
+			var streamUrl = 'https://test-streams.mux.dev/x36xhzz/url_0/193039199_mp4_h264_aac_hd_7.m3u8'; // Example: 'https://example.com/video.m3u8'
+			m3u8URL = streamUrl;
+			
 		    // Load HLS stream
 		    hls.loadSource(streamUrl);
 		    hls.attachMedia(video);
