@@ -39,7 +39,6 @@
   <script>
     let domain = "";
 	let m3u8URL = "";
-	let m3u8URL_latest = "";
     let video = document.getElementById('video');
 	let hls;
 	const is_HLS_supported = Hls.isSupported();
@@ -56,18 +55,11 @@
     
       XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
         // Check for m3u8 URL (example: https://example.com/video.m3u8)
-        if (method.toUpperCase() === "GET" /*&& url.includes(".m3u8")*/) {}
+        if (method.toUpperCase() === "GET" /*&& url.includes(".m3u8")*/) {
 
 			url = url.replaceAll("https://marcustansoon.github.io/PhysicsEngine.js-2D/video/", "").replaceAll("https://marcustansoon.github.io", "");
 			
-			const resolved = new URL(url, m3u8URL); 
-		  	// https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8 https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
-		  	// url_0/193039199_mp4_h264_aac_hd_7.m3u8 https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8
-		  	// url_462/193039199_mp4_h264_aac_hd_7.ts
-			//if(url.includes(".m3u8")){
-				//console.log('latest m3u8 reference: ' + resolved.href);
-				//m3u8URL_latest = resolved.href;
-			//}
+			const resolved = new URL(url, m3u8URL);
           
           const newUrl =
             "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?url=" +
