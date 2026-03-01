@@ -302,10 +302,18 @@ async function receiveMessageFromFlutter(msg) {
 		}else if(message.action === "setsubtitleurl" && message.url && message.label && message.language){
 			let content = await fetchSubtitleFromURL(message.url);
 			if(!content) return;
+			// Check for SRT format url - Convert into VTT format
+			if(message.url.includes('.srt')){
+				content = srtToVtt(content);
+			}
 			tracks[message.label.toLowerCase()] = addSubtitleFromVttString(content, message.label.toLowerCase(), message.language);
-		}else if(message.action === "setsubtitledata" && message.data && message.label && message.language){
+		}else if(message.action === "setsubtitledata" && message.data && message.label && message.language && message.type){
 			let content = message.data;
 			if(!content) return;
+			// Check for SRT format url - Convert into VTT format
+			if(message.type ==='srt'){
+				content = srtToVtt(content);
+			}
 			tracks[message.label.toLowerCase()] = addSubtitleFromVttString(content, message.label.toLowerCase(), message.language);
 		}else if(message.action === "showsubtitle" && message.label){
 			showSubtitles(message.label);
@@ -453,6 +461,37 @@ function hideAllSubtitles() {
     }
   }
   console.log("All subtitles hidden");
+}
+
+
+/**
+ * Converts SRT subtitle content to VTT format
+ * @param {string} srt - The SRT file content as a string
+ * @returns {string} - The converted VTT content
+ */
+function srtToVtt(srt) {
+    // Add VTT header
+    let vtt = 'WEBVTT\n\n';
+
+    // Normalize line endings
+    srt = srt.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+
+    // Split SRT blocks
+    const blocks = srt.split('\n\n');
+
+    blocks.forEach(block => {
+        const lines = block.split('\n');
+        if (lines.length >= 2) {
+            // Check if second line is the timestamp
+            const timeLine = lines[1].replace(',', '.'); // Replace comma with dot
+            vtt += timeLine + '\n';
+            // Add subtitle text lines
+            const textLines = lines.slice(2).join('\n');
+            vtt += textLines + '\n\n';
+        }
+    });
+
+    return vtt.trim();
 }
 
   </script>
