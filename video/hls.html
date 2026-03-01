@@ -469,30 +469,49 @@ function hideAllSubtitles() {
  * @param {string} srt - The SRT file content as a string
  * @returns {string} - The converted VTT content
  */
-function srtToVtt(srt) {
-    // Add VTT header
+function srtToVtt(srtContent) {
+    // Normalize line endings and split into blocks
+    const lines = srtContent
+        .trim()
+        .replace(/\r\n|\r/g, '\n')  // normalize to \n
+        .split('\n\n');
+
     let vtt = 'WEBVTT\n\n';
 
-    // Normalize line endings
-    srt = srt.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    for (const block of lines) {
+        const parts = block.trim().split('\n');
 
-    // Split SRT blocks
-    const blocks = srt.split('\n\n');
+        if (parts.length < 2) continue; // skip invalid blocks
 
-    blocks.forEach(block => {
-        const lines = block.split('\n');
-        if (lines.length >= 2) {
-            // Check if second line is the timestamp
-            const timeLine = lines[1].replace(',', '.'); // Replace comma with dot
-            vtt += timeLine + '\n';
-            // Add subtitle text lines
-            const textLines = lines.slice(2).join('\n');
-            vtt += textLines + '\n\n';
+        let timeLineIndex = 0;
+        if (/^\d+$/.test(parts[0].trim())) {
+            timeLineIndex = 1; // skip sequence number
         }
-    });
+
+        const timeLine = parts[timeLineIndex]?.trim();
+        if (!timeLine || !timeLine.includes('-->')) continue;
+
+        // Convert SRT timestamp → VTT timestamp
+        const [start, end] = timeLine.split('-->').map(t => t.trim());
+        const vttStart = start.replace(',', '.');
+        const vttEnd   = end.replace(',', '.');
+
+        // Collect all text lines after the timestamp
+        const textLines = parts.slice(timeLineIndex + 1)
+            .map(line => line.trim())
+            .filter(line => line !== '');
+
+        if (textLines.length === 0) continue;
+
+        // Build cue (correct template literal syntax)
+        vtt += `${vttStart} --> ${vttEnd}\n`;
+        vtt += textLines.join('\n');
+        vtt += '\n\n';
+    }
 
     return vtt.trim();
 }
+
 
   </script>
 </body>
