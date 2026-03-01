@@ -303,6 +303,10 @@ async function receiveMessageFromFlutter(msg) {
 			let content = await fetchSubtitleFromURL(message.url);
 			if(!content) return;
 			tracks[message.label.toLowerCase()] = addSubtitleFromVttString(content, message.label.toLowerCase(), message.language);
+		}else if(message.action === "setsubtitledata" && message.data && message.label && message.language){
+			let content = message.data;
+			if(!content) return;
+			tracks[message.label.toLowerCase()] = addSubtitleFromVttString(content, message.label.toLowerCase(), message.language);
 		}else if(message.action === "showsubtitle" && message.label){
 			showSubtitles(message.label);
 		}else if(message.action === "hidesubtitle"){
