@@ -325,6 +325,8 @@ async function receiveMessageFromFlutter(msg) {
 			rewindVideo();
 		}else if(message.action === "forward-video"){
 			forwardVideo();
+		}else if(message.action === "setsubtitledelay"){
+			// forwardVideo();
 		}else if(message.action === "run"){
 			alert('running 2');
 		    hls = new Hls();
