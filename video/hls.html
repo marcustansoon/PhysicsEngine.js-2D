@@ -321,6 +321,10 @@ async function receiveMessageFromFlutter(msg) {
 			hideAllSubtitles();
 		}else if(message.action === "start"){
 			startStream(m3u8URL);
+		}else if(message.action === "rewind-video"){
+			rewindVideo();
+		}else if(message.action === "forward-video"){
+			forwardVideo();
 		}else if(message.action === "run"){
 			alert('running 2');
 		    hls = new Hls();
@@ -342,13 +346,25 @@ async function receiveMessageFromFlutter(msg) {
 	
 }
 
-setTimeout(()=>{
-	if(!window || !window.flutter_inappwebview || !window.flutter_inappwebview.callHandler) {
-		// receiveMessageFromFlutter({'action':'run'})
+// setTimeout(()=>{
+// 	if(!window || !window.flutter_inappwebview || !window.flutter_inappwebview.callHandler) {
+// 		// receiveMessageFromFlutter({'action':'run'})
+// 	}
+// 	return;
+// 	// window.flutter_inappwebview.callHandler('sendMessageToFlutter', 'Hello Flutter!');
+// }, 10000);
+
+function forwardVideo(){
+	if (video) {
+		video.currentTime = Math.max(video.currentTime + 5, 0);
 	}
-	return;
-	// window.flutter_inappwebview.callHandler('sendMessageToFlutter', 'Hello Flutter!');
-}, 10000);
+}
+	  
+function rewindVideo(){
+	if (video) {
+		video.currentTime = Math.max(video.currentTime - 5, 0);
+	}
+}
 
 async function fetchSubtitleFromURL(url) {
   try {
