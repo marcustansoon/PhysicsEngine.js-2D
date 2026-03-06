@@ -336,7 +336,11 @@ async function receiveMessageFromFlutter(msg) {
 		}else if(message.action === "forward-video"){
 			forwardVideo();
 		}else if(message.action === "setsubtitledelay"){
-			// forwardVideo();
+			// Check if 'english' labelled track exists (hardcoded)
+			if (!tracks["english"]) return;
+			let delay = parseFloat(message['data']);
+			if(isNaN(delay)) return;
+			setSubtitleDelay(tracks["english"], delay);
 		}else if(message.action === "run"){
 			alert('running 2');
 		    hls = new Hls();
@@ -387,6 +391,27 @@ function removeSubtitleTrackByLabel(label){
 	    oldTrack.removeCue(oldTrack.cues[0]);
 	 }
 	delete tracks[label];
+}
+
+function setSubtitleDelay(track, delaySeconds) {
+    if (!track || !track.cues) return;
+
+    const cues = Array.from(track.cues);
+
+    cues.forEach(cue => {
+
+        if (cue._origStart === undefined) {
+            cue._origStart = cue.startTime;
+            cue._origEnd = cue.endTime;
+        }
+
+        track.removeCue(cue);
+
+        cue.startTime = Math.max(0, cue._origStart + delaySeconds);
+        cue.endTime   = Math.max(0, cue._origEnd + delaySeconds);
+
+        track.addCue(cue);
+    });
 }
 
 async function fetchSubtitleFromURL(url) {
