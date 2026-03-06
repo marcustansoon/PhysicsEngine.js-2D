@@ -288,7 +288,7 @@ async function receiveMessageFromFlutter(msg) {
 		let message = msg;
 		if(!message.action) return;
 		if(message.action === "addSubtitle" && message.data && message.label && message.language){
-			tracks[message.label] = addSubtitleFromVttString(message.data, message.label, message.language);
+			// tracks[message.label] = addSubtitleFromVttString(message.data, message.label, message.language);
 		}else if(message.action === "play"){
 			video.play();
 		}else if(message.action === "unmute"){
@@ -306,7 +306,12 @@ async function receiveMessageFromFlutter(msg) {
 			if(message.url.includes('.srt')){
 				content = srtToVtt(content);
 			}
-			tracks[message.label.toLowerCase()] = addSubtitleFromVttString(content, message.label.toLowerCase(), message.language);
+    		// Remove existing track
+    		const label = message.label.toLowerCase();
+			if (tracks[label]) {
+			    removeSubtitleTrackByLabel(label);
+			}
+			tracks[label] = addSubtitleFromVttString(content, label, message.language);
 		}else if(message.action === "setsubtitledata" && message.data && message.label && message.language && message.type){
 			let content = message.data;
 			if(!content) return;
@@ -314,7 +319,12 @@ async function receiveMessageFromFlutter(msg) {
 			if(message.type ==='srt'){
 				content = srtToVtt(content);
 			}
-			tracks[message.label.toLowerCase()] = addSubtitleFromVttString(content, message.label.toLowerCase(), message.language);
+    		// Remove existing track
+    		const label = message.label.toLowerCase();
+			if (tracks[label]) {
+			    removeSubtitleTrackByLabel(label);
+			}
+			tracks[label] = addSubtitleFromVttString(content, label, message.language);
 		}else if(message.action === "showsubtitle" && message.label){
 			showSubtitles(message.label);
 		}else if(message.action === "hidesubtitle"){
@@ -366,6 +376,17 @@ function rewindVideo(){
 	if (video) {
 		video.currentTime = Math.max(video.currentTime - 5, 0);
 	}
+}
+
+function removeSubtitleTrackByLabel(label){
+	const oldTrack = tracks[label];
+	 // Hide subtitles
+	oldTrack.mode = "disabled";
+	// Remove all cues
+	while (oldTrack.cues && oldTrack.cues.length > 0) {
+	    oldTrack.removeCue(oldTrack.cues[0]);
+	 }
+	delete tracks[label];
 }
 
 async function fetchSubtitleFromURL(url) {
