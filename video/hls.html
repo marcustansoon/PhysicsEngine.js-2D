@@ -180,7 +180,12 @@
 	    video.playsInline = true;
 
 		// Create HLS instance
-    	hls = new Hls();
+    	hls = new Hls({
+		  maxBufferLength: 90,       // target buffer
+		  maxMaxBufferLength: 180,   // absolute cap
+		  backBufferLength: 30,      // keep 30s behind
+		  startFragPrefetch: true
+		});
 		
 	    // Load HLS stream
 	    hls.loadSource(streamUrl);
