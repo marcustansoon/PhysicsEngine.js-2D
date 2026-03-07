@@ -50,6 +50,7 @@
 	let m3u8URL = "";
     let video = document.getElementById('video');
 	let hls;
+	const videoResolutions = [];
 	const is_HLS_supported = Hls.isSupported();
 	const tracks = {};
 
@@ -99,73 +100,9 @@
         return originalOpen.apply(this, arguments);
       };
     })();
-
-
-
-
-	// Set random ID for self
-    //const randomSixDigit = Math.floor(100000 + Math.random() * 900000);
-	// Show self random ID
-    //document.getElementById('number').innerHTML = randomSixDigit;
-
-	
-    //let connectingNumber, latestMessageTimestamp = 0;
-	// Connect to another device handler
-    /*function connectToOtherDevice(){
-		// Make sure 
-        if(!document.getElementById('connect-number').value) return;
-        connectingNumber = document.getElementById('connect-number').value;
-        document.getElementById('message-area').style.display="block";
-    }*/
     
-    
-    // Send message to other device
-    /*async function sendMessage(){
-      await fetch(
-        "https://blue-math-f85d.lenztan09.workers.dev/?key=" + connectingNumber,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            value: {
-            	action: document.getElementById('message').value, 
-            	timestamp: Date.now()
-            },
-          })
-        }
-      );
-    }*/
 
-	// Read incoming message for self
-   /* function readMessage(){
-		fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=" + randomSixDigit).then(d=>d.json()).then(d => {
-			if(!d || !d.timestamp || !d.action) return;
-			if(latestMessageTimestamp == d.timestamp) return;
-
-			d.action = d.action.toLowerCase();
-			
-			// Check actions
-            if(d.action === "unmuted"){
-            	 video.muted = false; 
-            }else if(d.action.includes("goto:")){
-            	video.currentTime = parseInt(d.action.replace("goto:",""));
-            }else if(d.action.includes("bgcolor:")){
-				document.body.style.backgroundColor = d.action.replace("bgcolor:","");
-            }
-
-
-			latestMessageTimestamp = d.timestamp;
-		}).catch(e => {
-        	console.error(e);
-			document.getElementById('log').innerHTML += `<div>err: ${e}</div>`;
-        })
-    }*/
-    
-   // let communicationInterval = setInterval(readMessage, 12000);
-
-	function startStream(streamUrl){
+	function startStream(streamUrl) {
 		// Check if HLS.js is supported
 		if (!is_HLS_supported) {
 			return;
@@ -186,19 +123,41 @@
 		  backBufferLength: 30,      // keep 30s behind
 		  startFragPrefetch: true
 		});
+
+		// Store video resolution
+		hls.on(Hls.Events.MANIFEST_PARSED, () => {
+			hls.levels.forEach(resolution => {
+				videoResolutions.push(resolution.height);
+			});
+		});
+
+		let retryCount = 0;
+		hls.on(Hls.Events.ERROR, (event, data) => {
+		  if (data.fatal && retryCount < 100) {
+		    retryCount++;
+		    if (data.type === Hls.ErrorTypes.NETWORK_ERROR) hls.startLoad();
+		    if (data.type === Hls.ErrorTypes.MEDIA_ERROR) hls.recoverMediaError();
+		  }
+		});
+
+		// setTimeout(()=>{
+		// 	window.flutter_inappwebview?.callHandler?.('sendMessageToFlutter', {'action': 'video-resolution', data: videoResolutions});
+		// }, 1500);
 		
 	    // Load HLS stream
 	    hls.loadSource(streamUrl);
 	    hls.attachMedia(video);
 	}
 	  
-	function destroyStream(){
+	function destroyStream() {
 		// Clean up previous hls
 		if (hls) {
 		  hls.detachMedia(); 
 		  hls.destroy();
 		  hls = null;
 		}
+		// Reset resolution
+		videoResolutions.length = 0;
 	}
 
 // Check if HLS.js is supported
@@ -340,6 +299,17 @@ async function receiveMessageFromFlutter(msg) {
 			rewindVideo();
 		}else if(message.action === "forward-video"){
 			forwardVideo();
+		}else if(message.action === "set-video-resolution-auto"){
+			autoSetResolution();
+		}else if(message.action === "set-video-resolution" && message.data){
+			let resolution = parseInt(message.data);
+			if(isNaN(resolution)) return;
+			setResolution(resolution);
+		}else if(message.action === "get-video-resolution"){
+			window.flutter_inappwebview?.callHandler?.('sendMessageToFlutter', {'action': 'get-video-resolution', data: videoResolutions});
+		}else if(message.action === "get-video-duration"){
+			let duration = Math.floor(video.duration);
+			window.flutter_inappwebview?.callHandler?.('sendMessageToFlutter', {'action': 'get-video-duration', data: isNaN(duration) ? 0 : duration});
 		}else if(message.action === "setsubtitledelay"){
 			// Check if 'english' labelled track exists (hardcoded)
 			if (!tracks["english"]) return;
@@ -374,6 +344,27 @@ async function receiveMessageFromFlutter(msg) {
 // 	return;
 // 	// window.flutter_inappwebview.callHandler('sendMessageToFlutter', 'Hello Flutter!');
 // }, 10000);
+	  
+// Set a specific resolution manually
+function setResolution(height) {
+  if (!hls || !hls.levels || hls.levels.length === 0) return;
+
+  const index = hls.levels.findIndex(level => level.height === height);
+  if (index !== -1) {
+    console.log(`Switching to ${height}p (level ${index})`);
+    hls.currentLevel = index;
+  } else {
+    console.warn(`Resolution ${height}p not found`);
+  }
+}
+
+// Return to automatic adaptive bitrate
+function autoSetResolution() {
+  if (!hls) return;
+
+  console.log("Switching back to auto resolution (-1)");
+  hls.currentLevel = -1;
+}
 
 function forwardVideo(){
 	if (video) {
@@ -511,17 +502,17 @@ function vttTimeToSeconds(timeStr) {
   return sec;
 }
 
-	function showSubtitles(label) {
-		  let targetTrack = tracks[label.toLowerCase()];
-		  
-		  // Hide all subtitles
-		hideAllSubtitles();
+function showSubtitles(label) {
+	  let targetTrack = tracks[label.toLowerCase()];
+	  
+	  // Hide all subtitles
+	hideAllSubtitles();
 
-		  if(!targetTrack) return;
-		  
-		  // Show the chosen one
-  		 targetTrack.mode = 'showing';
-	  }
+	  if(!targetTrack) return;
+	  
+	  // Show the chosen one
+	 targetTrack.mode = 'showing';
+}
 
 function hideAllSubtitles() {
   for (const track of video.textTracks) {
