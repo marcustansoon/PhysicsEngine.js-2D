@@ -129,6 +129,9 @@
 			hls.levels.forEach(resolution => {
 				videoResolutions.push(resolution.height.toString());
 			});
+			
+			window.flutter_inappwebview?.callHandler?.('sendMessageToFlutter', {'action': 'get-video-resolutions', data: videoResolutions});
+			alert(JSON.stringify(videoResolutions));
 		});
 
 		let retryCount = 0;
