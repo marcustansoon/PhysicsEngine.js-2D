@@ -127,7 +127,7 @@
 		// Store video resolution
 		hls.on(Hls.Events.MANIFEST_PARSED, () => {
 			hls.levels.forEach(resolution => {
-				videoResolutions.push(resolution.height);
+				videoResolutions.push(resolution.height.toString());
 			});
 		});
 
