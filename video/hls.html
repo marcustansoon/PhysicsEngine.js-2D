@@ -131,7 +131,7 @@
 			});
 			
 			window.flutter_inappwebview?.callHandler?.('sendMessageToFlutter', {'action': 'get-video-resolutions', data: videoResolutions});
-			alert(JSON.stringify(videoResolutions));
+			// alert(JSON.stringify(videoResolutions));
 		});
 
 		let retryCount = 0;
@@ -308,7 +308,7 @@ async function receiveMessageFromFlutter(msg) {
 		}else if(message.action === "set-video-resolution" && message.data){
 			let resolution = parseInt(message.data);
 			if(isNaN(resolution)) return;
-			alert('set vidr ' + resolution);
+			//alert('set vidr ' + resolution);
 			setResolution(resolution);
 		}else if(message.action === "get-video-resolutions"){
 			window.flutter_inappwebview?.callHandler?.('sendMessageToFlutter', {'action': 'get-video-resolutions', data: videoResolutions});
