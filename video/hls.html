@@ -306,8 +306,8 @@ async function receiveMessageFromFlutter(msg) {
 			let resolution = parseInt(message.data);
 			if(isNaN(resolution)) return;
 			setResolution(resolution);
-		}else if(message.action === "get-video-resolution"){
-			window.flutter_inappwebview?.callHandler?.('sendMessageToFlutter', {'action': 'get-video-resolution', data: videoResolutions});
+		}else if(message.action === "get-video-resolutions"){
+			window.flutter_inappwebview?.callHandler?.('sendMessageToFlutter', {'action': 'get-video-resolutions', data: videoResolutions});
 		}else if(message.action === "get-video-duration"){
 			let duration = Math.floor(video.duration);
 			window.flutter_inappwebview?.callHandler?.('sendMessageToFlutter', {'action': 'get-video-duration', data: isNaN(duration) ? 0 : duration});
