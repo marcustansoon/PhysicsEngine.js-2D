@@ -363,36 +363,36 @@ async function receiveMessageFromFlutter(msg) {
 	  
 // Set a specific resolution manually
 function setResolution(height) {
-  if (!hls || !hls.levels || hls.levels.length === 0) return;
+    if (!hls?.levels?.length) return;
 
-  const index = hls.levels.findIndex(level => level.height === height);
-  if (index !== -1) {
-    console.log(`Switching to ${height}p (level ${index})`);
-    hls.currentLevel = index;
-  } else {
-    console.warn(`Resolution ${height}p not found`);
-  }
+    const index = hls.levels.findIndex(level => level.height === height);
+    if (index !== -1) {
+        console.log(`Switching to ${height}p (level ${index})`);
+        hls.autoLevelEnabled = false;  // Disable auto mode
+        hls.currentLevel = index;
+    } else {
+        console.warn(`Resolution ${height}p not found`);
+    }
 }
 
 function getCurrentResolution() {
-  if (!hls || !hls.levels || hls.levels.length === 0) return;
+	if (!hls?.levels?.length) return;
+	
     // Auto mode
-  if (hls.currentLevel === -1) {
-	return 'Auto';
-  }
-    // Manual level
+    if (hls.autoLevelEnabled) return 'Auto';
+	
+    // Manual mode
     const level = hls.levels[hls.currentLevel];
-    if (level) {
-        return level.height.toString(); // number
-    }
+    return level?.height?.toString();
 }
 
 // Return to automatic adaptive bitrate
 function autoSetResolution() {
-  if (!hls) return;
+  	if (!hls) return;
 
-  console.log("Switching back to auto resolution (-1)");
-  hls.currentLevel = -1;
+  	console.log("Switching back to auto resolution (-1)");
+	hls.autoLevelEnabled = true;  // Turn on automatic quality selection
+	hls.currentLevel = -1;        // Optional: tells HLS to pick the level automatically
 }
 
 function forwardVideo(){
