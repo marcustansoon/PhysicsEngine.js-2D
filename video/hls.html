@@ -303,15 +303,22 @@ async function receiveMessageFromFlutter(msg) {
 			rewindVideo();
 		}else if(message.action === "forward-video"){
 			forwardVideo();
-		}else if(message.action === "set-video-resolution-auto"){
-			autoSetResolution();
 		}else if(message.action === "set-video-resolution" && message.data){
+			// Handle video resolution 'auto'
+			if(message.data === "Auto"){
+				autoSetResolution();
+				return;
+			}
 			let resolution = parseInt(message.data);
 			if(isNaN(resolution)) return;
 			//alert('set vidr ' + resolution);
 			setResolution(resolution);
 		}else if(message.action === "get-video-resolutions"){
 			window.flutter_inappwebview?.callHandler?.('sendMessageToFlutter', {'action': 'get-video-resolutions', data: videoResolutions});
+		}else if(message.action === "get-video-resolution"){
+			let resolution = getCurrentResolution();
+			if(!resolution) return;
+			window.flutter_inappwebview?.callHandler?.('sendMessageToFlutter', {'action': 'get-video-resolution', data: resolution});
 		}else if(message.action === "get-video-duration"){
 			let duration = Math.floor(video.duration);
 			window.flutter_inappwebview?.callHandler?.('sendMessageToFlutter', {'action': 'get-video-duration', data: isNaN(duration) ? 0 : duration});
@@ -365,6 +372,19 @@ function setResolution(height) {
   } else {
     console.warn(`Resolution ${height}p not found`);
   }
+}
+
+function getCurrentResolution() {
+  if (!hls || !hls.levels || hls.levels.length === 0) return;
+    // Auto mode
+  if (hls.currentLevel === -1) {
+	return 'Auto';
+  }
+    // Manual level
+    const level = hls.levels[hls.currentLevel];
+    if (level) {
+        return level.height.toString(); // number
+    }
 }
 
 // Return to automatic adaptive bitrate
