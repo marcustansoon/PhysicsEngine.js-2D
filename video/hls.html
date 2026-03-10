@@ -51,6 +51,7 @@
     let video = document.getElementById('video');
 	let hls;
 	const videoResolutions = [];
+	let selectedResolution = 'Auto';
 	const is_HLS_supported = Hls.isSupported();
 	const tracks = {};
 
@@ -129,9 +130,8 @@
 			hls.levels.forEach(resolution => {
 				videoResolutions.push(resolution.height.toString());
 			});
-			
+			// Send video resolutions to flutter
 			window.flutter_inappwebview?.callHandler?.('sendMessageToFlutter', {'action': 'get-video-resolutions', data: videoResolutions});
-			// alert(JSON.stringify(videoResolutions));
 		});
 
 		let retryCount = 0;
@@ -162,6 +162,8 @@
 		// Reset resolution
 		videoResolutions.length = 0;
 		videoResolutions.push('Auto');
+
+		selectedResolution = 'Auto';
 	}
 
 // Check if HLS.js is supported
@@ -370,20 +372,24 @@ function setResolution(height) {
         console.log(`Switching to ${height}p (level ${index})`);
         hls.autoLevelEnabled = false;  // Disable auto mode
         hls.currentLevel = index;
+
+		selectedResolution = height.toString();
     } else {
         console.warn(`Resolution ${height}p not found`);
     }
 }
 
 function getCurrentResolution() {
-	if (!hls?.levels?.length) return;
+	return selectedResolution;
 	
-    // Auto mode
-    if (hls.autoLevelEnabled) return 'Auto';
+	// if (!hls?.levels?.length) return;
 	
-    // Manual mode
-    const level = hls.levels[hls.currentLevel];
-    return level?.height?.toString();
+ //    // Auto mode
+ //    if (hls.autoLevelEnabled) return 'Auto';
+	
+ //    // Manual mode
+ //    const level = hls.levels[hls.currentLevel];
+ //    return level?.height?.toString();
 }
 
 // Return to automatic adaptive bitrate
@@ -393,6 +399,8 @@ function autoSetResolution() {
   	console.log("Switching back to auto resolution (-1)");
 	hls.autoLevelEnabled = true;  // Turn on automatic quality selection
 	hls.currentLevel = -1;        // Optional: tells HLS to pick the level automatically
+
+	selectedResolution = 'Auto';
 }
 
 function forwardVideo(){
