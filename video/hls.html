@@ -324,10 +324,14 @@ async function receiveMessageFromFlutter(msg) {
 		}else if(message.action === "get-video-duration"){
 			let duration = Math.floor(video.duration);
 			window.flutter_inappwebview?.callHandler?.('sendMessageToFlutter', {'action': 'get-video-duration', data: isNaN(duration) ? 0 : duration});
-		}else if(message.action === "set-video-duration" && message.data){
-			let duration = parseInt(message.data);
-			if(isNaN(video.duration) || isNaN(duration) || duration > video.duration) return;
-			video.currentTime = duration;
+		}else if(message.action === "set-video-timestamp" && message.data){
+			let timestampArr = message.data.split(':');
+			if(timestampArr.length !== 3) return;
+			let hoursTimestamp = parseInt(timestampArr[0]), minutesTimestamp = parseInt(timestampArr[1]), secondsTimestamp = parseInt(timestampArr[2]);
+			if(isNaN(hoursTimestamp) || isNaN(minutesTimestamp) || isNaN(secondsTimestamp)) return;
+			let timestampInSeconds = hoursTimestamp * 3600 + minutesTimestamp * 60 + secondsTimestamp;
+			if(isNaN(video.duration) || isNaN(timestampInSeconds) || timestampInSeconds > video.duration) return;
+			video.currentTime = timestampInSeconds;
 		}else if(message.action === "setsubtitledelay"){
 			// Check if 'english' labelled track exists (hardcoded)
 			if (!tracks["english"]) return;
