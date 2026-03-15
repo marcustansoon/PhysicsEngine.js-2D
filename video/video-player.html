@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Player</title>
+  <style>
+    video {
+      --subtitle-size: 18px; /* Default subtitle size */
+    }
+      
+    /* Style for subtitle tracks */
+    video::cue {
+      font-size: var(--subtitle-size);
+      color: white;
+      background-color: rgba(0, 0, 0, 0.7); /* Transparent black background */
+      padding: 4px;
+      border-radius: 4px;
+    }
+	  
+    body {
+      background-color: black;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;  /* horizontal */
+      align-items: center;      /* vertical */
+    }
+  </style>
+</head>
+<body>
+  <video id="video" width="100%" height="100%" controls autoplay muted playsinline></video>
+
+  <script>
+    // Get the video element
+    const video = document.getElementById('video');
+
+    // Get URL parameters
+    const params = new URLSearchParams(window.location.search);
+    const videoUrl = params.get('url'); // ?url=VIDEO_URL
+
+    // If a video URL is provided, set it as the video source
+    if (videoUrl) {
+      video.src = videoUrl;
+      video.play().catch(err => {
+        console.log("Autoplay blocked or error:", err);
+      });
+    } else {
+      console.log("No video URL provided in parameters.");
+    }
+  </script>
+</body>
+</html>
