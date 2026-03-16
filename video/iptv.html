@@ -75,39 +75,6 @@ http://skdy6cd5.g3awd.xyz/player_api.php?username=3vi1128091&password=UJvQdsWbrY
     const video = document.getElementById("video");
     let error403Count = 0;
 
-    (function () {
-		return;
-      const originalOpen = XMLHttpRequest.prototype.open;
-
-      XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
-
-        if (method.toUpperCase() === "GET" && url.includes(".m3u8?token=")) {
-
-          const parsed = new URL(url);
-		
-		  // Store token
-          if (!TOKEN) {
-            TOKEN = parsed.searchParams.get("token");
-          } else if(TOKEN !== parsed.searchParams.get("token")){
-			// Replace token value
-			parsed.searchParams.set("token", TOKEN);
-			// Replace new url with new token
-			arguments[1] = parsed.toString();
-		  }
-		  
-		  if (error403Count >= 2) {
-			error403Count = 0;
-            console.log('request new token')
-            arguments[1] = STREAM;
-			requestNewToken();
-          }
-        }
-
-        return originalOpen.apply(this, arguments);
-      };
-    })();
-
-
     function autoUnmuteVideo() {
       let videoCurrentTime;
       let currentLoop = 0;
@@ -124,17 +91,6 @@ http://skdy6cd5.g3awd.xyz/player_api.php?username=3vi1128091&password=UJvQdsWbrY
       }, 2000);
     }
 
-
-
-    /*function requestNewToken() {
-      fetch(STREAM)
-        .then(res => {
-          const parsed = new URL(res.url);
-          const token = parsed.searchParams.get("token");
-          console.log('updated token: ' + token);
-          TOKEN = token;
-        });
-    }*/
 
 
     setTimeout(start, 2000);
@@ -166,15 +122,19 @@ http://skdy6cd5.g3awd.xyz/player_api.php?username=3vi1128091&password=UJvQdsWbrY
 
         hls.loadSource(STREAM);
         hls.attachMedia(video);
-		
-		// Reset
-		// error403Count = 0;
 
-        // hls.on(Hls.Events.LEVEL_LOADED, (event, data) => {
-          // console.log('Media playlist loaded successfully for level:', data.level);
-		  // Reset
-          // error403Count = 0;
-        // });
+		hls.on(Hls.Events.LEVEL_LOADED, (event, data) => {
+		  const details = data.details;
+		  if (!details.live) {
+			console.log("ENDLIST detected, retrying in 5s");
+			setTimeout(()=>{
+				HLS.destroy();
+				HLS = null;
+				start();
+			}, 3000);
+		  }
+		});
+
 
 
         hls.on(Hls.Events.ERROR, function (event, data) {
