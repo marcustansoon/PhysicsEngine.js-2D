@@ -63,7 +63,11 @@ http://skdy6cd5.g3awd.xyz/player_api.php?username=3vi1128091&password=UJvQdsWbrY
 	const stream8 = "http://skdy6cd5.g3awd.xyz:80/live/3vi1128091/UJvQdsWbrY/1128005.m3u8";
 	const stream9 = "http://skdy6cd5.g3awd.xyz:80/live/3vi1128091/UJvQdsWbrY/1252426.m3u8";
 
-    const STREAM = stream8;
+	  
+    const params = new URLSearchParams(window.location.search);
+    const videoUrl = params.get('url');
+	  
+    const STREAM = videoUrl; //stream8;
 
     let TOKEN = "";
     let HLS;
