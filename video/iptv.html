@@ -125,13 +125,14 @@ http://skdy6cd5.g3awd.xyz/player_api.php?username=3vi1128091&password=UJvQdsWbrY
 
 		hls.on(Hls.Events.LEVEL_LOADED, (event, data) => {
 		  const details = data.details;
+		  console.log(data.details);
 		  if (!details.live) {
 			console.log("ENDLIST detected, retrying in 5s");
-			setTimeout(()=>{
+			/*setTimeout(()=>{
 				HLS.destroy();
 				HLS = null;
 				start();
-			}, 3000);
+			}, 3000);*/
 		  }
 		});
 
