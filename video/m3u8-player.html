@@ -36,13 +36,12 @@
 
 <body>
 
-  <video id="video" width="40%" height="40%" controls autoplay muted playsinline></video>
+  <video id="video" width="100%" height="100%" controls autoplay muted playsinline></video>
 
 
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
 	
-	<div id="log" style="color: white;"></div>
-
+	
 
 <!--
 
@@ -64,7 +63,6 @@ http://skdy6cd5.g3awd.xyz/player_api.php?username=3vi1128091&password=UJvQdsWbrY
     let HLS;
 
     const video = document.getElementById("video");
-    let error403Count = 0;
 	  
 	  // Overwrite existing XHR request
     (function () {
@@ -81,7 +79,7 @@ http://skdy6cd5.g3awd.xyz/player_api.php?username=3vi1128091&password=UJvQdsWbrY
             encodeURIComponent(resolved.href);
     
           	console.log("XHR Redirect:", url, "→", newUrl);
-			document.getElementById('log').innerHTML += `<div>${url} -> ${newUrl}</div>`;
+			// document.getElementById('log').innerHTML += `<div>${url} -> ${newUrl}</div>`;
     
           arguments[1] = newUrl; // replace URL
         }
