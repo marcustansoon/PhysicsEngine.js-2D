@@ -54,6 +54,18 @@ http://skdy6cd5.g3awd.xyz/player_api.php?username=3vi1128091&password=UJvQdsWbrY
 
 
   <script>
+	  
+    const params = new URLSearchParams(window.location.search);
+    const videoUrl = params.get('url');
+	  
+    const STREAM = videoUrl; 
+
+    let TOKEN = "";
+    let HLS;
+
+    const video = document.getElementById("video");
+    let error403Count = 0;
+	  
 	  // Overwrite existing XHR request
     (function () {
       const originalOpen = XMLHttpRequest.prototype.open;
@@ -62,10 +74,10 @@ http://skdy6cd5.g3awd.xyz/player_api.php?username=3vi1128091&password=UJvQdsWbrY
         if (method.toUpperCase() === "GET") {
 			url = url.replaceAll("https://marcustansoon.github.io/PhysicsEngine.js-2D/video/", "").replaceAll("https://marcustansoon.github.io", "");
 			
-			const resolved = new URL(url, m3u8URL);
+			const resolved = new URL(url, videoUrl);
           
           const newUrl =
-            "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/m3u8-player.html?url=" +
+            "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/m3u8-player.html?murl=" +
             encodeURIComponent(resolved.href);
     
           	console.log("XHR Redirect:", url, "→", newUrl);
@@ -78,17 +90,7 @@ http://skdy6cd5.g3awd.xyz/player_api.php?username=3vi1128091&password=UJvQdsWbrY
       };
     })();
 
-	  
-    const params = new URLSearchParams(window.location.search);
-    const videoUrl = params.get('url');
-	  
-    const STREAM = videoUrl; //stream8;
-
-    let TOKEN = "";
-    let HLS;
-
-    const video = document.getElementById("video");
-    let error403Count = 0;
+	
 
     function autoUnmuteVideo() {
       let videoCurrentTime;
