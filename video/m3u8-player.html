@@ -36,9 +36,12 @@
 
 <body>
 
-  <video id="video" width="100%" height="100%" controls autoplay muted playsinline></video>
+  <video id="video" width="40%" height="40%" controls autoplay muted playsinline></video>
+
 
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+	
+	<div id="log"></div>
 
 
 <!--
@@ -51,17 +54,29 @@ http://skdy6cd5.g3awd.xyz/player_api.php?username=3vi1128091&password=UJvQdsWbrY
 
 
   <script>
-    const stream2 = "http://electusprs.pro:8080/live/hQpBxw54/rPKMJ63/1865.m3u8";
-    const stream1 = "http://iptv1.kavkom.tv:8000/live/doukr05o/h81lnb53ld/1716.m3u8";
-    const stream3 = "http://tvcc.uno/live/bassotto/909099/51525.m3u8";
-    const stream4 = "http://bossip.net/live/coskunmaman/fey76c4/7959.m3u8";
-    const stream5 = "http://bedroombullyonline.com:8880/live/dghali79@gmail.com/tS7ELVXn6I/566951.m3u8";
-
-    const stream6 = "http://1tv41.icu:8080/live/4038135249/carolynne13%40telus.net/126723.m3u8";
-    const stream7 = "http://svipwoaf.top:8080/live/seri50417/seri50417AA/338.m3u8";
-	
-	const stream8 = "http://skdy6cd5.g3awd.xyz:80/live/3vi1128091/UJvQdsWbrY/1128005.m3u8";
-	const stream9 = "http://skdy6cd5.g3awd.xyz:80/live/3vi1128091/UJvQdsWbrY/1252426.m3u8";
+	  // Overwrite existing XHR request
+    (function () {
+      const originalOpen = XMLHttpRequest.prototype.open;
+    
+      XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
+        if (method.toUpperCase() === "GET") {
+			url = url.replaceAll("https://marcustansoon.github.io/PhysicsEngine.js-2D/video/", "").replaceAll("https://marcustansoon.github.io", "");
+			
+			const resolved = new URL(url, m3u8URL);
+          
+          const newUrl =
+            "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/m3u8-player.html?url=" +
+            encodeURIComponent(resolved.href);
+    
+          	console.log("XHR Redirect:", url, "→", newUrl);
+			document.getElementById('log').innerHTML += `<div>${url} -> ${newUrl}</div>`;
+    
+          arguments[1] = newUrl; // replace URL
+        }
+    
+        return originalOpen.apply(this, arguments);
+      };
+    })();
 
 	  
     const params = new URLSearchParams(window.location.search);
