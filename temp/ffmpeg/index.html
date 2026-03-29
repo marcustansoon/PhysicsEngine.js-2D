@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFmpeg.wasm - Transcode & Merge Video + Audio</title>
+    
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        button { margin: 8px 0; padding: 10px 16px; font-size: 16px; }
+        #log-div { margin-top: 15px; white-space: pre-wrap; background: #f4f4f4; padding: 10px; min-height: 100px; }
+    </style>
+</head>
+<body>
+    <h1>FFmpeg.wasm Demo</h1>
+
+    <video autoplay muted controls id="video-result" style="max-width: 100%;"></video><br/><br/>
+
+    <button id="load-button">Load ffmpeg-core (~31 MB)</button><br/>
+    <button disabled id="transcode-button">Transcode WebM to MP4 (test video)</button><br/>
+    <button disabled id="merge-button">Merge Video + Audio → MP4</button><br/>
+
+    <p id="log-div"></p>
+    <p>Open Developer Tools (Ctrl+Shift+I) to see detailed logs</p>
+
+    <script>
+        "use strict";
+
+        let ffmpeg = null;
+        let loadBtn = null;
+        let transcodeBtn = null;
+        let mergeBtn = null;
+        let logDiv = null;
+        let videoEl = null;
+
+        const tryMultiThread = true;
+
+        // Updated to more recent stable versions (as of early 2025/2026)
+        const baseURLFFMPEG = 'https://unpkg.com/@ffmpeg/ffmpeg@0.12.10/dist/umd';
+        const baseURLCore = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
+        const baseURLCoreMT = 'https://unpkg.com/@ffmpeg/core-mt@0.12.6/dist/umd';
+
+        const toBlobURL = async (url, mimeType) => {
+            const resp = await fetch(url);
+            const body = await resp.blob();
+            return URL.createObjectURL(new Blob([body], { type: mimeType }));
+        };
+
+        const toBlobURLPatched = async (url, mimeType, patcher) => {
+            const resp = await fetch(url);
+            let body = await resp.text();
+            if (patcher) body = patcher(body);
+            return URL.createObjectURL(new Blob([body], { type: mimeType }));
+        };
+
+        const fetchFile = async (url) => {
+            const resp = await fetch(url);
+            const buffer = await resp.arrayBuffer();
+            return new Uint8Array(buffer);
+        };
+
+        const log = (message) => {
+            console.log(message);
+            logDiv.innerHTML = message;
+        };
+
+        const load = async () => {
+            loadBtn.disabled = true;
+            log('Loading FFmpeg... (this may take 10-30 seconds)');
+
+            try {
+                // Patch the worker path
+                const ffmpegBlobURL = await toBlobURLPatched(
+                    `${baseURLFFMPEG}/ffmpeg.js`,
+                    'text/javascript',
+                    (js) => js.replace('new URL(e.p+e.u(814),e.b)', 'r.workerLoadURL')
+                );
+
+                await import(ffmpegBlobURL);
+
+                ffmpeg = new FFmpegWASM.FFmpeg();
+
+                ffmpeg.on('log', ({ message }) => {
+                    console.log(message);
+                    logDiv.innerHTML = message;
+                });
+
+                ffmpeg.on('progress', ({ progress }) => {
+                    log(`Progress: ${(progress * 100).toFixed(1)}%`);
+                });
+
+                const isMultiThreadSupported = tryMultiThread && window.crossOriginIsolated;
+
+                if (isMultiThreadSupported) {
+                    log('Loading multi-threaded FFmpeg (faster)...');
+                    mergeBtn.innerHTML = 'Merge Video + Audio (multi-threaded)';
+                    transcodeBtn.innerHTML = 'Transcode WebM to MP4 (multi-threaded)';
+
+                    await ffmpeg.load({
+                        workerLoadURL: await toBlobURL(`${baseURLFFMPEG}/814.ffmpeg.js`, 'text/javascript'),
+                        coreURL: await toBlobURL(`${baseURLCoreMT}/ffmpeg-core.js`, 'text/javascript'),
+                        wasmURL: await toBlobURL(`${baseURLCoreMT}/ffmpeg-core.wasm`, 'application/wasm'),
+                        workerURL: await toBlobURL(`${baseURLCoreMT}/ffmpeg-core.worker.js`, 'application/javascript'),
+                    });
+                } else {
+                    log('Loading single-threaded FFmpeg (slower, no crossOriginIsolated)');
+                    await ffmpeg.load({
+                        workerLoadURL: await toBlobURL(`${baseURLFFMPEG}/814.ffmpeg.js`, 'text/javascript'),
+                        coreURL: await toBlobURL(`${baseURLCore}/ffmpeg-core.js`, 'text/javascript'),
+                        wasmURL: await toBlobURL(`${baseURLCore}/ffmpeg-core.wasm`, 'application/wasm'),
+                    });
+                }
+
+                log('FFmpeg loaded successfully!');
+                transcodeBtn.disabled = false;
+                mergeBtn.disabled = false;
+
+            } catch (err) {
+                console.error(err);
+                log('Error loading FFmpeg: ' + err.message);
+                loadBtn.disabled = false;
+            }
+        };
+
+        // Original transcode example
+        const transcode = async () => {
+            transcodeBtn.disabled = true;
+            log('Downloading test video and transcoding...');
+
+            try {
+                await ffmpeg.writeFile('input.webm', await fetchFile('https://raw.githubusercontent.com/ffmpegwasm/testdata/master/Big_Buck_Bunny_180_10s.webm'));
+
+                await ffmpeg.exec(['-i', 'input.webm', '-c:v', 'libx264', '-c:a', 'aac', 'output.mp4']);
+
+                const data = await ffmpeg.readFile('output.mp4');
+                videoEl.src = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+
+                log('Transcoding completed!');
+            } catch (err) {
+                log('Transcode error: ' + err.message);
+            } finally {
+                transcodeBtn.disabled = false;
+            }
+        };
+
+        // Merge Video + Audio
+        const mergeVideoAndAudio = async () => {
+            mergeBtn.disabled = true;
+            log('Merging video and audio...');
+
+            try {
+                // === CHANGE THESE URLs TO YOUR OWN FILES ===
+                const videoURL = 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny_720_10s_1mb.mp4'; // silent or with audio
+                const audioURL = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3';   // background music example
+
+                await ffmpeg.writeFile('input_video.mp4', await fetchFile(videoURL));
+                await ffmpeg.writeFile('input_audio.mp3', await fetchFile(audioURL));
+
+                // Fast merge: copy video stream, encode audio to AAC
+                await ffmpeg.exec([
+                    '-i', 'input_video.mp4',
+                    '-i', 'input_audio.mp3',
+                    '-c:v', 'copy',           // no re-encode video (fast)
+                    '-c:a', 'aac',            // MP4 needs AAC audio
+                    '-map', '0:v:0',          // take video from first input
+                    '-map', '1:a:0',          // take audio from second input
+                    '-shortest',              // end when shortest file ends
+                    'output_merged.mp4'
+                ]);
+
+                const data = await ffmpeg.readFile('output_merged.mp4');
+                videoEl.src = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+
+                log('Merge completed successfully! 🎉');
+            } catch (err) {
+                console.error(err);
+                log('Merge error: ' + err.message);
+            } finally {
+                mergeBtn.disabled = false;
+            }
+        };
+
+        // Initialize
+        window.addEventListener("load", () => {
+            loadBtn = document.getElementById('load-button');
+            transcodeBtn = document.getElementById('transcode-button');
+            mergeBtn = document.getElementById('merge-button');
+            logDiv = document.getElementById('log-div');
+            videoEl = document.getElementById('video-result');
+
+            loadBtn.addEventListener('click', load);
+            transcodeBtn.addEventListener('click', transcode);
+            mergeBtn.addEventListener('click', mergeVideoAndAudio);
+
+            log('Page loaded. Click "Load ffmpeg-core" to begin.');
+        });
+    </script>
+</body>
+</html>
