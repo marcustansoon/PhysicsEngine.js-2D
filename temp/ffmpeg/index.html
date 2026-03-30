@@ -1,48 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FFmpeg.wasm - Merge Video + Audio</title>
-<style>
-    body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
-    button { margin: 8px 0; padding: 12px 20px; font-size: 16px; cursor: pointer; }
-    input[type="file"] { margin: 10px 0; display: block; }
-    #log-div {
-        margin-top: 15px;
-        white-space: pre-wrap;
-        background: #f4f4f4;
-        padding: 12px;
-        min-height: 200px;
-        border: 1px solid #ddd;
-        font-family: monospace;
-        overflow-y: auto;
-    }
-    video { max-width: 100%; margin: 15px 0; background: #000; }
-    .success { color: green; }
-    .error { color: red; }
-    .status { color: #0066cc; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFmpeg.wasm - Merge Video + Audio</title>
+    <style>
+        button { margin: 8px 0; padding: 12px 20px; font-size: 16px; cursor: pointer; }
+        input[type="file"] { margin: 10px 0; display: block; }
+        #log-div {
+            margin-top: 15px;
+            white-space: pre-wrap;
+            background: #f4f4f4;
+            padding: 12px;
+            min-height: 200px;
+            border: 1px solid #ddd;
+            font-family: monospace;
+            overflow-y: auto;
+        }
+        video { max-width: 100%; margin: 15px 0; background: #000; }
+        .success { color: green; }
+        .error { color: red; }
+        .status { color: #0066cc; }
+    </style>
+    <style>
+        body {
+          font-family: 'Source Sans Pro';
+          background-color: #f4f4f4;
+          height: 100vh;
+          margin: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+    
+        .progress-wrapper {
+          width: 80%;
+          max-width: 500px;
+          text-align: center;
+        }
+    
+        .progress-title {
+          font-size: 22px;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 15px;
+        }
+    
+        .progress-bar {
+          height: 30px;
+          background: #e0e0e0;
+          border-radius: 50px;
+          overflow: hidden;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    
+        .progress {
+          height: 100%;
+          background: linear-gradient(90deg, #ff5f6d, #ff0000);
+          width: 0%;                    /* JS will control this */
+          transition: width 0.8s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-weight: bold;
+          font-size: 16px;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 </head>
 <body>
-<h1>FFmpeg.wasm: Merge Video + Audio → MP4</h1>
-<video id="video-result" controls></video><br><br>
+    
+  <div class="progress-wrapper">
+    <div class="progress-title">Project Progress</div>
+    <div class="progress-bar">
+      <div id="progress" class="progress"><div id="progress-text" style="position: absolute; left: 0; width: 100%;">0%</div></div>
+    </div>
+  </div>
+    
+<div style="display:none">
+    <h1>FFmpeg.wasm: Merge Video + Audio → MP4</h1>
+    <video id="video-result" controls></video><br><br>
+    
+    <h3>Step 1: Load FFmpeg</h3>
+    <button id="load-button">Load FFmpeg (~31 MB)</button><br><br>
+    
+    <h3>Step 2: Select Files</h3>
+    <label>Video File (MP4, WebM, MOV...):<br>
+        <input type="file" id="video-input" accept="video/*">
+    </label><br><br>
+    
+    <label>Audio File (M4A, MP3, WAV, AAC...):<br>
+        <input type="file" id="audio-input" accept="audio/*">
+    </label><br><br>
+    
+    <button disabled id="merge-button">Merge Video + Audio → MP4</button><br>
+    
+    <div id="log-div">Click "Load FFmpeg" to start.</div>
 
-<h3>Step 1: Load FFmpeg</h3>
-<button id="load-button">Load FFmpeg (~31 MB)</button><br><br>
-
-<h3>Step 2: Select Files</h3>
-<label>Video File (MP4, WebM, MOV...):<br>
-    <input type="file" id="video-input" accept="video/*">
-</label><br><br>
-
-<label>Audio File (M4A, MP3, WAV, AAC...):<br>
-    <input type="file" id="audio-input" accept="audio/*">
-</label><br><br>
-
-<button disabled id="merge-button">Merge Video + Audio → MP4</button><br>
-
-<div id="log-div">Click "Load FFmpeg" to start.</div>
+</div>
 
 <!-- Local FFmpeg -->
 <script src="ffmpeg.min.js"></script>
@@ -94,6 +150,7 @@
                     }
                 }
             }
+            updateProgressBar("audio-download", (i+1) / totalChunks);
         }
         return {'data': fullArray, 'status': 200};
     }
@@ -133,6 +190,7 @@
                     }
                 }
             }
+            updateProgressBar("audio-download", (i+1) / totalChunks);
         }
         return {'data': fullArray, 'status': 200};
     }
@@ -179,6 +237,8 @@
                 total: totalChunks,
                 data: base64Chunk,
             });
+
+            updateProgressBar("video-upload", (i+1) / totalChunks);
             
             // Small delay to avoid overloading WebView
             await delay(50);
@@ -190,122 +250,155 @@
 
     
 
-let ffmpeg = null;
-let loadBtn, mergeBtn, logDiv, videoEl;
-let selectedVideoFile = null;
-let selectedAudioFile = null;
+    let ffmpeg = null;
+    let loadBtn, mergeBtn, logDiv, videoEl;
+    let selectedVideoFile = null;
+    let selectedAudioFile = null;
+    
+    const log = (msg, type='') => {
+        console.log(msg);
+        let cls = 'status', prefix = '';
+        if(type==='success'){ cls='success'; prefix='✅ '; }
+        if(type==='error'){ cls='error'; prefix='❌ '; }
+        logDiv.innerHTML = `<span class="${cls}">${prefix}${msg}</span>`;
+    };
+    
+    const fileToUint8Array = async (file) => {
+        if(!file) throw new Error("No file selected");
+        return new Uint8Array(await file.arrayBuffer());
+    };
+    
+    const loadFFmpeg = async () => {
+        loadBtn.disabled = true;
+        log('Loading FFmpeg... (may take 15–40s first time)');
+    
+        try{
+            ffmpeg = new FFmpegWASM.FFmpeg();
+    
+            ffmpeg.on('log', ({message}) => console.log('FFmpeg log:', message));
+            ffmpeg.on('progress', ({progress}) => {
+                log(`Progress: ${(progress*100).toFixed(1)}%`);
+                updateProgressBar("merging", progress);
+            });
+    
+            // Load core and worker from local files to avoid CORS issues
+            await ffmpeg.load({
+                corePath: 'ffmpeg-core.js',
+                wasmPath: 'ffmpeg-core.wasm',
+                workerPath: '814.ffmpeg.js'
+            });
+    
+            log('FFmpeg loaded successfully!', 'success');
+            mergeBtn.disabled = false;
+            
+            isLibLoaded = true;
+            checkForMergeReady();
+            
+            updateProgressBar("load-lib", 1);
+        } catch(err){
+            console.error(err);
+            log('Failed to load FFmpeg: ' + err.message,'error');
+            loadBtn.disabled = false;
+        }
+    };
+    
+    const handleVideoSelect = (e) => {
+        selectedVideoFile = e.target.files[0];
+        if(selectedVideoFile){
+            log(`Video selected: ${selectedVideoFile.name} (${(selectedVideoFile.size/(1024*1024)).toFixed(1)} MB)`);
+        }
+    };
+    
+    const handleAudioSelect = (e) => {
+        selectedAudioFile = e.target.files[0];
+        if(selectedAudioFile){
+            log(`Audio selected: ${selectedAudioFile.name} (${(selectedAudioFile.size/(1024*1024)).toFixed(1)} MB)`);
+        }
+    };
+    
+    const mergeVideoAndAudio = async () => {
+        mergeBtn.disabled = true;
+        log('Starting merge...');
+    
+        try{
+            const videoData = vd;//await fileToUint8Array(selectedVideoFile);
+            const audioData = ad;//await fileToUint8Array(selectedAudioFile);
+    
+            await ffmpeg.writeFile('input_video', videoData);
+            await ffmpeg.writeFile('input_audio', audioData);
+    
+            await ffmpeg.exec([
+                '-i','input_video',
+                '-i','input_audio',
+                '-c:v','copy',
+                '-c:a','aac',
+                '-map','0:v:0',
+                '-map','1:a:0',
+                '-shortest',
+                'output_merged.mp4'
+            ]);
+    
+            const outputData = await ffmpeg.readFile('output_merged.mp4');
+            const blob = new Blob([outputData.buffer], {type:'video/mp4'});
+            videoEl.src = URL.createObjectURL(blob);
+    
+            sendMergedVideoToFlutter(outputData);
+    
+            log('Merge completed successfully! Play the video above.','success');
+            updateProgressBar("merging", 1);
+        }catch(err){
+            console.error(err);
+            log('Merge failed: '+err.message,'error');
+        }finally{
+            mergeBtn.disabled = false;
+        }
+    };
+    
+    window.addEventListener('load', ()=>{
+        loadBtn = document.getElementById('load-button');
+        mergeBtn = document.getElementById('merge-button');
+        logDiv = document.getElementById('log-div');
+        videoEl = document.getElementById('video-result');
+    
+        document.getElementById('video-input').addEventListener('change', handleVideoSelect);
+        document.getElementById('audio-input').addEventListener('change', handleAudioSelect);
+        loadBtn.addEventListener('click', loadFFmpeg);
+        mergeBtn.addEventListener('click', mergeVideoAndAudio);
+    
+        log('Ready. Click "Load FFmpeg" to begin.');
+    });
+    
+    setTimeout(()=>{
+        document.getElementById('load-button').click();
+        fetchVideoAndAudioFiles();
+    }, 600);
 
-const log = (msg, type='') => {
-    console.log(msg);
-    let cls = 'status', prefix = '';
-    if(type==='success'){ cls='success'; prefix='✅ '; }
-    if(type==='error'){ cls='error'; prefix='❌ '; }
-    logDiv.innerHTML = `<span class="${cls}">${prefix}${msg}</span>`;
-};
 
-const fileToUint8Array = async (file) => {
-    if(!file) throw new Error("No file selected");
-    return new Uint8Array(await file.arrayBuffer());
-};
-
-const loadFFmpeg = async () => {
-    loadBtn.disabled = true;
-    log('Loading FFmpeg... (may take 15–40s first time)');
-
-    try{
-        ffmpeg = new FFmpegWASM.FFmpeg();
-
-        ffmpeg.on('log', ({message}) => console.log('FFmpeg log:', message));
-        ffmpeg.on('progress', ({progress}) => log(`Progress: ${(progress*100).toFixed(1)}%`));
-
-        // Load core and worker from local files to avoid CORS issues
-        await ffmpeg.load({
-            corePath: 'ffmpeg-core.js',
-            wasmPath: 'ffmpeg-core.wasm',
-            workerPath: '814.ffmpeg.js'
-        });
-
-        log('FFmpeg loaded successfully!', 'success');
-        mergeBtn.disabled = false;
-        
-        isLibLoaded = true;
-        checkForMergeReady();
-    } catch(err){
-        console.error(err);
-        log('Failed to load FFmpeg: ' + err.message,'error');
-        loadBtn.disabled = false;
+    
+    
+    const progressBar = document.getElementById('progress');
+    const progressText = document.getElementById('progress-text');
+    let progressBarStatus = {"video-download": 0, "audio-download": 0, "load-lib": 0, "merging": 0, "video-upload": 0};
+    
+    // Progress Bar Update
+    function updateProgressBar(type, percentageValue){
+        // percentageValue is of value between 0 - 1
+        progressBarStatus[type] = parseFloat(percentageValue);
+        setProgress(calculateProgressBar());
     }
-};
 
-const handleVideoSelect = (e) => {
-    selectedVideoFile = e.target.files[0];
-    if(selectedVideoFile){
-        log(`Video selected: ${selectedVideoFile.name} (${(selectedVideoFile.size/(1024*1024)).toFixed(1)} MB)`);
+    function calculateProgressBar() {
+        return Math.max((progressBarStatus["video-download"] * 0.15 + progressBarStatus["audio-download"] * 0.15 + progressBarStatus["load-lib"] * 0.1 + progressBarStatus["merging"] * 0.3 + progressBarStatus["video-upload"] * 0.3) * 100, 100); 
     }
-};
 
-const handleAudioSelect = (e) => {
-    selectedAudioFile = e.target.files[0];
-    if(selectedAudioFile){
-        log(`Audio selected: ${selectedAudioFile.name} (${(selectedAudioFile.size/(1024*1024)).toFixed(1)} MB)`);
+    function setProgress(percent) {
+      if (percent < 0) percent = 0;
+      if (percent > 100) percent = 100;
+      
+      progressBar.style.width = percent + '%';
+      progressText.textContent = percent + '%';
     }
-};
 
-const mergeVideoAndAudio = async () => {
-    mergeBtn.disabled = true;
-    log('Starting merge...');
-
-    try{
-        const videoData = vd;//await fileToUint8Array(selectedVideoFile);
-        const audioData = ad;//await fileToUint8Array(selectedAudioFile);
-
-        await ffmpeg.writeFile('input_video', videoData);
-        await ffmpeg.writeFile('input_audio', audioData);
-
-        await ffmpeg.exec([
-            '-i','input_video',
-            '-i','input_audio',
-            '-c:v','copy',
-            '-c:a','aac',
-            '-map','0:v:0',
-            '-map','1:a:0',
-            '-shortest',
-            'output_merged.mp4'
-        ]);
-
-        const outputData = await ffmpeg.readFile('output_merged.mp4');
-        const blob = new Blob([outputData.buffer], {type:'video/mp4'});
-        videoEl.src = URL.createObjectURL(blob);
-
-        sendMergedVideoToFlutter(outputData);
-
-        log('Merge completed successfully! Play the video above.','success');
-    }catch(err){
-        console.error(err);
-        log('Merge failed: '+err.message,'error');
-    }finally{
-        mergeBtn.disabled = false;
-    }
-};
-
-window.addEventListener('load', ()=>{
-    loadBtn = document.getElementById('load-button');
-    mergeBtn = document.getElementById('merge-button');
-    logDiv = document.getElementById('log-div');
-    videoEl = document.getElementById('video-result');
-
-    document.getElementById('video-input').addEventListener('change', handleVideoSelect);
-    document.getElementById('audio-input').addEventListener('change', handleAudioSelect);
-    loadBtn.addEventListener('click', loadFFmpeg);
-    mergeBtn.addEventListener('click', mergeVideoAndAudio);
-
-    log('Ready. Click "Load FFmpeg" to begin.');
-});
-
-setTimeout(()=>{
-    document.getElementById('load-button').click();
-    fetchVideoAndAudioFiles();
-}, 600);
 </script>
 </body>
 </html>
