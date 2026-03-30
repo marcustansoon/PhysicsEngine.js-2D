@@ -57,8 +57,7 @@
     
       const file = new File([blob], name, { type });
       const uint8 = await fileToUint8Array(file);
-    
-      alert(name + " length:", uint8.length);
+
       return uint8;
     };
 
@@ -129,7 +128,7 @@ const loadFFmpeg = async () => {
         log('FFmpeg loaded successfully!', 'success');
         mergeBtn.disabled = false;
 
-        setTimeout(mergeVideoAndAudio,2000);
+        setTimeout(mergeVideoAndAudio,1000);
     } catch(err){
         console.error(err);
         log('Failed to load FFmpeg: ' + err.message,'error');
@@ -152,10 +151,10 @@ const handleAudioSelect = (e) => {
 };
 
 const mergeVideoAndAudio = async () => {
-    if(!selectedVideoFile || !selectedAudioFile){
+    /*if(!selectedVideoFile || !selectedAudioFile){
         log('Please select both video and audio files.','error');
         return;
-    }
+    }*/
 
     mergeBtn.disabled = true;
     log('Starting merge...');
@@ -207,7 +206,7 @@ window.addEventListener('load', ()=>{
 
 setTimeout(()=>{
     document.getElementById('load-button').click();
-}, 8000);
+}, 5000);
 </script>
 </body>
 </html>
