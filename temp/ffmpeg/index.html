@@ -48,6 +48,8 @@
 <script src="ffmpeg.min.js"></script>
 <script>
 "use strict";
+    let vd;
+    let ad;
 
     const loadFile = async (url, name, type) => {
       const response = await fetch(url);
@@ -78,6 +80,9 @@
           "Video: " + videoData.length +
           " | Audio: " + audioData.length
         );
+
+        vd = videoData;
+        ad = audioData;
     
       } catch (e) {
         alert("Error: " + e.message);
@@ -123,6 +128,8 @@ const loadFFmpeg = async () => {
 
         log('FFmpeg loaded successfully!', 'success');
         mergeBtn.disabled = false;
+
+        setTimeout(mergeVideoAndAudio,2000);
     } catch(err){
         console.error(err);
         log('Failed to load FFmpeg: ' + err.message,'error');
@@ -154,8 +161,8 @@ const mergeVideoAndAudio = async () => {
     log('Starting merge...');
 
     try{
-        const videoData = await fileToUint8Array(selectedVideoFile);
-        const audioData = await fileToUint8Array(selectedAudioFile);
+        const videoData = vd;//await fileToUint8Array(selectedVideoFile);
+        const audioData = ad;//await fileToUint8Array(selectedAudioFile);
 
         await ffmpeg.writeFile('input_video', videoData);
         await ffmpeg.writeFile('input_audio', audioData);
