@@ -64,6 +64,7 @@
         
         // Ask for file size (video)
         const videoSize = await window.flutter_inappwebview.callHandler('getFileSize', 'video');
+        if(videoSize == 0) return {'status': 400};
         const totalChunks = Math.ceil(videoSize / chunkSize);
     
         let fullArray = new Uint8Array(videoSize);
@@ -102,6 +103,7 @@
         
         // Ask for file size (audio)
         const audioSize = await window.flutter_inappwebview.callHandler('getFileSize', 'audio');
+        if(audioSize == 0) return {'status': 400};
         const totalChunks = Math.ceil(audioSize / chunkSize);
     
         let fullArray = new Uint8Array(audioSize);
