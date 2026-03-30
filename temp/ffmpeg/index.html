@@ -25,7 +25,6 @@
     <style>
         body {
           font-family: 'Source Sans Pro';
-          background-color: #f4f4f4;
           height: 100vh;
           margin: 0;
           display: flex;
@@ -50,7 +49,7 @@
           height: 30px;
           background: #e0e0e0;
           border-radius: 50px;
-          overflow: hidden;
+          /*overflow: hidden;*/
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
     
@@ -72,10 +71,11 @@
 <body>
     
   <div class="progress-wrapper">
-    <div class="progress-title">Project Progress</div>
+    <div id="progress-title" class="progress-title">Project Progress</div>
     <div class="progress-bar">
       <div id="progress" class="progress"><div id="progress-text" style="position: absolute; left: 0; width: 100%;">0%</div></div>
     </div>
+    <div class="" style=" color: red; padding: 5px; ">Error: Fetch video failed</div>
   </div>
     
 <div style="display:none">
@@ -197,7 +197,9 @@
 
     
     async function fetchVideoAndAudioFiles(){
+        updateProgressTitle("Processing video...");
         let _vd = await fetchVideoFile();
+        updateProgressTitle("Processing audio...");
         let _ad = await fetchAudioFile();
         if(_vd.status === 400 || _ad.status === 400){
             return;
@@ -209,6 +211,9 @@
     }
 
     function checkForMergeReady(){
+        if(!isLibLoaded){
+            updateProgressTitle("Loading utilities...");
+        }
         if(isFetchDataReady && isLibLoaded) {
             mergeVideoAndAudio();
         }
@@ -216,6 +221,7 @@
 
     
     async function sendMergedVideoToFlutter(outputData) {
+        updateProgressTitle("Finalizing video...");
         if (!window.flutter_inappwebview?.callHandler) return;
     
         // Notify Flutter to get ready
@@ -319,7 +325,7 @@
     const mergeVideoAndAudio = async () => {
         mergeBtn.disabled = true;
         log('Starting merge...');
-    
+        updateProgressTitle("Merging video...");
         try{
             const videoData = vd;//await fileToUint8Array(selectedVideoFile);
             const audioData = ad;//await fileToUint8Array(selectedAudioFile);
@@ -377,14 +383,19 @@
     
     
     const progressBar = document.getElementById('progress');
+    const progressTitle = document.getElementById('progress-title');
     const progressText = document.getElementById('progress-text');
     let progressBarStatus = {"video-download": 0, "audio-download": 0, "load-lib": 0, "merging": 0, "video-upload": 0};
     
     // Progress Bar Update
     function updateProgressBar(type, percentageValue){
         // percentageValue is of value between 0 - 1
-        progressBarStatus[type] = parseFloat(percentageValue);
+        progressBarStatus[type] = Math.min(parseFloat(percentageValue), 1);
         setProgress(calculateProgressBar());
+    }
+
+    function updateProgressTitle(text){
+        progressTitle.textContent = text;
     }
 
     function calculateProgressBar() {
