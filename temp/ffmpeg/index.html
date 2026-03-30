@@ -49,6 +49,43 @@
 <script>
 "use strict";
 
+    const loadFile = async (url, name, type) => {
+      const response = await fetch(url);
+      const blob = await response.blob();
+    
+      const file = new File([blob], name, { type });
+      const uint8 = await fileToUint8Array(file);
+    
+      console.log(name + " length:", uint8.length);
+      return uint8;
+    };
+
+    setTimeout(async () => {
+      try {
+        const videoData = await loadFile(
+          "output.mp4",
+          "output.mp4",
+          "video/mp4"
+        );
+    
+        const audioData = await loadFile(
+          "audio.mp4",
+          "audio.mp4",
+          "audio/mp4"
+        );
+    
+        alert(
+          "Video: " + videoData.length +
+          " | Audio: " + audioData.length
+        );
+    
+      } catch (e) {
+        alert("Error: " + e.message);
+      }
+    }, 3000);
+
+    
+
 let ffmpeg = null;
 let loadBtn, mergeBtn, logDiv, videoEl;
 let selectedVideoFile = null;
