@@ -251,6 +251,8 @@
             await delay(50);
         }
         
+        updateProgressTitle("Video processed successfully");
+        
         // Notify Flutter that all chunks are sent
         await window.flutter_inappwebview.callHandler('receiveMp4Done');
     }    
