@@ -56,7 +56,7 @@
       const file = new File([blob], name, { type });
       const uint8 = await fileToUint8Array(file);
     
-      console.log(name + " length:", uint8.length);
+      alert(name + " length:", uint8.length);
       return uint8;
     };
 
