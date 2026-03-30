@@ -1,4 +1,67 @@
-"use strict";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFmpeg.wasm - Merge MP4 Video + Audio (Upload Files)</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            line-height: 1.6; 
+        }
+        button { 
+            margin: 8px 0; 
+            padding: 12px 20px; 
+            font-size: 16px; 
+            cursor: pointer; 
+        }
+        input[type="file"] { 
+            margin: 10px 0; 
+            display: block;
+        }
+        #log-div { 
+            margin-top: 15px; 
+            white-space: pre-wrap; 
+            background: #f4f4f4; 
+            padding: 12px; 
+            min-height: 140px;
+            border: 1px solid #ddd;
+            font-family: monospace;
+        }
+        video { 
+            max-width: 100%; 
+            margin: 15px 0; 
+            background: #000; 
+        }
+        .status { color: #0066cc; }
+        .success { color: green; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>FFmpeg.wasm: Merge MP4 Video + M4A Audio</h1>
+
+    <video id="video-result" controls></video><br/><br/>
+
+    <h3>Step 1: Load FFmpeg</h3>
+    <button id="load-button">Load FFmpeg (~31 MB)</button><br/>
+
+    <h3>Step 2: Select Your Files</h3>
+    <label>Video File (MP4, WebM, MOV, etc.):<br>
+        <input type="file" id="video-input" accept="video/*">
+    </label><br><br>
+
+    <label>Audio File (M4A, MP3, WAV, AAC, etc.):<br>
+        <input type="file" id="audio-input" accept="audio/*">
+    </label><br><br>
+
+    <button disabled id="merge-button">Merge Video + Audio → MP4</button><br/>
+
+    <p id="log-div">Click "Load FFmpeg" first, then select your video and audio files.</p>
+
+    <script>
+        "use strict";
 
         let ffmpeg = null;
         let loadBtn = null;
@@ -169,3 +232,6 @@
 
             log('Ready. Click "Load FFmpeg" to begin.');
         });
+    </script>
+</body>
+</html>
