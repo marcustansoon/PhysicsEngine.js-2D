@@ -47,46 +47,112 @@
 <!-- Local FFmpeg -->
 <script src="ffmpeg.min.js"></script>
 <script>
-"use strict";
+    "use strict";
+    
+    const chunkSize = 1024 * 50; // 50 KB
     let vd;
     let ad;
+    let isFetchDataReady = false;
+    let isLibLoaded = false;
 
-    const loadFile = async (url, name, type) => {
-      const response = await fetch(url);
-      const blob = await response.blob();
-    
-      const file = new File([blob], name, { type });
-      const uint8 = await fileToUint8Array(file);
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
-      return uint8;
-    };
+    async function fetchVideoFile() {
+        if(!window.flutter_inappwebview?.callHandler) return {'status': 400};
+        
+        // Ask for file size (video)
+        const videoSize = await window.flutter_inappwebview.callHandler('getFileSize', 'video');
+        const totalChunks = Math.ceil(videoSize / chunkSize);
+    
+        let fullArray = new Uint8Array(videoSize);
+        const maxRetries = 50;
+        let retriesCount = 0;
+    
+        for (let i = 0; i < totalChunks; i++) {
+            retriesCount = 0;
+            while(retriesCount < maxRetries){
+                try{
+                    const start = i * chunkSize;
+                    const end = Math.min(start + chunkSize, videoSize);
+                    const url = `output.mp4?start=${start}&end=${end}`;
+                  
+                    const response = await fetch(url);
+                    const buffer = await response.arrayBuffer();
+                  
+                    fullArray.set(new Uint8Array(buffer), start);
+                    await delay(50);
+                    
+                    break;
+                }catch(e){
+                    retriesCount++;
+                    await delay(1000);
+                    if(retriesCount >= maxRetries){
+                        return {'status': 400};
+                    }
+                }
+            }
+        }
+        return {'data': fullArray, 'status': 200};
+    }
 
-    setTimeout(async () => {
-      try {
-        const videoData = await loadFile(
-          "output.mp4",
-          "output.mp4",
-          "video/mp4"
-        );
+    async function fetchAudioFile() {
+        if(!window.flutter_inappwebview?.callHandler) return {'status': 400};
+        
+        // Ask for file size (audio)
+        const audioSize = await window.flutter_inappwebview.callHandler('getFileSize', 'audio');
+        const totalChunks = Math.ceil(audioSize / chunkSize);
     
-        const audioData = await loadFile(
-          "audio.mp4",
-          "audio.mp4",
-          "audio/mp4"
-        );
+        let fullArray = new Uint8Array(audioSize);
+        const maxRetries = 50;
+        let retriesCount = 0;
     
-        alert(
-          "Video: " + videoData.length +
-          " | Audio: " + audioData.length
-        );
+        for (let i = 0; i < totalChunks; i++) {
+            retriesCount = 0;
+            while(retriesCount < maxRetries){
+                try{
+                    const start = i * chunkSize;
+                    const end = Math.min(start + chunkSize, audioSize);
+                    const url = `audio.mp4?start=${start}&end=${end}`;
+                  
+                    const response = await fetch(url);
+                    const buffer = await response.arrayBuffer();
+                  
+                    fullArray.set(new Uint8Array(buffer), start);
+                    await delay(50);
+                    
+                    break;
+                }catch(e){
+                    retriesCount++;
+                    await delay(1000);
+                    if(retriesCount >= maxRetries){
+                        return {'status': 400};
+                    }
+                }
+            }
+        }
+        return {'data': fullArray, 'status': 200};
+    }
 
-        vd = videoData;
-        ad = audioData;
     
-      } catch (e) {
-        alert("Error: " + e.message);
-      }
-    }, 3000);
+    async function fetchVideoAndAudioFiles(){
+        let _vd = await fetchVideoFile();
+        let _ad = await fetchAudioFile();
+        if(_vd.status === 400 || _ad.status === 400){
+            return;
+        }
+        vd = _vd.data;
+        ad = _ad.data;
+        isFetchDataReady = true;
+        checkForMergeReady();
+    }
+
+    function checkForMergeReady(){
+        if(isFetchDataReady && isLibLoaded) {
+            mergeVideoAndAudio();
+        }
+    }
 
     
 
@@ -127,8 +193,9 @@ const loadFFmpeg = async () => {
 
         log('FFmpeg loaded successfully!', 'success');
         mergeBtn.disabled = false;
-
-        setTimeout(mergeVideoAndAudio,1000);
+        
+        isLibLoaded = true;
+        checkForMergeReady();
     } catch(err){
         console.error(err);
         log('Failed to load FFmpeg: ' + err.message,'error');
@@ -151,11 +218,6 @@ const handleAudioSelect = (e) => {
 };
 
 const mergeVideoAndAudio = async () => {
-    /*if(!selectedVideoFile || !selectedAudioFile){
-        log('Please select both video and audio files.','error');
-        return;
-    }*/
-
     mergeBtn.disabled = true;
     log('Starting merge...');
 
@@ -206,7 +268,8 @@ window.addEventListener('load', ()=>{
 
 setTimeout(()=>{
     document.getElementById('load-button').click();
-}, 5000);
+    fetchVideoAndAudioFiles();
+}, 1000);
 </script>
 </body>
 </html>
