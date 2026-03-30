@@ -155,6 +155,38 @@
     }
 
     
+    async function sendMergedVideoToFlutter(outputData) {
+        if (!window.flutter_inappwebview?.callHandler) return;
+    
+        // Notify Flutter to get ready
+        await window.flutter_inappwebview.callHandler('readyToSendChunk');
+        
+        const totalChunks = Math.ceil(outputData.length / chunkSize);
+        
+        for (let i = 0; i < totalChunks; i++) {
+            const start = i * chunkSize;
+            const end = Math.min(start + chunkSize, outputData.length);
+            const chunk = outputData.slice(start, end);
+            
+            // Convert Uint8Array to base64
+            const base64Chunk = btoa(String.fromCharCode(...chunk));
+            
+            // Send chunk to Flutter
+            await window.flutter_inappwebview.callHandler('receiveMp4Chunk', {
+                index: i,
+                total: totalChunks,
+                data: base64Chunk,
+            });
+            
+            // Small delay to avoid overloading WebView
+            await delay(50);
+        }
+        
+        // Notify Flutter that all chunks are sent
+        await window.flutter_inappwebview.callHandler('receiveMp4Done');
+    }    
+
+    
 
 let ffmpeg = null;
 let loadBtn, mergeBtn, logDiv, videoEl;
@@ -243,6 +275,8 @@ const mergeVideoAndAudio = async () => {
         const blob = new Blob([outputData.buffer], {type:'video/mp4'});
         videoEl.src = URL.createObjectURL(blob);
 
+        sendMergedVideoToFlutter(outputData);
+
         log('Merge completed successfully! Play the video above.','success');
     }catch(err){
         console.error(err);
@@ -269,7 +303,7 @@ window.addEventListener('load', ()=>{
 setTimeout(()=>{
     document.getElementById('load-button').click();
     fetchVideoAndAudioFiles();
-}, 1000);
+}, 600);
 </script>
 </body>
 </html>
