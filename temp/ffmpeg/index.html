@@ -405,7 +405,7 @@
     }
 
     function calculateProgressBar() {
-        return Math.max((progressBarStatus["video-download"] * 0.15 + progressBarStatus["audio-download"] * 0.15 + progressBarStatus["load-lib"] * 0.1 + progressBarStatus["merging"] * 0.3 + progressBarStatus["video-upload"] * 0.3) * 100, 100); 
+        return Math.min((progressBarStatus["video-download"] * 0.15 + progressBarStatus["audio-download"] * 0.15 + progressBarStatus["load-lib"] * 0.1 + progressBarStatus["merging"] * 0.3 + progressBarStatus["video-upload"] * 0.3) * 100, 100); 
     }
 
     function setProgress(percent) {
