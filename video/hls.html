@@ -71,10 +71,11 @@
 			url = url.replaceAll("https://marcustansoon.github.io/PhysicsEngine.js-2D/video/", "").replaceAll("https://marcustansoon.github.io", "");
 			
 			const resolved = new URL(url, m3u8URL);
+			
+			// Base64-encode the FULL resolved URL
+			const base64Url = encodeURIComponent(btoa(resolved.href));   // native btoa = base64
           
-          const newUrl =
-            "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?url=" +
-            encodeURIComponent(resolved.href);
+			const newUrl = "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?b64=" + base64Url;
     
           	console.log("XHR Redirect:", url, "→", newUrl);
 			document.getElementById('log').innerHTML += `<div>${url} -> ${newUrl}</div>`;
@@ -453,9 +454,10 @@ function setSubtitleDelay(track, delaySeconds) {
 
 async function fetchSubtitleFromURL(url) {
   try {
-    const sURL =
-            "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?isSubtitle=true&url=" +
-            encodeURIComponent(url);
+	// Base64-encode the FULL resolved URL
+	const base64Url = encodeURIComponent(btoa(url));   // native btoa = base64
+	  
+    const sURL = "https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.html?isSubtitle=true&b64=" + base64Url;
     const response = await fetch(sURL);
 
     if (!response.ok) {
