@@ -265,40 +265,40 @@
         updateProgressTitle("Finalizing video...");
         if (!window.flutter_inappwebview?.callHandler) return;
     
-        alert('b')
-        // Notify Flutter to get ready
         await window.flutter_inappwebview.callHandler('readyToSendChunk');
-        
+    
         const totalChunks = Math.ceil(outputData.length / chunkSize);
-        alert(outputData.length)
+    
+        function uint8ToBase64(uint8Array) {
+            let binary = '';
+            const sliceSize = 0x8000; // 32 KB
+            for (let i = 0; i < uint8Array.length; i += sliceSize) {
+                const subArray = uint8Array.subarray(i, i + sliceSize);
+                binary += String.fromCharCode(...subArray);
+            }
+            return btoa(binary);
+        }
+    
         for (let i = 0; i < totalChunks; i++) {
-        alert(i)
             const start = i * chunkSize;
             const end = Math.min(start + chunkSize, outputData.length);
             const chunk = outputData.slice(start, end);
-            
-            // Convert Uint8Array to base64
-            const base64Chunk = btoa(String.fromCharCode(...chunk));
-            
-            // Send chunk to Flutter
+            const base64Chunk = uint8ToBase64(chunk);
+    
             await window.flutter_inappwebview.callHandler('receiveMp4Chunk', {
                 index: i,
                 total: totalChunks,
                 data: base64Chunk,
             });
-
-            updateProgressBar("video-upload", (i+1) / totalChunks);
-            
-            // Small delay to avoid overloading WebView
-            await delay(25);
+    
+            updateProgressBar("video-upload", (i + 1) / totalChunks);
+    
+            await delay(25); // small delay to avoid UI freezing
         }
-        
+    
         updateProgressTitle("Video processed successfully");
-        
-        // Notify Flutter that all chunks are sent
         await window.flutter_inappwebview.callHandler('receiveMp4Done');
-    }    
-
+    }
     
 
     let ffmpeg = null;
