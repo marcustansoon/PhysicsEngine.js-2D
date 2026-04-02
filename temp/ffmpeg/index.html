@@ -367,8 +367,8 @@
         log('Starting merge...');
         updateProgressTitle("Merging video...");
         try{
-            const videoData = vd;//await fileToUint8Array(selectedVideoFile);
-            await ffmpeg.writeFile('input_video', videoData);
+            const videoData = vd;    //await fileToUint8Array(selectedVideoFile);
+            await ffmpeg.writeFile('input_video.ts', videoData);
 
             if(audioExists){
                 const audioData = ad;//await fileToUint8Array(selectedAudioFile);
@@ -387,16 +387,11 @@
                     'output_merged.mp4'
                 ]);
             }else{
-                await ffmpeg.exec([             
-                      "-i",
-                      "input_video",
-                      "-c:v",
-                      "libx264",
-                      "-c:a",
-                      "aac",
-                      "-movflags",
-                      "+faststart",
-                      "output_merged.mp4"
+                await ffmpeg.exec([     
+                  '-i', 'input_video.ts',
+                  '-c', 'copy',
+                  '-movflags', '+faststart',
+                  'output_merged.mp4'
                 ]);
             }
     
