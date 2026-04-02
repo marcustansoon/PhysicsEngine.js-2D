@@ -165,6 +165,7 @@
             }
             updateProgressBar("video-download", (i+1) / totalChunks);
         }
+       alert(fullArray.length);
         return {'data': fullArray, 'status': 200};
     }
 
@@ -222,14 +223,14 @@
         audioExists = await isAudioExists();
         
         updateProgressTitle("Processing video...");
-        let _vd = await fetchVideoFile();
+        let _ = await fetchVideoFile();
         videoFileName = await getVideoFileName();
 
-        if(_vd.status === 400){
+        if(_.status === 400){
             updateProgressErrText("There was an error processing the video or audio. Please try again.");
             return;
         }
-        vd = _vd.data;
+         = _vd.data;
         
         if(audioExists){
             updateProgressTitle("Processing audio...");
