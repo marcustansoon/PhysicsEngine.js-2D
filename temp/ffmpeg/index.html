@@ -152,7 +152,7 @@
                     const buffer = await response.arrayBuffer();
                   
                     fullArray.set(new Uint8Array(buffer), start);
-                    await delay(50);
+                    await delay(25);
                     
                     break;
                 }catch(e){
@@ -192,7 +192,7 @@
                     const buffer = await response.arrayBuffer();
                   
                     fullArray.set(new Uint8Array(buffer), start);
-                    await delay(50);
+                    await delay(25);
                     
                     break;
                 }catch(e){
@@ -284,7 +284,7 @@
             updateProgressBar("video-upload", (i+1) / totalChunks);
             
             // Small delay to avoid overloading WebView
-            await delay(50);
+            await delay(25);
         }
         
         updateProgressTitle("Video processed successfully");
