@@ -408,6 +408,7 @@
         }catch(err){
             console.error(err);
             log('Merge failed: '+err.message,'error');
+            updateProgressErrText(err.message)
         }finally{
             mergeBtn.disabled = false;
         }
