@@ -363,11 +363,33 @@
             log(`Audio selected: ${selectedAudioFile.name} (${(selectedAudioFile.size/(1024*1024)).toFixed(1)} MB)`);
         }
     };
+
+    const mergeMessages = [
+        "Merging video… please wait.",
+        "Processing your video…",
+        "Combining video segments…",
+        "Hang tight, we’re stitching your video together!",
+        "Almost done! Merging video files…",
+        "Cooking up your video… this might take a moment.",
+        "Magically combining your video… ✨",
+        "Your masterpiece is being stitched together… 🎬",
+        "Mixing pixels and frames… 🍿",
+        "Video merge in progress… almost there!"
+    ];
+
+    // Function to get a random message
+    function getRandomMergeMessage() {
+        const index = Math.floor(Math.random() * mergeMessages.length);
+        return mergeMessages[index];
+    }
+    let mergingVideoMessageInterval;
     
     const mergeVideoAndAudio = async () => {
         mergeBtn.disabled = true;
+        mergingVideoMessageInterval = setInterval(() => {
+            updateProgressTitle(getRandomMergeMessage());          
+        }, 5000);
         log('Starting merge...');
-        updateProgressTitle("Merging video...");
         try{
             const videoData = vd;                                    //await fileToUint8Array(selectedVideoFile);
             await ffmpeg.writeFile('input_video', videoData);
@@ -389,12 +411,11 @@
                     'output_merged.mp4'
                 ]);
             }else{
-                await ffmpeg.exec([     
-                  "-i", "input_video",
-                  "-c:v", "libx264",
-                  "-c:a", "aac",
-                  "-movflags", "+faststart",
-                  "output_merged.mp4"
+                await ffmpeg.exec([    
+                  '-i', 'input_video',
+                  '-c', 'copy',
+                  '-movflags', '+faststart',
+                  'output_merged.mp4'
                 ]);
             }
     
@@ -402,11 +423,12 @@
             const blob = new Blob([outputData.buffer], {type:'video/mp4'});
             videoEl.src = URL.createObjectURL(blob);
     
-            sendMergedVideoToFlutter(outputData);
-    
-            log('Merge completed successfully! Play the video above.','success');
+            clearInterval(mergingVideoMessageInterval);
             updateProgressBar("merging", 1);
+            sendMergedVideoToFlutter(outputData);
+            log('Merge completed successfully! Play the video above.','success');
         }catch(err){
+            clearInterval(mergingVideoMessageInterval);
             console.error(err);
             log('Merge failed: '+err.message,'error');
             updateProgressErrText(err.message)
@@ -433,9 +455,6 @@
         document.getElementById('load-button').click();
         fetchVideoAndAudioFiles();
     }, 600);
-
-
-    
     
     const progressBar = document.getElementById('progress');
     const progressTitle = document.getElementById('progress-title');
