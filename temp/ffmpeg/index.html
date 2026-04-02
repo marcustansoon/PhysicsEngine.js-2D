@@ -240,6 +240,8 @@
                 return;
             }
             ad = _ad.data;
+        } else {
+            updateProgressBar("audio-download", 1);
         }
         isFetchDataReady = true;
         checkForMergeReady();
