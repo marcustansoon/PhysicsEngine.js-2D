@@ -270,7 +270,7 @@
         await window.flutter_inappwebview.callHandler('readyToSendChunk');
         
         const totalChunks = Math.ceil(outputData.length / chunkSize);
-        alert('a')
+        alert(outputData.length)
         for (let i = 0; i < totalChunks; i++) {
         alert(i)
             const start = i * chunkSize;
