@@ -225,6 +225,7 @@
         updateProgressTitle("Processing video...");
         let _vd = await fetchVideoFile();
         videoFileName = await getVideoFileName();
+        alert('filename: ' + videoFileName);
 
         if(_vd.status === 400){
             updateProgressErrText("There was an error processing the video or audio. Please try again.");
