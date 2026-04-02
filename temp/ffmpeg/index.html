@@ -265,12 +265,14 @@
         updateProgressTitle("Finalizing video...");
         if (!window.flutter_inappwebview?.callHandler) return;
     
+        alert('b')
         // Notify Flutter to get ready
         await window.flutter_inappwebview.callHandler('readyToSendChunk');
         
         const totalChunks = Math.ceil(outputData.length / chunkSize);
-        
+        alert('a')
         for (let i = 0; i < totalChunks; i++) {
+        alert(i)
             const start = i * chunkSize;
             const end = Math.min(start + chunkSize, outputData.length);
             const chunk = outputData.slice(start, end);
