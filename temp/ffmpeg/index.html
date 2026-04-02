@@ -108,6 +108,8 @@
     const chunkSize = 1024 * 50; // 50 KB
     let vd;
     let ad;
+    let videoFileName = "";
+    let audioFileName = "";
     let audioExists = false;
     let isFetchDataReady = false;
     let isLibLoaded = false;
@@ -115,7 +117,17 @@
     function delay(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
     }
-
+    
+    async function getVideoFileName(){
+        if(!window.flutter_inappwebview?.callHandler) return '';
+        return await window.flutter_inappwebview.callHandler('getVideoFileName');
+    }
+    
+    async function getAudioFileName(){
+        if(!window.flutter_inappwebview?.callHandler) return '';
+        return await window.flutter_inappwebview.callHandler('getAudioFileName');
+    }
+    
     async function fetchVideoFile() {
         if(!window.flutter_inappwebview?.callHandler) return {'status': 400};
         
@@ -134,7 +146,7 @@
                 try{
                     const start = i * chunkSize;
                     const end = Math.min(start + chunkSize, videoSize);
-                    const url = `output.mp4?start=${start}&end=${end}`;
+                    const url = `${videoFileName}?start=${start}&end=${end}`;
                   
                     const response = await fetch(url);
                     const buffer = await response.arrayBuffer();
@@ -174,7 +186,7 @@
                 try{
                     const start = i * chunkSize;
                     const end = Math.min(start + chunkSize, audioSize);
-                    const url = `audio.mp4?start=${start}&end=${end}`;
+                    const url = `${audioFileName}?start=${start}&end=${end}`;
                   
                     const response = await fetch(url);
                     const buffer = await response.arrayBuffer();
@@ -211,6 +223,7 @@
         
         updateProgressTitle("Processing video...");
         let _vd = await fetchVideoFile();
+        videoFileName = await getVideoFileName();
 
         if(_vd.status === 400){
             updateProgressErrText("There was an error processing the video or audio. Please try again.");
@@ -221,6 +234,7 @@
         if(audioExists){
             updateProgressTitle("Processing audio...");
             let _ad = await fetchAudioFile();
+            audioFileName = await getAudioFileName();
             if(_ad.status === 400){
                 updateProgressErrText("There was an error processing the video or audio. Please try again.");
                 return;
