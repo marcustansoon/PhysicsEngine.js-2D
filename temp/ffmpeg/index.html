@@ -78,7 +78,7 @@
     <div style=" color: red; padding: 5px;" id="progress-err-text"></div>
   </div>
     
-<div style="display:non1e">
+<div style="display:none">
     <h1>FFmpeg.wasm: Merge Video + Audio → MP4</h1>
     <video id="video-result" controls></video><br><br>
     
@@ -167,7 +167,6 @@
             }
             updateProgressBar("video-download", (i+1) / totalChunks);
         }
-       alert(fullArray.length);
         return {'data': fullArray, 'status': 200};
     }
 
@@ -369,12 +368,11 @@
         log('Starting merge...');
         updateProgressTitle("Merging video...");
         try{
-            alert(vd)
-            const videoData = vd;    //await fileToUint8Array(selectedVideoFile);
-            await ffmpeg.writeFile('input_video.ts', videoData);
+            const videoData = vd;                                    //await fileToUint8Array(selectedVideoFile);
+            await ffmpeg.writeFile('input_video', videoData);
 
             if(audioExists){
-                const audioData = ad;//await fileToUint8Array(selectedAudioFile);
+                const audioData = ad;                                //await fileToUint8Array(selectedAudioFile);
                 await ffmpeg.writeFile('input_audio', audioData);
             }
 
@@ -391,10 +389,11 @@
                 ]);
             }else{
                 await ffmpeg.exec([     
-                  '-i', 'input_video.ts',
-                  '-c', 'copy',
-                  '-movflags', '+faststart',
-                  'output_merged.mp4'
+                  "-i", "input_video",
+                  "-c:v", "libx264",
+                  "-c:a", "aac",
+                  "-movflags", "+faststart",
+                  "output_merged.mp4"
                 ]);
             }
     
