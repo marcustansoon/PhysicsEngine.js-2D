@@ -367,6 +367,7 @@
         log('Starting merge...');
         updateProgressTitle("Merging video...");
         try{
+            alert(vd)
             const videoData = vd;    //await fileToUint8Array(selectedVideoFile);
             await ffmpeg.writeFile('input_video.ts', videoData);
 
