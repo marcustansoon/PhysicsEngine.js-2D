@@ -108,6 +108,7 @@
     const chunkSize = 1024 * 50; // 50 KB
     let vd;
     let ad;
+    let audioExists = false;
     let isFetchDataReady = false;
     let isLibLoaded = false;
 
@@ -194,19 +195,38 @@
         }
         return {'data': fullArray, 'status': 200};
     }
+    
+    async function isAudioExists() {
+        if(!window.flutter_inappwebview?.callHandler) return false;
+        
+        // Ask for file size (audio)
+        let value = await window.flutter_inappwebview.callHandler('isAudioExists');
+        
+        return (isNaN(parseInt(value)) ? 0 : parseInt(value)) === 1 ? true : false;
+    }
 
     
     async function fetchVideoAndAudioFiles(){
+        audioExists = await isAudioExists();
+        
         updateProgressTitle("Processing video...");
         let _vd = await fetchVideoFile();
-        updateProgressTitle("Processing audio...");
-        let _ad = await fetchAudioFile();
-        if(_vd.status === 400 || _ad.status === 400){
+
+        if(_vd.status === 400){
             updateProgressErrText("There was an error processing the video or audio. Please try again.");
             return;
         }
         vd = _vd.data;
-        ad = _ad.data;
+        
+        if(audioExists){
+            updateProgressTitle("Processing audio...");
+            let _ad = await fetchAudioFile();
+            if(_ad.status === 400){
+                updateProgressErrText("There was an error processing the video or audio. Please try again.");
+                return;
+            }
+            ad = _ad.data;
+        }
         isFetchDataReady = true;
         checkForMergeReady();
     }
@@ -331,21 +351,37 @@
         updateProgressTitle("Merging video...");
         try{
             const videoData = vd;//await fileToUint8Array(selectedVideoFile);
-            const audioData = ad;//await fileToUint8Array(selectedAudioFile);
-    
             await ffmpeg.writeFile('input_video', videoData);
-            await ffmpeg.writeFile('input_audio', audioData);
-    
-            await ffmpeg.exec([
-                '-i','input_video',
-                '-i','input_audio',
-                '-c:v','copy',
-                '-c:a','aac',
-                '-map','0:v:0',
-                '-map','1:a:0',
-                '-shortest',
-                'output_merged.mp4'
-            ]);
+
+            if(audioExists){
+                const audioData = ad;//await fileToUint8Array(selectedAudioFile);
+                await ffmpeg.writeFile('input_audio', audioData);
+            }
+
+            if(audioExists){
+                await ffmpeg.exec([
+                    '-i','input_video',
+                    '-i','input_audio',
+                    '-c:v','copy',
+                    '-c:a','aac',
+                    '-map','0:v:0',
+                    '-map','1:a:0',
+                    '-shortest',
+                    'output_merged.mp4'
+                ]);
+            }else{
+                await ffmpeg.exec([             
+                      "-i",
+                      "input_video",
+                      "-c:v",
+                      "libx264",
+                      "-c:a",
+                      "aac",
+                      "-movflags",
+                      "+faststart",
+                      "output_merged.mp4"
+                ]);
+            }
     
             const outputData = await ffmpeg.readFile('output_merged.mp4');
             const blob = new Blob([outputData.buffer], {type:'video/mp4'});
