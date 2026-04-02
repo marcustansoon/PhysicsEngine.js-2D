@@ -131,6 +131,8 @@
     async function fetchVideoFile() {
         if(!window.flutter_inappwebview?.callHandler) return {'status': 400};
         
+        videoFileName = await getVideoFileName();
+        
         // Ask for file size (video)
         const videoSize = await window.flutter_inappwebview.callHandler('getFileSize', 'video');
         if(videoSize == 0) return {'status': 400};
@@ -171,6 +173,8 @@
 
     async function fetchAudioFile() {
         if(!window.flutter_inappwebview?.callHandler) return {'status': 400};
+        
+        audioFileName = await getAudioFileName();
         
         // Ask for file size (audio)
         const audioSize = await window.flutter_inappwebview.callHandler('getFileSize', 'audio');
@@ -224,8 +228,6 @@
         
         updateProgressTitle("Processing video...");
         let _vd = await fetchVideoFile();
-        videoFileName = await getVideoFileName();
-        alert('filename: ' + videoFileName);
 
         if(_vd.status === 400){
             updateProgressErrText("There was an error processing the video or audio. Please try again.");
@@ -236,7 +238,6 @@
         if(audioExists){
             updateProgressTitle("Processing audio...");
             let _ad = await fetchAudioFile();
-            audioFileName = await getAudioFileName();
             if(_ad.status === 400){
                 updateProgressErrText("There was an error processing the video or audio. Please try again.");
                 return;
