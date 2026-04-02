@@ -223,14 +223,14 @@
         audioExists = await isAudioExists();
         
         updateProgressTitle("Processing video...");
-        let _ = await fetchVideoFile();
+        let _vd = await fetchVideoFile();
         videoFileName = await getVideoFileName();
 
-        if(_.status === 400){
+        if(_vd.status === 400){
             updateProgressErrText("There was an error processing the video or audio. Please try again.");
             return;
         }
-         = _vd.data;
+        vd = _vd.data;
         
         if(audioExists){
             updateProgressTitle("Processing audio...");
