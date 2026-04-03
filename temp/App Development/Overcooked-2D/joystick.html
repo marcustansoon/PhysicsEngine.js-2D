@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PixiJS Playground</title>
+
+  <style>
+    body,
+      html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+      }
+  </style>
+
+  
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/pixi.js@8/dist/pixi.min.js"></script>
+
+  <script>
+    (async () => {
+  /*********************PIXI Setup***********************/
+  // Create a new application
+  const app = new PIXI.Application();
+
+  // Initialize the application
+  await app.init({
+    background: '#000',
+    resizeTo: window, // Automatically resize canvas to window size
+  });
+
+  // Append the application canvas to the document body
+  document.body.appendChild(app.canvas);
+
+  /*********************Container Setup***********************/
+  // Create a UI container for the joystick and a main container for the game
+  const container = new PIXI.Container();
+  app.stage.addChild(container);
+
+  // Add a white background to the container
+  const background = new PIXI.Graphics();
+  background.beginFill(0xffffff); // White color
+  background.drawRect(0, 0, app.screen.width, app.screen.height);
+  background.endFill();
+  container.addChild(background); // Add background as the first child of container
+
+  const uiContainer = new PIXI.Container();
+  app.stage.addChild(uiContainer); // Add to app.stage for UI elements
+
+  // Make container interactive for dragging
+  container.eventMode = 'static'; // PixiJS v8+ event mode
+  container.cursor = 'grab'; // Show grab cursor
+
+  // Dragging state
+  let isDraggingContainer = false;
+  let dragStart = { x: 0, y: 0 };
+  let containerStart = { x: 0, y: 0 };
+
+  // Handle container dragging
+  container.on('pointerdown', (event) => {
+    // Only start dragging if not interacting with the joystick
+    if (!isDragging) { // Check joystick dragging state to avoid conflicts
+      isDraggingContainer = true;
+      container.cursor = 'grabbing'; // Change cursor while dragging
+      dragStart.x = event.global.x; // Use event.global.x instead of getGlobalPosition
+      dragStart.y = event.global.y; // Use event.global.y
+      containerStart.x = container.x;
+      containerStart.y = container.y;
+    }
+  });
+
+  container.on('pointermove', (event) => {
+    if (isDraggingContainer) {
+      const dx = event.global.x - dragStart.x; // Use event.global.x
+      const dy = event.global.y - dragStart.y; // Use event.global.y
+      container.x = containerStart.x + dx;
+      container.y = containerStart.y + dy;
+    }
+  });
+
+  container.on('pointerup', () => {
+    isDraggingContainer = false;
+    container.cursor = 'grab'; // Reset cursor
+  });
+
+  container.on('pointerupoutside', () => {
+    isDraggingContainer = false;
+    container.cursor = 'grab'; // Reset cursor
+  });
+
+  /*********************Joystick***********************/
+  // ... (Joystick code remains unchanged)
+
+  // Joystick properties
+  const joystickRadius = 50;
+  const stickRadius = 20;
+  const maxDistance = joystickRadius - stickRadius;
+
+  // Create joystick base
+  const joystickBase = new PIXI.Graphics();
+  joystickBase.beginFill(0x666666, 0.5);
+  joystickBase.drawCircle(0, 0, joystickRadius);
+  joystickBase.endFill();
+  joystickBase.position.set(joystickRadius + 20, app.screen.height - joystickRadius - 20);
+  uiContainer.addChild(joystickBase);
+
+  // Create joystick stick
+  const joystickStick = new PIXI.Graphics();
+  joystickStick.beginFill(0xffffff);
+  joystickStick.drawCircle(0, 0, stickRadius);
+  joystickStick.endFill();
+  joystickStick.position.copyFrom(joystickBase.position);
+  uiContainer.addChild(joystickStick);
+
+  // Joystick state
+  let isDragging = false; // Renamed to avoid confusion with isDraggingContainer
+  let joystickDirection = { x: 0, y: 0 };
+  let joystickMagnitude = 0;
+
+  // Make joystick interactive
+  joystickStick.eventMode = 'static'; // PixiJS v8+ event mode
+  joystickStick.cursor = 'pointer';
+
+  joystickStick.on('pointerdown', (event) => {
+    isDragging = true;
+  });
+
+  joystickStick.on('pointermove', (event) => {
+    if (isDragging) {
+      const localPos = event.getLocalPosition(uiContainer);
+      const basePos = joystickBase.position;
+
+      let dx = localPos.x - basePos.x;
+      let dy = localPos.y - basePos.y;
+      let distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance > maxDistance) {
+        const angle = Math.atan2(dy, dx);
+        dx = Math.cos(angle) * maxDistance;
+        dy = Math.sin(angle) * maxDistance;
+        distance = maxDistance;
+      }
+
+      joystickStick.position.set(basePos.x + dx, basePos.y + dy);
+      joystickDirection.x = dx / maxDistance;
+      joystickDirection.y = dy / maxDistance;
+      joystickMagnitude = distance / maxDistance;
+    }
+  });
+
+  joystickStick.on('pointerup', () => {
+    isDragging = false;
+    joystickStick.position.copyFrom(joystickBase.position);
+    joystickDirection = { x: 0, y: 0 };
+    joystickMagnitude = 0;
+  });
+
+  joystickStick.on('pointerupoutside', () => {
+    isDragging = false;
+    joystickStick.position.copyFrom(joystickBase.position);
+    joystickDirection = { x: 0, y: 0 };
+    joystickMagnitude = 0;
+  });
+
+  /*********************Player***********************/
+  // Create player (inside container)
+  const player = new PIXI.Graphics();
+  player.beginFill(0xff0000);
+  player.drawRect(-25, -25, 50, 50);
+  player.endFill();
+  player.position.set(app.screen.width / 2, app.screen.height / 2); // Center of the screen
+  container.addChild(player); // Add to container
+
+  // Update loop to move player based on joystick input
+  app.ticker.add(() => {
+    if (joystickMagnitude > 0) {
+      const speed = 5;
+      player.x += joystickDirection.x * speed * joystickMagnitude;
+      player.y += joystickDirection.y * speed * joystickMagnitude;
+
+      // Keep player within container bounds (relative to container's position)
+      const bounds = {
+        left: -container.x + 25,
+        right: -container.x + app.screen.width - 25,
+        top: -container.y + 25,
+        bottom: -container.y + app.screen.height - 25,
+      };
+      player.x = Math.max(bounds.left, Math.min(bounds.right, player.x));
+      player.y = Math.max(bounds.top, Math.min(bounds.bottom, player.y));
+    }
+  });
+
+  // Handle window resize to update joystick and background
+  window.addEventListener('resize', () => {
+    joystickBase.position.set(joystickRadius + 20, app.screen.height - joystickRadius - 20);
+    joystickStick.position.copyFrom(joystickBase.position);
+    // Update background size
+    background.clear();
+    background.beginFill(0xffffff);
+    background.drawRect(0, 0, app.screen.width, app.screen.height);
+    background.endFill();
+  });
+})();
+  </script>
+</body>
+</html>
