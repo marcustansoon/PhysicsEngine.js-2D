@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PixiJS Dialog Example</title>
+<style>
+  body { margin: 0; overflow: hidden; background: #222; }
+</style>
+</head>
+<body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script>
+const app = new PIXI.Application({
+  width: 800,
+  height: 600,
+  resolution: window.devicePixelRatio || 1,
+  autoDensity: true
+});
+document.body.appendChild(app.view);
+
+
+// --- Overlay ---
+const overlay = new PIXI.Graphics();
+overlay.beginFill(0xFF00F0, 1);
+overlay.drawRect(0, 0, 600, 600);
+overlay.x = 0;
+overlay.y = 0;
+overlay.endFill();
+
+overlay.alpha = 1;
+overlay.eventMode = 'static'; // ✅ new way
+overlay.visible = true;
+
+
+let pointerDownPos = null;
+let currentPos = null;
+let pointerMovePos = null;
+overlay.on('pointerdown', (event) => {
+  pointerDownPos = event.data.global.clone(); 
+  
+  currentPos = {
+	x: container.x,
+	y: container.y,
+  }
+});
+
+overlay.on('pointerup', (event) => {
+	if(!pointerDownPos) return;
+	container.x = currentPos.x + -pointerDownPos.x + pointerMovePos.x;
+	container.y = currentPos.y + -pointerDownPos.y + pointerMovePos.y;
+	pointerDownPos = null;
+});
+overlay.on('pointerout', (event) => {
+	if(!pointerDownPos) return;
+	container.x = currentPos.x + -pointerDownPos.x + pointerMovePos.x;
+	container.y = currentPos.y + -pointerDownPos.y + pointerMovePos.y;
+	pointerDownPos = null;
+});
+
+overlay.on('pointermove', (event) => {
+  if(!pointerDownPos) return;
+  
+  pointerMovePos = event.data.global.clone();
+  
+	container.x = currentPos.x + -pointerDownPos.x + pointerMovePos.x;
+	container.y = currentPos.y + -pointerDownPos.y + pointerMovePos.y;
+    
+});
+
+app.stage.addChild(overlay);
+
+
+// --- Container ---
+const container = new PIXI.Container();
+container.pivot.set(0.5, 0.5); // center pivot
+container.visible = true;
+app.stage.addChild(container);
+
+
+// create character
+const chef = new PIXI.Graphics();
+chef.beginFill(0xffffff, 1);
+chef.drawRect(0, 0, 25, 25);
+chef.x = 0;
+chef.y = 0;
+chef.endFill();
+container.addChild(chef);
+
+
+
+// create character
+const chef2 = new PIXI.Graphics();
+chef2.beginFill(0xffffff, 1);
+chef2.drawRect(0, 0, 25, 25);
+chef2.x = 50;
+chef2.y = 50;
+chef2.endFill();
+container.addChild(chef2);
+
+
+
+
+
+
+   // gsap.to(overlay, { alpha: 0.5, duration: 0.5 });
+</script>
+</body>
+</html>
