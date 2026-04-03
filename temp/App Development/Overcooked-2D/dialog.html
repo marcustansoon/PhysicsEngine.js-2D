@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>PixiJS Dialog Example</title>
+<style>
+  body { margin: 0; overflow: hidden; background: #222; }
+</style>
+</head>
+<body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/7.2.4/pixi.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script>
+const app = new PIXI.Application({ width: 800, height: 600 });
+document.body.appendChild(app.view);
+
+// --- Overlay ---
+const overlay = new PIXI.Graphics();
+overlay.beginFill(0x000000, 0);
+overlay.drawRect(0, 0, app.screen.width, app.screen.height);
+overlay.endFill();
+overlay.alpha = 0;
+overlay.interactive = true;
+overlay.visible = false;
+app.stage.addChild(overlay);
+
+// --- Dialog Container ---
+const dialog = new PIXI.Container();
+dialog.x = app.screen.width / 2;
+dialog.y = app.screen.height / 2;
+dialog.pivot.set(0.5, 0.5); // center pivot
+dialog.visible = false;
+app.stage.addChild(dialog);
+
+// --- Dialog Background ---
+const dialogBg = new PIXI.Graphics();
+dialogBg.beginFill(0x444444);
+dialogBg.drawRoundedRect(-150, -75, 300, 150, 10);
+dialogBg.endFill();
+dialog.addChild(dialogBg);
+
+// --- Message Text ---
+const messageText = new PIXI.Text("Are you sure?", { fill: 0xffffff, fontSize: 20, wordWrap: true, wordWrapWidth: 280 });
+messageText.anchor.set(0.5);
+messageText.y = -20;
+dialog.addChild(messageText);
+
+// --- Buttons ---
+function createButton(label, x) {
+    const btn = new PIXI.Graphics();
+    btn.beginFill(0x00aaff);
+    btn.drawRoundedRect(-50, -20, 100, 40, 5);
+    btn.endFill();
+    btn.x = x;
+    btn.y = 40;
+    btn.interactive = true;
+    btn.buttonMode = true;
+
+    const text = new PIXI.Text(label, { fill: 0xffffff, fontSize: 18 });
+    text.anchor.set(0.5);
+    btn.addChild(text);
+
+    return btn;
+}
+
+const okButton = createButton("OK", -60);
+const cancelButton = createButton("Cancel", 60);
+dialog.addChild(okButton);
+dialog.addChild(cancelButton);
+
+// --- Show Dialog Function ---
+function showDialog(message, onOk, onCancel) {
+    messageText.text = message;
+    dialog.visible = true;
+    overlay.visible = true;
+	overlay.alpha = 0;
+    gsap.to(overlay, { alpha: 0.5, duration: 0.5 });
+    gsap.fromTo(dialog.scale, { x: 0, y: 0 }, { x:1, y:1, duration:0.5, ease: "back.out(1.7)" });
+
+    // Button callbacks
+    okButton.once('pointertap', () => {
+        dialog.visible = false;
+        gsap.to(overlay, { alpha: 0, duration: 0.2, onComplete: ()=> overlay.visible = false });
+        if(onOk) onOk();
+    });
+
+    cancelButton.once('pointertap', () => {
+        dialog.visible = false;
+        gsap.to(overlay, { alpha: 0, duration: 0.2, onComplete: ()=> overlay.visible = false });
+        if(onCancel) onCancel();
+    });
+}
+
+// --- Example usage ---
+showDialog("Do you want to continue?", 
+    () => console.log("User clicked OK"), 
+    () => console.log("User clicked Cancel")
+);
+
+
+   // gsap.to(overlay, { alpha: 0.5, duration: 0.5 });
+</script>
+</body>
+</html>
