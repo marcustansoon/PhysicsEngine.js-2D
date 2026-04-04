@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FFmpeg.wasm - Merge Video + Audio</title>
+    <style>
+        button { margin: 8px 0; padding: 12px 20px; font-size: 16px; cursor: pointer; }
+        input[type="file"] { margin: 10px 0; display: block; }
+        #log-div {
+            margin-top: 15px;
+            white-space: pre-wrap;
+            background: #f4f4f4;
+            padding: 12px;
+            min-height: 200px;
+            border: 1px solid #ddd;
+            font-family: monospace;
+            overflow-y: auto;
+        }
+        video { max-width: 100%; margin: 15px 0; background: #000; }
+        .success { color: green; }
+        .error { color: red; }
+        .status { color: #0066cc; }
+    </style>
+    <style>
+        body {
+          font-family: 'Source Sans Pro';
+          height: 100vh;
+          margin: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+    
+        .progress-wrapper {
+          width: 80%;
+          max-width: 500px;
+          text-align: center;
+        }
+    
+        .progress-title {
+          font-size: 22px;
+          font-weight: 600;
+          color: #333;
+          margin-bottom: 15px;
+        }
+    
+        .progress-bar {
+          height: 30px;
+          background: #e0e0e0;
+          border-radius: 50px;
+          /*overflow: hidden;*/
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+    
+        .progress {
+          height: 100%;
+          background: linear-gradient(90deg, #ff5f6d, #ff0000);
+          width: 0%;                    /* JS will control this */
+          transition: width 0.8s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: white;
+          font-weight: bold;
+          font-size: 16px;
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+    <link rel="stylesheet" href="liquid.css">
+</head>
+<body>
+    
+  <div class="progress-wrapper">
+    <div id="progress-title" class="progress-title"></div>
+    <div class="progress-bar">
+      <div id="progress" class="progress"><div id="progress-text" style="position: absolute; left: 0; width: 100%;">0%</div></div>
+    </div>
+    <div style=" color: red; padding: 5px;" id="progress-err-text"></div>
+  </div>
+  <div style=" font-size: small; position: absolute; bottom: 0; padding: 30px; text-align: center; ">Please keep your screen on while the video is processing</div>
+    
+<div style="display:none">
+    <h1>FFmpeg.wasm: Merge Video + Audio → MP4</h1>
+    <video id="video-result" controls></video><br><br>
+    
+    <h3>Step 1: Load FFmpeg</h3>
+    <button id="load-button">Load FFmpeg (~31 MB)</button><br><br>
+    
+    <h3>Step 2: Select Files</h3>
+    <label>Video File (MP4, WebM, MOV...):<br>
+        <input type="file" id="video-input" accept="video/*">
+    </label><br><br>
+    
+    <label>Audio File (M4A, MP3, WAV, AAC...):<br>
+        <input type="file" id="audio-input" accept="audio/*">
+    </label><br><br>
+    
+    <button disabled id="merge-button">Merge Video + Audio → MP4</button><br>
+    
+    <div id="log-div">Click "Load FFmpeg" to start.</div>
+
+</div>
+
+<!-- Local FFmpeg -->
+<script src="ffmpeg.min.js"></script>
+<script>
+    "use strict";
+    
+    // New chunk size
+    const chunkSize = 1024 * 512; // 512 KB
+    let vd;
+    let ad;
+    let videoFileName = "";
+    let audioFileName = "";
+    let audioExists = false;
+    let isFetchDataReady = false;
+    let isLibLoaded = false;
+
+    function delay(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+    
+    async function getVideoFileName(){
+        if(!window.flutter_inappwebview?.callHandler) return '';
+        return await window.flutter_inappwebview.callHandler('getVideoFileName');
+    }
+    
+    async function getAudioFileName(){
+        if(!window.flutter_inappwebview?.callHandler) return '';
+        return await window.flutter_inappwebview.callHandler('getAudioFileName');
+    }
+    
+    async function fetchVideoFile() {
+        if(!window.flutter_inappwebview?.callHandler) return {'status': 400};
+        
+        videoFileName = await getVideoFileName();
+        
+        // Ask for file size (video)
+        const videoSize = await window.flutter_inappwebview.callHandler('getFileSize', 'video');
+        if(videoSize == 0) return {'status': 400};
+        const totalChunks = Math.ceil(videoSize / chunkSize);
+    
+        let fullArray = new Uint8Array(videoSize);
+        const maxRetries = 50;
+        let retriesCount = 0;
+    
+        for (let i = 0; i < totalChunks; i++) {
+            retriesCount = 0;
+            while(retriesCount < maxRetries){
+                try{
+                    const start = i * chunkSize;
+                    const end = Math.min(start + chunkSize, videoSize);
+                    const url = `${videoFileName}?start=${start}&end=${end}`;
+                  
+                    const response = await fetch(url);
+                    const buffer = await response.arrayBuffer();
+                  
+                    fullArray.set(new Uint8Array(buffer), start);
+                    await delay(25);
+                    
+                    break;
+                }catch(e){
+                    retriesCount++;
+                    await delay(1000);
+                    if(retriesCount >= maxRetries){
+                        return {'status': 400};
+                    }
+                }
+            }
+            updateProgressBar("video-download", (i+1) / totalChunks);
+        }
+        return {'data': fullArray, 'status': 200};
+    }
+
+    async function fetchAudioFile() {
+        if(!window.flutter_inappwebview?.callHandler) return {'status': 400};
+        
+        audioFileName = await getAudioFileName();
+        
+        // Ask for file size (audio)
+        const audioSize = await window.flutter_inappwebview.callHandler('getFileSize', 'audio');
+        if(audioSize == 0) return {'status': 400};
+        const totalChunks = Math.ceil(audioSize / chunkSize);
+    
+        let fullArray = new Uint8Array(audioSize);
+        const maxRetries = 50;
+        let retriesCount = 0;
+    
+        for (let i = 0; i < totalChunks; i++) {
+            retriesCount = 0;
+            while(retriesCount < maxRetries){
+                try{
+                    const start = i * chunkSize;
+                    const end = Math.min(start + chunkSize, audioSize);
+                    const url = `${audioFileName}?start=${start}&end=${end}`;
+                  
+                    const response = await fetch(url);
+                    const buffer = await response.arrayBuffer();
+                  
+                    fullArray.set(new Uint8Array(buffer), start);
+                    await delay(25);
+                    
+                    break;
+                }catch(e){
+                    retriesCount++;
+                    await delay(1000);
+                    if(retriesCount >= maxRetries){
+                        return {'status': 400};
+                    }
+                }
+            }
+            updateProgressBar("audio-download", (i+1) / totalChunks);
+        }
+        return {'data': fullArray, 'status': 200};
+    }
+    
+    async function isAudioExists() {
+        if(!window.flutter_inappwebview?.callHandler) return false;
+        
+        // Ask for file size (audio)
+        let value = await window.flutter_inappwebview.callHandler('isAudioExists');
+        
+        return (isNaN(parseInt(value)) ? 0 : parseInt(value)) === 1 ? true : false;
+    }
+
+    
+    async function fetchVideoAndAudioFiles(){
+        audioExists = await isAudioExists();
+        
+        updateProgressTitle("Processing video...");
+        let _vd = await fetchVideoFile();
+
+        if(_vd.status === 400){
+            updateProgressErrText("There was an error processing the video or audio. Please try again.");
+            return;
+        }
+        vd = _vd.data;
+        
+        if(audioExists){
+            updateProgressTitle("Processing audio...");
+            let _ad = await fetchAudioFile();
+            if(_ad.status === 400){
+                updateProgressErrText("There was an error processing the video or audio. Please try again.");
+                return;
+            }
+            ad = _ad.data;
+        } else {
+            updateProgressBar("audio-download", 1);
+        }
+        isFetchDataReady = true;
+        checkForMergeReady();
+    }
+
+    function checkForMergeReady(){
+        if(!isLibLoaded){
+            updateProgressTitle("Loading utilities...");
+        }
+        if(isFetchDataReady && isLibLoaded) {
+            mergeVideoAndAudio();
+        }
+    }
+
+    
+    async function sendMergedVideoToFlutter(outputData) {
+        updateProgressTitle("Finalizing video...");
+        if (!window.flutter_inappwebview?.callHandler) return;
+    
+        await window.flutter_inappwebview.callHandler('readyToSendChunk');
+    
+        const totalChunks = Math.ceil(outputData.length / chunkSize);
+    
+        function uint8ToBase64(uint8Array) {
+            let binary = '';
+            const sliceSize = 0x8000; // 32 KB
+            for (let i = 0; i < uint8Array.length; i += sliceSize) {
+                const subArray = uint8Array.subarray(i, i + sliceSize);
+                binary += String.fromCharCode(...subArray);
+            }
+            return btoa(binary);
+        }
+    
+        for (let i = 0; i < totalChunks; i++) {
+            const start = i * chunkSize;
+            const end = Math.min(start + chunkSize, outputData.length);
+            const chunk = outputData.slice(start, end);
+            const base64Chunk = uint8ToBase64(chunk);
+    
+            await window.flutter_inappwebview.callHandler('receiveMp4Chunk', {
+                index: i,
+                total: totalChunks,
+                data: base64Chunk,
+            });
+    
+            updateProgressBar("video-upload", (i + 1) / totalChunks);
+    
+            await delay(25); // small delay to avoid UI freezing
+        }
+    
+        updateProgressTitle("Video processed successfully");
+        await window.flutter_inappwebview.callHandler('receiveMp4Done');
+    }
+    
+
+    let ffmpeg = null;
+    let loadBtn, mergeBtn, logDiv, videoEl;
+    let selectedVideoFile = null;
+    let selectedAudioFile = null;
+    
+    const log = (msg, type='') => {
+        console.log(msg);
+        let cls = 'status', prefix = '';
+        if(type==='success'){ cls='success'; prefix='✅ '; }
+        if(type==='error'){ cls='error'; prefix='❌ '; }
+        logDiv.innerHTML = `<span class="${cls}">${prefix}${msg}</span>`;
+    };
+    
+    const fileToUint8Array = async (file) => {
+        if(!file) throw new Error("No file selected");
+        return new Uint8Array(await file.arrayBuffer());
+    };
+    
+    const loadFFmpeg = async () => {
+        loadBtn.disabled = true;
+        log('Loading FFmpeg... (may take 15–40s first time)');
+    
+        try{
+            ffmpeg = new FFmpegWASM.FFmpeg();
+    
+            ffmpeg.on('log', ({message}) => console.log('FFmpeg log:', message));
+            ffmpeg.on('progress', ({progress}) => {
+                log(`Progress: ${(progress*100).toFixed(1)}%`);
+                updateProgressBar("merging", progress);
+            });
+    
+            // Load core and worker from local files to avoid CORS issues
+            await ffmpeg.load({
+                corePath: 'ffmpeg-core.js',
+                wasmPath: 'ffmpeg-core.wasm',
+                workerPath: '814.ffmpeg.js'
+            });
+    
+            log('FFmpeg loaded successfully!', 'success');
+            mergeBtn.disabled = false;
+            
+            isLibLoaded = true;
+            checkForMergeReady();
+            
+            updateProgressBar("load-lib", 1);
+        } catch(err){
+            console.error(err);
+            log('Failed to load FFmpeg: ' + err.message,'error');
+            loadBtn.disabled = false;
+        }
+    };
+    
+    const handleVideoSelect = (e) => {
+        selectedVideoFile = e.target.files[0];
+        if(selectedVideoFile){
+            log(`Video selected: ${selectedVideoFile.name} (${(selectedVideoFile.size/(1024*1024)).toFixed(1)} MB)`);
+        }
+    };
+    
+    const handleAudioSelect = (e) => {
+        selectedAudioFile = e.target.files[0];
+        if(selectedAudioFile){
+            log(`Audio selected: ${selectedAudioFile.name} (${(selectedAudioFile.size/(1024*1024)).toFixed(1)} MB)`);
+        }
+    };
+
+    const mergeMessages = [
+        "Merging video… please wait.",
+        "Processing your video…",
+        "Combining video segments…",
+        "Hang tight, we’re stitching your video together!",
+        "Almost done! Merging video files…",
+        "Cooking up your video… this might take a moment.",
+        "Magically combining your video… ✨",
+        "Your masterpiece is being stitched together… 🎬",
+        "Mixing pixels and frames… 🍿",
+        "Video merge in progress… almost there!"
+    ];
+
+    // Function to get a random message
+    function getRandomMergeMessage() {
+        const index = Math.floor(Math.random() * mergeMessages.length);
+        return mergeMessages[index];
+    }
+    let mergingVideoMessageInterval;
+    
+    const mergeVideoAndAudio = async () => {
+        mergeBtn.disabled = true;
+        mergingVideoMessageInterval = setInterval(() => {
+            updateProgressTitle(getRandomMergeMessage());          
+        }, 5000);
+        log('Starting merge...');
+        try{
+            const videoData = vd;                                    //await fileToUint8Array(selectedVideoFile);
+            await ffmpeg.writeFile('input_video', videoData);
+
+            if(audioExists){
+                const audioData = ad;                                //await fileToUint8Array(selectedAudioFile);
+                await ffmpeg.writeFile('input_audio', audioData);
+            }
+
+            if(audioExists){
+                await ffmpeg.exec([
+                    '-i','input_video',
+                    '-i','input_audio',
+                    '-c:v','copy',
+                    '-c:a','aac',
+                    '-map','0:v:0',
+                    '-map','1:a:0',
+                    '-shortest',
+                    'output_merged.mp4'
+                ]);
+            }else{
+                await ffmpeg.exec([    
+                  '-i', 'input_video',
+                  '-c', 'copy',
+                  '-movflags', '+faststart',
+                  'output_merged.mp4'
+                ]);
+            }
+    
+            const outputData = await ffmpeg.readFile('output_merged.mp4');
+            const blob = new Blob([outputData.buffer], {type:'video/mp4'});
+            videoEl.src = URL.createObjectURL(blob);
+    
+            clearInterval(mergingVideoMessageInterval);
+            updateProgressBar("merging", 1);
+            sendMergedVideoToFlutter(outputData);
+            log('Merge completed successfully! Play the video above.','success');
+        }catch(err){
+            clearInterval(mergingVideoMessageInterval);
+            console.error(err);
+            log('Merge failed: '+err.message,'error');
+            updateProgressErrText(err.message)
+        }finally{
+            mergeBtn.disabled = false;
+        }
+    };
+    
+    window.addEventListener('load', ()=>{
+        loadBtn = document.getElementById('load-button');
+        mergeBtn = document.getElementById('merge-button');
+        logDiv = document.getElementById('log-div');
+        videoEl = document.getElementById('video-result');
+    
+        document.getElementById('video-input').addEventListener('change', handleVideoSelect);
+        document.getElementById('audio-input').addEventListener('change', handleAudioSelect);
+        loadBtn.addEventListener('click', loadFFmpeg);
+        mergeBtn.addEventListener('click', mergeVideoAndAudio);
+    
+        log('Ready. Click "Load FFmpeg" to begin.');
+    });
+    
+    setTimeout(()=>{
+        document.getElementById('load-button').click();
+        fetchVideoAndAudioFiles();
+    }, 600);
+    
+    const progressBar = document.getElementById('progress');
+    const progressTitle = document.getElementById('progress-title');
+    const progressText = document.getElementById('progress-text');
+    const progressErrText = document.getElementById('progress-err-text');
+    let progressBarStatus = {"video-download": 0, "audio-download": 0, "load-lib": 0, "merging": 0, "video-upload": 0};
+    
+    // Progress Bar Update
+    function updateProgressBar(type, percentageValue){
+        // percentageValue is of value between 0 - 1
+        progressBarStatus[type] = Math.min(parseFloat(percentageValue), 1);
+        setProgress(calculateProgressBar());
+    }
+
+    function updateProgressTitle(text){
+        progressTitle.textContent = text;
+    }
+
+    function updateProgressErrText(text){
+        progressErrText.textContent = text;
+    }
+
+    function calculateProgressBar() {
+        return Math.min((progressBarStatus["video-download"] * 0.15 + progressBarStatus["audio-download"] * 0.15 + progressBarStatus["load-lib"] * 0.1 + progressBarStatus["merging"] * 0.3 + progressBarStatus["video-upload"] * 0.3) * 100, 100); 
+    }
+
+    function setProgress(percent) {
+      if (percent < 0) percent = 0;
+      if (percent > 100) percent = 100;
+      
+      progressBar.style.width = percent.toFixed(2) + '%';
+      progressText.textContent = percent.toFixed(2) + '%';
+    }
+
+</script>
+</body>
+</html>
