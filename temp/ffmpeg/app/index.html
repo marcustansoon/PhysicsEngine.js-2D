@@ -312,6 +312,7 @@
         }
     
         updateProgressTitle("Video processed successfully");
+        updateProgressDoneText("File saved to " + folderPath + "/output_merged.mp4");
         await window.flutter_inappwebview.callHandler('receiveMp4Done');
     }
     
@@ -444,7 +445,6 @@
             clearInterval(mergingVideoMessageInterval);
             updateProgressBar("merging", 1);
             sendMergedVideoToFlutter(outputData);
-            updateProgressDoneText("File saved to " + folderPath + "/output_merged.mp4");
             log('Merge completed successfully! Play the video above.','success');
         }catch(err){
             clearInterval(mergingVideoMessageInterval);
