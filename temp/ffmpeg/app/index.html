@@ -82,7 +82,8 @@
     <div class="progress-bar">
       <div id="progress" class="progress"><div id="progress-text" style="position: absolute; left: 0; width: 100%;">0%</div></div>
     </div>
-    <div style=" color: red; padding: 5px;" id="progress-err-text"></div>
+    <div style="color: red;padding: 5px;" id="progress-err-text"></div>
+    <div style="color: green;padding: 5px;" id="progress-done-text"></div>
   </div>
   <div style=" font-size: small; position: absolute; bottom: 0; padding: 30px; text-align: center; ">Please keep your screen on while the video is processing</div>
     
@@ -117,6 +118,7 @@
     const chunkSize = 1024 * 512; // 512 KB
     let vd;
     let ad;
+    let folderPath = "";
     let videoFileName = "";
     let audioFileName = "";
     let audioExists = false;
@@ -230,8 +232,14 @@
         return (isNaN(parseInt(value)) ? 0 : parseInt(value)) === 1 ? true : false;
     }
 
+    async function getFolderPath() {
+        if(!window.flutter_inappwebview?.callHandler) return false;
+        return await window.flutter_inappwebview.callHandler('getFolderPath');
+    }
+
     
     async function fetchVideoAndAudioFiles(){
+        folderPath = await getFolderPath();
         audioExists = await isAudioExists();
         
         updateProgressTitle("Processing video...");
@@ -436,6 +444,7 @@
             clearInterval(mergingVideoMessageInterval);
             updateProgressBar("merging", 1);
             sendMergedVideoToFlutter(outputData);
+            updateProgressDoneText("File saved to " + folderPath + "/output_merged.mp4");
             log('Merge completed successfully! Play the video above.','success');
         }catch(err){
             clearInterval(mergingVideoMessageInterval);
@@ -470,6 +479,7 @@
     const progressTitle = document.getElementById('progress-title');
     const progressText = document.getElementById('progress-text');
     const progressErrText = document.getElementById('progress-err-text');
+    const progressDoneText = document.getElementById('progress-done-text');
     let progressBarStatus = {"video-download": 0, "audio-download": 0, "load-lib": 0, "merging": 0, "video-upload": 0};
     
     // Progress Bar Update
@@ -477,6 +487,7 @@
         // percentageValue is of value between 0 - 1
         progressBarStatus[type] = Math.min(parseFloat(percentageValue), 1);
         setProgress(calculateProgressBar());
+        updateProgressLiquidColor(calculateProgressBar());
     }
 
     function updateProgressTitle(text){
@@ -485,6 +496,24 @@
 
     function updateProgressErrText(text){
         progressErrText.textContent = text;
+    }
+
+    function updateProgressDoneText(text){
+        updateProgressDoneColor();
+        progressDoneText.textContent = text;
+    }
+
+    function updateProgressDoneColor(){
+        progressBar.style.background = "linear-gradient(90deg, rgb(57, 209, 5), rgb(78, 249, 8))";
+    }
+
+    function updateProgressLiquidColor(progress){
+      // Calculate RGB from red to green
+      const r = Math.round(255 * (1 - progress / 100));
+      const g = Math.round(255 * (progress / 100));
+      const b = 0;
+         
+      document.querySelector('.liquid-bg').children[0].style.background = `rgba(${r}, ${g}, ${b}, 0.5)`;
     }
 
     function calculateProgressBar() {
