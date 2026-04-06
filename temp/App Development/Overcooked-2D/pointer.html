@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PixiJS Dialog Example</title>
 <style>
   body { margin: 0; overflow: hidden; background: #222; }
@@ -36,38 +37,46 @@ overlay.visible = true;
 
 
 let pointerDownPos = null;
-let currentPos = null;
-let pointerMovePos = null;
+let currentContainerPos = null;
+let isPointerDown = false;
+
+const getDistance = (x1, y1, x2, y2) => Math.hypot(x2 - x1, y2 - y1);
+
 overlay.on('pointerdown', (event) => {
+  isPointerDown = true;
+  // Keep track of current pointer position
   pointerDownPos = event.data.global.clone(); 
-  
-  currentPos = {
+  // Keep track of current container position
+  currentContainerPos = {
 	x: container.x,
 	y: container.y,
   }
 });
 
 overlay.on('pointerup', (event) => {
-	if(!pointerDownPos) return;
-	container.x = currentPos.x + -pointerDownPos.x + pointerMovePos.x;
-	container.y = currentPos.y + -pointerDownPos.y + pointerMovePos.y;
-	pointerDownPos = null;
+	if(!isPointerDown) return;
+	isPointerDown = false;
+
+	let currentMovePos = event.data.global.clone();
+	// Calculate distance
+	if(getDistance(currentMovePos.x, currentMovePos.y, pointerDownPos.x, pointerDownPos.y) < 10){
+		chef.x = pointerDownPos.x - currentContainerPos.x;
+		chef.y = pointerDownPos.y - currentContainerPos.y;
+	}
 });
 overlay.on('pointerout', (event) => {
-	if(!pointerDownPos) return;
-	container.x = currentPos.x + -pointerDownPos.x + pointerMovePos.x;
-	container.y = currentPos.y + -pointerDownPos.y + pointerMovePos.y;
-	pointerDownPos = null;
+	if(!isPointerDown) return;
+	isPointerDown = false;
 });
 
 overlay.on('pointermove', (event) => {
-  if(!pointerDownPos) return;
-  
-  pointerMovePos = event.data.global.clone();
-  
-	container.x = currentPos.x + -pointerDownPos.x + pointerMovePos.x;
-	container.y = currentPos.y + -pointerDownPos.y + pointerMovePos.y;
-    
+	if(!isPointerDown) return;
+	let currentMovePos = event.data.global.clone();
+	// Calculate distance
+	if(getDistance(currentMovePos.x, currentMovePos.y, pointerDownPos.x, pointerDownPos.y) >= 10){
+	container.x = currentContainerPos.x + -pointerDownPos.x + currentMovePos.x;
+	container.y = currentContainerPos.y + -pointerDownPos.y + currentMovePos.y;
+	}
 });
 
 app.stage.addChild(overlay);
@@ -82,7 +91,7 @@ app.stage.addChild(container);
 
 // create character
 const chef = new PIXI.Graphics();
-chef.beginFill(0xffffff, 1);
+chef.beginFill(0xffff00, 1);
 chef.drawRect(0, 0, 25, 25);
 chef.x = 0;
 chef.y = 0;
@@ -99,8 +108,6 @@ chef2.x = 50;
 chef2.y = 50;
 chef2.endFill();
 container.addChild(chef2);
-
-
 
 
 
