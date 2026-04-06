@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+<title>PixiJS Dialog Example</title>
+<style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+      }
+</style>
+</head>
+<body>
+
+<script src="pixi.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script>
+
+/*********************Utilities***********************/
+const getDistance = (x1, y1, x2, y2) => Math.hypot(x2 - x1, y2 - y1);
+
+function sliceSheet(texture, frameCount, frameWidth, frameHeight) {
+	const frames = [];
+	let currentFrameWidth = 0;
+	let currentFrameHeight = 0;
+	while(frameCount--){
+		const rect = new PIXI.Rectangle(
+			currentFrameWidth,
+			currentFrameHeight,
+			frameWidth,
+			frameHeight
+		);
+		frames.push(new PIXI.Texture(texture.baseTexture, rect));
+		currentFrameWidth += frameWidth;
+		if(currentFrameWidth >= texture.baseTexture.width){
+			currentFrameHeight += frameHeight;
+			currentFrameWidth = 0;
+		}
+	}
+	return frames;
+}
+
+
+const chefAnimations = [];
+class LoadingScene {
+    constructor(app) {
+      this.app = app;
+      this.type = "loading-scene";
+      this.container = new PIXI.Container();
+      this.objects = [];
+      this.isDestroyed = false;
+      this.loadResources();
+    }
+	
+    update() {
+	
+	}
+	
+    async loadResources() {
+		await PIXI.Assets.load([
+			{
+			  alias: "chef-idle",
+			  src: "chef-idle-675x700.png"
+			},
+			{
+			  alias: "chef-walking",
+			  src:
+				"chef-walking-450x700.png"
+			},
+			{
+			  alias: "chef-chopping",
+			  src:
+				"chef-knifing-675x700.png"
+			}
+		]);
+		
+		this.setCompletion();
+	}
+	
+	setCompletion() {
+		this.isComplete = true;
+		console.log('done');
+	}
+	
+	show() {
+		this.app.stage.addChild(this.container);
+    }
+
+    hide() {
+		this.app.stage.removeChild(this.container);
+    }
+	
+	destroy() {
+		this.objects.forEach((obj) => {
+			this.container.removeChild(obj);
+			// Remove all event listeners
+			obj.off();
+
+			// Destroy and free memory
+			obj.destroy({ children: true });
+		});
+		this.objects = [];
+		this.isDestroyed = true;
+	}
+}
+
+class GameScene {
+    constructor(app) {
+		this.app = app;
+		this.type = "game-scene";
+		this.container = new PIXI.Container();
+		this.internalContainer = new PIXI.Container();
+		this.objects = [];
+		this.isDestroyed = false;
+		
+		// Create overlay
+		const overlay = new PIXI.Graphics();
+		overlay.beginFill(0xFF0000, 1);
+		overlay.drawRect(0, 0, 500, 500);
+		overlay.x = 0;
+		overlay.y = 0;
+		overlay.endFill();
+		overlay.eventMode = 'static';
+		overlay.visible = true;
+		this.objects.push(overlay);
+		
+		this.container.addChild(overlay);
+		this.container.addChild(this.internalContainer);
+		
+		
+		let pointerDownPos = null;
+		let currentContainerPos = null;
+		let isPointerDown = false;
+		
+		// Create chef
+		const chef = new PIXI.Graphics();
+		chef.beginFill(0x00FF00, 1);    // bright green
+		chef.drawRect(0, 0, 25, 25);
+		chef.x = 20;
+		chef.y = 20;
+		chef.endFill();
+		this.chef = chef;
+		this.objects.push(chef);
+		this.internalContainer.addChild(chef);
+		
+		overlay.on('pointerdown', (event) => {
+			isPointerDown = true;
+			// Keep track of current pointer position
+			pointerDownPos = event.data.global.clone(); 
+			// Keep track of current container position
+			currentContainerPos = {
+				x: this.internalContainer.x,
+				y: this.internalContainer.y,
+			}
+		});
+
+
+		overlay.on('pointerup', (event) => {
+			if(!isPointerDown) return;
+				isPointerDown = false;
+
+			let currentMovePos = event.data.global.clone();
+			// Calculate distance
+			if(getDistance(currentMovePos.x, currentMovePos.y, pointerDownPos.x, pointerDownPos.y) < 10){
+				this.chef.x = pointerDownPos.x - currentContainerPos.x;
+				this.chef.y = pointerDownPos.y - currentContainerPos.y;
+			}
+		});
+		
+		overlay.on('pointerout', (event) => {
+			if(!isPointerDown) return;
+			isPointerDown = false;
+		});
+
+		overlay.on('pointermove', (event) => {
+			if(!isPointerDown) return;
+			let currentMovePos = event.data.global.clone();
+			// Calculate distance
+			if(getDistance(currentMovePos.x, currentMovePos.y, pointerDownPos.x, pointerDownPos.y) >= 10){
+				this.internalContainer.x = currentContainerPos.x + -pointerDownPos.x + currentMovePos.x;
+				this.internalContainer.y = currentContainerPos.y + -pointerDownPos.y + currentMovePos.y;
+			}
+		});
+		
+		// setTimeout(this.destroy.bind(this), 5000);
+		
+    }
+	
+    update() {
+	
+	}
+	
+	show() {
+		this.app.stage.addChild(this.container);
+    }
+
+    hide() {
+		this.app.stage.removeChild(this.container);
+    }
+	
+	destroy() {
+		this.objects.forEach((obj) => {
+			if (obj.parent) obj.parent.removeChild(obj);
+
+			// Remove all event listeners
+			obj.off?.();
+
+			// Destroy and free memory
+			obj.destroy({ children: true });
+		});
+		this.objects.length = 0;
+		this.isDestroyed = true;
+		this.internalContainer?.parent.removeChild(this.internalContainer);
+		this.internalContainer.destroy({ children: true });
+		this.container.parent?.removeChild(this.container);
+		this.container.destroy({ children: true });
+	}
+}
+
+class Chef {
+	constructor(){
+		this.animations = this.getAnimations();
+		this.sprite = new PIXI.AnimatedSprite(this.animations.idle);
+		this.sprite.currentAnim = 'idle';
+		
+		this.sprite.anchor.set(0.5);
+		this.sprite.scale.set(0.5);
+
+		this.sprite.animationSpeed = 0.15;
+		this.sprite.play();
+	}
+	
+	getAnimations() {
+		const idleTex = PIXI.Texture.from('chef-idle-675x700.png');
+		const walkTex = PIXI.Texture.from('chef-walking-450x700.png');
+		const chopTex = PIXI.Texture.from('chef-knifing-675x700.png');
+
+		const animations = {
+			idle: sliceSheet(idleTex, 5, 225, 350),
+			chop: sliceSheet(chopTex, 5, 225, 350),
+			walk: sliceSheet(walkTex, 4, 225, 350),
+		};
+		
+		return animations;
+	}
+	
+	setAnimation(name){
+		if (this.currentAnim === name) return;
+		if (!this.animations[name]) return;
+
+		this.currentAnim = name;
+		this.sprite.textures = this.animations[name];
+		this.sprite.play();
+	}
+	
+	// Destroy chef safely
+	destroy() {
+		this.sprite.off();       // remove all sprite events
+		this.itemSprite.off();   // remove item events
+		if (this.container.parent) this.container.parent.removeChild(this.container);
+			this.container.destroy({ children: true, texture: true, baseTexture: true });
+	}
+}
+
+
+(async () => {
+	/*********************PIXI***********************/
+	// Create a new application
+	const app = new PIXI.Application();
+
+	// Initialize the application
+	await app.init({
+		background: "#000",
+		resizeTo: window,
+		//resolution: window.devicePixelRatio || 1,
+	});
+	
+	// Append the application canvas to the document body
+	document.body.appendChild(app.canvas);
+	/*********************PIXI***********************/
+	
+	
+	let gameScene, activeScene, loadingScene;
+	
+	loadingScene = new LoadingScene(app);
+	activeScene = loadingScene;
+	activeScene.show();
+	
+	// Listen for animate update
+	app.ticker.add((time) => {
+		activeScene.update();
+		if(loadingScene.isComplete && activeScene.type === "loading-scene"){
+			activeScene.hide();
+			activeScene.destroy();
+			// Switch to game scene
+			gameScene = new GameScene(app);
+			activeScene = gameScene;
+			activeScene.show();
+		}
+	});
+})();
+
+
+/*
+// --- Overlay ---
+const overlay = new PIXI.Graphics();
+overlay.beginFill(0xFF00F0, 1);
+overlay.drawRect(0, 0, 600, 600);
+overlay.x = 0;
+overlay.y = 0;
+overlay.endFill();
+
+overlay.alpha = 1;
+overlay.eventMode = 'static';
+overlay.visible = true;
+
+
+let pointerDownPos = null;
+let currentContainerPos = null;
+let isPointerDown = false;
+
+const getDistance = (x1, y1, x2, y2) => Math.hypot(x2 - x1, y2 - y1);
+
+overlay.on('pointerdown', (event) => {
+  isPointerDown = true;
+  // Keep track of current pointer position
+  pointerDownPos = event.data.global.clone(); 
+  // Keep track of current container position
+  currentContainerPos = {
+	x: container.x,
+	y: container.y,
+  }
+});
+
+
+overlay.on('pointerup', (event) => {
+	if(!isPointerDown) return;
+	isPointerDown = false;
+
+	let currentMovePos = event.data.global.clone();
+	// Calculate distance
+	if(getDistance(currentMovePos.x, currentMovePos.y, pointerDownPos.x, pointerDownPos.y) < 10){
+		chef3.x = pointerDownPos.x - currentContainerPos.x;
+		chef3.y = pointerDownPos.y - currentContainerPos.y;
+	}
+});
+overlay.on('pointerout', (event) => {
+	if(!isPointerDown) return;
+	isPointerDown = false;
+});
+
+overlay.on('pointermove', (event) => {
+	if(!isPointerDown) return;
+	let currentMovePos = event.data.global.clone();
+	// Calculate distance
+	if(getDistance(currentMovePos.x, currentMovePos.y, pointerDownPos.x, pointerDownPos.y) >= 10){
+	container.x = currentContainerPos.x + -pointerDownPos.x + currentMovePos.x;
+	container.y = currentContainerPos.y + -pointerDownPos.y + currentMovePos.y;
+	}
+});
+
+app.stage.addChild(overlay);
+
+
+// --- Container ---
+const container = new PIXI.Container();
+container.pivot.set(0.5, 0.5); // center pivot
+container.visible = true;
+app.stage.addChild(container);
+
+
+const baseTexture = PIXI.BaseTexture.from('chef-idle-675x700.png');
+
+const cols = 2;
+const rows = 2;
+
+const frameWidth = 450 / cols;   
+const frameHeight = 700 / rows; 
+
+const frames = [];
+
+for (let y = 0; y < rows; y++) {
+  for (let x = 0; x < cols; x++) {
+    const rect = new PIXI.Rectangle(
+      x * frameWidth,
+      y * frameHeight,
+      frameWidth,
+      frameHeight
+    );
+
+    const texture = new PIXI.Texture(baseTexture, rect);
+    frames.push(texture);
+  }
+}
+
+async function loadAnimation(){
+	await PIXI.Assets.load([
+	  'chef-walking-450x700.png',
+	  'chef-idle-675x700.png',
+	  'chef-knifing-675x700.png',
+	]);
+	const idleTex = PIXI.Texture.from('chef-idle-675x700.png');
+	const walkTex = PIXI.Texture.from('chef-walking-450x700.png');
+	const chopTex = PIXI.Texture.from('chef-knifing-675x700.png');
+
+	const animations = {
+		idle: sliceSheet(idleTex, 5, 225, 350),
+		chop: sliceSheet(chopTex, 5, 225, 350),
+		walk: sliceSheet(walkTex, 4, 225, 350),
+	};
+	
+	chef3 = new PIXI.AnimatedSprite(animations.chop);
+
+	chef3.anchor.set(0.5);
+	chef3.scale.set(0.5);
+	chef3.x = 150;
+	chef3.y = 150;
+
+	chef3.animationSpeed = 0.15;
+	chef3.play();
+
+	container.addChild(chef3);
+}
+
+loadAnimation();
+
+
+function sliceSheet(texture, frameCount, frameWidth, frameHeight) {
+	const frames = [];
+	let currentFrameWidth = 0;
+	let currentFrameHeight = 0;
+	while(frameCount--){
+		const rect = new PIXI.Rectangle(
+			currentFrameWidth,
+			currentFrameHeight,
+			frameWidth,
+			frameHeight
+		);
+		frames.push(new PIXI.Texture(texture.baseTexture, rect));
+		currentFrameWidth += frameWidth;
+		if(currentFrameWidth >= texture.baseTexture.width){
+			currentFrameHeight += frameHeight;
+			currentFrameWidth = 0;
+		}
+	}
+	return frames;
+}
+
+let chef3;
+
+
+// create character
+const chef = new PIXI.Graphics();
+chef.beginFill(0xffff00, 1);
+chef.drawRect(0, 0, 25, 25);
+chef.x = 0;
+chef.y = 0;
+chef.endFill();
+container.addChild(chef);
+
+
+// create character
+const chef2 = new PIXI.Graphics();
+chef2.beginFill(0xffffff, 1);
+chef2.drawRect(0, 0, 25, 25);
+chef2.x = 50;
+chef2.y = 50;
+chef2.endFill();
+container.addChild(chef2);
+
+*/
+   // gsap.to(overlay, { alpha: 0.5, duration: 0.5 });
+</script>
+</body>
+</html>
