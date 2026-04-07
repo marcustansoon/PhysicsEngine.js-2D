@@ -27,22 +27,28 @@ const getDistance = (x1, y1, x2, y2) => Math.hypot(x2 - x1, y2 - y1);
 
 function sliceSheet(texture, frameCount, frameWidth, frameHeight) {
 	const frames = [];
-	let currentFrameWidth = 0;
-	let currentFrameHeight = 0;
-	while(frameCount--){
-		const rect = new PIXI.Rectangle(
-			currentFrameWidth,
-			currentFrameHeight,
-			frameWidth,
-			frameHeight
-		);
-		frames.push(new PIXI.Texture(texture.baseTexture, rect));
-		currentFrameWidth += frameWidth;
-		if(currentFrameWidth >= texture.baseTexture.width){
-			currentFrameHeight += frameHeight;
-			currentFrameWidth = 0;
+
+	let x = 0;
+	let y = 0;
+
+	for (let i = 0; i < frameCount; i++) {
+		const frame = new PIXI.Rectangle(x, y, frameWidth, frameHeight);
+
+		const newTex = new PIXI.Texture({
+			source: texture.source, // ✅ IMPORTANT (v8)
+			frame: frame
+		});
+
+		frames.push(newTex);
+
+		x += frameWidth;
+
+		if (x + frameWidth > texture.width) {
+			x = 0;
+			y += frameHeight;
 		}
 	}
+
 	return frames;
 }
 
@@ -114,8 +120,10 @@ class GameScene {
     constructor(app) {
 		this.app = app;
 		this.type = "game-scene";
+		// Main container
 		this.container = new PIXI.Container();
-		this.internalContainer = new PIXI.Container();
+		// Object container
+		this.objContainer = new PIXI.Container();
 		this.objects = [];
 		this.isDestroyed = false;
 		
@@ -128,11 +136,11 @@ class GameScene {
 		overlay.endFill();
 		overlay.eventMode = 'static';
 		overlay.visible = true;
+		this.overlay = overlay;
 		this.objects.push(overlay);
 		
 		this.container.addChild(overlay);
-		this.container.addChild(this.internalContainer);
-		
+		this.container.addChild(this.objContainer);
 		
 		let pointerDownPos = null;
 		let currentContainerPos = null;
@@ -145,11 +153,21 @@ class GameScene {
 		chef.x = 20;
 		chef.y = 20;
 		chef.endFill();
-		this.chef = chef;
 		this.objects.push(chef);
-		this.internalContainer.addChild(chef);
+		this.objContainer.addChild(chef);
 		
-		overlay.on('pointerdown', (event) => {
+		const chef2 = new Chef();
+		this.objContainer.addChild(chef2.sprite);
+		this.chef = chef2;
+		this.objects.push(chef2.sprite);
+		this.chef.setAnimation('walk');
+		
+		
+		// Create input controller
+        this.inputController = new InputController(this.overlay, this.chef, this.objContainer);
+		
+		
+		/*overlay.on('pointerdown', (event) => {
 			isPointerDown = true;
 			// Keep track of current pointer position
 			pointerDownPos = event.data.global.clone(); 
@@ -176,9 +194,9 @@ class GameScene {
 		overlay.on('pointerout', (event) => {
 			if(!isPointerDown) return;
 			isPointerDown = false;
-		});
+		});*/
 
-		overlay.on('pointermove', (event) => {
+		/*overlay.on('pointermove', (event) => {
 			if(!isPointerDown) return;
 			let currentMovePos = event.data.global.clone();
 			// Calculate distance
@@ -186,7 +204,7 @@ class GameScene {
 				this.internalContainer.x = currentContainerPos.x + -pointerDownPos.x + currentMovePos.x;
 				this.internalContainer.y = currentContainerPos.y + -pointerDownPos.y + currentMovePos.y;
 			}
-		});
+		});*/
 		
 		// setTimeout(this.destroy.bind(this), 5000);
 		
@@ -223,24 +241,75 @@ class GameScene {
 	}
 }
 
+class InputController {
+    constructor(overlay, chef, internalContainer) {
+        this.overlay = overlay;
+        this.chef = chef;
+        this.internalContainer = internalContainer;
+
+        this.pointerDownPos = null;
+        this.currentContainerPos = null;
+        this.isPointerDown = false;
+
+        this.setupListeners();
+    }
+
+    setupListeners() {
+        this.overlay.on('pointerdown', this.onPointerDown.bind(this));
+        this.overlay.on('pointermove', this.onPointerMove.bind(this));
+        this.overlay.on('pointerup', this.onPointerUp.bind(this));
+        this.overlay.on('pointerout', this.onPointerUp.bind(this));
+    }
+
+    onPointerDown(event) {
+        this.isPointerDown = true;
+        this.pointerDownPos = event.data.global.clone();
+        this.currentContainerPos = {
+            x: this.internalContainer.x,
+            y: this.internalContainer.y
+        };
+    }
+
+    onPointerMove(event) {
+        if(!this.isPointerDown) return;
+        const currentMovePos = event.data.global.clone();
+        if (getDistance(currentMovePos.x, currentMovePos.y, this.pointerDownPos.x, this.pointerDownPos.y) >= 10) {
+            this.internalContainer.x = this.currentContainerPos.x + currentMovePos.x - this.pointerDownPos.x;
+            this.internalContainer.y = this.currentContainerPos.y + currentMovePos.y - this.pointerDownPos.y;
+        }
+    }
+
+    onPointerUp(event) {
+        if(!this.isPointerDown) return;
+        this.isPointerDown = false;
+        const currentMovePos = event.data.global.clone();
+        if (getDistance(currentMovePos.x, currentMovePos.y, this.pointerDownPos.x, this.pointerDownPos.y) < 10) {
+            this.chef.moveTo(this.pointerDownPos.x - this.currentContainerPos.x, this.pointerDownPos.y - this.currentContainerPos.y);
+        }
+    }
+}
+
 class Chef {
 	constructor(){
 		this.animations = this.getAnimations();
+		console.log(this.animations);
 		this.sprite = new PIXI.AnimatedSprite(this.animations.idle);
-		this.sprite.currentAnim = 'idle';
+		this.currentAnim = 'idle';
 		
 		this.sprite.anchor.set(0.5);
-		this.sprite.scale.set(0.5);
+		this.sprite.scale.set(0.25);
+		
 
 		this.sprite.animationSpeed = 0.15;
 		this.sprite.play();
 	}
 	
 	getAnimations() {
-		const idleTex = PIXI.Texture.from('chef-idle-675x700.png');
-		const walkTex = PIXI.Texture.from('chef-walking-450x700.png');
-		const chopTex = PIXI.Texture.from('chef-knifing-675x700.png');
-
+		const idleTex = PIXI.Texture.from('chef-idle');
+		const walkTex = PIXI.Texture.from('chef-walking');
+		const chopTex = PIXI.Texture.from('chef-chopping');
+		
+		console.log(idleTex);
 		const animations = {
 			idle: sliceSheet(idleTex, 5, 225, 350),
 			chop: sliceSheet(chopTex, 5, 225, 350),
@@ -259,12 +328,17 @@ class Chef {
 		this.sprite.play();
 	}
 	
+	moveTo(x, y) {
+		this.sprite.position.set(x, y);
+	}
+	
 	// Destroy chef safely
 	destroy() {
-		this.sprite.off();       // remove all sprite events
-		this.itemSprite.off();   // remove item events
-		if (this.container.parent) this.container.parent.removeChild(this.container);
-			this.container.destroy({ children: true, texture: true, baseTexture: true });
+		this.sprite.off();
+
+		this.sprite.parent?.removeChild(this.sprite);
+		
+		this.sprite.destroy();
 	}
 }
 
