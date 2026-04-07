@@ -77,7 +77,7 @@ class LoadingScene {
 			{
 			  alias: "chef-walking",
 			  src:
-				"chef-walking-450x700.png"
+				"chef-walking-450x700v2.png"
 			},
 			{
 			  alias: "chef-chopping",
@@ -162,6 +162,22 @@ class GameScene {
 		this.objects.push(chef2.sprite);
 		this.chef.setAnimation('walk');
 		
+		
+		// create interactive table;
+		const table = new PIXI.Graphics();
+		table.beginFill(0xffff00, 1);
+		table.drawRect(0, 0, 25, 25);
+		table.x = 150;
+		table.y = 150;
+		table.eventMode = 'static';
+table.cursor = 'pointer';
+		table.endFill();
+		this.objContainer.addChild(table);
+		table.on('pointerdown', () => {
+	console.log('table clicked');
+});
+
+
 		
 		// Create input controller
         this.inputController = new InputController(this.overlay, this.chef, this.objContainer);
@@ -284,7 +300,10 @@ class InputController {
         this.isPointerDown = false;
         const currentMovePos = event.data.global.clone();
         if (getDistance(currentMovePos.x, currentMovePos.y, this.pointerDownPos.x, this.pointerDownPos.y) < 10) {
-            this.chef.moveTo(this.pointerDownPos.x - this.currentContainerPos.x, this.pointerDownPos.y - this.currentContainerPos.y);
+			const x = this.pointerDownPos.x - this.currentContainerPos.x;
+			const y = this.pointerDownPos.y - this.currentContainerPos.y;
+			console.log(x, y);
+            this.chef.moveTo(x, y);
         }
     }
 }
@@ -365,9 +384,22 @@ class Chef {
 		}
 		
 		// Move with current speed
-		if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
-			this.sprite.x += dx < 0 ? -1.5 : 1.5;//dx * this.speed;
-			this.sprite.y += dy < 0 ? -1.5 : 1.5;//dy * this.speed;
+		if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+			//this.sprite.x = Math.round(this.sprite.x + dx < 0 ? -2 : 2);
+			//this.sprite.y = Math.round(this.sprite.y + dy < 0 ? -2 : 2);
+			//console.log(Math.round(this.sprite.x + dx < 0 ? -2 : 2));
+			if(dx < 0){
+				this.sprite.x = Math.round(this.sprite.x - 1);
+			}else{
+				this.sprite.x = Math.round(this.sprite.x + 1);
+			}
+			if(dy < 0){
+				this.sprite.y -= 1;
+			}else{
+				this.sprite.y += 1;
+			}
+			//this.sprite.x += dx < 0 ? -2 : 2;//dx * this.speed;
+			//this.sprite.y += dy < 0 ? -2 : 2;//dy * this.speed;
 			
 			// Increase speed gradually
 			this.speed += 0.001;
