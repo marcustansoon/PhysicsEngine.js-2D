@@ -131,6 +131,7 @@ class GameScene {
 		const overlay = new PIXI.Graphics();
 		overlay.beginFill(0xFF0000, 1);
 		overlay.drawRect(0, 0, 800, 800);
+		overlay.alpha = 0;
 		overlay.x = 0;
 		overlay.y = 0;
 		overlay.endFill();
@@ -165,19 +166,36 @@ class GameScene {
 		
 		// create interactive table;
 		const table = new PIXI.Graphics();
-		table.beginFill(0xffff00, 1);
+		table.beginFill(0xff0000, 1);
 		table.drawRect(0, 0, 25, 25);
 		table.x = 150;
 		table.y = 150;
 		table.eventMode = 'static';
-table.cursor = 'pointer';
+		table.cursor = 'pointer';
 		table.endFill();
 		this.objContainer.addChild(table);
 		table.on('pointerdown', () => {
-	console.log('table clicked');
-});
+			console.log('table clicked');
+		});
+
+		const progress = new CircularProgress(15);
+		progress.graphics.x = 150;
+		progress.graphics.y = 150;
+		this.progress = progress;
+		this.objContainer.addChild(progress.graphics);
 
 
+		this.t = 0;
+		
+
+		const bar = new ProgressBar(150, 12);
+
+		bar.graphics.x = 200;
+		bar.graphics.y = 200;
+
+		this.objContainer.addChild(bar.graphics);
+		this.barProgress = bar;
+		
 		
 		// Create input controller
         this.inputController = new InputController(this.overlay, this.chef, this.objContainer);
@@ -228,6 +246,9 @@ table.cursor = 'pointer';
 	
     update(delta) {
 		this.chef.update(delta);
+		this.t = (this.t + 0.01 * delta) % 1;
+		this.progress.setProgress(this.t % 1);
+		this.barProgress.setProgress(this.t);
 	}
 	
 	show() {
@@ -427,6 +448,69 @@ class Chef {
 	}
 }
 
+class CircularProgress {
+	constructor(radius = 20) {
+		this.radius = radius;
+		this.progress = 0;
+
+		this.graphics = new PIXI.Graphics();
+	}
+
+	setProgress(value) {
+		this.progress = Math.max(0, Math.min(1, value));
+		this.draw();
+	}
+
+	draw() {
+		const g = this.graphics;
+		g.clear();
+
+		// Background circle
+		g.setStrokeStyle({ width: 4, color: 0x333333 });
+		g.circle(0, 0, this.radius);
+		g.stroke();
+
+		// Progress arc
+		const startAngle = -Math.PI / 2;
+		const endAngle = startAngle + this.progress * Math.PI * 2;
+
+		g.setStrokeStyle({ width: 4, color: 0x00ff00 });
+		g.arc(0, 0, this.radius, startAngle, endAngle);
+		g.stroke();
+	}
+}
+
+class ProgressBar {
+	constructor(width = 100, height = 10) {
+		this.width = width;
+		this.height = height;
+		this.progress = 0;
+
+		this.graphics = new PIXI.Graphics();
+		this.draw();
+	}
+
+	setProgress(value) {
+		this.progress = Math.max(0, Math.min(1, value));
+		this.draw();
+	}
+
+	draw() {
+		const g = this.graphics;
+		g.clear();
+
+		// Background
+		g.setFillStyle({ color: 0x333333 });
+		g.rect(0, 0, this.width, this.height);
+		g.fill();
+
+		// Progress fill
+		g.setFillStyle({ color: 0x00ff00 });
+		g.rect(0, 0, this.width * this.progress, this.height);
+		g.fill();
+	}
+}
+
 
 (async () => {
 	/*********************PIXI***********************/
@@ -443,6 +527,8 @@ class Chef {
 	// Append the application canvas to the document body
 	document.body.appendChild(app.canvas);
 	/*********************PIXI***********************/
+	
+	
 	
 	
 	let gameScene, activeScene, loadingScene;
@@ -463,6 +549,8 @@ class Chef {
 			activeScene.show();
 		}
 	});
+	
+	
 })();
 
 
