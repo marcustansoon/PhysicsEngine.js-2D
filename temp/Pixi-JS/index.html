@@ -131,7 +131,7 @@ class GameScene {
 		const overlay = new PIXI.Graphics();
 		overlay.beginFill(0xFF0000, 1);
 		overlay.drawRect(0, 0, 800, 800);
-		overlay.alpha = 0;
+		overlay.alpha = 1;
 		overlay.x = 0;
 		overlay.y = 0;
 		overlay.endFill();
@@ -339,10 +339,12 @@ class Chef {
 		this.sprite.anchor.set(0.5);
 		this.sprite.scale.set(0.3);
 		
+		this.gsap = null;
 		this.direction = 'right';
 
 		this.sprite.animationSpeed = 0.15;
 		this.sprite.play();
+		
 	}
 	
 	getAnimations() {
@@ -350,7 +352,6 @@ class Chef {
 		const walkTex = PIXI.Texture.from('chef-walking');
 		const chopTex = PIXI.Texture.from('chef-chopping');
 		
-		console.log(idleTex);
 		const animations = {
 			idle: sliceSheet(idleTex, 5, 225, 350),
 			chop: sliceSheet(chopTex, 5, 225, 350),
@@ -385,14 +386,38 @@ class Chef {
 	}
 	
 	moveTo(x, y) {
+		// If there’s already a tween running, kill it
+		if (this.gsap) this.gsap.kill();
 		// Set target
 		// Reset speed for next movement
 		this.speed = 0.01;
 		this.target = {x: x, y: y}
 		//this.sprite.position.set(x, y);
+		
+		const dx = this.target.x - this.sprite.x;
+		const dy = this.target.y - this.sprite.y;
+		
+		// set facing direction	
+		if(dx < -1){
+			this.setDirection('left');
+		}else {
+			this.setDirection('right');
+		}
+		
+		let distance = getDistance(this.target.x, this.target.y, this.sprite.x, this.sprite.y);
+		// 1s = 120pixels
+		this.gsap = gsap.to(this.sprite, {
+			x: this.target.x,
+			y: this.target.y,
+			duration: distance / 120,
+			ease: "none",
+			onStart: () => this.setAnimation('walk'),
+			onComplete: () => this.setAnimation('idle')
+		});
 	}
 	
 	update(delta) {
+	return;
 		if (!this.target) return;
 
 		const dx = this.target.x - this.sprite.x;
@@ -403,9 +428,9 @@ class Chef {
 		}else {
 			this.setDirection('right');
 		}
-		
+
 		// Move with current speed
-		if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+		/*if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
 			//this.sprite.x = Math.round(this.sprite.x + dx < 0 ? -2 : 2);
 			//this.sprite.y = Math.round(this.sprite.y + dy < 0 ? -2 : 2);
 			//console.log(Math.round(this.sprite.x + dx < 0 ? -2 : 2));
@@ -435,7 +460,7 @@ class Chef {
 			
 			// Reset speed for next movement
 			this.speed = 0.01;
-		}
+		}*/
 	}
 	
 	// Destroy chef safely
