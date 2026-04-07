@@ -130,7 +130,7 @@ class GameScene {
 		// Create overlay
 		const overlay = new PIXI.Graphics();
 		overlay.beginFill(0xFF0000, 1);
-		overlay.drawRect(0, 0, 500, 500);
+		overlay.drawRect(0, 0, 800, 800);
 		overlay.x = 0;
 		overlay.y = 0;
 		overlay.endFill();
@@ -297,7 +297,7 @@ class Chef {
 		this.currentAnim = 'idle';
 		
 		this.sprite.anchor.set(0.5);
-		this.sprite.scale.set(0.25);
+		this.sprite.scale.set(0.3);
 		
 		this.direction = 'right';
 
@@ -323,6 +323,7 @@ class Chef {
 	setDirection(name){
 		if(this.direction === name) return;
 		this.direction = name;
+		
 		console.log(name);
 		switch (name) {
 			case 'right':
@@ -337,7 +338,7 @@ class Chef {
 	setAnimation(name){
 		if (this.currentAnim === name) return;
 		if (!this.animations[name]) return;
-
+		console.log(name)
 		this.currentAnim = name;
 		this.sprite.textures = this.animations[name];
 		this.sprite.play();
@@ -357,22 +358,22 @@ class Chef {
 		const dx = this.target.x - this.sprite.x;
 		const dy = this.target.y - this.sprite.y;
 		
-		if(dx < -1){
+		if(dx < -3){
 			this.setDirection('left');
 		}else {
 			this.setDirection('right');
 		}
 		
 		// Move with current speed
-		if (Math.abs(dx) > 1 || Math.abs(dy) > 1) {
-			this.sprite.x += dx < 0 ? -1 : 1;//dx * this.speed;
-			this.sprite.y += dy < 0 ? -1 : 1;//dy * this.speed;
+		if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+			this.sprite.x += dx < 0 ? -1.5 : 1.5;//dx * this.speed;
+			this.sprite.y += dy < 0 ? -1.5 : 1.5;//dy * this.speed;
 			
 			// Increase speed gradually
 			this.speed += 0.001;
 			
 			// Cap speed so it doesn’t go crazy
-			if(this.speed > 0.06) this.speed = 0.06;
+			if(this.speed > 0.02) this.speed = 0.02;
 			
 			this.setAnimation('walk');
 		} else {
