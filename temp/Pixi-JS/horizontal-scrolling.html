@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+<title>PixiJS Dialog Example</title>
+<style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+      }
+</style>
+</head>
+<body>
+
+<script src="pixi.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script>
+
+
+
+(async () => {
+	/*********************PIXI***********************/
+	// Create a new application
+	const app = new PIXI.Application();
+
+	// Initialize the application
+	await app.init({
+		background: "#000",
+		resizeTo: window,
+		//resolution: window.devicePixelRatio || 1,
+	});
+	
+	// Append the application canvas to the document body
+	document.body.appendChild(app.canvas);
+	
+	// --- Configuration ---
+    const navHeight = 120;
+    const itemSize = 80;
+    const spacing = 15;
+    const buttonCount = 20;
+
+    // 2. Create Layout Containers
+    const bottomNav = new PIXI.Container();
+    const scrollContainer = new PIXI.Container();
+    const navBg = new PIXI.Graphics();
+    const navMask = new PIXI.Graphics();
+
+    // 3. Setup Navbar Hierarchy
+    // Order matters: Background -> ScrollContainer (with Mask)
+    bottomNav.addChild(navBg);
+    bottomNav.addChild(scrollContainer);
+    bottomNav.addChild(navMask); // Mask doesn't need to be a child, but it's cleaner
+    scrollContainer.mask = navMask;
+    app.stage.addChild(bottomNav);
+
+    // 4. Function to handle responsive layout
+    const resizeLayout = () => {
+        const width = app.renderer.width;
+        const height = app.renderer.height;
+
+        bottomNav.y = height - navHeight;
+
+        // Redraw Background
+        navBg.clear()
+            .rect(0, 0, width, navHeight)
+            .fill({ color: 0x1a1a1a, alpha: 0.9 });
+
+        // Redraw Mask
+        navMask.clear()
+            .rect(0, 0, width, navHeight)
+            .fill(0xffffff);
+    };
+
+    window.addEventListener('resize', resizeLayout);
+    resizeLayout();
+
+    // 5. Populate Scrollable Items
+    let xPos = spacing;
+    const buttons = [];
+
+    for (let i = 0; i < buttonCount; i++) {
+        const imgURL = `200.jpg`;
+        
+        // v8 Best Practice: Load texture first to avoid "null" errors
+        try {
+            const texture = await PIXI.Assets.load(imgURL);
+            const btn = new PIXI.Sprite(texture);
+            
+            btn.width = itemSize;
+            btn.height = itemSize;
+            btn.anchor.set(0.5);
+            btn.x = xPos + itemSize / 2;
+            btn.y = navHeight / 2;
+            
+            // Interactivity
+            btn.eventMode = 'static';
+            btn.cursor = 'pointer';
+            
+            // On click, update main area
+            btn.on('pointertap', () => showContent(imgURL));
+
+            scrollContainer.addChild(btn);
+            buttons.push(btn);
+            xPos += itemSize + spacing;
+        } catch (e) {
+            console.error("Failed to load image:", imgURL);
+        }
+    }
+
+    // 6. Horizontal Drag Logic
+    let isDragging = false;
+    let dragStartX = 0;
+    let scrollStartX = 0;
+
+    bottomNav.eventMode = 'static';
+    bottomNav.on('pointerdown', (e) => {
+        isDragging = true;
+        dragStartX = e.global.x;
+        scrollStartX = scrollContainer.x;
+    });
+
+    window.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        
+        const deltaX = e.clientX - dragStartX;
+        let newX = scrollStartX + deltaX;
+
+        // Constraints: Don't scroll past the edges
+        const minX = Math.min(0, app.renderer.width - xPos);
+        scrollContainer.x = Math.max(minX, Math.min(0, newX));
+    });
+
+    window.addEventListener('pointerup', () => {
+        isDragging = false;
+    });
+
+    // 7. Main Content Management
+    let mainContent = null;
+    async function showContent(url) {
+        try {
+            // Load new texture before removing old one to prevent flickering
+            const tex = await PIXI.Assets.load(url);
+            
+            if (mainContent) {
+                mainContent.destroy({ texture: false }); // Keep texture in cache
+            }
+
+            mainContent = new PIXI.Sprite(tex);
+            mainContent.anchor.set(0.5);
+            mainContent.x = app.renderer.width / 2;
+            mainContent.y = (app.renderer.height - navHeight) / 2;
+            
+            // Scale to fit screen
+            const maxDim = 400;
+            const scale = Math.min(maxDim / mainContent.width, maxDim / mainContent.height);
+            mainContent.scale.set(scale);
+
+            app.stage.addChildAt(mainContent, 0); // Keep it behind the navbar
+        } catch (e) {
+            console.error("Error swapping content:", e);
+        }
+    }
+
+    // Initial load
+    showContent(`https://picsum.photos/400/400?random=start`);
+	
+	
+})();
+
+</script>
+</body>
+</html>
