@@ -1,0 +1,99 @@
+Client:
+sendData: chef(action,timestamp,data)
+
+Host:
+sendData: chef(action,timestamp,data)
+
+
+HOST/Client(s):
+onReceived: chef(action,timestamp,data)
+
+if(action=move)
+ time=time needed to move toward data.to based on timestamp
+ chef.moveTo(from:data.from, to:data.to, time:time)
+
+if(action=chop) // chopping burger 
+ time=progress time needed based on timestamp
+ chef.chop(time)
+
+onReceived: cookingPot(action,timestamp,data)
+ if(action=cooking)
+ time=time needed to cook data.foodType from timestamp
+cookingPot.cook(data.foodType, time)
+
+
+client tap on cookingPot
+client send cookingPot(action,timestamp,data)
+host receive cookingPot(action,timestamp,data)
+host process cookingPot(action,timestamp,data)
+host send cookingPot(action,timestamp,data)
+client process cookingPot(action,timestamp,data)
+
+
+ 
+
+client tap on water
+client send chef(action,data) // action=grab-water;data.id=waterid
+host receive and process  chef(action,data)
+host send chef(action,timestamp,data)
+client receive and process chef(action,timestamp,data)
+
+
+new customer(s) coming in
+host send customer(action:new-c,timestamp,data:redshirt;group1)
+host send customer(action:new-c,timestamp,data:blueshirt;group1)
+host send customer(action:c-move,timestamp,data:group1;fromXY;toXY)
+
+
+
+
+
+action:{
+ players:[chef1{
+		'action':chop,timestamp:,data
+		}, chef2],
+ customersGroupID:{group1:[],group2:[])
+
+}
+
+
+player -> grab mango -> walk -> chop on table -> mango slices on table -> take mango slices
+
+
+mango: 0 -> raw
+1-> chopped
+
+onReceived: 
+
+action:'newFood',type:mango, id: id5, state:0 -> store in foods
+action:'carry',timestamp:123,data.from:(x,y),data.id:id5
+
+action:'carry-move-to',timestamp:123,data.from(x,y),data:to(x,y)
+
+action:'chop',timestamp:123,data.from(x,y),data.id:id4 // id4 is table
+
+action:'
+
+
+
+
+
+states = {
+ id1:{type:player,state:{action:chop,timestamp:123,data.food:mango}} //player 1
+ id2:{type:player,state:{action:moveTo,timestamp:123,data.from:..data.to:...}}
+ id3:{type:player,state:{action:moveTo-carry,timestamp:123,data.from:..data.to:..,data.id:id5}}
+ id4:{type:table,state:{..}}
+}
+
+foods = {
+ id5:{type:mango,state0}
+
+}
+
+objs = {
+
+}
+
+
+
+
