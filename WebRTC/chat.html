@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+<title>PixiJS Dialog Example</title>
+<style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+      }
+</style>
+</head>
+<body>
+
+<script>
+const config = {
+  iceServers: [{ urls: "stun:stun4.l.google.com:19302" }]
+};
+const pc1 = new RTCPeerConnection();
+const dataChannel = pc1.createDataChannel("chat");
+
+dataChannel.onopen = () => console.log("Data channel open");
+dataChannel.onmessage = (event) => console.log("Message received:", event.data);
+
+async function combine(){
+	await clientA_createOffer2();
+	setTimeout(clientB_createAnswer2, 1000)
+}
+
+async function manualClientA(){
+	await clientA_createOffer();
+	setTimeout(clientA_getAnswer, 5000);
+}
+
+async function manualClientB(){
+	await clientB_receiveOffer();
+	await clientB_fetchCandidates();
+	await clientB_createAnswer();
+}
+
+ 
+
+
+async function clientA_createOffer2(){
+	pc1.createOffer().then(offer => {
+		pc1.setLocalDescription(offer)
+		// Send offer to Client B via signaling server
+
+		clientB_receiveOffer2(offer);
+	});
+	
+	pc1.onicecandidate = (event) => {
+		console.log('setup ice for client 1');
+		clientB_receiveICE({candidate: event.candidate})
+	};
+}
+
+async function clientA_createOffer(){
+	console.log('this is client 1');
+
+	pc1.createOffer().then(offer => {
+		pc1.setLocalDescription(offer)
+		// Send offer to Client B via signaling server
+
+		fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=client-1-offer", {
+		  method: "POST",
+		  headers: { "Content-Type": "application/json" },
+		  body: JSON.stringify({ value: offer })
+		})
+		.then(res => res.json())
+		.then(console.log)
+		.catch(console.error);
+	});
+	
+	pc1.onicecandidate = (event) => {
+		console.log('setup ice for client 1');
+		if (event.candidate) {
+			fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=client-1-ice", {
+			  method: "POST",
+			  headers: { "Content-Type": "application/json" },
+			  body: JSON.stringify({ value: {candidate: event.candidate} })
+			});
+		}
+	};
+}
+
+async function clientA_fetchCandidates() {
+		console.log('getting ice from client 2');
+		const res = await (await fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=client-2-ice")).json();
+		const candidate = res.candidate;
+		//for (const c of candidates) {
+			await pc1.addIceCandidate(new RTCIceCandidate(candidate));
+		//}
+		
+}
+
+async function clientA_receiveICE(res) {
+
+		if(!res?.candidate) return
+		//const res = await (await fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=client-1-ice")).json();
+		const candidate = res.candidate;
+		//for (const c of candidates) {
+		await pc1.addIceCandidate(new RTCIceCandidate(candidate));
+		//}
+}
+
+
+async function clientA_getAnswer(){
+	console.log('get answer from client 2');
+	let resp = await (await fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=client-2-answer", {
+		  method: "GET",
+	})).json();
+
+	const answer = resp;
+
+	await pc1.setRemoteDescription(new RTCSessionDescription(answer));
+
+}
+
+async function clientA_getAnswer2(resp){
+	console.log('get answer from client 2');
+	const answer = resp;
+
+	await pc1.setRemoteDescription(new RTCSessionDescription(answer));
+
+}
+
+
+
+
+
+
+const pc2 = new RTCPeerConnection();
+pc2.ondatachannel = (event) => {
+	const dataChannel = event.channel;
+	dataChannel.onmessage = (e) => console.log("Message:", e.data);
+	window.dataChannel2 = dataChannel; // store for sending messages
+};
+
+
+async function clientB_receiveOffer(){
+	console.log('receive offer from client 1');
+	// Receive offer from Worker
+	const offer = await (await fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=client-1-offer", {
+		  method: "GET"
+	})).json();
+	await pc2.setRemoteDescription(new RTCSessionDescription(offer));
+	
+	
+	pc2.onicecandidate = (event) => {
+		console.log('setup ice for client 2');
+	  if (event.candidate) {
+		fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=client-2-ice", {
+		  method: "POST",
+		  headers: { "Content-Type": "application/json" },
+		  body: JSON.stringify({ value: {candidate: event.candidate} })
+		});
+	  }
+	};
+}
+async function clientB_receiveOffer2(offer){
+	await pc2.setRemoteDescription(new RTCSessionDescription(offer));
+	
+	pc2.onicecandidate = (event) => {
+		console.log('setup ice for client 2');
+		clientA_receiveICE({candidate: event.candidate});
+	  }
+	
+}
+
+async function clientB_createAnswer2(){
+	console.log('create answer for client 2');
+	// Create answer
+	const answer = await pc2.createAnswer();
+	await pc2.setLocalDescription(answer);
+	clientA_getAnswer2(answer);
+}
+
+async function clientB_createAnswer(){
+	console.log('create answer for client 2');
+	// Create answer
+	const answer = await pc2.createAnswer();
+	await pc2.setLocalDescription(answer);
+
+	// Send answer back to Worker for Client A
+	await fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=client-2-answer", {
+		  method: "POST",
+		  headers: { "Content-Type": "application/json" },
+		  body: JSON.stringify({ value: answer })
+	});
+}
+
+
+async function clientB_fetchCandidates() {
+		const res = await (await fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=client-1-ice")).json();
+		const candidate = res.candidate;
+		//for (const c of candidates) {
+			await pc2.addIceCandidate(new RTCIceCandidate(candidate));
+		//}
+}
+
+async function clientB_receiveICE(res) {
+		console.log(res)
+		if(!res?.candidate) return
+		//const res = await (await fetch("https://blue-math-f85d.lenztan09.workers.dev/?key=client-1-ice")).json();
+		const candidate = res.candidate;
+		//for (const c of candidates) {
+		await pc2.addIceCandidate(new RTCIceCandidate(candidate));
+		//}
+}
+
+
+
+</script>
+</body>
+</html>
