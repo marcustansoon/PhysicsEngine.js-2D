@@ -63,26 +63,54 @@ player -> grab mango -> walk -> chop on table -> mango slices on table -> take m
 mango: 0 -> raw
 1-> chopped
 
-onReceived: 
-
-action:'newFood',type:mango, id: id5, state:0 -> store in foods
-action:'carry',timestamp:123,data.from:(x,y),data.id:id5
-
-action:'carry-move-to',timestamp:123,data.from(x,y),data:to(x,y)
-
-action:'chop',timestamp:123,data.from(x,y),data.id:id4 // id4 is table
-
-action:'
+client send:
+action:'carry-new-food', type:mango, holderId:player-1
+server send:
+action:'carry-new-food', type:mango, id:mango-id1, holderId:player-1 (clients will create new mango sprite and show player1 carrying a mango anim )
 
 
 
+client send:
+action:'carry-move-to', id:mango-id1, holderid:player-1, toXY
+server send:
+action:'carry-move-to', id:mango-id1, holderid:player-1, toXY, timestamp, fromXY
 
+client send:
+action:chop,id:mango-id1,holderid:player-1,tableid:table-1
+server send:
+action:chop,id:mango-id1,holderid:player-1:tableid:table-1, timestamp //start time
+->action:chop,playerid:player-1
+->action:chop,tableid:table-1,foodid:mango-1
+Upon receving:
+client locks player-1 (show chopping anim)
+client show progress bar on table-1 ( mango anim)
+
+on done:
+server send:
+action:chop-done,id:mango-id1,holderid:player-1:tableid:table-1,timestamp
+upon receiving it
+client show chopped mango on table-1 (change sprite of mango-id1 & change state to chopped)
+client stop progress bar
+client stop player
+
+player should has reset method to reset current anim
+anim: carry,walk,idle
+holding obj:obj id
+table should has reset method (rm progress)
+holding obj
+
+during outofsync, send objs and states to that player
+=
+
+client -> server send multiple times with same seq
+server validate and only process the first seq
 
 states = {
  id1:{type:player,state:{action:chop,timestamp:123,data.food:mango}} //player 1
  id2:{type:player,state:{action:moveTo,timestamp:123,data.from:..data.to:...}}
  id3:{type:player,state:{action:moveTo-carry,timestamp:123,data.from:..data.to:..,data.id:id5}}
  id4:{type:table,state:{..}}
+ player-id1:action:chop,id:mango-id1,tableid:table-1, timestamp //start time
 }
 
 foods = {
@@ -90,10 +118,15 @@ foods = {
 
 }
 
+before (outofsync):
 objs = {
-
+	player1:holding:false
 }
 
+after:
+objs = {
+	player1:holding:true, objid:mango-id1
+}
 
 
 
