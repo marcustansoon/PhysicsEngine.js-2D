@@ -536,6 +536,196 @@ class ProgressBar {
 	}
 }
 
+class MultiplayerManager {
+	constructor(app) {
+	    this.app = app;
+	    this.peers = new Map(); // peerId → { pc: RTCPeerConnection, dc: RTCDataChannel }
+	    this.myID = 0;
+	    this.isHost = false;
+	    this.onActionReceived = null;
+	    this.onPlayerJoined = null;
+	}
+	setMyID(id, isHost) {
+		this.myID = id;
+		isHost && this.setAsHost();
+	}
+	setAsHost() {
+		this.isHost = true;
+	}
+	// Called on host side
+	connectToClient(clientID) {
+		// Set up my Peer Connection as host
+		const pc = new RTCPeerConnection();
+		const dataChannel = pc.createDataChannel("chat");
+
+		dataChannel.onopen = () => console.log("Data channel open");
+		dataChannel.onmessage = (event) => console.log("Message received:", event.data);
+
+		pc.onconnectionstatechange = () => {
+  			console.log("Connection state:", pc.connectionState);
+		};
+
+		let iceCandidates = [];
+		let isScheduled = false;
+		pc.onicecandidate = (event) => {
+			// Send ICE to client
+			// clientB_receiveICE({candidate: event.candidate})
+
+			// Filter out non-null
+			if(!event?.candidate) return;
+
+			console.log('I (Host) got the ICE. Now sending to client');
+
+			iceCandidates.push({candidate: event.candidate});
+
+			if(isScheduled) return;
+			isScheduled = true;
+
+			setTimeout(() => {
+				this.storeICECandidatesOnServer(iceCandidates);
+				isScheduled = false;
+			}, 500);
+
+			return;
+		};
+
+		this.peers.set(this.myID, {
+			"pc": pc,
+			"dc": dataChannel
+		});
+
+		// Create offer as host
+		pc.createOffer().then(offer => {
+			console.log('I (Host) created the offer');
+			pc.setLocalDescription(offer);
+
+			// Send offer to Client
+			// clientB_receiveOffer2(offer);
+
+			// Store offer on server
+			this.storeDataOnServer(`${this.myID}-offer`, offer);
+		});
+
+		// Wait for answer from CLIENT
+		let interval = setInterval(async () => {
+			const answer = await this.fetchDataFromServer(`${clientID}-answer`);
+			if(!answer?.sdp) return;
+			await pc.setRemoteDescription(new RTCSessionDescription(answer));
+
+			// Fetch ICE candidates from CLIENT
+			// Get candidate count
+			let count = (await this.fetchDataFromServer(`${clientID}-ice-count`)).count ?? 0;
+			if(!count){
+				return;
+			}
+			// Add all ICE
+			while(count--){
+				const candidate = (await this.fetchDataFromServer(`${clientID}-ice-${count}`)).candidate;
+				await pc.addIceCandidate(new RTCIceCandidate(candidate));
+			}
+			clearInterval(interval);
+		}, 5000);
+	}
+	async storeICECandidatesOnServer(arr) {
+		// Get ICE count from server
+		await this.storeDataOnServer(`${this.myID}-ice-count`, {count: arr.length});
+		arr.forEach((data, index) => {
+			this.storeDataOnServer(`${this.myID}-ice-${index}`, data);
+		});
+	}
+	async storeDataOnServer(key, data){
+		await fetch(`https://blue-math-f85d.lenztan09.workers.dev/?key=${key}`, {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({ value: data })
+		});
+	}
+	async fetchDataFromServer(key){
+		let resp = await fetch(`https://blue-math-f85d.lenztan09.workers.dev/?key=${key}`, {
+			method: "GET",
+			headers: { "Content-Type": "application/json" },
+		});
+		return resp.json();
+	}
+	// Called on client side
+	async connectToHost(hostID) {
+		// Set up my Peer Connection as client
+		const pc = new RTCPeerConnection();
+
+		pc.ondatachannel = (event) => {
+			const dataChannel = event.channel;
+			dataChannel.onmessage = (e) => console.log("Message:", e.data);
+			this.peers.set(this.myID, {
+				"pc": pc,
+				"dc": dataChannel
+			});
+		};
+		
+		pc.onconnectionstatechange = () => {
+  			console.log("Connection state:", pc.connectionState);
+		};
+
+		let iceCandidates = [];
+		let isScheduled = false;
+		pc.onicecandidate = (event) => {
+			// Filter out non-null
+			if(!event?.candidate) return;
+
+			console.log('I (Client) got the ICE. Now sending to host');
+
+			iceCandidates.push({candidate: event.candidate});
+
+			if(isScheduled) return;
+			isScheduled = true;
+
+			setTimeout(() => {
+				this.storeICECandidatesOnServer(iceCandidates);
+				isScheduled = false;
+			}, 500);
+		};
+
+		// Receive offer from HOST
+		const offer = await this.fetchDataFromServer(`${hostID}-offer`);
+		if(!offer?.sdp) return;
+ 		await pc.setRemoteDescription(new RTCSessionDescription(offer));
+
+		// Fetch ICE candidates from HOST
+		// Get ICE candidate count
+		let count = (await this.fetchDataFromServer(`${hostID}-ice-count`)).count ?? 0;
+		if(!count){
+			return;
+		}
+		// Add ICE candidate
+		while(count--){
+			const candidate = (await this.fetchDataFromServer(`${hostID}-ice-${count}`)).candidate;
+			await pc.addIceCandidate(new RTCIceCandidate(candidate));
+		}
+		console.log('done fetch cand from host');
+
+		// Create answer
+		const answer = await pc.createAnswer();
+		await pc.setLocalDescription(answer);
+
+		// Send answer back to HOST
+		await this.storeDataOnServer(`${this.myID}-answer`, answer);
+	}
+}
+
+const params = new URLSearchParams(window.location.search);
+const isHost = params.get("isHost");
+
+let MMHost, MMClient;
+if(isHost){
+	// Host
+	MMHost = new MultiplayerManager();
+	MMHost.setMyID(5);
+	MMHost.connectToClient(6);
+}else{
+	// Client
+	MMClient = new MultiplayerManager();
+	MMClient.setMyID(6);
+	MMClient.connectToHost(5);
+}
 
 (async () => {
 	/*********************PIXI***********************/
