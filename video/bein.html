@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HLS.js</title>
+ <style>
+html, body {
+  margin: 0;
+  height: 100%;
+  background: black;
+}
+
+/* FULL SCREEN GRID */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  height: 100vh;
+  width: 100vw;
+  gap: 2px;
+}
+
+/* 5 videos fill grid cells */
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  background: black;
+}
+
+/* Make last cell span center bottom nicely */
+.v5 {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+}
+</style>
+</head>
+
+<body>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+<div class="grid">
+  <video id="v1" muted playsinline controls></video>
+  <video id="v2" muted playsinline controls></video>
+  <video id="v3" muted playsinline controls></video>
+  <video id="v4" muted playsinline controls></video>
+  <video id="v5" class="v5" muted playsinline controls></video>
+  <video id="v6" class="" muted playsinline controls></video>
+</div>
+
+<script>
+    (function () {
+		//return;
+      const originalOpen = XMLHttpRequest.prototype.open;
+      XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
+        if (method.toUpperCase() === "GET" && !url.includes(".m3u8") && !url.includes(".ts")) {
+			const lastPart = url.split('/').filter(Boolean).pop();
+			arguments[1] = `http://hkpremiumtv.xyz:2095/live/MuratK/UW2QtJm7f5Dj/${lastPart}.m3u8`;
+        }
+
+        return originalOpen.apply(this, arguments);
+      };
+    })();
+	
+	const streams = [
+	  "http://hkpremiumtv.xyz:2095/live/MuratK/UW2QtJm7f5Dj/139901.m3u8",
+	  "http://hkpremiumtv.xyz:2095/live/MuratK/UW2QtJm7f5Dj/148075.m3u8",
+	  "http://hkpremiumtv.xyz:2095/live/MuratK/UW2QtJm7f5Dj/63479.m3u8",
+	  "http://hkpremiumtv.xyz:2095/live/MuratK/UW2QtJm7f5Dj/24606.m3u8",
+	  "http://hkpremiumtv.xyz:2095/live/MuratK/UW2QtJm7f5Dj/107904.m3u8",
+	  "http://hkpremiumtv.xyz:2095/live/MuratK/UW2QtJm7f5Dj/65974.m3u8",
+	];
+
+	const videos = [
+	  document.getElementById("v1"),
+	  document.getElementById("v2"),
+	  document.getElementById("v3"),
+	  document.getElementById("v4"),
+	  document.getElementById("v5"),
+	  document.getElementById("v6")
+	];
+
+	const players = [];
+
+	streams.forEach((url, i) => {
+	  const hls = new Hls({
+		lowLatencyMode: true,
+		maxBufferLength: 10,
+        maxMaxBufferLength: 30,        // prevent buffer from growing too much
+        backBufferLength: 10,
+        maxBufferSize: 50 * 1000 * 1000, // 30MB is usually enough
+	  });
+
+	  hls.loadSource(url);
+	  hls.attachMedia(videos[i]);
+
+	  players.push(hls);
+	});
+	
+	setTimeout(()=>{
+		videos.forEach(e=>e.play())
+	},10000);
+</script>
