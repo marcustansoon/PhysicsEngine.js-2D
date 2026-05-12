@@ -1,13 +1,31 @@
-# Huawei Ads & Telemetry Blocklist
-# Format: 0.0.0.0 domain.com
+# Huawei Ads / Tracking
+0.0.0.0 ads.hispace.hicloud.com
+0.0.0.0 ads-drcn.platform.hicloud.com
+0.0.0.0 ads.platform.hicloud.com
+0.0.0.0 ad-sdk-config.youku.com
+0.0.0.0 adx-drcn.op.dbankcloud.com
+0.0.0.0 adx-dre.op.dbankcloud.com
 
-0.0.0.0 ads-dra.dbankcdn.com
-0.0.0.0 ads-dra.dbankcloud.cn
-0.0.0.0 contentcenter-dra.dbankcdn.com
-0.0.0.0 logservice.hicloud.com
-0.0.0.0 metrics.data.hicloud.com
-0.0.0.0 metrics1.data.hicloud.com
-0.0.0.0 query.hicloud.com
-0.0.0.0 grs.hicloud.com
-0.0.0.0 appgallery.cloud.huawei.com
-0.0.0.0 connect-dra.dbankcloud.com
+# Huawei Analytics / Telemetry
+0.0.0.0 metrics2.data.hicloud.com
+0.0.0.0 data.hicloud.com
+0.0.0.0 logbak.hicloud.com
+0.0.0.0 sdklog-dra.platform.hicloud.com
+0.0.0.0 datacollector-drcn.dt.dbankcloud.cn
+
+# Huawei AppGallery / Recommendations
+0.0.0.0 recommendation.hispace.hicloud.com
+0.0.0.0 pushtrs.push.hicloud.com
+0.0.0.0 appdl.hicloud.com
+0.0.0.0 update.dbankcdn.com
+
+# Huawei Video / Content Ads
+0.0.0.0 contentcenter.hicloud.com
+0.0.0.0 browser.huawei.com
+0.0.0.0 cloudbrowser.hicloud.com
+
+# OTA / Diagnostics (optional — may break updates)
+0.0.0.0 configserver.hicloud.com
+0.0.0.0 ota.hispace.hicloud.com
+0.0.0.0 query1.hicloud.com
+0.0.0.0 netcheck.platform.hicloud.com
