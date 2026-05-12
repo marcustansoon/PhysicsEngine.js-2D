@@ -1,0 +1,13 @@
+# Huawei Ads & Telemetry Blocklist
+# Format: 0.0.0.0 domain.com
+
+0.0.0.0 ads-dra.dbankcdn.com
+0.0.0.0 ads-dra.dbankcloud.cn
+0.0.0.0 contentcenter-dra.dbankcdn.com
+0.0.0.0 logservice.hicloud.com
+0.0.0.0 metrics.data.hicloud.com
+0.0.0.0 metrics1.data.hicloud.com
+0.0.0.0 query.hicloud.com
+0.0.0.0 grs.hicloud.com
+0.0.0.0 appgallery.cloud.huawei.com
+0.0.0.0 connect-dra.dbankcloud.com
