@@ -136,7 +136,7 @@ class GameScene {
 		const overlay = new PIXI.Graphics();
 		overlay.beginFill(0xFF0000, 1);
 		overlay.drawRect(0, 0, 800, 800);
-		overlay.alpha = 1;
+		overlay.alpha = .1;
 		overlay.x = 0;
 		overlay.y = 0;
 		overlay.endFill();
@@ -170,6 +170,7 @@ class GameScene {
 		this.objects.push(chef);
 		this.objContainer.addChild(chef);
 		
+		
 		const chef2 = new Chef();
 		this.objContainer.addChild(chef2.sprite);
 		this.chef = chef2;
@@ -182,6 +183,11 @@ class GameScene {
 		this.chef3 = chef3;
 		this.objects.push(chef3.sprite);
 		this.chef.setAnimation('idle');
+		
+		chef2.sprite.filters = [
+			new PIXI.filters.GlowFilter({color: 0x34eb49, distance: 15, outerStrength: 2 })
+		];
+		
 		
 		// Layering
 		//const layer = new PIXI.RenderLayer();
