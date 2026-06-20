@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PixiJS Day-Night Cycle</title>
+  <style>
+    body { margin: 0; background: #111; color: #eee; font-family: system-ui, sans-serif; }
+    #controls { position: absolute; top: 20px; left: 20px; z-index: 10; background: rgba(0,0,0,0.6); padding: 15px; border-radius: 8px; }
+    button, input { margin: 5px; padding: 8px 12px; }
+    #timeDisplay { font-size: 18px; font-weight: bold; margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <button id="playBtn">Pause</button>
+    <button id="resetBtn">Reset Time</button>
+    <br>
+    <label>Time of Day: <input type="range" id="timeSlider" min="0" max="1" step="0.001" value="0.5"></label>
+    <div id="timeDisplay">12:00</div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/8.7.0/pixi.min.js"></script>
+  <script>
+    // ==================== PIXI SETUP ====================
+   	/*********************PIXI***********************/
+	// Create a new application
+	const app = new PIXI.Application();
+
+	// Initialize the application
+	app.init({
+		background: "#000",
+		resizeTo: window,
+		//resolution: window.devicePixelRatio || 1,
+	}).then(_ => {
+    	document.body.appendChild(app.canvas);
+  
+	
+	// Append the application canvas to the document body
+	// document.body.appendChild(app.canvas);
+
+    // ==================== LAYERS ====================
+    const skyLayer = new PIXI.Container();
+    const worldLayer = new PIXI.Container();
+    app.stage.addChild(skyLayer);
+    app.stage.addChild(worldLayer);
+
+    // Night filter on the whole world (ground + objects)
+    const nightFilter = new PIXI.ColorMatrixFilter();
+    worldLayer.filters = [nightFilter];
+
+    // ==================== SKY BACKGROUND ====================
+    const sky = new PIXI.Graphics();
+    skyLayer.addChild(sky);
+
+    // ==================== STARS ====================
+    const stars = new PIXI.Container();
+    skyLayer.addChild(stars);
+    const starCount = 80;
+    const starSprites = [];
+    for (let i = 0; i < starCount; i++) {
+      const star = new PIXI.Graphics();
+      star.beginFill(0xffffff);
+      star.drawCircle(0, 0, Math.random() * 1.8 + 0.8);
+      star.endFill();
+      star.x = Math.random() * app.screen.width;
+      star.y = Math.random() * (app.screen.height * 0.65);
+      star.alpha = 0;
+      stars.addChild(star);
+      starSprites.push(star);
+    }
+
+    // ==================== SUN ====================
+    const sun = new PIXI.Graphics();
+    sun.beginFill(0xfff200);
+    sun.drawCircle(0, 0, 28);
+    sun.endFill();
+    // Simple glow
+    sun.beginFill(0xffe066, 0.3);
+    sun.drawCircle(0, 0, 45);
+    sun.endFill();
+    skyLayer.addChild(sun);
+
+    // ==================== MOON ====================
+    const moon = new PIXI.Graphics();
+    moon.beginFill(0xf0f0ff);
+    moon.drawCircle(0, 0, 22);
+    moon.endFill();
+    // Simple crater detail
+    moon.beginFill(0xd0d0e0);
+    moon.drawCircle(-6, -4, 5);
+    moon.drawCircle(8, 6, 4);
+    moon.endFill();
+    skyLayer.addChild(moon);
+
+    // ==================== WORLD (GROUND + OBJECTS) ====================
+    // Ground
+    const ground = new PIXI.Graphics();
+    ground.beginFill(0x2e7d32);
+    ground.drawRect(0, 420, app.screen.width, 180);
+    ground.endFill();
+    worldLayer.addChild(ground);
+
+    // Simple path
+    const path = new PIXI.Graphics();
+    path.beginFill(0x8d6e63);
+    path.drawRect(200, 480, 500, 40);
+    path.endFill();
+    worldLayer.addChild(path);
+
+    // Trees function
+    function createTree(x, y) {
+      const trunk = new PIXI.Graphics();
+      trunk.beginFill(0x5d4037);
+      trunk.drawRect(x - 8, y, 16, 50);
+      trunk.endFill();
+
+      const foliage = new PIXI.Graphics();
+      foliage.beginFill(0x1b5e20);
+      foliage.drawCircle(x, y - 10, 35);
+      foliage.drawCircle(x - 20, y + 5, 28);
+      foliage.drawCircle(x + 22, y + 5, 28);
+      foliage.endFill();
+
+      const tree = new PIXI.Container();
+      tree.addChild(trunk, foliage);
+      return tree;
+    }
+
+    // Add some trees
+    worldLayer.addChild(createTree(120, 380));
+    worldLayer.addChild(createTree(280, 390));
+    worldLayer.addChild(createTree(650, 385));
+    worldLayer.addChild(createTree(780, 395));
+
+    // Simple house
+    const house = new PIXI.Container();
+    const houseBody = new PIXI.Graphics();
+    houseBody.beginFill(0xd32f2f);
+    houseBody.drawRect(450, 360, 80, 60);
+    houseBody.endFill();
+    const roof = new PIXI.Graphics();
+    roof.beginFill(0x37474f);
+    roof.moveTo(440, 360);
+    roof.lineTo(490, 320);
+    roof.lineTo(540, 360);
+    roof.lineTo(440, 360);
+    roof.endFill();
+    house.addChild(houseBody, roof);
+    worldLayer.addChild(house);
+
+    // ==================== TIME & UPDATE ====================
+    let time = 0.5;           // 0 = midnight, 0.5 = noon, 1 = next midnight
+    let isPlaying = true;
+    const cycleSpeed = 0.0008; // adjust for faster/slower cycle
+
+    function updateTimeDisplay() {
+      const hours = Math.floor(time * 24);
+      const minutes = Math.floor(((time * 24) % 1) * 60);
+      document.getElementById('timeDisplay').textContent = 
+        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+      document.getElementById('timeSlider').value = time;
+    }
+
+    function getSkyColor(t) {
+      // Simple multi-stop color interpolation
+      if (t < 0.15) return 0x0d1b2a;                    // Deep night
+      if (t < 0.25) return lerpColor(0x0d1b2a, 0xff7043, (t - 0.15) / 0.1); // Dawn
+      if (t < 0.35) return lerpColor(0xff7043, 0x4fc3f7, (t - 0.25) / 0.1); // Early day
+      if (t < 0.65) return 0x4fc3f7;                    // Bright day
+      if (t < 0.75) return lerpColor(0x4fc3f7, 0xce93d8, (t - 0.65) / 0.1); // Dusk
+      return lerpColor(0xce93d8, 0x0d1b2a, (t - 0.75) / 0.25); // Night
+    }
+
+    function lerpColor(c1, c2, factor) {
+      const r1 = (c1 >> 16) & 0xff, g1 = (c1 >> 8) & 0xff, b1 = c1 & 0xff;
+      const r2 = (c2 >> 16) & 0xff, g2 = (c2 >> 8) & 0xff, b2 = c2 & 0xff;
+      const r = Math.round(r1 + (r2 - r1) * factor);
+      const g = Math.round(g1 + (g2 - g1) * factor);
+      const b = Math.round(b1 + (b2 - b1) * factor);
+      return (r << 16) | (g << 8) | b;
+    }
+
+    function updateCycle(delta) {
+      if (isPlaying) {
+        time = (time + cycleSpeed * delta) % 1;
+      }
+
+      // === SKY ===
+      sky.clear();
+      sky.beginFill(getSkyColor(time));
+      sky.drawRect(0, 0, app.screen.width, app.screen.height * 0.7);
+      sky.endFill();
+
+      // === SUN & MOON POSITION (arc) ===
+      const centerX = app.screen.width / 2;
+      const horizonY = app.screen.height * 0.55;
+      const radiusX = 380;
+      const radiusY = 220;
+
+      // Sun angle
+      const sunAngle = (time * Math.PI * 2) - Math.PI * 0.6;
+      sun.x = centerX + Math.cos(sunAngle) * radiusX;
+      sun.y = horizonY + Math.sin(sunAngle) * radiusY;
+
+      // Moon angle (offset by half cycle)
+      const moonAngle = sunAngle + Math.PI;
+      moon.x = centerX + Math.cos(moonAngle) * radiusX;
+      moon.y = horizonY + Math.sin(moonAngle) * radiusY;
+
+      // Fade sun/moon when below horizon
+      const horizonThreshold = horizonY + 30;
+      sun.alpha = sun.y < horizonThreshold ? 1 : Math.max(0, 1 - (sun.y - horizonThreshold) / 80);
+      moon.alpha = moon.y < horizonThreshold ? 1 : Math.max(0, 1 - (moon.y - horizonThreshold) / 80);
+
+      // === STARS ===
+      const nightFactor = Math.max(0, Math.sin((time + 0.5) * Math.PI * 2) * 0.5 + 0.5);
+      starSprites.forEach((star, i) => {
+        star.alpha = nightFactor * (0.6 + Math.sin(Date.now() / 300 + i) * 0.4);
+      });
+
+      // === NIGHT LIGHTING FILTER ===
+      // Reset then apply day/night adjustments
+      nightFilter.reset();
+      
+      const brightness = 0.75 + Math.sin(time * Math.PI * 2) * 0.35; // brighter in day
+      const saturation = 0.6 + Math.sin(time * Math.PI * 2) * 0.5;
+      
+      nightFilter.brightness(brightness);
+      nightFilter.saturate(saturation);
+      
+      // Cool blue/purple tint at night
+      if (time > 0.7 || time < 0.3) {
+        nightFilter.tint(0x445577, true);
+      }
+
+      updateTimeDisplay();
+    }
+
+    // ==================== TICKER ====================
+    app.ticker.add((delta) => {
+      updateCycle(delta);
+    });
+
+    // ==================== CONTROLS ====================
+    const playBtn = document.getElementById('playBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const slider = document.getElementById('timeSlider');
+
+    playBtn.addEventListener('click', () => {
+      isPlaying = !isPlaying;
+      playBtn.textContent = isPlaying ? 'Pause' : 'Play';
+    });
+
+    resetBtn.addEventListener('click', () => {
+      time = 0.5;
+      isPlaying = true;
+      playBtn.textContent = 'Pause';
+    });
+
+    slider.addEventListener('input', (e) => {
+      time = parseFloat(e.target.value);
+      isPlaying = false;
+      playBtn.textContent = 'Play';
+    });
+
+    // Initial update
+    updateCycle(0);
+    console.log('%c[PixiJS] Day-night cycle ready! Try the controls.', 'color:#4fc3f7');
+    
+      });
+  </script>
+</body>
+</html>
