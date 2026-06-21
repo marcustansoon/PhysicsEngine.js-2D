@@ -56,6 +56,7 @@
 	const tracks = {};
 
 	let isSubtitlePlaying = false;
+	let latestTrack = {}; // To store latest subtitle track. Automatic add subtitle track when a new stream url is applied
 
 	if(!is_HLS_supported){
 		video.style.display = "none";
@@ -365,9 +366,17 @@ async function receiveMessageFromFlutter(msg) {
 	
 }
 
+// Callback when subtitle tracks are updated
 video.textTracks.onchange = (event) => {subtitleModeSync(event)};
 function subtitleModeSync(event) {
 	if(video.textTracks.length === 0) return;
+	// Automatic add subtitle track when a new stream url is applied
+	if(video.textTracks[video.textTracks.length-1].cues === null) {
+		let content = latestTrack.vttString;
+		let label = latestTrack.label;
+		let language = latestTrack.language;
+		tracks[label] = addSubtitleFromVttString(content, label, language);
+	}
 	video.textTracks[video.textTracks.length-1].mode = isSubtitlePlaying ? "showing" : "hidden";
 }
 
@@ -484,7 +493,14 @@ async function fetchSubtitleFromURL(url) {
 }
 
 
- function addSubtitleFromVttString(vttString, label = 'English', language = 'en', kind = 'subtitles') {
+ function addSubtitleFromVttString(vttString, label = 'English', language = 'en', kind = 'subtitles') { 	
+	 
+	// Store latest track
+ 	latestTrack.label = label;
+ 	latestTrack.language = language;
+ 	latestTrack.kind = kind;
+ 	latestTrack.vttString = vttString;
+	 
   // 1. Create the track (hidden at first is fine – change to 'showing' when you want to display)
   const track = video.addTextTrack(kind, label, language);
 	 
