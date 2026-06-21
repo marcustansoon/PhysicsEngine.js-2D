@@ -55,6 +55,8 @@
 	const is_HLS_supported = Hls.isSupported();
 	const tracks = {};
 
+	let isSubtitlePlaying = false;
+
 	if(!is_HLS_supported){
 		video.style.display = "none";
 		document.getElementById('not-supported').style.display = 'flex';
@@ -298,8 +300,10 @@ async function receiveMessageFromFlutter(msg) {
 			tracks[label] = addSubtitleFromVttString(content, label, message.language);
 		}else if(message.action === "showsubtitle" && message.label){
 			showSubtitles(message.label);
+			isSubtitlePlaying = true;
 		}else if(message.action === "hidesubtitle"){
 			hideAllSubtitles();
+			isSubtitlePlaying = false;
 		}else if(message.action === "start"){
 			startStream(m3u8URL);
 		}else if(message.action === "rewind-video"){
@@ -334,6 +338,7 @@ async function receiveMessageFromFlutter(msg) {
 			if(isNaN(video.duration) || isNaN(timestampInSeconds) || timestampInSeconds > video.duration) return;
 			video.currentTime = timestampInSeconds;
 		}else if(message.action === "setsubtitledelay"){
+			isSubtitlePlaying = true;
 			// Check if 'english' labelled track exists (hardcoded)
 			if (!tracks["english"]) return;
 			let delay = parseFloat(message['data']);
@@ -358,6 +363,12 @@ async function receiveMessageFromFlutter(msg) {
 		document.getElementById('log').innerHTML += `<div>err: ${e}</div>`;
 	}
 	
+}
+
+video.textTracks.onchange = (event) => {subtitleModeSync(event)};
+function subtitleModeSync(event) {
+	if(video.textTracks.length === 0) return;
+	video.textTracks[video.textTracks.length-1].mode = isSubtitlePlaying ? "showing" : "hidden";
 }
 
 // setTimeout(()=>{
