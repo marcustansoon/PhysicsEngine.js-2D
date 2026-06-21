@@ -36,12 +36,44 @@
     justify-content: center;  /* horizontal */
     align-items: center;      /* vertical */
   }
+	.modal {
+	  position: fixed;
+	  top: 0;
+	  left: 0;
+	  width: 100%;
+	  height: 100%;
+	  background: rgba(0,0,0,0.6);
+	  display: flex;
+	  justify-content: center;
+	  align-items: center;
+	  z-index: 9999;
+	}
+	
+	.modal-content {
+	  background: white;
+	  padding: 20px;
+	  border-radius: 8px;
+	  min-width: 200px;
+	  text-align: center;
+	}
+	
+	.hidden {
+	  display: none;
+	}
   </style>
 </head>
 <body>
-  <video id="video" width="100%" height="100%" controls autoplay muted playsinline></video>
-  <h2 id="not-supported" style="height: 100vh; text-align: center; display: none; align-items: center;">HLS is not supported in this device</h2>
 
+	<div id="modal" class="modal hidden">
+	  <div class="modal-content">
+	    <p id="modal-text-1"></p>
+	    <p id="modal-text-2"></p>
+	  </div>
+	</div>
+	
+	<video id="video" width="100%" height="100%" controls autoplay muted playsinline></video>
+	<h2 id="not-supported" style="height: 100vh; text-align: center; display: none; align-items: center;">HLS is not supported in this device</h2>
+	
 	<div id="log" style="color:white;display:none;"></div>
 	
   <script src="https://marcustansoon.github.io/PhysicsEngine.js-2D/video/hls.js"></script>
@@ -123,9 +155,9 @@
 
 		// Create HLS instance
     	hls = new Hls({
-		  maxBufferLength: 90,       // target buffer
+		  maxBufferLength: 120,       // target buffer
 		  maxMaxBufferLength: 180,   // absolute cap
-		  backBufferLength: 30,      // keep 30s behind
+		  backBufferLength: 20,      // keep 20s behind
 		  startFragPrefetch: true
 		});
 
@@ -306,7 +338,9 @@ async function receiveMessageFromFlutter(msg) {
 			hideAllSubtitles();
 			isSubtitlePlaying = false;
 		}else if(message.action === "start"){
-			startStream(m3u8URL);
+			showCurrentTimestampModal().then(() => {
+				startStream(m3u8URL);
+			});
 		}else if(message.action === "rewind-video"){
 			rewindVideo();
 		}else if(message.action === "forward-video"){
@@ -366,6 +400,42 @@ async function receiveMessageFromFlutter(msg) {
 	
 }
 
+
+async function showCurrentTimestampModal() {
+	return new Promise((resolve, reject) => {
+		if (isNaN(video.duration)) {
+      resolve(1);
+      return; // IMPORTANT: stop execution
+    }
+
+		let seconds = video.currentTime;
+	  document.getElementById("modal-text-1").innerText = "Current timestamp: " + formatTime(seconds);
+	  document.getElementById("modal-text-2").innerText = "Playing next stream...";
+	  document.getElementById("modal").classList.remove("hidden");
+
+	  setTimeout(()=>{
+	  	closeCurrentTimestampModal();
+	  	resolve(1);
+	  }, 3000);
+	});
+}
+
+function closeCurrentTimestampModal() {
+  document.getElementById("modal").classList.add("hidden");
+}
+
+function formatTime(seconds) {
+  const hrs = Math.floor(seconds / 3600);
+  const mins = Math.floor((seconds % 3600) / 60);
+  const secs = Math.floor(seconds % 60);
+
+  return (
+    String(hrs).padStart(2, '0') + ':' +
+    String(mins).padStart(2, '0') + ':' +
+    String(secs).padStart(2, '0')
+  );
+}
+	  
 // Callback when subtitle tracks are updated
 video.textTracks.onchange = (event) => {subtitleModeSync(event)};
 function subtitleModeSync(event) {
