@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+<title>PixiJS Dialog Example</title>
+<style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+      }
+</style>
+</head>
+<body>
+
+<script src="pixi.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script>
+
+/*********************Utilities***********************/
+const getDistance = (x1, y1, x2, y2) => Math.hypot(x2 - x1, y2 - y1);
+
+class LoadingScene {
+    constructor(app) {
+      this.app = app;
+      this.type = "loading-scene";
+      this.container = new PIXI.Container();
+      this.objects = [];
+      this.isDestroyed = false;
+      this.loadResources();
+    }
+    
+    update(delta) {
+    
+    }
+    
+    async loadResources() {
+        await PIXI.Assets.load([
+            /*{
+              alias: "chef-idle",
+              src: "chef-idle-675x700.png"
+            },
+            {
+              alias: "chef-walking",
+              src:
+                "chef-walking-450x700v2.png"
+            },
+            {
+              alias: "chef-chopping",
+              src:
+                "chef-knifing-675x700.png"
+            }*/
+        ]);
+        
+        this.setCompletion();
+    }
+    
+    setCompletion() {
+        this.isComplete = true;
+        console.log('done');
+    }
+    
+    show() {
+        this.app.stage.addChild(this.container);
+    }
+
+    hide() {
+        this.app.stage.removeChild(this.container);
+    }
+    
+    destroy() {
+        this.objects.forEach((obj) => {
+            this.container.removeChild(obj);
+            // Remove all event listeners
+            obj.off();
+
+            // Destroy and free memory
+            obj.destroy({ children: true });
+        });
+        this.objects = [];
+        this.isDestroyed = true;
+    }
+}
+
+let tool, isToolSelected;
+
+class GameScene {
+    constructor(app) {
+        this.app = app;
+        this.type = "game-scene";
+        // Main container
+        this.container = new PIXI.Container();
+        // Object container
+        this.objContainer = new PIXI.Container();
+        this.objects = [];
+        this.isDestroyed = false;
+        
+        // Create overlay
+        const overlay = new PIXI.Graphics();
+        overlay.beginFill(0xFF0000, 1);
+        overlay.drawRect(0, 0, 800, 800);
+        overlay.alpha = 1;
+        overlay.x = 0;
+        overlay.y = 0;
+        overlay.endFill();
+        overlay.eventMode = 'static';
+        overlay.visible = true;
+        this.overlay = overlay;
+        this.objects.push(overlay);
+        
+        this.container.addChild(overlay);
+        this.container.addChild(this.objContainer);
+        
+        let pointerDownPos = null;
+        let currentContainerPos = null;
+        let isPointerDown = false;
+        
+        // Create chef
+        const chef = new PIXI.Graphics();
+        chef.beginFill(0x00FF00, 1);    // bright green
+        chef.drawRect(0, 0, 25, 25);
+        chef.x = 20;
+        chef.y = 20;
+        chef.endFill();
+        this.objects.push(chef);
+        this.objContainer.addChild(chef);
+
+        tool = new PIXI.Graphics();
+        tool.beginFill(0x00FF00, 1);    // bright green
+        tool.drawRect(0, 0, 25, 25);
+        tool.endFill();
+        this.objContainer.addChild(tool);
+        
+        // create interactive table;
+        const table = new PIXI.Graphics();
+        table.beginFill(0xff00F0, 1);
+        table.drawRect(0, 0, 25, 25);
+        table.x = 150;
+        table.y = 150;
+        table.eventMode = 'static';
+        table.cursor = 'pointer';
+        table.endFill();
+        this.objContainer.addChild(table);
+        table.on('pointerdown', () => {
+            console.log('table clicked');
+        });
+        
+        
+        // Create input controller
+        this.inputController = new InputController(this.overlay, tool, this.objContainer);
+        
+        // Create bottom slider
+        this.bottomSlider = new BottomSlider(this.app);
+        this.container.addChild(this.bottomSlider.container);
+    }
+    
+    update(delta) {
+
+    }
+    
+    show() {
+        this.app.stage.addChild(this.container);
+    }
+
+    hide() {
+        this.app.stage.removeChild(this.container);
+    }
+    
+    destroy() {
+        if (this.bottomSlider) {
+            this.bottomSlider.destroy();
+        }
+        this.objects.forEach((obj) => {
+            if (obj.parent) obj.parent.removeChild(obj);
+
+            // Remove all event listeners
+            obj.off?.();
+
+            // Destroy and free memory
+            obj.destroy({ children: true });
+        });
+        this.objects.length = 0;
+        this.isDestroyed = true;
+        this.internalContainer?.parent.removeChild(this.internalContainer);
+        this.internalContainer.destroy({ children: true });
+        this.container.parent?.removeChild(this.container);
+        this.container.destroy({ children: true });
+    }
+}
+
+class BottomSlider {
+    constructor(app) {
+        this.app = app;
+        this.container = new PIXI.Container();
+        this.itemsContainer = new PIXI.Container();
+        
+        this.sliderHeight = 120;
+        this.background = new PIXI.Graphics();
+        this.updateBackground();
+        
+        this.container.addChild(this.background);
+        this.container.addChild(this.itemsContainer);
+        
+        this.container.y = this.app.screen.height - this.sliderHeight;
+        
+        this.container.eventMode = 'static';
+        this.container.on('pointerdown', this.onPointerDown.bind(this));
+        this.container.on('pointermove', this.onPointerMove.bind(this));
+        this.container.on('pointerup', this.onPointerUp.bind(this));
+        this.container.on('pointerupoutside', this.onPointerUp.bind(this));
+
+        this.isPointerDown = false;
+        this.isDragging = false;
+        this.pointerDownPos = null;
+        this.dragStartX = 0;
+
+        this.createItems();
+
+        this.onResize = this.onResize.bind(this);
+        window.addEventListener('resize', this.onResize);
+    }
+
+    onResize() {
+        this.container.y = this.app.screen.height - this.sliderHeight;
+        this.updateBackground();
+    }
+
+    updateBackground() {
+        this.background.clear();
+        this.background.beginFill(0x222222, 0.9);
+        this.background.drawRect(0, 0, this.app.screen.width, this.sliderHeight);
+        this.background.endFill();
+        this.container.hitArea = new PIXI.Rectangle(0, 0, this.app.screen.width, this.sliderHeight);
+    }
+
+    createItems() {
+        const itemWidth = 80;
+        const itemHeight = 80;
+        const spacing = 20;
+        
+        for (let i = 0; i < 15; i++) {
+            const item = new PIXI.Graphics();
+            const color = Math.floor(Math.random() * 0xFFFFFF);
+            item.beginFill(color);
+            item.drawRoundedRect(0, 0, itemWidth, itemHeight, 10);
+            item.endFill();
+            
+            item.x = spacing + i * (itemWidth + spacing);
+            item.y = (this.sliderHeight - itemHeight) / 2;
+            
+            item.eventMode = 'static';
+            item.cursor = 'pointer';
+            
+            item.on('pointerup', (e) => {
+                if (!this.isDragging) {
+                    console.log('Selected item ' + i);
+                    item.alpha = 0.5;
+                    setTimeout(() => { 
+                        if (item && item.parent) item.alpha = 1; 
+                    }, 200);
+                    isToolSelected = !isToolSelected;
+                }
+            });
+            
+            this.itemsContainer.addChild(item);
+        }
+    }
+
+    onPointerDown(event) {
+        this.isPointerDown = true;
+        this.isDragging = false;
+        this.pointerDownPos = event.data.global.clone();
+        this.dragStartX = this.itemsContainer.x;
+    }
+
+    onPointerMove(event) {
+        if (!this.isPointerDown) return;
+        
+        const currentPos = event.data.global;
+        const dx = currentPos.x - this.pointerDownPos.x;
+        
+        if (Math.abs(dx) > 5) {
+            this.isDragging = true;
+        }
+        
+        if (this.isDragging) {
+            let newX = this.dragStartX + dx;
+            
+            const maxScroll = 0;
+            const minScroll = Math.min(0, this.app.screen.width - this.itemsContainer.width - 20);
+            
+            if (newX > maxScroll) newX = maxScroll;
+            if (newX < minScroll) newX = minScroll;
+            
+            this.itemsContainer.x = newX;
+        }
+    }
+
+    onPointerUp(event) {
+        this.isPointerDown = false;
+        setTimeout(() => {
+            this.isDragging = false;
+        }, 10);
+    }
+
+    destroy() {
+        window.removeEventListener('resize', this.onResize);
+        this.container.destroy({ children: true });
+    }
+}
+
+class InputController {
+    constructor(overlay, tool, internalContainer) {
+        this.overlay = overlay;
+        this.tool = tool;
+        this.internalContainer = internalContainer;
+
+        this.pointerDownPos = null;
+        this.currentContainerPos = null;
+        this.isPointerDown = false;
+
+        this.setupListeners();
+    }
+
+    setupListeners() {
+        this.overlay.on('pointerdown', this.onPointerDown.bind(this));
+        this.overlay.on('pointermove', this.onPointerMove.bind(this));
+        this.overlay.on('pointerup', this.onPointerUp.bind(this));
+        this.overlay.on('pointerout', this.onPointerUp.bind(this));
+    }
+
+    onPointerDown(event) {
+        this.isPointerDown = true;
+        this.pointerDownPos = event.data.global.clone();
+        this.currentContainerPos = {
+            x: this.internalContainer.x,
+            y: this.internalContainer.y
+        };
+        this.currentToolPos = {
+            x: this.tool.x,
+            y: this.tool.y
+        };
+    }
+
+    onPointerMove(event) {
+        if(!this.isPointerDown) return;
+        const currentMovePos = event.data.global.clone();
+        if (getDistance(currentMovePos.x, currentMovePos.y, this.pointerDownPos.x, this.pointerDownPos.y) >= 10) {
+            // Check if any tool is selected
+            if(isToolSelected){
+                // Snap the tool directly to the pointer's position inside the container
+                this.tool.x = currentMovePos.x - this.internalContainer.x;
+                this.tool.y = currentMovePos.y - this.internalContainer.y;
+                console.log(this.tool.x, this.tool.y);
+            } else {
+                this.internalContainer.x = this.currentContainerPos.x + currentMovePos.x - this.pointerDownPos.x;
+                this.internalContainer.y = this.currentContainerPos.y + currentMovePos.y - this.pointerDownPos.y;
+            }
+        }
+    }
+
+    onPointerUp(event) {
+        if(!this.isPointerDown) return;
+        this.isPointerDown = false;
+        const currentMovePos = event.data.global.clone();
+        if (getDistance(currentMovePos.x, currentMovePos.y, this.pointerDownPos.x, this.pointerDownPos.y) < 10) {
+            const x = this.pointerDownPos.x - this.currentContainerPos.x;
+            const y = this.pointerDownPos.y - this.currentContainerPos.y;
+            console.log(x, y);
+            // this.chef.moveTo(x, y);
+        }
+    }
+}
+
+
+(async () => {
+    /*********************PIXI***********************/
+    // Create a new application
+    const app = new PIXI.Application();
+
+    // Initialize the application
+    await app.init({
+        background: "#000",
+        resizeTo: window,
+        //resolution: window.devicePixelRatio || 1,
+    });
+    
+    // Append the application canvas to the document body
+    document.body.appendChild(app.canvas);
+    /*********************PIXI***********************/
+    
+    
+    
+    
+    let gameScene, activeScene, loadingScene;
+    
+    loadingScene = new LoadingScene(app);
+    activeScene = loadingScene;
+    activeScene.show();
+    
+    // Listen for animate update
+    app.ticker.add((time) => {
+        activeScene.update(time.deltaTime);
+        if(loadingScene.isComplete && activeScene.type === "loading-scene"){
+            activeScene.hide();
+            activeScene.destroy();
+            // Switch to game scene
+            gameScene = new GameScene(app);
+            activeScene = gameScene;
+            activeScene.show();
+        }
+    });
+    
+    
+})();
+
+</script>
+</body>
+</html>
