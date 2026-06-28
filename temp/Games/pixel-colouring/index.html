@@ -25,6 +25,28 @@
 <script>
     /*********************Utilities***********************/
     const getDistance = (x1, y1, x2, y2) => Math.hypot(x2 - x1, y2 - y1);
+    function extractUniqueOpaqueColors2D(pixels2D) {
+        const set = new Set();
+
+        for (let y = 0; y < pixels2D.length; y++) {
+            for (let x = 0; x < pixels2D[y].length; x++) {
+                const p = pixels2D[y][x];
+
+                if (p.a !== 1 && p.a !== 255) continue;
+
+                set.add(`${p.r},${p.g},${p.b}`);
+            }
+        }
+
+        return [...set].map(str => {
+            const [r, g, b] = str.split(',').map(Number);
+            return { r, g, b };
+        });
+    }
+    function rgbaObjectToHex({ r, g, b }) {
+        return (r << 16) | (g << 8) | b;
+    }
+
 
     // 1. Get the canvas element and its 2D context
     const canvas = document.getElementById('canvas');
@@ -216,14 +238,16 @@ class GameScene {
         
         // Create input controller
         this.inputController = new InputController(this.overlay, tool, this.objContainer);
-        
-        // Create bottom slider
-        this.bottomSlider = new BottomSlider(this.app);
-        this.container.addChild(this.bottomSlider.container);
 
         // Load image
-        loadImageUsingCanvas("zombie.png").then( data => {
+        loadImageUsingCanvas("zombie-2.png").then( data => {
             console.log(data);
+            const colors = extractUniqueOpaqueColors2D(data);
+
+            // rgbaObjectToHex
+            // Create bottom slider
+            this.bottomSlider = new BottomSlider(this.app, colors);
+            this.container.addChild(this.bottomSlider.container);
         });
     }
     
@@ -263,8 +287,9 @@ class GameScene {
 }
 
 class BottomSlider {
-    constructor(app) {
+    constructor(app, colors) {
         this.app = app;
+        this.colors = colors;
 
         this.container = new PIXI.Container();
         this.itemsContainer = new PIXI.Container();
@@ -289,7 +314,7 @@ class BottomSlider {
 
         this.resizeTimeout = null;
 
-        this.createItems();
+        this.createItems(this.colors);
         this.setupListeners();
     }
 
@@ -332,7 +357,7 @@ class BottomSlider {
 
     updateBackground() {
         this.background.clear();
-        this.background.beginFill(0x222222, 0.9);
+        this.background.beginFill(0xffffff, 1);
         this.background.drawRect(
             0,
             0,
@@ -349,15 +374,15 @@ class BottomSlider {
         );
     }
 
-    createItems() {
+    createItems(colors) {
         const itemWidth = 80;
         const itemHeight = 80;
         const spacing = 20;
 
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < colors.length; i++) {
             const item = new PIXI.Graphics();
 
-            item.beginFill(Math.floor(Math.random() * 0xffffff));
+            item.beginFill(rgbaObjectToHex(colors[i]));
             item.drawRoundedRect(0, 0, itemWidth, itemHeight, 10);
             item.endFill();
 
@@ -382,8 +407,20 @@ class BottomSlider {
 
                 isToolSelected = !isToolSelected;
             });
-
+            
             this.itemsContainer.addChild(item);
+
+            // Add last item
+            if(i === colors.length - 1){
+                const lastItem = new PIXI.Graphics();
+                lastItem.beginFill(0xffff00);
+                lastItem.drawRoundedRect(0, 0, spacing, itemHeight, 10);
+                lastItem.endFill();
+
+                lastItem.x = (i + 1) * (itemWidth + spacing);
+                lastItem.y = (this.sliderHeight - itemHeight) / 2;
+                this.itemsContainer.addChild(lastItem);
+            }
         }
     }
 
