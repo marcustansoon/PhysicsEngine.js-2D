@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PixiJS</title>
+<style>
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        width: 100%;
+        height: 100%;
+      }
+</style>
+</head>
+<body>
+
+<canvas id="canvas" width="0" height="0" style="display: none;"></canvas>
+
+<!-- Include PixiJS and GSAP -->
+<script src="pixi.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+<script>
+    /*********************Utilities***********************/
+    const getDistance = (x1, y1, x2, y2) => Math.hypot(x2 - x1, y2 - y1);
+
+    // 1. Get the canvas element and its 2D context
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    async function loadImageUsingCanvas(imageURL) {
+        return new Promise((resolve, reject) => {
+            const pixelData = [];
+
+            // 2. Create a new Image object
+            const img = new Image();
+            img.crossOrigin = "anonymous";
+
+            // 3. Define what happens once the image loads
+            img.onload = () => {
+                // 5. Set canvas size to match image size
+                canvas.width = img.width;
+                canvas.height = img.height;
+
+                // Draws the image at coordinate (0,0) on the canvas
+                ctx.drawImage(img, 0, 0); 
+
+                // 5. Get the pixel data for the entire image
+                // getImageData(startX, startY, width, height)
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                
+                // The data is stored in imageData.data (a Uint8ClampedArray)
+                // console.log(imageData.data); 
+
+                // 7. Extract all the pixel data
+                for(let y = 0; y < canvas.height; y++) {
+                    const temp = [];
+                    for(let x = 0; x < canvas.width; x++) {
+                        temp.push(getPixelColor(imageData, x, y));
+                    }
+                    pixelData.push(temp);
+                }
+
+                resolve(pixelData);
+            };
+
+            // 4. Set the source URL (this triggers the download)
+            img.src = imageURL;
+        });
+    }
+
+    // Function to read the pixel data (rgba)
+    function getPixelColor(imageData, x, y) {
+        const width = imageData.width;
+        const index = (y * width + x) * 4;
+
+        const r = imageData.data[index];     // Red
+        const g = imageData.data[index + 1]; // Green
+        const b = imageData.data[index + 2]; // Blue
+        const a = imageData.data[index + 3]; // Alpha
+
+        return { r, g, b, a };
+    }
+
+    loadImageUsingCanvas("https://i.imgur.com/DqijLGq.jpeg");
+
+    
+    
+class LoadingScene {
+    constructor(app) {
+      this.app = app;
+      this.type = "loading-scene";
+      this.container = new PIXI.Container();
+      this.objects = [];
+      this.isDestroyed = false;
+      this.loadResources();
+    }
+    
+    update(delta) {
+    
+    }
+    
+    async loadResources() {
+        await PIXI.Assets.load([
+            /*{
+              alias: "chef-idle",
+              src: "chef-idle-675x700.png"
+            },
+            {
+              alias: "chef-walking",
+              src:
+                "chef-walking-450x700v2.png"
+            },
+            {
+              alias: "chef-chopping",
+              src:
+                "chef-knifing-675x700.png"
+            }*/
+        ]);
+        
+        this.setCompletion();
+    }
+    
+    setCompletion() {
+        this.isComplete = true;
+        console.log('done');
+    }
+    
+    show() {
+        this.app.stage.addChild(this.container);
+    }
+
+    hide() {
+        this.app.stage.removeChild(this.container);
+    }
+    
+    destroy() {
+        this.objects.forEach((obj) => {
+            this.container.removeChild(obj);
+            // Remove all event listeners
+            obj.off();
+
+            // Destroy and free memory
+            obj.destroy({ children: true });
+        });
+        this.objects = [];
+        this.isDestroyed = true;
+    }
+}
+
+let isToolSelected = false, tool;
+
+class GameScene {
+    constructor(app) {
+        this.app = app;
+        this.type = "game-scene";
+        // Main container
+        this.container = new PIXI.Container();
+        // Object container
+        this.objContainer = new PIXI.Container();
+        this.objects = [];
+        this.isDestroyed = false;
+        
+        // Create overlay
+        const overlay = new PIXI.Graphics();
+        overlay.beginFill(0xFF0000, 1);
+        overlay.drawRect(0, 0, 800, 800);
+        overlay.alpha = 1;
+        overlay.x = 0;
+        overlay.y = 0;
+        overlay.endFill();
+        overlay.eventMode = 'static';
+        overlay.visible = true;
+        this.overlay = overlay;
+        this.objects.push(overlay);
+        
+        this.container.addChild(overlay);
+        this.container.addChild(this.objContainer);
+        
+        let pointerDownPos = null;
+        let currentContainerPos = null;
+        let isPointerDown = false;
+        
+        // Create chef
+        const chef = new PIXI.Graphics();
+        chef.beginFill(0x00FF00, 1);    // bright green
+        chef.drawRect(0, 0, 25, 25);
+        chef.x = 20;
+        chef.y = 20;
+        chef.endFill();
+        this.objects.push(chef);
+        this.objContainer.addChild(chef);
+
+        tool = new PIXI.Graphics();
+        tool.beginFill(0x00FF00, 1);    // bright green
+        tool.drawRect(0, 0, 25, 25);
+        tool.endFill();
+        this.objContainer.addChild(tool);
+        
+        // create interactive table;
+        const table = new PIXI.Graphics();
+        table.beginFill(0xff00F0, 1);
+        table.drawRect(0, 0, 25, 25);
+        table.x = 150;
+        table.y = 150;
+        table.eventMode = 'static';
+        table.cursor = 'pointer';
+        table.endFill();
+        this.objContainer.addChild(table);
+        table.on('pointerdown', () => {
+            console.log('table clicked');
+        });
+        
+        
+        // Create input controller
+        this.inputController = new InputController(this.overlay, tool, this.objContainer);
+        
+        // Create bottom slider
+        this.bottomSlider = new BottomSlider(this.app);
+        this.container.addChild(this.bottomSlider.container);
+
+        // Load image
+        loadImageUsingCanvas("zombie.png").then( data => {
+            console.log(data);
+        });
+    }
+    
+    update(delta) {
+
+    }
+    
+    show() {
+        this.app.stage.addChild(this.container);
+    }
+
+    hide() {
+        this.app.stage.removeChild(this.container);
+    }
+    
+    destroy() {
+        this.inputController.destroy();
+
+        this.bottomSlider.destroy();
+
+        this.objects.forEach((obj) => {
+            if (obj.parent) obj.parent.removeChild(obj);
+
+            // Remove all event listeners
+            obj.off?.();
+
+            // Destroy and free memory
+            obj.destroy({ children: true });
+        });
+        this.objects.length = 0;
+        this.isDestroyed = true;
+        this.internalContainer?.parent.removeChild(this.internalContainer);
+        this.internalContainer.destroy({ children: true });
+        this.container.parent?.removeChild(this.container);
+        this.container.destroy({ children: true });
+    }
+}
+
+class BottomSlider {
+    constructor(app) {
+        this.app = app;
+
+        this.container = new PIXI.Container();
+        this.itemsContainer = new PIXI.Container();
+
+        this.sliderHeight = 120;
+
+        this.background = new PIXI.Graphics();
+        this.updateBackground();
+
+        this.container.addChild(this.background);
+        this.container.addChild(this.itemsContainer);
+
+        this.container.y = this.app.screen.height - this.sliderHeight;
+
+        this.container.eventMode = 'static';
+
+        // state
+        this.isPointerDown = false;
+        this.isDragging = false;
+        this.pointerDownPos = null;
+        this.dragStartX = 0;
+
+        this.resizeTimeout = null;
+
+        this.createItems();
+        this.setupListeners();
+    }
+
+    setupListeners() {
+        this.container.on('pointerdown', this.onPointerDown);
+        this.container.on('pointermove', this.onPointerMove);
+        this.container.on('pointerup', this.onPointerUp);
+        this.container.on('pointerupoutside', this.onPointerUp);
+
+        this.resizeHandler = () => {
+            clearTimeout(this.resizeTimeout);
+
+            this.resizeTimeout = setTimeout(() => {
+                this.onResize();
+            }, 100);
+        };
+
+        window.addEventListener('resize', this.resizeHandler);
+    }
+
+    removeListeners() {
+        this.container.off('pointerdown', this.onPointerDown);
+        this.container.off('pointermove', this.onPointerMove);
+        this.container.off('pointerup', this.onPointerUp);
+        this.container.off('pointerupoutside', this.onPointerUp);
+
+        window.removeEventListener('resize', this.resizeHandler);
+
+        clearTimeout(this.resizeTimeout);
+
+        this.itemsContainer.children.forEach(item => {
+            item.removeAllListeners();
+        });
+    }
+
+    onResize = () => {
+        this.container.y = this.app.screen.height - this.sliderHeight;
+        this.updateBackground();
+    }
+
+    updateBackground() {
+        this.background.clear();
+        this.background.beginFill(0x222222, 0.9);
+        this.background.drawRect(
+            0,
+            0,
+            this.app.screen.width,
+            this.sliderHeight
+        );
+        this.background.endFill();
+
+        this.container.hitArea = new PIXI.Rectangle(
+            0,
+            0,
+            this.app.screen.width,
+            this.sliderHeight
+        );
+    }
+
+    createItems() {
+        const itemWidth = 80;
+        const itemHeight = 80;
+        const spacing = 20;
+
+        for (let i = 0; i < 15; i++) {
+            const item = new PIXI.Graphics();
+
+            item.beginFill(Math.floor(Math.random() * 0xffffff));
+            item.drawRoundedRect(0, 0, itemWidth, itemHeight, 10);
+            item.endFill();
+
+            item.x = spacing + i * (itemWidth + spacing);
+            item.y = (this.sliderHeight - itemHeight) / 2;
+
+            item.eventMode = 'static';
+            item.cursor = 'pointer';
+
+            item.on('pointerup', () => {
+                if (this.isDragging) return;
+
+                console.log(`Selected item ${i}`);
+
+                item.alpha = 0.5;
+
+                setTimeout(() => {
+                    if (item.parent) {
+                        item.alpha = 1;
+                    }
+                }, 200);
+
+                isToolSelected = !isToolSelected;
+            });
+
+            this.itemsContainer.addChild(item);
+        }
+    }
+
+    onPointerDown = (event) => {
+        this.isPointerDown = true;
+        this.isDragging = false;
+
+        this.pointerDownPos = event.data.global.clone();
+        this.dragStartX = this.itemsContainer.x;
+    }
+
+    onPointerMove = (event) => {
+        if (!this.isPointerDown) return;
+
+        const currentPos = event.data.global;
+        const dx = currentPos.x - this.pointerDownPos.x;
+
+        if (Math.abs(dx) > 5) {
+            this.isDragging = true;
+        }
+
+        if (!this.isDragging) return;
+
+        let newX = this.dragStartX + dx;
+
+        const maxScroll = 0;
+        const minScroll = Math.min(
+            0,
+            this.app.screen.width - this.itemsContainer.width - 20
+        );
+
+        this.itemsContainer.x = Math.max(minScroll, Math.min(maxScroll, newX));
+    }
+
+    onPointerUp = () => {
+        this.isPointerDown = false;
+        this.isDragging = false;
+    }
+
+    destroy() {
+        this.removeListeners();
+
+        this.container.destroy({ children: true });
+
+        this.app = null;
+        this.container = null;
+        this.itemsContainer = null;
+        this.background = null;
+
+        this.pointerDownPos = null;
+        this.resizeHandler = null;
+        this.resizeTimeout = null;
+    }
+}
+
+class InputController {
+    constructor(overlay, tool, internalContainer) {
+        this.overlay = overlay;
+        this.tool = tool;
+        this.internalContainer = internalContainer;
+
+        this.activePointers = new Map();
+
+        this.currentContainerPos = null;
+        this.pinchState = null;
+
+        this.setupListeners();
+    }
+
+    setupListeners() {
+        this.overlay.on('pointerdown', this.onPointerDown);
+        this.overlay.on('pointermove', this.onPointerMove);
+        this.overlay.on('pointerup', this.onPointerUp);
+        this.overlay.on('pointerout', this.onPointerUp);
+        this.overlay.on('wheel', this.onWheel);
+    }
+
+    zoomAt(screenX, screenY, newScale) {
+        newScale = Math.max(0.1, Math.min(newScale, 10));
+
+        const localX =
+            (screenX - this.internalContainer.x) /
+            this.internalContainer.scale.x;
+
+        const localY =
+            (screenY - this.internalContainer.y) /
+            this.internalContainer.scale.y;
+
+        this.internalContainer.scale.set(newScale);
+
+        this.internalContainer.x = screenX - localX * newScale;
+        this.internalContainer.y = screenY - localY * newScale;
+    }
+
+    onWheel = (event) => {
+        const mouseX = event.global.x;
+        const mouseY = event.global.y;
+        const zoomFactor = 1 - event.deltaY / 1000;
+        const newScale = this.internalContainer.scale.x * zoomFactor;
+        this.zoomAt(mouseX, mouseY, newScale);
+    }
+
+    onPointerDown = (event) => {
+        const pos = event.data.global.clone();
+
+        this.activePointers.set(event.pointerId, {
+            startX: pos.x,
+            startY: pos.y,
+            x: pos.x,
+            y: pos.y
+        });
+
+        if (this.activePointers.size === 1) {
+            this.currentContainerPos = {
+                x: this.internalContainer.x,
+                y: this.internalContainer.y
+            };
+        }
+
+        if (this.activePointers.size === 2) {
+            const pointers = [...this.activePointers.values()];
+            const p1 = pointers[0];
+            const p2 = pointers[1];
+
+            this.pinchState = {
+                startScale: this.internalContainer.scale.x,
+
+                startDistance: getDistance(
+                    p1.x,
+                    p1.y,
+                    p2.x,
+                    p2.y
+                ),
+
+                worldMid: {
+                    x:
+                        ((p1.x + p2.x) / 2 - this.internalContainer.x) /
+                        this.internalContainer.scale.x,
+
+                    y:
+                        ((p1.y + p2.y) / 2 - this.internalContainer.y) /
+                        this.internalContainer.scale.y
+                }
+            };
+        }
+    }
+
+    onPointerMove = (event) => {
+        if (!this.activePointers.has(event.pointerId)) return;
+
+        const pointer = this.activePointers.get(event.pointerId);
+
+        pointer.x = event.data.global.x;
+        pointer.y = event.data.global.y;
+
+        // ---------- One finger ----------
+        if (this.activePointers.size === 1) {
+            const moved =
+                getDistance(
+                    pointer.x,
+                    pointer.y,
+                    pointer.startX,
+                    pointer.startY
+                ) >= 10;
+
+            if (!moved) return;
+
+            if (isToolSelected) {
+                let x =
+                    (pointer.x - this.internalContainer.x) /
+                    this.internalContainer.scale.x;
+
+                let y =
+                    (pointer.y - this.internalContainer.y) /
+                    this.internalContainer.scale.y;
+
+                console.log(x, y);
+            } else {
+                this.internalContainer.x =
+                    this.currentContainerPos.x +
+                    pointer.x -
+                    pointer.startX;
+
+                this.internalContainer.y =
+                    this.currentContainerPos.y +
+                    pointer.y -
+                    pointer.startY;
+            }
+        }
+
+        // ---------- Two fingers ----------
+        else if (this.activePointers.size === 2) {
+            const pointers = [...this.activePointers.values()];
+
+            const p1 = pointers[0];
+            const p2 = pointers[1];
+
+            const currentDistance = getDistance(
+                p1.x,
+                p1.y,
+                p2.x,
+                p2.y
+            );
+
+            let newScale =
+                this.pinchState.startScale *
+                (currentDistance / this.pinchState.startDistance);
+
+            newScale = Math.max(0.1, Math.min(newScale, 10));
+
+            const midX = (p1.x + p2.x) / 2;
+            const midY = (p1.y + p2.y) / 2;
+
+            this.internalContainer.scale.set(newScale);
+
+            this.internalContainer.x =
+                midX - this.pinchState.worldMid.x * newScale;
+
+            this.internalContainer.y =
+                midY - this.pinchState.worldMid.y * newScale;
+        }
+    }
+
+    onPointerUp = (event) => {
+        if (!this.activePointers.has(event.pointerId)) return;
+
+        const pointer = this.activePointers.get(event.pointerId);
+
+        if (this.activePointers.size === 1) {
+            if (
+                getDistance(
+                    pointer.x,
+                    pointer.y,
+                    pointer.startX,
+                    pointer.startY
+                ) < 10
+            ) {
+                const x =
+                    (pointer.startX - this.currentContainerPos.x) /
+                    this.internalContainer.scale.x;
+
+                const y =
+                    (pointer.startY - this.currentContainerPos.y) /
+                    this.internalContainer.scale.y;
+
+                console.log(x, y);
+
+                // this.chef.moveTo(x, y);
+            }
+        }
+
+        this.activePointers.delete(event.pointerId);
+
+        if (this.activePointers.size < 2) {
+            this.pinchState = null;
+
+            // reset pan origin after pinch
+            if (this.activePointers.size === 1) {
+                const remaining = [...this.activePointers.values()][0];
+
+                remaining.startX = remaining.x;
+                remaining.startY = remaining.y;
+
+                this.currentContainerPos = {
+                    x: this.internalContainer.x,
+                    y: this.internalContainer.y
+                };
+            }
+        }
+    }
+
+    destroy() {
+        // Now these references match EXACTLY what was passed to .on()
+        this.overlay.off('pointerdown', this.onPointerDown);
+        this.overlay.off('pointermove', this.onPointerMove);
+        this.overlay.off('pointerup', this.onPointerUp);
+        this.overlay.off('pointerout', this.onPointerUp);
+        this.overlay.off('wheel', this.onWheel);
+
+        this.activePointers.clear();
+        this.activePointers = null;
+        this.currentContainerPos = null;
+        this.pinchState = null;
+        
+        this.overlay = null;
+        this.tool = null;
+        this.internalContainer = null;
+    }
+}
+
+    (async () => {
+        /*********************PIXI***********************/
+        // Create a new application
+        const app = new PIXI.Application();
+
+        // Initialize the application
+        await app.init({
+            background: "#000",
+            resizeTo: window,
+            //resolution: window.devicePixelRatio || 1,
+        });
+        
+        // Append the application canvas to the document body
+        document.body.appendChild(app.canvas);
+        /*********************PIXI***********************/
+        
+        let gameScene, activeScene, loadingScene;
+        
+        loadingScene = new LoadingScene(app);
+        activeScene = loadingScene;
+        activeScene.show();
+        
+        // Listen for animate update
+        app.ticker.add((time) => {
+            activeScene.update(time.deltaTime);
+            if(loadingScene.isComplete && activeScene.type === "loading-scene"){
+                activeScene.hide();
+                activeScene.destroy();
+                // Switch to game scene
+                gameScene = new GameScene(app);
+                activeScene = gameScene;
+                activeScene.show();
+            }
+        });
+        
+    })();
+</script>
+
+</body>
+</html>
+
