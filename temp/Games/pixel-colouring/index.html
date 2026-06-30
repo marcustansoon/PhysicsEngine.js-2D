@@ -25,27 +25,123 @@
 <script>
     /*********************Utilities***********************/
     const getDistance = (x1, y1, x2, y2) => Math.hypot(x2 - x1, y2 - y1);
-    function extractUniqueOpaqueColors2D(pixels2D) {
-        const set = new Set();
 
-        for (let y = 0; y < pixels2D.length; y++) {
-            for (let x = 0; x < pixels2D[y].length; x++) {
-                const p = pixels2D[y][x];
-
-                if (p.a !== 1 && p.a !== 255) continue;
-
-                set.add(`${p.r},${p.g},${p.b}`);
-            }
-        }
-
-        return [...set].map(str => {
-            const [r, g, b] = str.split(',').map(Number);
-            return { r, g, b };
-        });
-    }
     function rgbaObjectToHex({ r, g, b }) {
         return (r << 16) | (g << 8) | b;
     }
+    function rgbToHex(px) {
+        return (px.r << 16) | (px.g << 8) | px.b;
+    }
+    /**
+     * Build a palette of unique colors from the pixel data.
+     * @returns {{ colorToNum: Map<number, number>, palette: number[] }}
+     *          palette[i] = 0xRRGGBB for number (i + 1).
+     */
+    function buildPalette(pixelData) {
+        const colorToNum = new Map();
+        const palette = [];
+        for (const row of pixelData) {
+            for (const px of row) {
+                const c = rgbToHex(px);
+                // Skip fully transparent
+                if(px.a === 0) continue;
+                if (!colorToNum.has(c)) {
+                    colorToNum.set(c, palette.length);
+                    palette.push(c);
+                }
+            }
+        }
+        return { colorToNum, palette };
+    }
+    /**
+     * One big Graphics that starts all-white. Tapping a tile reveals its
+     * original color from pixelData. Reveal-only (never needs clear()).
+     *
+     * @param {number} width   number of tiles across (pixelData[0].length)
+     * @param {number} height  number of tiles down   (pixelData.length)
+     * @param {Array<Array<{r,g,b}>>} pixelData
+     * @param {number} size    pixel size of each tile in screen units
+     * @returns {PIXI.Graphics}
+     */
+    function createPixelGrid(width, height, pixelData, size = 8) {
+        const g = new PIXI.Graphics();
+
+        // initial white grid
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+                // Ignore transparent pixel
+                if(pixelData[y][x].a !== 0)
+                    g.rect(x * size, y * size, size, size).fill(rgbToHex(pixelData[y][x]));
+            }
+        }
+
+        return g;
+        const revealed = new Set(); // bounds geometry growth: each tile painted once
+
+        g.eventMode = 'static'; // v7: g.interactive = true;
+        g.cursor = 'pointer';
+        
+        g.on('pointertap', (e) => {
+            const pos = e.getLocalPosition(g);
+            const col = Math.floor(pos.x / size);
+            const row = Math.floor(pos.y / size);
+            if (col < 0 || row < 0 || col >= width || row >= height) return;
+
+            const key = row * width + col;
+            if (revealed.has(key)) return;
+            revealed.add(key);
+            
+            const color = rgbToHex(pixelData[row][col]);
+            g.rect(col * size, row * size, size, size).fill(color);
+        });
+
+        return g;
+    }
+
+    /**
+     * Paint-by-numbers grid: white tiles labelled with a number that maps
+     * to a unique color in the palette.
+     *
+     * @returns {{ container: PIXI.Container, palette: number[],
+     *             colorToNum: Map<number, number> }}
+     *
+     * NOTE: each label is a separate PIXI.Text object. Fine for small grids;
+     *       for large grids use PIXI.BitmapText (shared font atlas) instead.
+     */
+    function createNumberedGrid(pixelData, size = 24) {
+        const height = pixelData.length;
+        const width = pixelData[0].length;
+        const { colorToNum, palette } = buildPalette(pixelData);
+
+        const container = new PIXI.Container();
+
+        // white tiles with light borders (single Graphics for all)
+        const g = new PIXI.Graphics();
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+            g.rect(x * size, y * size, size, size)
+                .fill(0xffffff)
+                .stroke({ width: 1, color: 0xcccccc });
+            }
+        }
+        container.addChild(g);
+
+        // number label centered on each tile
+        const style = new PIXI.TextStyle({ fontSize: Math.floor(size * 0.5), fill: 0x333333 });
+        for (let y = 0; y < height; y++) {
+            for (let x = 0; x < width; x++) {
+            const num = colorToNum.get(rgbToHex(pixelData[y][x])) + 1; // 1-based
+            const label = new PIXI.Text({ text: String(num), style }); // v7: new PIXI.Text(String(num), style)
+            label.anchor.set(0.5);
+            label.x = x * size + size / 2;
+            label.y = y * size + size / 2;
+            container.addChild(label);
+            }
+        }
+
+        return { container, palette, colorToNum };
+    }
+
 
 
     // 1. Get the canvas element and its 2D context
@@ -106,7 +202,7 @@
         return { r, g, b, a };
     }
 
-    loadImageUsingCanvas("https://i.imgur.com/DqijLGq.jpeg");
+    // loadImageUsingCanvas("https://i.imgur.com/DqijLGq.jpeg");
 
     
     
@@ -235,18 +331,24 @@ class GameScene {
             console.log('table clicked');
         });
         
-        
         // Create input controller
         this.inputController = new InputController(this.overlay, tool, this.objContainer);
 
         // Load image
-        loadImageUsingCanvas("zombie-2.png").then( data => {
-            console.log(data);
-            const colors = extractUniqueOpaqueColors2D(data);
+        loadImageUsingCanvas("image-3.png").then( pixelData => {
+            console.log(pixelData);
+
+            const { colorToNum, palette } = buildPalette(pixelData);
+
+            const width  = pixelData[0].length;  // tiles across
+            const height = pixelData.length;     // tiles down
+
+            const grid = createPixelGrid(width, height, pixelData, 10); // 10 = tile size in px
+            this.objContainer.addChild(grid);
 
             // rgbaObjectToHex
             // Create bottom slider
-            this.bottomSlider = new BottomSlider(this.app, colors);
+            this.bottomSlider = new BottomSlider(this.app, palette);
             this.container.addChild(this.bottomSlider.container);
         });
     }
@@ -382,7 +484,7 @@ class BottomSlider {
         for (let i = 0; i < colors.length; i++) {
             const item = new PIXI.Graphics();
 
-            item.beginFill(rgbaObjectToHex(colors[i]));
+            item.beginFill(colors[i]);
             item.drawRoundedRect(0, 0, itemWidth, itemHeight, 10);
             item.endFill();
 
