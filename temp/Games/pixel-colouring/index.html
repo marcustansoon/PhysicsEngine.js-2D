@@ -26,11 +26,36 @@
     /*********************Utilities***********************/
     const getDistance = (x1, y1, x2, y2) => Math.hypot(x2 - x1, y2 - y1);
 
-    function rgbaObjectToHex({ r, g, b }) {
-        return (r << 16) | (g << 8) | b;
-    }
     function rgbToHex(px) {
         return (px.r << 16) | (px.g << 8) | px.b;
+    }
+
+    function rgbToGray(pixel, lighten = 0.4) {
+        let gray = Math.round(
+            0.2126 * pixel.r +
+            0.7152 * pixel.g +
+            0.0722 * pixel.b
+        );
+
+        // Shift toward white
+        gray = Math.round(gray + (255 - gray) * lighten);
+
+        return (gray << 16) | (gray << 8) | gray;
+    }
+
+    function getTextColor({ r, g, b }, lighten = 0.4) {
+        const luminance =
+            0.2126 * r +
+            0.7152 * g +
+            0.0722 * b;
+
+        // approximate resulting brightness after lightening
+        const adjusted = luminance + (255 - luminance) * lighten;
+
+        // dynamic threshold based on lightening
+        const threshold = 180 + lighten * 30;
+
+        return adjusted > threshold ? 0x222222 : 0xffffff;
     }
     /**
      * Build a palette of unique colors from the pixel data.
@@ -63,7 +88,7 @@
      * @param {number} size    pixel size of each tile in screen units
      * @returns {PIXI.Graphics}
      */
-    function createPixelGrid(width, height, pixelData, size = 8) {
+    function createInitialPixelGrid(width, height, pixelData, size = 8) {
         const g = new PIXI.Graphics();
 
         // initial white grid
@@ -71,29 +96,9 @@
             for (let x = 0; x < width; x++) {
                 // Ignore transparent pixel
                 if(pixelData[y][x].a !== 0)
-                    g.rect(x * size, y * size, size, size).fill(rgbToHex(pixelData[y][x]));
+                    g.rect(x * size, y * size, size, size).fill(rgbToGray(pixelData[y][x])); // rgbToHex(pixelData[y][x])
             }
         }
-
-        return g;
-        const revealed = new Set(); // bounds geometry growth: each tile painted once
-
-        g.eventMode = 'static'; // v7: g.interactive = true;
-        g.cursor = 'pointer';
-        
-        g.on('pointertap', (e) => {
-            const pos = e.getLocalPosition(g);
-            const col = Math.floor(pos.x / size);
-            const row = Math.floor(pos.y / size);
-            if (col < 0 || row < 0 || col >= width || row >= height) return;
-
-            const key = row * width + col;
-            if (revealed.has(key)) return;
-            revealed.add(key);
-            
-            const color = rgbToHex(pixelData[row][col]);
-            g.rect(col * size, row * size, size, size).fill(color);
-        });
 
         return g;
     }
@@ -102,7 +107,7 @@
      * Paint-by-numbers grid: white tiles labelled with a number that maps
      * to a unique color in the palette.
      *
-     * @returns {{ container: PIXI.Container, palette: number[],
+     * @returns {{ numberGrid: (PIXI.Text | null)[][], palette: number[],
      *             colorToNum: Map<number, number> }}
      *
      * NOTE: each label is a separate PIXI.Text object. Fine for small grids;
@@ -113,33 +118,60 @@
         const width = pixelData[0].length;
         const { colorToNum, palette } = buildPalette(pixelData);
 
-        const container = new PIXI.Container();
+        const numberGrid = [];
 
         // white tiles with light borders (single Graphics for all)
-        const g = new PIXI.Graphics();
-        for (let y = 0; y < height; y++) {
-            for (let x = 0; x < width; x++) {
-            g.rect(x * size, y * size, size, size)
-                .fill(0xffffff)
-                .stroke({ width: 1, color: 0xcccccc });
-            }
-        }
-        container.addChild(g);
+        // const g = new PIXI.Graphics();
+        // for (let y = 0; y < height; y++) {
+        //     for (let x = 0; x < width; x++) {
+        //         g.rect(x * size, y * size, size, size)
+        //             .fill(0xffffff)
+        //             .stroke({ width: 1, color: 0xcccccc });
+        //         }
+        // }
+        // container.addChild(g);
 
         // number label centered on each tile
-        const style = new PIXI.TextStyle({ fontSize: Math.floor(size * 0.5), fill: 0x333333 });
+        // const style = new PIXI.TextStyle({ fontSize: Math.floor(size * 0.5), fill: 0x333333 });
         for (let y = 0; y < height; y++) {
+            const row = [];
             for (let x = 0; x < width; x++) {
-            const num = colorToNum.get(rgbToHex(pixelData[y][x])) + 1; // 1-based
-            const label = new PIXI.Text({ text: String(num), style }); // v7: new PIXI.Text(String(num), style)
-            label.anchor.set(0.5);
-            label.x = x * size + size / 2;
-            label.y = y * size + size / 2;
-            container.addChild(label);
+                if (pixelData[y][x].a === 0) {
+                    row.push(null); // Keep the spot empty to preserve the 2D grid structure
+                    continue;
+                }
+                const num = colorToNum.get(rgbToHex(pixelData[y][x])) + 1; // 1-based
+                const fill = getTextColor(pixelData[y][x]);
+                const label = new PIXI.Text({
+                    text: String(num),
+                    style: new PIXI.TextStyle({
+                        fontSize: Math.floor(size * 0.5),
+                        fill
+                    })
+                });
+                //const label = new PIXI.Text({ text: String(num), style }); // v7: new PIXI.Text(String(num), style)
+                label.anchor.set(0.5);
+                label.x = x * size + size / 2;
+                label.y = y * size + size / 2;
+                
+                row.push(label);
             }
+            numberGrid.push(row);
         }
+        console.log(numberGrid)
+        return { numberGrid, palette, colorToNum };
+    }
 
-        return { container, palette, colorToNum };
+    function makeColorBolder(hex, factor = 1.2) {
+        let r = (hex >> 16) & 0xff;
+        let g = (hex >> 8) & 0xff;
+        let b = hex & 0xff;
+
+        r = Math.round(Math.min(255, r * factor));
+        g = Math.round(Math.min(255, g * factor));
+        b = Math.round(Math.min(255, b * factor));
+
+        return (r << 16) | (g << 8) | b;
     }
 
 
@@ -222,20 +254,15 @@ class LoadingScene {
     
     async loadResources() {
         await PIXI.Assets.load([
-            /*{
-              alias: "chef-idle",
-              src: "chef-idle-675x700.png"
+            {
+              alias: "drag",
+              src: "drag.png"
             },
             {
-              alias: "chef-walking",
+              alias: "color",
               src:
-                "chef-walking-450x700v2.png"
+                "color.png"
             },
-            {
-              alias: "chef-chopping",
-              src:
-                "chef-knifing-675x700.png"
-            }*/
         ]);
         
         this.setCompletion();
@@ -269,6 +296,7 @@ class LoadingScene {
 }
 
 let isToolSelected = false, tool;
+let updateDraggableGrid;
 
 class GameScene {
     constructor(app) {
@@ -283,7 +311,7 @@ class GameScene {
         
         // Create overlay
         const overlay = new PIXI.Graphics();
-        overlay.beginFill(0xFF0000, 1);
+        overlay.beginFill(0x0000ff, 1);
         overlay.drawRect(0, 0, 800, 800);
         overlay.alpha = 1;
         overlay.x = 0;
@@ -312,7 +340,7 @@ class GameScene {
         this.objContainer.addChild(chef);
 
         tool = new PIXI.Graphics();
-        tool.beginFill(0x00FF00, 1);    // bright green
+        tool.beginFill(0xFFFFFF, 1);    // bright green
         tool.drawRect(0, 0, 25, 25);
         tool.endFill();
         this.objContainer.addChild(tool);
@@ -338,18 +366,63 @@ class GameScene {
         loadImageUsingCanvas("image-3.png").then( pixelData => {
             console.log(pixelData);
 
-            const { colorToNum, palette } = buildPalette(pixelData);
-
             const width  = pixelData[0].length;  // tiles across
             const height = pixelData.length;     // tiles down
 
-            const grid = createPixelGrid(width, height, pixelData, 10); // 10 = tile size in px
-            this.objContainer.addChild(grid);
+            const size = 32;
 
-            // rgbaObjectToHex
+            const initialGrid = createInitialPixelGrid(width, height, pixelData, size); // 10 = tile size in px
+            this.objContainer.addChild(initialGrid);
+
+            const { numberGrid, palette, colorToNum } = createNumberedGrid(pixelData, size);
+            
+            for(let y = 0; y < numberGrid.length; y++)
+                for(let x = 0; x < numberGrid[y].length; x++){
+                    if(numberGrid[y][x] === null) continue;
+                    this.objContainer.addChild(numberGrid[y][x]);
+                }
+                  
+            const revealed = new Set(); // bounds geometry growth: each tile painted once
+
+            initialGrid.eventMode = 'static'; // v7: g.interactive = true;
+
+            updateDraggableGrid = function() {
+                if(isToolSelected)
+                    initialGrid.eventMode = 'static'
+                else
+                    initialGrid.eventMode = 'none'
+            }
+            updateDraggableGrid();
+
+            initialGrid.cursor = 'pointer';
+            
+            initialGrid.on('pointertap', draw);
+            
+            initialGrid.on('pointermove', draw);
+
+            function draw(e) {
+                const pos = e.getLocalPosition(initialGrid);
+                
+                const col = Math.floor(pos.x / size);
+                const row = Math.floor(pos.y / size);
+                if (col < 0 || row < 0 || col >= width || row >= height) return;
+
+                const key = row * width + col;
+                if (revealed.has(key)) return;
+                revealed.add(key);
+                
+                const color = rgbToHex(pixelData[row][col]);
+                numberGrid[row][col].visible  = false;
+                initialGrid.rect(col * size, row * size, size, size).fill(color);
+            }
+
             // Create bottom slider
-            this.bottomSlider = new BottomSlider(this.app, palette);
+            this.bottomSlider = new BottomSlider(this.app, colorToNum, palette);
             this.container.addChild(this.bottomSlider.container);
+
+            // Add the new mini tool slider above it
+            this.toolSlider = new ToolSlider(this.app);
+            this.container.addChild(this.toolSlider.container);
         });
     }
     
@@ -368,7 +441,8 @@ class GameScene {
     destroy() {
         this.inputController.destroy();
 
-        this.bottomSlider.destroy();
+        if (this.bottomSlider) this.bottomSlider.destroy();
+        if (this.toolSlider) this.toolSlider.destroy();
 
         this.objects.forEach((obj) => {
             if (obj.parent) obj.parent.removeChild(obj);
@@ -388,13 +462,155 @@ class GameScene {
     }
 }
 
-class BottomSlider {
-    constructor(app, colors) {
+class ToolSlider {
+    constructor(app) {
         this.app = app;
-        this.colors = colors;
+        this.container = new PIXI.Container();
+        this.itemsContainer = new PIXI.Container();
+
+        this.sliderHeight = 60; // Mini slider height
+        this.bottomSliderHeight = 120; // Needs to sit on top of the BottomSlider (120px)
+
+        this.background = new PIXI.Graphics();
+        this.updateBackground();
+
+        this.container.addChild(this.background);
+        this.container.addChild(this.itemsContainer);
+
+        // Position it right above the bottom slider
+        this.container.y = this.app.screen.height - this.bottomSliderHeight - this.sliderHeight;
+        this.container.eventMode = 'static';
+
+        this.createItems();
+        this.setupListeners();
+    }
+
+    updateBackground() {
+        this.background.clear();
+        // White background
+        this.background.beginFill(0xffffff, 1);
+        this.background.drawRect(
+            0,
+            0,
+            this.app.screen.width,
+            this.sliderHeight
+        );
+        this.background.endFill();
+
+        this.container.hitArea = new PIXI.Rectangle(
+            0,
+            0,
+            this.app.screen.width,
+            this.sliderHeight
+        );
+    }
+
+    createItems() {
+        // Map the buttons: Drag sets isToolSelected to false, Color sets it to true
+        const tools = [
+            { id: 'drag', label: 'Drag', textureName: 'drag', activeValue: false },
+            { id: 'color', label: 'Color', textureName: 'color', activeValue: true }
+        ];
+
+        const itemWidth = 44;
+        const itemHeight = 44;
+        const spacing = 15;
+
+        tools.forEach((toolData, index) => {
+            const item = new PIXI.Container();
+            item.x = spacing + index * (itemWidth + spacing);
+            item.y = (this.sliderHeight - itemHeight) / 2;
+
+            // Background block for each tool (gives active selection tint)
+            const bg = new PIXI.Graphics();
+            this.drawItemBg(bg, itemWidth, itemHeight, isToolSelected === toolData.activeValue);
+            item.addChild(bg);
+            item.bg = bg;
+
+            // Add the pre-loaded image sprite
+            try {
+                const sprite = PIXI.Sprite.from(toolData.textureName);
+                sprite.width = itemWidth - 12;
+                sprite.height = itemHeight - 12;
+                sprite.x = 6;
+                sprite.y = 6;
+                item.addChild(sprite);
+            } catch (e) {
+                // Fallback text if sprite texture fails
+                const fallbackText = new PIXI.Text({
+                    text: toolData.label,
+                    style: { fontSize: 11, fill: 0x333333 }
+                });
+                fallbackText.anchor.set(0.5);
+                fallbackText.x = itemWidth / 2;
+                fallbackText.y = itemHeight / 2;
+                item.addChild(fallbackText);
+            }
+
+            item.eventMode = 'static';
+            item.cursor = 'pointer';
+
+            item.on('pointerup', () => {
+                isToolSelected = toolData.activeValue;
+                updateDraggableGrid();
+                this.updateSelections();
+            });
+
+            this.itemsContainer.addChild(item);
+        });
+    }
+
+    drawItemBg(graphics, width, height, isActive) {
+        graphics.clear();
+        if (isActive) {
+            // Light blue tint with a stronger blue border for the active tool
+            graphics.beginFill(0xe0f7fa, 1);
+            graphics.lineStyle(2, 0x00bcd4);
+        } else {
+            // Subtle gray border for inactive tools
+            graphics.beginFill(0xf5f5f5, 1);
+            graphics.lineStyle(1, 0xcccccc);
+        }
+        graphics.drawRoundedRect(0, 0, width, height, 8);
+        graphics.endFill();
+    }
+
+    // Refresh visual active states
+    updateSelections() {
+        const toolsValues = [false, true];
+        this.itemsContainer.children.forEach((item, index) => {
+            if (item.bg) {
+                const isActive = isToolSelected === toolsValues[index];
+                this.drawItemBg(item.bg, 44, 44, isActive);
+            }
+        });
+    }
+
+    setupListeners() {
+        this.resizeHandler = () => {
+            this.container.y = this.app.screen.height - this.bottomSliderHeight - this.sliderHeight;
+            this.updateBackground();
+        };
+        window.addEventListener('resize', this.resizeHandler);
+    }
+
+    destroy() {
+        window.removeEventListener('resize', this.resizeHandler);
+        this.container.destroy({ children: true });
+    }
+}
+
+class BottomSlider {
+    constructor(app, colorToNum, palette) {
+        this.app = app;
+        this.colorToNum = colorToNum;
+        this.palette = palette;
 
         this.container = new PIXI.Container();
         this.itemsContainer = new PIXI.Container();
+
+        this.isItemSelected = false;
+        this.selectedItemIndex = 0;
 
         this.sliderHeight = 120;
 
@@ -416,8 +632,28 @@ class BottomSlider {
 
         this.resizeTimeout = null;
 
-        this.createItems(this.colors);
+        this.createItems(this.palette);
         this.setupListeners();
+    }
+
+    selectItem(id) {
+        this.removeSelectedItem();
+        this.isItemSelected = true;
+        this.itemsContainer.children.forEach(child => {
+            if(child.type === 'Outline' && child.id === id) {
+                child.visible = true;
+            }
+        });
+    }
+
+    removeSelectedItem() {
+        if(!this.isItemSelected) return;
+        this.isItemSelected = false;
+        this.itemsContainer.children.forEach(child => {
+            if(child.type === "Outline") {
+                child.visible = false;
+            }
+        });
     }
 
     setupListeners() {
@@ -477,16 +713,21 @@ class BottomSlider {
     }
 
     createItems(colors) {
-        const itemWidth = 80;
-        const itemHeight = 80;
+        const itemWidth = 70;
+        const itemHeight = 70;
         const spacing = 20;
 
         for (let i = 0; i < colors.length; i++) {
             const item = new PIXI.Graphics();
 
+            // Set ID
+            item.id = i;
+            item.type = "Color";
+
             item.beginFill(colors[i]);
             item.drawRoundedRect(0, 0, itemWidth, itemHeight, 10);
             item.endFill();
+            item.alpha = 1;
 
             item.x = spacing + i * (itemWidth + spacing);
             item.y = (this.sliderHeight - itemHeight) / 2;
@@ -498,6 +739,7 @@ class BottomSlider {
                 if (this.isDragging) return;
 
                 console.log(`Selected item ${i}`);
+                this.selectItem(item.id);
 
                 item.alpha = 0.5;
 
@@ -507,17 +749,62 @@ class BottomSlider {
                     }
                 }, 200);
 
-                isToolSelected = !isToolSelected;
+                isToolSelected = true;
+                updateDraggableGrid();
+                
+                // Update active tool slider selections if gameScene is active
+                if (typeof gameScene !== 'undefined' && gameScene && gameScene.toolSlider) {
+                    gameScene.toolSlider.updateSelections();
+                }
             });
             
             this.itemsContainer.addChild(item);
 
+            // Add number label to color item based on colorToNum
+            const num = (this.colorToNum.get(colors[i]) ?? i) + 1;
+            const r = (colors[i] >> 16) & 0xff;
+            const g = (colors[i] >> 8) & 0xff;
+            const b = colors[i] & 0xff;
+            const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+            const textFill = brightness >= 128 ? 0x000000 : 0xffffff;
+
+            // Create the label text
+            const label = new PIXI.Text({
+                text: String(num),
+                style: {
+                    fontSize: 24,
+                    fill: textFill,
+                    fontWeight: 'bold'
+                }
+            });
+            label.id = i;
+            label.type = "Label";
+            label.anchor.set(0.5);
+            label.x = item.x + itemWidth / 2;
+            label.y = item.y + itemHeight / 2;
+            label.eventMode = 'none';
+            this.itemsContainer.addChild(label);
+
+            // Add outline
+            const outline = new PIXI.Graphics();
+            outline.id = i;
+            outline.type = "Outline";
+            outline.rect(0, 0, itemWidth, itemHeight);
+            outline.stroke({ width: 8, color: colors[i] });
+            outline.visible = false;
+
+            outline.x = item.x;
+            outline.y = item.y;
+
+            this.itemsContainer.addChild(outline);
+
             // Add last item
             if(i === colors.length - 1){
                 const lastItem = new PIXI.Graphics();
-                lastItem.beginFill(0xffff00);
+                lastItem.beginFill(0xffffff);
                 lastItem.drawRoundedRect(0, 0, spacing, itemHeight, 10);
                 lastItem.endFill();
+                lastItem.alpha = 0;
 
                 lastItem.x = (i + 1) * (itemWidth + spacing);
                 lastItem.y = (this.sliderHeight - itemHeight) / 2;
@@ -690,7 +977,7 @@ class InputController {
 
             if (!moved) return;
 
-            if (isToolSelected) {
+            if (isToolSelected && false) {
                 let x =
                     (pointer.x - this.internalContainer.x) /
                     this.internalContainer.scale.x;
@@ -853,4 +1140,3 @@ class InputController {
 
 </body>
 </html>
-
