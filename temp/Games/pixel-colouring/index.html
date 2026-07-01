@@ -88,7 +88,10 @@
      * @param {number} size    pixel size of each tile in screen units
      * @returns {PIXI.Graphics}
      */
-    function createInitialPixelGrid(width, height, pixelData, size = 8) {
+    function createInitialPixelGrid(pixelData, size = 8) {
+        const width = pixelData[0].length;
+        const height = pixelData.length;
+
         const g = new PIXI.Graphics();
 
         // initial white grid
@@ -136,6 +139,7 @@
         for (let y = 0; y < height; y++) {
             const row = [];
             for (let x = 0; x < width; x++) {
+                // Check for transparent pixel
                 if (pixelData[y][x].a === 0) {
                     row.push(null); // Keep the spot empty to preserve the 2D grid structure
                     continue;
@@ -295,17 +299,19 @@ class LoadingScene {
     }
 }
 
-let isToolSelected = false, tool;
+let isToolSelected = false;
 let updateDraggableGrid;
 
 class GameScene {
     constructor(app) {
         this.app = app;
         this.type = "game-scene";
+
         // Main container
         this.container = new PIXI.Container();
         // Object container
         this.objContainer = new PIXI.Container();
+
         this.objects = [];
         this.isDestroyed = false;
         
@@ -325,42 +331,42 @@ class GameScene {
         this.container.addChild(overlay);
         this.container.addChild(this.objContainer);
         
-        let pointerDownPos = null;
-        let currentContainerPos = null;
-        let isPointerDown = false;
+        // let pointerDownPos = null;
+        // let currentContainerPos = null;
+        // let isPointerDown = false;
         
         // Create chef
-        const chef = new PIXI.Graphics();
-        chef.beginFill(0x00FF00, 1);    // bright green
-        chef.drawRect(0, 0, 25, 25);
-        chef.x = 20;
-        chef.y = 20;
-        chef.endFill();
-        this.objects.push(chef);
-        this.objContainer.addChild(chef);
+        // const chef = new PIXI.Graphics();
+        // chef.beginFill(0x00FF00, 1);    // bright green
+        // chef.drawRect(0, 0, 25, 25);
+        // chef.x = 20;
+        // chef.y = 20;
+        // chef.endFill();
+        // this.objects.push(chef);
+        // this.objContainer.addChild(chef);
 
-        tool = new PIXI.Graphics();
-        tool.beginFill(0xFFFFFF, 1);    // bright green
-        tool.drawRect(0, 0, 25, 25);
-        tool.endFill();
-        this.objContainer.addChild(tool);
+        // tool = new PIXI.Graphics();
+        // tool.beginFill(0xFFFFFF, 1);    // bright green
+        // tool.drawRect(0, 0, 25, 25);
+        // tool.endFill();
+        // this.objContainer.addChild(tool);
         
         // create interactive table;
-        const table = new PIXI.Graphics();
-        table.beginFill(0xff00F0, 1);
-        table.drawRect(0, 0, 25, 25);
-        table.x = 150;
-        table.y = 150;
-        table.eventMode = 'static';
-        table.cursor = 'pointer';
-        table.endFill();
-        this.objContainer.addChild(table);
-        table.on('pointerdown', () => {
-            console.log('table clicked');
-        });
+        // const table = new PIXI.Graphics();
+        // table.beginFill(0xff00F0, 1);
+        // table.drawRect(0, 0, 25, 25);
+        // table.x = 150;
+        // table.y = 150;
+        // table.eventMode = 'static';
+        // table.cursor = 'pointer';
+        // table.endFill();
+        // this.objContainer.addChild(table);
+        // table.on('pointerdown', () => {
+        //     console.log('table clicked');
+        // });
         
         // Create input controller
-        this.inputController = new InputController(this.overlay, tool, this.objContainer);
+        this.inputController = new InputController(this.overlay, this.objContainer);
 
         // Load image
         loadImageUsingCanvas("image-3.png").then( pixelData => {
@@ -376,12 +382,14 @@ class GameScene {
 
             const { numberGrid, palette, colorToNum } = createNumberedGrid(pixelData, size);
             
-            for(let y = 0; y < numberGrid.length; y++)
+            for(let y = 0; y < numberGrid.length; y++) {
                 for(let x = 0; x < numberGrid[y].length; x++){
+                    // If location is null (transparent pixel)
                     if(numberGrid[y][x] === null) continue;
                     this.objContainer.addChild(numberGrid[y][x]);
-                }
-                  
+                } 
+            }
+
             const revealed = new Set(); // bounds geometry growth: each tile painted once
 
             initialGrid.eventMode = 'static'; // v7: g.interactive = true;
@@ -424,6 +432,36 @@ class GameScene {
             this.toolSlider = new ToolSlider(this.app);
             this.container.addChild(this.toolSlider.container);
         });
+    }
+
+    async start(imageURL) {
+        const tileSize = 32;
+
+        const initialCanvas = await createWhiteCanvas(imageURL, tileSize);
+
+        // Add to scene
+        this.objContainer.addChild(initialCanvas);
+
+        // Create numbering grid
+        const { numberGrid, palette, colorToNum } = createNumberedGrid(pixelData, size);
+
+        // Add to scene
+        for(let y = 0; y < numberGrid.length; y++) {
+            for(let x = 0; x < numberGrid[y].length; x++){
+                // If location is null (transparent pixel)
+                if(numberGrid[y][x] === null) continue;
+                this.objContainer.addChild(numberGrid[y][x]);
+            } 
+        }
+    }
+
+    async createWhiteCanvas(imageURL, tileSize) {
+        const pixelData = await loadImageUsingCanvas(imageURL);
+
+        const size = tileSize;
+
+        // Create a big white canvas of multiple pixel based tiles
+        return createInitialPixelGrid(pixelData, size);
     }
     
     update(delta) {
@@ -866,9 +904,8 @@ class BottomSlider {
 }
 
 class InputController {
-    constructor(overlay, tool, internalContainer) {
+    constructor(overlay, internalContainer) {
         this.overlay = overlay;
-        this.tool = tool;
         this.internalContainer = internalContainer;
 
         this.activePointers = new Map();
