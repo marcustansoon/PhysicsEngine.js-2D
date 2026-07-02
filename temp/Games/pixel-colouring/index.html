@@ -650,7 +650,6 @@ class BottomSlider extends EventEmitter {
         this.itemsContainer = new PIXI.Container();
 
         this.isItemSelected = false;
-        this.selectedItemIndex = 0;
 
         this.sliderHeight = 120;
 
@@ -698,7 +697,7 @@ class BottomSlider extends EventEmitter {
 
     setupListeners() {
         this.container.on('pointerdown', this.onPointerDown);
-        this.container.on('pointermove', this.onPointerMove);
+        this.container.on('globalpointermove', this.onPointerMove);
         this.container.on('pointerup', this.onPointerUp);
         this.container.on('pointerupoutside', this.onPointerUp);
 
@@ -715,7 +714,7 @@ class BottomSlider extends EventEmitter {
 
     removeListeners() {
         this.container.off('pointerdown', this.onPointerDown);
-        this.container.off('pointermove', this.onPointerMove);
+        this.container.off('globalpointermove', this.onPointerMove);
         this.container.off('pointerup', this.onPointerUp);
         this.container.off('pointerupoutside', this.onPointerUp);
 
@@ -735,20 +734,10 @@ class BottomSlider extends EventEmitter {
 
     updateBackground() {
         this.background.clear();
-        this.background.beginFill(0xffffff, 1);
-        this.background.drawRect(
-            0,
-            0,
-            this.app.screen.width,
-            this.sliderHeight
-        );
-        this.background.endFill();
+        this.background.rect(0, 0, this.app.screen.width, this.sliderHeight).fill(0xffffff);
 
         this.container.hitArea = new PIXI.Rectangle(
-            0,
-            0,
-            this.app.screen.width,
-            this.sliderHeight
+            0, 0, this.app.screen.width, this.sliderHeight
         );
     }
 
@@ -764,9 +753,8 @@ class BottomSlider extends EventEmitter {
             item.id = i;
             item.type = "Color";
 
-            item.beginFill(colors[i]);
-            item.drawRoundedRect(0, 0, itemWidth, itemHeight, 10);
-            item.endFill();
+            item.roundRect(0, 0, itemWidth, itemHeight, 10).fill(colors[i]);
+
             item.alpha = 1;
 
             item.x = spacing + i * (itemWidth + spacing);
@@ -823,21 +811,19 @@ class BottomSlider extends EventEmitter {
             const outline = new PIXI.Graphics();
             outline.id = i;
             outline.type = "Outline";
-            outline.rect(0, 0, itemWidth, itemHeight);
-            outline.stroke({ width: 8, color: colors[i] });
+            outline.roundRect(0, 0, itemWidth, itemHeight, 10);
+            outline.stroke({ width: 5, color: 0xffffff, alignment: 1 }); // outer white
+            outline.roundRect(2, 2, itemWidth - 4, itemHeight - 4, 9);
+            outline.stroke({ width: 3, color: 0x000000, alignment: 0 }); // inner black, inside the path
             outline.visible = false;
-
             outline.x = item.x;
             outline.y = item.y;
-
             this.itemsContainer.addChild(outline);
 
             // Add last item
             if(i === colors.length - 1){
                 const lastItem = new PIXI.Graphics();
-                lastItem.beginFill(0xffffff);
-                lastItem.drawRoundedRect(0, 0, spacing, itemHeight, 10);
-                lastItem.endFill();
+                lastItem.roundRect(0, 0, spacing, itemHeight, 10).fill(0xffffff);
                 lastItem.alpha = 0;
 
                 lastItem.x = (i + 1) * (itemWidth + spacing);
@@ -851,14 +837,14 @@ class BottomSlider extends EventEmitter {
         this.isPointerDown = true;
         this.isDragging = false;
 
-        this.pointerDownPos = event.data.global.clone();
+        this.pointerDownPos = event.global.clone();
         this.dragStartX = this.itemsContainer.x;
     }
 
     onPointerMove = (event) => {
         if (!this.isPointerDown) return;
 
-        const currentPos = event.data.global;
+        const currentPos = event.global;
         const dx = currentPos.x - this.pointerDownPos.x;
 
         if (Math.abs(dx) > 5) {
@@ -884,7 +870,12 @@ class BottomSlider extends EventEmitter {
     }
 
     destroy() {
+        if (this.isDestroyed) return;
+        this.isDestroyed = true;
+
         this.removeListeners();
+
+        this.clear(); // wipe EventEmitter subscriptions (e.g. scene's "update-color-selection" handler)
 
         this.container.destroy({ children: true });
 
@@ -892,7 +883,6 @@ class BottomSlider extends EventEmitter {
         this.container = null;
         this.itemsContainer = null;
         this.background = null;
-
         this.pointerDownPos = null;
         this.resizeHandler = null;
         this.resizeTimeout = null;
