@@ -342,6 +342,7 @@ class GameScene extends EventEmitter {
             this.drawingCanvas.setDrawingMode(false);
         else
             this.drawingCanvas.setDrawingMode(true);
+        this.bottomSlider.removeSelectedItem();
     }
 
     // async #createWhiteCanvas(imageURL, tileSize) {
