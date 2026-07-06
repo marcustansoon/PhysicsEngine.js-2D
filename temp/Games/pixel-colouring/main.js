@@ -36,25 +36,38 @@ function getTextColor({ r, g, b }, lighten = 0.4) {
 }
 
 /**
- * Build a palette of unique colors from the pixel data.
- * @returns {{ colorToNum: Map<number, number>, palette: number[] }}
- *          palette[i] = 0xRRGGBB for number (i + 1).
+ * Scans pixel data and builds the color palette for the drawing canvas.
+ *
+ * Iterates over every pixel in raster order (top-left to bottom-right),
+ * skipping fully transparent pixels (alpha === 0). Each distinct color is
+ * assigned a number based on first appearance.
+ *
+ * @param {Array<Array<{r: number, g: number, b: number, a: number}>>} pixelData
+ *   2D array of pixels, indexed as [row][column].
+ *
+ * @returns {{
+ *   colorToNum: Map<string, number>,  // hex color → palette index (0-based)
+ *   palette: string[],                // palette index → hex color
+ *   totalPixels: number               // count of all non-transparent pixels
+ * }}
  */
 function buildPalette(pixelData) {
     const colorToNum = new Map();
     const palette = [];
+    let totalPixels = 0;   // every non-transparent pixel
     for (const row of pixelData) {
         for (const px of row) {
             const c = rgbToHex(px);
             // Skip fully transparent
             if(px.a === 0) continue;
+            totalPixels++;
             if (!colorToNum.has(c)) {
                 colorToNum.set(c, palette.length);
                 palette.push(c);
             }
         }
     }
-    return { colorToNum, palette };
+    return { colorToNum, palette, totalPixels };
 }
 
 /**
@@ -86,19 +99,25 @@ function createInitialPixelGrid(pixelData, size = 8) {
 }
 
 /**
- * Paint-by-numbers grid: white tiles labelled with a number that maps
- * to a unique color in the palette.
+ * Paint-by-numbers grid: creates a centered number label per non-transparent
+ * tile. Numbers are 1-based and map to palette entries (label N = palette[N-1]).
+ * Transparent tiles get null, preserving [row][col] grid alignment with pixelData.
  *
- * @returns {{ numberGrid: (PIXI.Text | null)[][], palette: number[],
- *             colorToNum: Map<number, number> }}
+ * NOTE: labels are NOT added to a container — caller must attach them.
+ * NOTE: each label is a separate PIXI.Text; for large grids use
+ *       PIXI.BitmapText (shared font atlas) instead.
  *
- * NOTE: each label is a separate PIXI.Text object. Fine for small grids;
- *       for large grids use PIXI.BitmapText (shared font atlas) instead.
+ * @returns {{
+ *   numberGrid: (PIXI.Text | null)[][],
+ *   palette: string[],                 // index → hex color
+ *   colorToNum: Map<string, number>,   // hex color → 0-based index
+ *   totalPixels: number                // non-transparent tile count
+ * }}
  */
 function createNumberedGrid(pixelData, size = 24) {
     const height = pixelData.length;
     const width = pixelData[0].length;
-    const { colorToNum, palette } = buildPalette(pixelData);
+    const { colorToNum, palette, totalPixels } = buildPalette(pixelData);
 
     const numberGrid = [];
 
@@ -141,8 +160,8 @@ function createNumberedGrid(pixelData, size = 24) {
         }
         numberGrid.push(row);
     }
-    console.log(numberGrid)
-    return { numberGrid, palette, colorToNum };
+    
+    return { numberGrid, palette, colorToNum, totalPixels };
 }
 
 function makeColorBolder(hex, factor = 1.2) {
@@ -272,7 +291,7 @@ class LoadingScene {
     }
 }
 
-let isToolSelected = false;
+// let isToolSelected = false;
 
 class GameScene {
     constructor(app) {
@@ -330,14 +349,24 @@ class GameScene {
     #colorSelectionHandler = (colorID) => {
         console.log('selected ' + colorID);
         this.drawingCanvas.setDrawingMode(true);
+        this.drawingCanvas.setColor(colorID);
+        // Set tool as 'color'
+        this.drawingCanvas.setTool("color");
         this.toolSlider.clearAllSelections();
     }
 
     #toolSelectionHandler = (selectedToolID) => {
-        if(selectedToolID === 'drag')
+        // Enable / disable drawing mode based on tool selected
+        if(selectedToolID === 'drag') {
             this.drawingCanvas.setDrawingMode(false);
-        else
+        } else {
             this.drawingCanvas.setDrawingMode(true);
+        }
+
+        // Set tool as ('drag' / 'bomb')
+        this.drawingCanvas.setTool(selectedToolID);
+
+        // Remove any selected color
         this.bottomSlider.removeSelectedItem();
     }
 
@@ -358,21 +387,27 @@ class GameScene {
         this.isDestroyed = true;
 
         this.inputController?.destroy();
+        this.inputController = null;
 
         this.toolSlider?.off({ event: "update-tool-selection", fn: this.#toolSelectionHandler });
         this.toolSlider?.destroy();
+        this.toolSlider = null;
 
-        this.bottomSlider?.off({
-            event: "update-color-selection",
-            fn: this.#colorSelectionHandler
-        });
+        this.bottomSlider?.off({ event: "update-color-selection", fn: this.#colorSelectionHandler });
         this.bottomSlider?.destroy();
+        this.bottomSlider = null;
 
         this.drawingCanvas?.destroy();
+        this.drawingCanvas = null;
 
-        this.container.destroy({
-            children: false
-        });
+        // Catches overlay + objContainer (and anything forgotten)
+        this.container.destroy({ children: true });
+        this.container = null;
+        this.objContainer = null;
+        this.overlay = null;
+
+        this.objects = null;
+        this.app = null;
     }
 }
 
@@ -391,11 +426,17 @@ class DrawingCanvas {
         this.container.addChild(initialCanvas);
 
         // Create numbering grids
-        const { numberGrid, palette, colorToNum } = this.#createNumberedGrid(pixelData, tileSize);
+        const { numberGrid, palette, colorToNum, totalPixels } = this.#createNumberedGrid(pixelData, tileSize);
+
+        // Total pixels to be colored
+        this.totalPixels = totalPixels;
 
         // Set reference
         this.palette = palette;
         this.colorToNum = colorToNum;
+
+        this.selectedColor = null;
+        this.selectedToolID = 'drag';
 
         for (const row of numberGrid) {
             for (const tile of row) {
@@ -405,8 +446,8 @@ class DrawingCanvas {
         this.numberGrid = numberGrid;
 
         this.initialCanvas.cursor = 'pointer';
-        this.initialCanvas.on('pointertap', this.#drawWhiteCanvasHandler);
-        this.initialCanvas.on('pointermove', this.#drawWhiteCanvasHandler);
+        this.initialCanvas.on('pointertap', this.#drawWhiteCanvasTapHandler);
+        this.initialCanvas.on('pointermove', this.#drawWhiteCanvasMoveHandler);
 
         this.setDrawingMode(false);
     }
@@ -416,6 +457,7 @@ class DrawingCanvas {
         const pixelData = await loadImageUsingCanvas(imageURL);
         const width = pixelData[0].length;
         const height = pixelData.length;
+        
         // Create white canvas
         const initialCanvas = createInitialPixelGrid(pixelData, tileSize);
 
@@ -427,40 +469,92 @@ class DrawingCanvas {
             this.initialCanvas.eventMode = "static";
         } else {
             this.initialCanvas.eventMode = "none";
+            this.selectedColor = null;
         }
+    }
+
+    setTool(selectedToolID) {
+        this.selectedToolID = selectedToolID;
+    }
+
+    #findKeyByValue(map, value) {
+        for (const [k, v] of map) {
+            if (v === value) return k;
+        }
+        return undefined;
+    }
+
+    setColor(colorID) {
+        this.selectedColor = this.#findKeyByValue(this.colorToNum, colorID);
     }
 
     #createNumberedGrid(pixelData, size) {
         return createNumberedGrid(pixelData, size);
     }
 
-    #drawWhiteCanvasHandler = (e) => {
+    #drawWhiteCanvasMoveHandler = (e) => {
         const pos = e.getLocalPosition(this.initialCanvas);
-        
-        const col = Math.floor(pos.x / this.tileSize);
-        const row = Math.floor(pos.y / this.tileSize);
-        if (col < 0 || row < 0 || col >= this.imageWidth || row >= this.imageHeight) return;
 
+        if (this.selectedToolID === "color") {
+            // Single tile, color must match
+            const col = Math.floor(pos.x / this.tileSize);
+            const row = Math.floor(pos.y / this.tileSize);
+            if (col < 0 || row < 0 || col >= this.imageWidth || row >= this.imageHeight) return;
+            this.#revealTile(col, row, { checkColor: true });
+        }
+    }
+
+    #drawWhiteCanvasTapHandler = (e) => {
+        const pos = e.getLocalPosition(this.initialCanvas);
+
+        if (this.selectedToolID === "bomb") {
+            console.log('bomb!!');
+
+            // Circular brush, any color
+            const radius = this.brushRadius ?? 100;   // 100px diameter
+
+            const colStart = Math.max(0, Math.floor((pos.x - radius) / this.tileSize));
+            const colEnd   = Math.min(this.imageWidth  - 1, Math.floor((pos.x + radius) / this.tileSize));
+            const rowStart = Math.max(0, Math.floor((pos.y - radius) / this.tileSize));
+            const rowEnd   = Math.min(this.imageHeight - 1, Math.floor((pos.y + radius) / this.tileSize));
+
+            for (let row = rowStart; row <= rowEnd; row++) {
+                for (let col = colStart; col <= colEnd; col++) {
+                    // Circular check: tile center inside the radius?
+                    const cx = col * this.tileSize + this.tileSize / 2;
+                    const cy = row * this.tileSize + this.tileSize / 2;
+                    if (Math.hypot(cx - pos.x, cy - pos.y) > radius) continue;
+
+                    this.#revealTile(col, row, { checkColor: false });
+                }
+            }
+        }
+    }
+    
+    #revealTile(col, row, { checkColor }) {
         const key = row * this.imageWidth + col;
         if (this.revealed.has(key)) return;
 
         const tile = this.numberGrid[row][col];
-        if (!tile) return;              // transparent pixel — nothing to reveal
-        
-        this.revealed.add(key);
-        
+        if (!tile) return;
+
         const color = rgbToHex(this.pixelData[row][col]);
+        if (checkColor && this.selectedColor !== color) return;
 
-        // Hide number grid at that position
-        tile.visible  = false;
+        this.revealed.add(key);
+        tile.visible = false;
+        this.initialCanvas.rect(col * this.tileSize, row * this.tileSize,
+                                this.tileSize, this.tileSize).fill(color);
 
-        // Set color on white canvas at that position
-        this.initialCanvas.rect(col * this.tileSize, row * this.tileSize, this.tileSize, this.tileSize).fill(color);
+        if (this.revealed.size === this.totalPixels) {
+            // completion hook
+            console.log('done');
+        }
     }
 
     destroy() {
-        this.initialCanvas?.off('pointertap', this.#drawWhiteCanvasHandler);
-        this.initialCanvas?.off('pointermove', this.#drawWhiteCanvasHandler);
+        this.initialCanvas?.off('pointertap', this.#drawWhiteCanvasTapHandler);
+        this.initialCanvas?.off('pointermove', this.#drawWhiteCanvasMoveHandler);
         this.revealed.clear();
         this.revealed = null;
         this.container.removeFromParent();
@@ -481,10 +575,10 @@ class ToolSlider extends EventEmitter {
         this.bottomSliderHeight = 120; // Needs to sit on top of the BottomSlider (120px)
 
         // Create a white bg (full width)
-        this.background = new PIXI.Graphics();
-        this.updateBackground();
+        // this.background = new PIXI.Graphics();
+        // this.updateBackground();
 
-        this.container.addChild(this.background);
+        // this.container.addChild(this.background);
         this.container.addChild(this.itemsContainer);
 
         // Position it right above the bottom slider
@@ -517,7 +611,7 @@ class ToolSlider extends EventEmitter {
         // Map the buttons: Drag sets isToolSelected to false, Color sets it to true
         const tools = [
             { id: 'drag', label: 'Drag', textureName: 'drag' },
-            // { id: 'bomb', label: 'Color', textureName: 'drag' }
+            { id: 'bomb', label: 'Bomb', textureName: 'drag' },
         ];
 
         const itemWidth = 44;
@@ -601,6 +695,7 @@ class ToolSlider extends EventEmitter {
         };
         window.addEventListener('resize', this.resizeHandler);
 
+        // Tool selection handler
         this.toolContainers.forEach(tool => {
             tool.eventMode = 'static';
             tool.cursor = 'pointer';
@@ -994,7 +1089,7 @@ class InputController {
 
             if (!moved) return;
 
-            if (isToolSelected && false) {
+            if (false) {
                 let x =
                     (pointer.x - this.internalContainer.x) /
                     this.internalContainer.scale.x;
