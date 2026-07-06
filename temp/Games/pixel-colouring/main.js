@@ -330,6 +330,17 @@ class GameScene {
 
         // Create white canvas
         this.drawingCanvas = await DrawingCanvas.create(imageURL, tileSize);
+
+        // Center the image
+        const canvasW = this.drawingCanvas.imageWidth * tileSize;
+        const canvasH = this.drawingCanvas.imageHeight * tileSize;
+        this.drawingCanvas.container.pivot.set(canvasW / 2, canvasH / 2);
+        this.drawingCanvas.container.x = this.app.screen.width / 2;
+        this.drawingCanvas.container.y = this.app.screen.height / 2;
+
+        // console.log(this.drawingCanvas.container.x, this.drawingCanvas.container.y);
+        // console.log(this.drawingCanvas.container.width, this.drawingCanvas.container.height);
+
         // Add to Object scene (Draggable)
         this.objContainer.addChild(this.drawingCanvas.container);
 
