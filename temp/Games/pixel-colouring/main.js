@@ -1,4 +1,5 @@
 import EventEmitter from "./EventEmitter.js";
+import { SceneAnimator } from './SceneAnimator.js';
 
 /*********************Utilities***********************/
 const getDistance = (x1, y1, x2, y2) => Math.hypot(x2 - x1, y2 - y1);
@@ -338,9 +339,6 @@ class GameScene {
         this.drawingCanvas.container.x = this.app.screen.width / 2;
         this.drawingCanvas.container.y = this.app.screen.height / 2;
 
-        // console.log(this.drawingCanvas.container.x, this.drawingCanvas.container.y);
-        // console.log(this.drawingCanvas.container.width, this.drawingCanvas.container.height);
-
         // Add to Object scene (Draggable)
         this.objContainer.addChild(this.drawingCanvas.container);
 
@@ -355,6 +353,17 @@ class GameScene {
         this.toolSlider.on("update-tool-selection", this.#toolSelectionHandler);
         // Add to scene
         this.container.addChild(this.toolSlider.container);
+
+        // Completion effect
+        this.fx = new SceneAnimator(this.app, this.objContainer);
+        setTimeout(()=>{
+            // this.fx.exitBlurZoomClear(() => console.log('done'));
+            // use it in a sequence instead of zoomTo:
+            this.fx.sequence([
+                d => this.fx.zoomToFit(d, 0.9, 1500),
+                d => this.fx.shake(d, 10, 350),
+            ], () => console.log('everything visible'));
+        }, 1000);
     }
 
     #colorSelectionHandler = (colorID) => {
@@ -382,6 +391,7 @@ class GameScene {
     }
 
     update(delta) {
+        this.fx?.update(delta * (1000 / 60));
 
     }
 
@@ -1249,7 +1259,7 @@ class InputController {
             activeScene.destroy();
             // Switch to game scene
             gameScene = new GameScene(app);
-            gameScene.start("image-3.png")
+            gameScene.start("image-4.png")
             activeScene = gameScene;
             activeScene.show();
         }
