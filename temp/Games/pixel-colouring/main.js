@@ -515,7 +515,10 @@ class DrawingCanvas {
         this.initialCanvas.on('pointertap', this.#drawWhiteCanvasTapHandler);
         this.initialCanvas.on('pointermove', this.#drawWhiteCanvasMoveHandler);
 
+        // Init (Drag mode)
         this.setDrawingMode(false);
+
+        this.pendingTimeouts = new Set();
     }
 
     static async create(imageURL, tileSize) {
@@ -648,9 +651,11 @@ class DrawingCanvas {
         }
         // ripple: one ring every 35ms, spreading out from the tap point
         rings.forEach((ring, d) => {
-            setTimeout(() => {
+            const id = setTimeout(() => {
+                this.pendingTimeouts.delete(id);
                 for (const [c, r] of ring) this.#revealTile(c, r, { checkColor: false });
             }, d * 35);
+            this.pendingTimeouts.add(id);
         });
     }
     
@@ -683,17 +688,22 @@ class DrawingCanvas {
         const maxD = Math.max(startRow, this.imageHeight - 1 - startRow);
 
         for (let d = 0; d <= maxD; d++) {
-            setTimeout(() => {
+            const id = setTimeout(() => {
+                this.pendingTimeouts.delete(id);
                 const up = startRow - d;
                 const down = startRow + d;
                 if (up >= 0) this.#revealTile(startCol, up, { checkColor });
                 if (down < this.imageHeight && down !== up)
                     this.#revealTile(startCol, down, { checkColor });
             }, d * stepMs);
+            this.pendingTimeouts.add(id);
         }
     }
 
     destroy() {
+        for (const id of this.pendingTimeouts) clearTimeout(id);
+        this.pendingTimeouts.clear();
+        this.pendingTimeouts = null;
         this.initialCanvas?.off('pointertap', this.#drawWhiteCanvasTapHandler);
         this.initialCanvas?.off('pointermove', this.#drawWhiteCanvasMoveHandler);
         this.revealed.clear();
