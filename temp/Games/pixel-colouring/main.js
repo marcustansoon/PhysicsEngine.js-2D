@@ -368,7 +368,9 @@ class GameScene {
 
     #colorSelectionHandler = (colorID) => {
         console.log('selected ' + colorID);
+        // Set drawing mode ON
         this.drawingCanvas.setDrawingMode(true);
+        // Set selected color
         this.drawingCanvas.setColor(colorID);
         // Set tool as 'color'
         this.drawingCanvas.setTool("color");
@@ -383,8 +385,9 @@ class GameScene {
             this.drawingCanvas.setDrawingMode(true);
         }
 
-        // Set tool as ('drag' / 'bomb')
+        // Set tool as ('drag' / 'bomb' / 'flood')
         this.drawingCanvas.setTool(selectedToolID);
+        console.log(selectedToolID)
 
         // Remove any selected color
         this.bottomSlider.removeSelectedItem();
@@ -549,7 +552,56 @@ class DrawingCanvas {
                     this.#revealTile(col, row, { checkColor: false });
                 }
             }
+        } else if (this.selectedToolID === "flood") {
+            console.log('flood!!');
+
+            const col = Math.floor(pos.x / this.tileSize);
+            const row = Math.floor(pos.y / this.tileSize);
+            if (col < 0 || row < 0 || col >= this.imageWidth || row >= this.imageHeight) return;
+            this.#floodReveal(col, row, { matchSelected: false, ripple: true });
         }
+    }
+
+    /**
+     * Reveal the connected region of same-colored tiles around (col,row).
+     * matchSelected: only fire if the tapped color is the player's selected color
+     * ripple: reveal ring-by-ring outward instead of all at once
+     */
+    #floodReveal(startCol, startRow, { matchSelected = true, ripple = true } = {}) {
+        const targetColor = rgbToHex(this.pixelData[startRow][startCol]);
+        if (matchSelected && targetColor !== this.selectedColor) return;
+
+        // BFS over same-color neighbors, grouping tiles by distance from tap
+        const visited = new Set([startRow * this.imageWidth + startCol]);
+        const queue = [[startCol, startRow, 0]];
+        const rings = [];                       // rings[d] = tiles at BFS depth d
+        let head = 0;                           // index pointer — no O(n) shift()
+
+        while (head < queue.length) {
+            const [col, row, d] = queue[head++];
+            (rings[d] ??= []).push([col, row]);
+
+            for (const [nc, nr] of [[col+1,row],[col-1,row],[col,row+1],[col,row-1]]) {
+                if (nc < 0 || nr < 0 || nc >= this.imageWidth || nr >= this.imageHeight) continue;
+                const key = nr * this.imageWidth + nc;
+                if (visited.has(key)) continue;
+                if (rgbToHex(this.pixelData[nr][nc]) !== targetColor) continue;
+                visited.add(key);
+                queue.push([nc, nr, d + 1]);
+            }
+        }
+
+        if (!ripple) {
+            for (const ring of rings)
+                for (const [c, r] of ring) this.#revealTile(c, r, { checkColor: false });
+            return;
+        }
+        // ripple: one ring every 35ms, spreading out from the tap point
+        rings.forEach((ring, d) => {
+            setTimeout(() => {
+                for (const [c, r] of ring) this.#revealTile(c, r, { checkColor: false });
+            }, d * 35);
+        });
     }
     
     #revealTile(col, row, { checkColor }) {
@@ -633,6 +685,7 @@ class ToolSlider extends EventEmitter {
         const tools = [
             { id: 'drag', label: 'Drag', textureName: 'drag' },
             { id: 'bomb', label: 'Bomb', textureName: 'drag' },
+            { id: 'flood', label: 'Flood', textureName: 'drag' },
         ];
 
         const itemWidth = 44;
