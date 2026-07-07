@@ -91,12 +91,14 @@
         border-radius: 10px; padding: 14px 16px; margin-bottom: 18px;
     }
     #controls label { color: var(--muted); font-size: 13px; }
-    #targetNum {
-        width: 84px; background: var(--panel-2); color: var(--ink);
+    #targetNum, #method {
+        background: var(--panel-2); color: var(--ink);
         border: 1px solid var(--line); border-radius: 6px;
-        font: 600 16px var(--mono); padding: 7px 10px; text-align: center;
+        font: 600 16px var(--mono); padding: 7px 10px;
     }
-    #targetNum:focus { border-color: var(--accent); outline: none; }
+    #targetNum { width: 84px; text-align: center; }
+    #method { font-size: 13.5px; }
+    #targetNum:focus, #method:focus { border-color: var(--accent); outline: none; }
     #targetRange { flex: 1; min-width: 160px; accent-color: var(--accent); }
     button {
         background: var(--accent); color: #17181c; border: 0; border-radius: 6px;
@@ -141,6 +143,13 @@
         <input type="number" id="targetNum" min="2" max="4096" value="16">
         <input type="range" id="targetRange" min="1" max="8" value="4" step="1"
                aria-label="Target colors (powers of two)">
+        <label for="method">Method</label>
+        <select id="method">
+            <option value="mediancut" selected>Median cut</option>
+            <option value="kmeans">K-means (seeded)</option>
+            <option value="octree">Octree</option>
+            <option value="popularity">Popularity (top-N)</option>
+        </select>
         <button id="btnQuant">Reduce colors</button>
         <button id="btnDownload" class="ghost" disabled>Download PNG</button>
         <span id="note"></span>
@@ -303,6 +312,160 @@ function quantize(map, targetCount) {
     return lut;
 }
 
+// ---------- alternative quantizers ----------
+function itemsOf(map) {
+    return [...map.entries()].map(([k, c]) =>
+        [(k >>> 24) & 255, (k >>> 16) & 255, (k >>> 8) & 255, k & 255, c]);
+}
+function identityLut(items) {
+    const lut = new Map();
+    for (const it of items) lut.set(keyOf(it[0], it[1], it[2], it[3]), it.slice(0, 4));
+    return lut;
+}
+function nearestIndex(it, pal) {
+    let bi = 0, bd = Infinity;
+    for (let p = 0; p < pal.length; p++) {
+        const q = pal[p];
+        const dr = it[0]-q[0], dg = it[1]-q[1], db = it[2]-q[2], da = it[3]-q[3];
+        const d = dr*dr + dg*dg + db*db + da*da;
+        if (d < bd) { bd = d; bi = p; }
+    }
+    return bi;
+}
+
+/** K-means in RGBA, seeded with the median-cut palette (deterministic) */
+function quantizeKMeans(map, target) {
+    const items = itemsOf(map);
+    if (items.length <= target) return identityLut(items);
+    const seed = quantize(map, target);
+    let centers = [...new Set(seed.values())].map(c => c.slice());
+    const assign = new Int32Array(items.length).fill(-1);
+
+    for (let iter = 0; iter < 10; iter++) {
+        let changed = false;
+        const acc = centers.map(() => [0, 0, 0, 0, 0]);
+        for (let i = 0; i < items.length; i++) {
+            const bi = nearestIndex(items[i], centers);
+            if (assign[i] !== bi) { assign[i] = bi; changed = true; }
+            const a = acc[bi], it = items[i], w = it[4];
+            a[0] += it[0]*w; a[1] += it[1]*w; a[2] += it[2]*w; a[3] += it[3]*w; a[4] += w;
+        }
+        for (let p = 0; p < centers.length; p++) {
+            if (acc[p][4] > 0) centers[p] = [
+                Math.round(acc[p][0]/acc[p][4]), Math.round(acc[p][1]/acc[p][4]),
+                Math.round(acc[p][2]/acc[p][4]), Math.round(acc[p][3]/acc[p][4]),
+            ];
+        }
+        if (!changed) break;
+    }
+    const lut = new Map();
+    for (let i = 0; i < items.length; i++) {
+        const it = items[i];
+        lut.set(keyOf(it[0], it[1], it[2], it[3]), centers[assign[i]]);
+    }
+    return lut;
+}
+
+/** Octree quantization, generalized to RGBA (16-way tree, depth 6) */
+function quantizeOctree(map, target) {
+    const items = itemsOf(map);
+    if (items.length <= target) return identityLut(items);
+    const MAXD = 6;
+    const levels = Array.from({ length: MAXD + 1 }, () => []);
+    const newNode = () => ({ kids: new Array(16).fill(null),
+                             leaf: false, dead: false, n: 0, r: 0, g: 0, b: 0, a: 0 });
+    const root = newNode();
+    let leafCount = 0;
+
+    const idxAt = (it, d) => {
+        const s = 7 - d;
+        return ((it[0] >> s & 1) << 3) | ((it[1] >> s & 1) << 2)
+             | ((it[2] >> s & 1) << 1) |  (it[3] >> s & 1);
+    };
+    function absorb(node, sub) {           // merge subtree into node, count leaves removed
+        if (sub.leaf) {
+            node.n += sub.n; node.r += sub.r; node.g += sub.g;
+            node.b += sub.b; node.a += sub.a;
+            sub.dead = true;
+            return 1;
+        }
+        sub.dead = true;
+        let rm = 0;
+        for (const k of sub.kids) if (k) rm += absorb(node, k);
+        return rm;
+    }
+    function reduce() {
+        for (let lv = MAXD; lv >= 1; lv--) {
+            const list = levels[lv];
+            while (list.length) {
+                const node = list.pop();
+                if (node.dead || node.leaf) continue;
+                let rm = 0;
+                for (let i = 0; i < 16; i++) {
+                    if (node.kids[i]) { rm += absorb(node, node.kids[i]); node.kids[i] = null; }
+                }
+                node.leaf = true;
+                leafCount -= rm - 1;
+                return;
+            }
+        }
+    }
+    function insert(it) {
+        let node = root;
+        for (let d = 0; d < MAXD; d++) {
+            if (node.leaf) break;                     // landed in a reduced region
+            const idx = idxAt(it, d);
+            if (!node.kids[idx]) {
+                const child = newNode();
+                node.kids[idx] = child;
+                if (d === MAXD - 1) { child.leaf = true; leafCount++; }
+                else levels[d + 1].push(child);
+            }
+            node = node.kids[idx];
+        }
+        const w = it[4];
+        node.n += w; node.r += it[0]*w; node.g += it[1]*w;
+        node.b += it[2]*w; node.a += it[3]*w;
+        while (leafCount > target) reduce();
+    }
+
+    for (const it of items) insert(it);
+
+    const lut = new Map();
+    for (const it of items) {
+        let node = root;
+        for (let d = 0; d < MAXD && !node.leaf; d++) node = node.kids[idxAt(it, d)];
+        if (!node.col) node.col = [
+            Math.round(node.r/node.n), Math.round(node.g/node.n),
+            Math.round(node.b/node.n), Math.round(node.a/node.n),
+        ];
+        lut.set(keyOf(it[0], it[1], it[2], it[3]), node.col);
+    }
+    return lut;
+}
+
+/** Popularity: keep the N most frequent colors, snap the rest to nearest */
+function quantizePopularity(map, target) {
+    const items = itemsOf(map);
+    if (items.length <= target) return identityLut(items);
+    const palette = [...items].sort((x, y) => y[4] - x[4])
+        .slice(0, target).map(it => it.slice(0, 4));
+    const lut = new Map();
+    for (const it of items) {
+        lut.set(keyOf(it[0], it[1], it[2], it[3]), palette[nearestIndex(it, palette)]);
+    }
+    return lut;
+}
+
+function runQuantize(map, target, method) {
+    switch (method) {
+        case "kmeans":     return quantizeKMeans(map, target);
+        case "octree":     return quantizeOctree(map, target);
+        case "popularity": return quantizePopularity(map, target);
+        default:           return quantize(map, target);       // median cut
+    }
+}
+
 // ---------- apply + UI ----------
 const num = $("targetNum"), range = $("targetRange");
 range.addEventListener("input", () => { num.value = 2 ** +range.value; }); // 2..256
@@ -318,7 +481,7 @@ $("btnQuant").addEventListener("click", () => {
     $("btnQuant").disabled = true;
 
     setTimeout(() => {   // let the note paint before the heavy work
-        const lut = quantize(colorMap, target);
+        const lut = runQuantize(colorMap, target, $("method").value);
         const out = new ImageData(new Uint8ClampedArray(origData.data), origData.width, origData.height);
         const d = out.data;
         const resultMap = new Map();
