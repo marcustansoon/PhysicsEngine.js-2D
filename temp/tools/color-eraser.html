@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Color Eraser</title>
+<style>
+    :root {
+        --bg: #17181c;
+        --panel: #1f2126;
+        --panel-2: #26292f;
+        --line: #33373f;
+        --ink: #e8eaed;
+        --muted: #8a8f98;
+        --accent: #e8b44c;
+        --mono: ui-monospace, "Cascadia Code", "SF Mono", Consolas, monospace;
+    }
+    * { box-sizing: border-box; margin: 0; }
+    body {
+        background: var(--bg); color: var(--ink);
+        font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif;
+        min-height: 100vh; padding: 28px 20px 60px;
+    }
+    .wrap { max-width: 980px; margin: 0 auto; }
+    header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 22px; }
+    h1 { font: 600 17px/1 var(--mono); letter-spacing: .04em; }
+    h1 span { color: var(--accent); }
+    header small { color: var(--muted); font-size: 12.5px; }
+
+    #drop {
+        border: 1.5px dashed var(--line); border-radius: 10px;
+        padding: 42px 20px; text-align: center; color: var(--muted);
+        cursor: pointer; transition: border-color .15s, background .15s;
+    }
+    #drop.hover, #drop:focus-visible { border-color: var(--accent); background: #1b1d22; outline: none; }
+    #drop strong { color: var(--ink); font-weight: 500; }
+
+    #tool { display: none; }
+
+    /* pick bar: hover readout + tolerance */
+    #pickbar {
+        display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+        background: var(--panel); border: 1px solid var(--line);
+        border-radius: 10px; padding: 12px 16px; margin: 18px 0 14px;
+    }
+    #hoverSwatch {
+        width: 30px; height: 30px; border-radius: 6px; border: 1px solid var(--line);
+        background: repeating-conic-gradient(#2c2f36 0% 25%, #23252b 0% 50%) 0 0 / 10px 10px;
+        position: relative; flex: none;
+    }
+    #hoverSwatch::after { content: ""; position: absolute; inset: 0; border-radius: 5px; background: var(--c, transparent); }
+    #hoverText { font: 500 13px var(--mono); color: var(--muted); min-width: 210px; }
+    #pickbar label { color: var(--muted); font-size: 13px; }
+    #tol { width: 140px; accent-color: var(--accent); }
+    #tolVal { font: 600 14px var(--mono); width: 34px; text-align: right; }
+    button {
+        background: var(--accent); color: #17181c; border: 0; border-radius: 6px;
+        font: 600 13.5px var(--mono); letter-spacing: .03em;
+        padding: 9px 16px; cursor: pointer;
+    }
+    button:hover { filter: brightness(1.08); }
+    button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+    button.ghost { background: var(--panel-2); color: var(--ink); border: 1px solid var(--line); }
+    button:disabled { opacity: .45; cursor: default; }
+
+    /* removed color chips */
+    #chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; min-height: 0; }
+    .chip {
+        display: flex; align-items: center; gap: 8px;
+        background: var(--panel); border: 1px solid var(--line);
+        border-radius: 20px; padding: 5px 10px 5px 6px;
+        font: 500 12.5px var(--mono);
+    }
+    .chip .sw { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--line); flex: none; }
+    .chip .tolTag { color: var(--muted); }
+    .chip button {
+        background: none; color: var(--muted); padding: 0 2px;
+        font-size: 15px; line-height: 1;
+    }
+    .chip button:hover { color: var(--ink); filter: none; }
+
+    /* canvases */
+    #panels { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+    @media (max-width: 700px) { #panels { grid-template-columns: 1fr; } }
+    .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+    .panel h2 { font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+    .canvas-holder {
+        border-radius: 6px; overflow: auto; max-height: 440px;
+        background: repeating-conic-gradient(#2c2f36 0% 25%, #23252b 0% 50%) 0 0 / 16px 16px;
+        display: flex; align-items: flex-start; justify-content: center;
+    }
+    canvas { display: block; image-rendering: pixelated; max-width: 100%; }
+    #cvOrig { cursor: crosshair; }
+
+    #footer { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+    #stats { font: 500 13px var(--mono); color: var(--muted); }
+    #stats b { color: var(--accent); font-weight: 600; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+    <header>
+        <h1>color<span>·</span>eraser</h1>
+        <small>click a color in the image to make it transparent — with tolerance</small>
+    </header>
+
+    <div id="drop" tabindex="0" role="button" aria-label="Load an image">
+        <strong>Drop an image here</strong> or click to browse<br>
+        <span style="font-size:12.5px">PNG · GIF · JPG · WebP — processed locally, nothing uploaded</span>
+    </div>
+    <input type="file" id="file" accept="image/*" hidden>
+
+    <div id="tool">
+        <div id="pickbar">
+            <div id="hoverSwatch"></div>
+            <span id="hoverText">hover the original to inspect, click to erase</span>
+            <label for="tol">Tolerance</label>
+            <input type="range" id="tol" min="0" max="100" value="0">
+            <span id="tolVal">0</span>
+        </div>
+
+        <div id="chips"></div>
+
+        <div id="panels">
+            <div class="panel"><h2>Original — click to erase a color</h2>
+                <div class="canvas-holder"><canvas id="cvOrig"></canvas></div></div>
+            <div class="panel"><h2>Result</h2>
+                <div class="canvas-holder"><canvas id="cvOut"></canvas></div></div>
+        </div>
+
+        <div id="footer">
+            <button id="btnDownload" disabled>Download PNG</button>
+            <button id="btnClear" class="ghost" disabled>Clear all</button>
+            <span id="stats"></span>
+        </div>
+    </div>
+</div>
+
+<script>
+"use strict";
+const $ = id => document.getElementById(id);
+const drop = $("drop"), fileInput = $("file");
+const cvOrig = $("cvOrig"), cvOut = $("cvOut");
+let origData = null;
+let targets = [];        // [{ r, g, b, tol }]
+
+// ---------- loading ----------
+drop.addEventListener("click", () => fileInput.click());
+drop.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") fileInput.click(); });
+["dragover","dragenter"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("hover"); }));
+["dragleave","drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("hover"); }));
+drop.addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if (f) loadFile(f); });
+fileInput.addEventListener("change", () => { if (fileInput.files[0]) loadFile(fileInput.files[0]); });
+
+function loadFile(file) {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+        URL.revokeObjectURL(url);
+        cvOrig.width = cvOut.width = img.naturalWidth;
+        cvOrig.height = cvOut.height = img.naturalHeight;
+        const ctx = cvOrig.getContext("2d", { willReadFrequently: true });
+        ctx.drawImage(img, 0, 0);
+        origData = ctx.getImageData(0, 0, cvOrig.width, cvOrig.height);
+        targets = [];
+        $("tool").style.display = "block";
+        apply();
+    };
+    img.onerror = () => { $("hoverText").textContent = "Couldn't decode that file as an image."; };
+    img.src = url;
+}
+
+// ---------- picking ----------
+function pixelAt(e) {
+    const rect = cvOrig.getBoundingClientRect();
+    const x = Math.floor((e.clientX - rect.left) * (cvOrig.width / rect.width));
+    const y = Math.floor((e.clientY - rect.top) * (cvOrig.height / rect.height));
+    if (x < 0 || y < 0 || x >= cvOrig.width || y >= cvOrig.height) return null;
+    const i = (y * cvOrig.width + x) * 4;
+    const d = origData.data;
+    return { x, y, r: d[i], g: d[i+1], b: d[i+2], a: d[i+3] };
+}
+const hex = (r,g,b) => "#" + [r,g,b].map(v => v.toString(16).padStart(2, "0")).join("");
+
+cvOrig.addEventListener("mousemove", e => {
+    const p = pixelAt(e);
+    if (!p) return;
+    $("hoverSwatch").style.setProperty("--c", `rgba(${p.r},${p.g},${p.b},${p.a/255})`);
+    $("hoverText").textContent =
+        `${hex(p.r,p.g,p.b)}  rgba(${p.r},${p.g},${p.b},${(p.a/255).toFixed(2)})  @ ${p.x},${p.y}`;
+});
+cvOrig.addEventListener("click", e => {
+    const p = pixelAt(e);
+    if (!p || p.a === 0) return;                    // can't erase what's already gone
+    const tol = +$("tol").value;
+    // replace existing entry for the same color instead of duplicating
+    const existing = targets.find(t => t.r === p.r && t.g === p.g && t.b === p.b);
+    if (existing) existing.tol = tol;
+    else targets.push({ r: p.r, g: p.g, b: p.b, tol });
+    apply();
+});
+$("tol").addEventListener("input", () => { $("tolVal").textContent = $("tol").value; });
+
+// ---------- apply ----------
+function apply() {
+    const out = new ImageData(new Uint8ClampedArray(origData.data), origData.width, origData.height);
+    const d = out.data;
+    let erased = 0, total = 0;
+
+    // precompute squared distance thresholds (tolerance 100 ≈ full RGB diagonal)
+    const th = targets.map(t => {
+        const maxDist = 441.673;                    // sqrt(3 * 255²)
+        const r = (t.tol / 100) * maxDist;
+        return { r: t.r, g: t.g, b: t.b, d2: r * r };
+    });
+
+    for (let i = 0; i < d.length; i += 4) {
+        if (d[i + 3] === 0) continue;
+        total++;
+        for (const t of th) {
+            const dr = d[i] - t.r, dg = d[i+1] - t.g, db = d[i+2] - t.b;
+            if (dr*dr + dg*dg + db*db <= t.d2) {
+                d[i] = d[i+1] = d[i+2] = d[i+3] = 0;
+                erased++;
+                break;
+            }
+        }
+    }
+    cvOut.getContext("2d").putImageData(out, 0, 0);
+    renderChips();
+    $("btnDownload").disabled = targets.length === 0;
+    $("btnClear").disabled = targets.length === 0;
+    $("stats").innerHTML = targets.length
+        ? `erased <b>${erased.toLocaleString()}</b> of ${total.toLocaleString()} px (${(erased/total*100).toFixed(1)}%)`
+        : "";
+}
+
+function renderChips() {
+    const box = $("chips");
+    box.innerHTML = "";
+    targets.forEach((t, i) => {
+        const chip = document.createElement("div");
+        chip.className = "chip";
+        chip.innerHTML =
+            `<span class="sw" style="background:${hex(t.r,t.g,t.b)}"></span>` +
+            `<span>${hex(t.r,t.g,t.b)}</span>` +
+            `<span class="tolTag">±${t.tol}</span>`;
+        const btn = document.createElement("button");
+        btn.textContent = "×";
+        btn.title = "restore this color";
+        btn.addEventListener("click", () => { targets.splice(i, 1); apply(); });
+        chip.appendChild(btn);
+        box.appendChild(chip);
+    });
+}
+
+$("btnClear").addEventListener("click", () => { targets = []; apply(); });
+$("btnDownload").addEventListener("click", () => {
+    const a = document.createElement("a");
+    a.download = "erased.png";
+    a.href = cvOut.toDataURL("image/png");
+    a.click();
+});
+</script>
+</body>
+</html>
