@@ -364,6 +364,48 @@ class GameScene {
                 d => this.fx.shake(d, 10, 350),
             ], () => console.log('everything visible'));
         }, 1000);
+
+
+//         const lightFilter = new PIXI.Filter({
+//     glProgram: new PIXI.GlProgram({
+//         vertex: PIXI.defaultFilterVert,
+//         fragment: `in vec2 vTextureCoord;
+//             out vec4 finalColor;
+            
+//             uniform sampler2D uTexture;
+//             uniform float uCenter;     // beam center, 0..1 (top to bottom)
+//             uniform float uWidth;      // beam half-width in UV (0.1 = 10%)
+//             uniform float uIntensity;  // 0 = off, 0.6 = strong
+//             uniform vec3  uTint;       // light color
+            
+//             void main(void) {
+//                 vec4 c = texture(uTexture, vTextureCoord);
+                
+//                 // CHANGED: We now calculate distance on the Y axis
+//                 float d = abs(vTextureCoord.y - uCenter) / uWidth;
+                
+//                 // soft falloff: 1 at center → 0 at the edge
+//                 float glow = smoothstep(1.0, 0.0, d);
+                
+//                 // additive light, only on visible pixels (respect alpha)
+//                 vec3 lit = c.rgb + uTint * glow * uIntensity * c.a;
+//                 finalColor = vec4(lit, c.a);
+//             }
+//         `,
+//     }),
+//     resources: {
+//         lightUniforms: {
+//             uCenter:    { value: 0.5,  type: 'f32' },
+//             uWidth:     { value: 0.15, type: 'f32' },
+//             uIntensity: { value: 0.5,  type: 'f32' },
+//             uTint:      { value: [1.0, 0.95, 0.8], type: 'vec3<f32>' }, // warm white
+//         },
+//     },
+// });
+
+// this.objContainer.filters = [lightFilter];
+
+
     }
 
     #colorSelectionHandler = (colorID) => {
@@ -559,6 +601,14 @@ class DrawingCanvas {
             const row = Math.floor(pos.y / this.tileSize);
             if (col < 0 || row < 0 || col >= this.imageWidth || row >= this.imageHeight) return;
             this.#floodReveal(col, row, { matchSelected: false, ripple: true });
+        } else if (this.selectedToolID === "laser") {
+            const col = Math.floor(pos.x / this.tileSize);
+            const row = Math.floor(pos.y / this.tileSize);
+            if (col < 0 || row < 0 || col >= this.imageWidth || row >= this.imageHeight) return;
+
+            this.#verticalReveal(col, row);
+            if (col + 1 < this.imageWidth) this.#verticalReveal(col + 1, row);
+            if (col - 1 >= 0)              this.#verticalReveal(col - 1, row);
         }
     }
 
@@ -625,6 +675,24 @@ class DrawingCanvas {
         }
     }
 
+    /**
+     * Reveal the tapped tile, then spread one tile up and one tile down
+     * per step until the column is filled.
+     */
+    #verticalReveal(startCol, startRow, { checkColor = false, stepMs = 30 } = {}) {
+        const maxD = Math.max(startRow, this.imageHeight - 1 - startRow);
+
+        for (let d = 0; d <= maxD; d++) {
+            setTimeout(() => {
+                const up = startRow - d;
+                const down = startRow + d;
+                if (up >= 0) this.#revealTile(startCol, up, { checkColor });
+                if (down < this.imageHeight && down !== up)
+                    this.#revealTile(startCol, down, { checkColor });
+            }, d * stepMs);
+        }
+    }
+
     destroy() {
         this.initialCanvas?.off('pointertap', this.#drawWhiteCanvasTapHandler);
         this.initialCanvas?.off('pointermove', this.#drawWhiteCanvasMoveHandler);
@@ -686,6 +754,7 @@ class ToolSlider extends EventEmitter {
             { id: 'drag', label: 'Drag', textureName: 'drag' },
             { id: 'bomb', label: 'Bomb', textureName: 'drag' },
             { id: 'flood', label: 'Flood', textureName: 'drag' },
+            { id: 'laser', label: 'Laser', textureName: 'drag' },
         ];
 
         const itemWidth = 44;
