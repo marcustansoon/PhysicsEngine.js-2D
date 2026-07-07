@@ -331,6 +331,7 @@ class GameScene {
 
         // Create white canvas
         this.drawingCanvas = await DrawingCanvas.create(imageURL, tileSize);
+        this.drawingCanvas.on('puzzle-completion', this.#onCompletion);
 
         // Center the image
         const canvasW = this.drawingCanvas.imageWidth * tileSize;
@@ -354,58 +355,21 @@ class GameScene {
         // Add to scene
         this.container.addChild(this.toolSlider.container);
 
-        // Completion effect
+        // Effect class
         this.fx = new SceneAnimator(this.app, this.objContainer);
+    }
+
+    #onCompletion = () => {
         setTimeout(()=>{
-            // this.fx.exitBlurZoomClear(() => console.log('done'));
-            // use it in a sequence instead of zoomTo:
             this.fx.sequence([
                 d => this.fx.zoomToFit(d, 0.9, 1500),
                 d => this.fx.shake(d, 10, 350),
-            ], () => console.log('everything visible'));
+            ], this.#onEffectDone);
         }, 1000);
+    }
 
-
-//         const lightFilter = new PIXI.Filter({
-//     glProgram: new PIXI.GlProgram({
-//         vertex: PIXI.defaultFilterVert,
-//         fragment: `in vec2 vTextureCoord;
-//             out vec4 finalColor;
-            
-//             uniform sampler2D uTexture;
-//             uniform float uCenter;     // beam center, 0..1 (top to bottom)
-//             uniform float uWidth;      // beam half-width in UV (0.1 = 10%)
-//             uniform float uIntensity;  // 0 = off, 0.6 = strong
-//             uniform vec3  uTint;       // light color
-            
-//             void main(void) {
-//                 vec4 c = texture(uTexture, vTextureCoord);
-                
-//                 // CHANGED: We now calculate distance on the Y axis
-//                 float d = abs(vTextureCoord.y - uCenter) / uWidth;
-                
-//                 // soft falloff: 1 at center → 0 at the edge
-//                 float glow = smoothstep(1.0, 0.0, d);
-                
-//                 // additive light, only on visible pixels (respect alpha)
-//                 vec3 lit = c.rgb + uTint * glow * uIntensity * c.a;
-//                 finalColor = vec4(lit, c.a);
-//             }
-//         `,
-//     }),
-//     resources: {
-//         lightUniforms: {
-//             uCenter:    { value: 0.5,  type: 'f32' },
-//             uWidth:     { value: 0.15, type: 'f32' },
-//             uIntensity: { value: 0.5,  type: 'f32' },
-//             uTint:      { value: [1.0, 0.95, 0.8], type: 'vec3<f32>' }, // warm white
-//         },
-//     },
-// });
-
-// this.objContainer.filters = [lightFilter];
-
-
+    #onEffectDone = () => {
+        console.log('effect done');
     }
 
     #colorSelectionHandler = (colorID) => {
@@ -463,6 +427,7 @@ class GameScene {
         this.bottomSlider?.destroy();
         this.bottomSlider = null;
 
+        this.drawingCanvas.off({ event: "puzzle-completion", fn: this.#onCompletion });
         this.drawingCanvas?.destroy();
         this.drawingCanvas = null;
 
@@ -477,8 +442,10 @@ class GameScene {
     }
 }
 
-class DrawingCanvas {
+class DrawingCanvas extends EventEmitter {
     constructor({ initialCanvas, pixelData, width, height }, tileSize) {
+        super();
+
         this.tileSize = tileSize;
         this.revealed = new Set();
         this.container = new PIXI.Container();
@@ -675,8 +642,7 @@ class DrawingCanvas {
                                 this.tileSize, this.tileSize).fill(color);
 
         if (this.revealed.size === this.totalPixels) {
-            // completion hook
-            console.log('done');
+            this.emit("puzzle-completion");
         }
     }
 
@@ -701,6 +667,8 @@ class DrawingCanvas {
     }
 
     destroy() {
+        this.clear(); // wipe all EventEmitter subscriptions
+        
         for (const id of this.pendingTimeouts) clearTimeout(id);
         this.pendingTimeouts.clear();
         this.pendingTimeouts = null;
