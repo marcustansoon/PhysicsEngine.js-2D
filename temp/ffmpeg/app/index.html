@@ -124,6 +124,7 @@
     let audioExists = false;
     let isFetchDataReady = false;
     let isLibLoaded = false;
+    let mergeStarted = false;
 
     function delay(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
@@ -269,8 +270,12 @@
     function checkForMergeReady(){
         if(!isLibLoaded){
             updateProgressTitle("Loading utilities...");
+            return;
         }
-        if(isFetchDataReady && isLibLoaded) {
+
+        if(isFetchDataReady && !mergeStarted) {
+            mergeStarted = true;
+            updateProgressTitle("Preparing merge...");
             mergeVideoAndAudio();
         }
     }
@@ -311,9 +316,10 @@
             await delay(25); // small delay to avoid UI freezing
         }
     
+        updateProgressTitle("Saving final video...");
+        await window.flutter_inappwebview.callHandler('receiveMp4Done');
         updateProgressTitle("Video processed successfully");
         updateProgressDoneText("File saved to " + folderPath + "/output_merged.mp4");
-        await window.flutter_inappwebview.callHandler('receiveMp4Done');
     }
     
 
@@ -359,9 +365,8 @@
             mergeBtn.disabled = false;
             
             isLibLoaded = true;
-            checkForMergeReady();
-            
             updateProgressBar("load-lib", 1);
+            checkForMergeReady();
         } catch(err){
             console.error(err);
             log('Failed to load FFmpeg: ' + err.message,'error');
@@ -405,18 +410,23 @@
     
     const mergeVideoAndAudio = async () => {
         mergeBtn.disabled = true;
-        mergingVideoMessageInterval = setInterval(() => {
+        const startMergeMessages = () => mergingVideoMessageInterval = setInterval(() => {
             updateProgressTitle(getRandomMergeMessage());          
         }, 5000);
         log('Starting merge...');
         try{
+            updateProgressTitle("Loading video into FFmpeg...");
             const videoData = vd;                                    //await fileToUint8Array(selectedVideoFile);
             await ffmpeg.writeFile('input_video', videoData);
 
             if(audioExists){
+                updateProgressTitle("Loading audio into FFmpeg...");
                 const audioData = ad;                                //await fileToUint8Array(selectedAudioFile);
                 await ffmpeg.writeFile('input_audio', audioData);
             }
+
+            updateProgressTitle("Merging video and audio...");
+            startMergeMessages();
 
             if (audioExists) {
                 const exitCode = await ffmpeg.exec([
@@ -450,19 +460,26 @@
                 }
             }
     
+            clearInterval(mergingVideoMessageInterval);
+            mergingVideoMessageInterval = null;
+            updateProgressBar("merging", 1);
+            updateProgressTitle("Preparing final video...");
+
             const outputData = await ffmpeg.readFile('output_merged.mp4');
             const blob = new Blob([outputData.buffer], {type:'video/mp4'});
             videoEl.src = URL.createObjectURL(blob);
-    
-            clearInterval(mergingVideoMessageInterval);
-            updateProgressBar("merging", 1);
-            sendMergedVideoToFlutter(outputData);
+
+            await sendMergedVideoToFlutter(outputData);
             log('Merge completed successfully! Play the video above.','success');
         }catch(err){
-            clearInterval(mergingVideoMessageInterval);
+            if(mergingVideoMessageInterval){
+                clearInterval(mergingVideoMessageInterval);
+                mergingVideoMessageInterval = null;
+            }
             console.error(err);
             log('Merge failed: '+err.message,'error');
-            updateProgressErrText(err.message)
+            updateProgressTitle("Video processing failed");
+            updateProgressErrText(err.message);
         }finally{
             mergeBtn.disabled = false;
         }
