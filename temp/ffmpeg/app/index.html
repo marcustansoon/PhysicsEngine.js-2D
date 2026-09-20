@@ -418,24 +418,36 @@
                 await ffmpeg.writeFile('input_audio', audioData);
             }
 
-            if(audioExists){
-                await ffmpeg.exec([
-                    '-i','input_video',
-                    '-i','input_audio',
-                    '-c:v','copy',
-                    '-c:a','aac',
-                    '-map','0:v:0',
-                    '-map','1:a:0',
+            if (audioExists) {
+                const exitCode = await ffmpeg.exec([
+                    '-i', 'input_video',
+                    '-i', 'input_audio',
+                    '-map', '0:v:0',
+                    '-map', '1:a:0',
+                    '-c:v', 'copy',
+                    '-c:a', 'copy',
                     '-shortest',
+                    '-movflags', '+faststart',
                     'output_merged.mp4'
                 ]);
-            }else{
-                await ffmpeg.exec([    
-                  '-i', 'input_video',
-                  '-c', 'copy',
-                  '-movflags', '+faststart',
-                  'output_merged.mp4'
+            
+                if (exitCode !== 0) {
+                    throw new Error(`FFmpeg remux failed with exit code ${exitCode}`);
+                }
+            } else {
+                const exitCode = await ffmpeg.exec([
+                    '-i', 'input_video',
+                    '-map', '0:v:0',
+                    '-c:v', 'copy',
+                    '-map', '0:a?',
+                    '-c:a', 'copy',
+                    '-movflags', '+faststart',
+                    'output_merged.mp4'
                 ]);
+            
+                if (exitCode !== 0) {
+                    throw new Error(`FFmpeg remux failed with exit code ${exitCode}`);
+                }
             }
     
             const outputData = await ffmpeg.readFile('output_merged.mp4');
