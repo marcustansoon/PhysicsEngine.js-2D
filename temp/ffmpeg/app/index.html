@@ -82,7 +82,7 @@
     <div class="progress-bar">
       <div id="progress" class="progress"><div id="progress-text" style="position: absolute; left: 0; width: 100%;">0%</div></div>
     </div>
-    <div style="color: red;padding: 5px;" id="progress-err-text"></div>
+    <div style="color: red;padding: 5px;white-space: pre-wrap;word-break: break-word;overflow-wrap: anywhere;" id="progress-err-text"></div>
     <div style="color: green;padding: 5px;white-space: pre-wrap;word-wrap: break-word;overflow-wrap: break-word;" id="progress-done-text"></div>
   </div>
   <div style=" font-size: small; position: absolute; bottom: 0; padding: 30px; text-align: center; ">Please keep your screen on while the video is processing</div>
@@ -147,10 +147,19 @@
         
         // Ask for file size (video)
         const videoSize = await window.flutter_inappwebview.callHandler('getFileSize', 'video');
-        if(videoSize == 0) return {'status': 400};
+        console.log('[Finalizer] video file=' + videoFileName + ' size=' + videoSize);
+        if(!Number.isFinite(Number(videoSize)) || Number(videoSize) <= 0) {
+            return {'status': 400, 'error': 'Video file is missing or has an invalid size: ' + videoSize};
+        }
         const totalChunks = Math.ceil(videoSize / chunkSize);
-    
-        let fullArray = new Uint8Array(videoSize);
+
+        let fullArray;
+        try {
+            fullArray = new Uint8Array(videoSize);
+        } catch(e) {
+            console.error('[Finalizer] video buffer allocation failed size=' + videoSize, e);
+            return {'status': 400, 'error': 'Could not allocate memory for the video (' + videoSize + ' bytes): ' + String(e)};
+        }
         const maxRetries = 50;
         let retriesCount = 0;
     
@@ -163,17 +172,29 @@
                     const url = `${videoFileName}?start=${start}&end=${end}`;
                   
                     const response = await fetch(url);
+                    if(!response.ok) {
+                        throw new Error('HTTP ' + response.status + ' ' + response.statusText);
+                    }
                     const buffer = await response.arrayBuffer();
-                  
-                    fullArray.set(new Uint8Array(buffer), start);
+                    const bytes = new Uint8Array(buffer);
+                    const expectedLength = end - start;
+                    if(bytes.length !== expectedLength) {
+                        throw new Error('Expected ' + expectedLength + ' bytes but received ' + bytes.length);
+                    }
+
+                    fullArray.set(bytes, start);
+                    if(i === 0 || i === totalChunks - 1) {
+                        console.log('[Finalizer] video chunk ' + i + '/' + totalChunks + ' start=' + start + ' end=' + end + ' bytes=' + bytes.length);
+                    }
                     await delay(25);
-                    
+
                     break;
                 }catch(e){
                     retriesCount++;
+                    console.error('[Finalizer] video chunk failed index=' + i + ' retry=' + retriesCount + ' error=' + String(e));
                     await delay(1000);
                     if(retriesCount >= maxRetries){
-                        return {'status': 400};
+                        return {'status': 400, 'error': 'Video chunk ' + i + ' failed after ' + maxRetries + ' attempts: ' + String(e)};
                     }
                 }
             }
@@ -189,10 +210,19 @@
         
         // Ask for file size (audio)
         const audioSize = await window.flutter_inappwebview.callHandler('getFileSize', 'audio');
-        if(audioSize == 0) return {'status': 400};
+        console.log('[Finalizer] audio file=' + audioFileName + ' size=' + audioSize);
+        if(!Number.isFinite(Number(audioSize)) || Number(audioSize) <= 0) {
+            return {'status': 400, 'error': 'Audio file is missing or has an invalid size: ' + audioSize};
+        }
         const totalChunks = Math.ceil(audioSize / chunkSize);
-    
-        let fullArray = new Uint8Array(audioSize);
+
+        let fullArray;
+        try {
+            fullArray = new Uint8Array(audioSize);
+        } catch(e) {
+            console.error('[Finalizer] audio buffer allocation failed size=' + audioSize, e);
+            return {'status': 400, 'error': 'Could not allocate memory for the audio (' + audioSize + ' bytes): ' + String(e)};
+        }
         const maxRetries = 50;
         let retriesCount = 0;
     
@@ -205,17 +235,29 @@
                     const url = `${audioFileName}?start=${start}&end=${end}`;
                   
                     const response = await fetch(url);
+                    if(!response.ok) {
+                        throw new Error('HTTP ' + response.status + ' ' + response.statusText);
+                    }
                     const buffer = await response.arrayBuffer();
-                  
-                    fullArray.set(new Uint8Array(buffer), start);
+                    const bytes = new Uint8Array(buffer);
+                    const expectedLength = end - start;
+                    if(bytes.length !== expectedLength) {
+                        throw new Error('Expected ' + expectedLength + ' bytes but received ' + bytes.length);
+                    }
+
+                    fullArray.set(bytes, start);
+                    if(i === 0 || i === totalChunks - 1) {
+                        console.log('[Finalizer] audio chunk ' + i + '/' + totalChunks + ' start=' + start + ' end=' + end + ' bytes=' + bytes.length);
+                    }
                     await delay(25);
-                    
+
                     break;
                 }catch(e){
                     retriesCount++;
+                    console.error('[Finalizer] audio chunk failed index=' + i + ' retry=' + retriesCount + ' error=' + String(e));
                     await delay(1000);
                     if(retriesCount >= maxRetries){
-                        return {'status': 400};
+                        return {'status': 400, 'error': 'Audio chunk ' + i + ' failed after ' + maxRetries + ' attempts: ' + String(e)};
                     }
                 }
             }
@@ -247,7 +289,9 @@
         let _vd = await fetchVideoFile();
 
         if(_vd.status === 400){
-            updateProgressErrText("There was an error processing the video or audio. Please try again.");
+            const message = _vd.error || "There was an error processing the video. Please try again.";
+            console.error('[Finalizer] video fetch failed: ' + message);
+            updateProgressErrText(message);
             return;
         }
         vd = _vd.data;
@@ -256,7 +300,9 @@
             updateProgressTitle("Processing audio...");
             let _ad = await fetchAudioFile();
             if(_ad.status === 400){
-                updateProgressErrText("There was an error processing the video or audio. Please try again.");
+                const message = _ad.error || "There was an error processing the audio. Please try again.";
+                console.error('[Finalizer] audio fetch failed: ' + message);
+                updateProgressErrText(message);
                 return;
             }
             ad = _ad.data;
@@ -414,18 +460,30 @@
             updateProgressTitle(getRandomMergeMessage());          
         }, 5000);
         log('Starting merge...');
+        let mergeStage = "Starting merge";
         try{
-            updateProgressTitle("Loading video into FFmpeg...");
+            mergeStage = "Loading video into FFmpeg";
+            updateProgressTitle(mergeStage + "...");
             const videoData = vd;                                    //await fileToUint8Array(selectedVideoFile);
+            console.log('[Finalizer] writeFile input_video START bytes=' + videoData.length);
+            const videoWriteStarted = performance.now();
             await ffmpeg.writeFile('input_video', videoData);
+            console.log('[Finalizer] writeFile input_video DONE ms=' + Math.round(performance.now() - videoWriteStarted));
 
             if(audioExists){
-                updateProgressTitle("Loading audio into FFmpeg...");
+                mergeStage = "Loading audio into FFmpeg";
+                updateProgressTitle(mergeStage + "...");
                 const audioData = ad;                                //await fileToUint8Array(selectedAudioFile);
+                console.log('[Finalizer] writeFile input_audio START bytes=' + audioData.length);
+                const audioWriteStarted = performance.now();
                 await ffmpeg.writeFile('input_audio', audioData);
+                console.log('[Finalizer] writeFile input_audio DONE ms=' + Math.round(performance.now() - audioWriteStarted));
             }
 
-            updateProgressTitle("Merging video and audio...");
+            mergeStage = "Merging video and audio";
+            updateProgressTitle(mergeStage + "...");
+            console.log('[Finalizer] ffmpeg.exec START');
+            const execStarted = performance.now();
             startMergeMessages();
 
             if (audioExists) {
@@ -460,6 +518,7 @@
                 }
             }
     
+            console.log('[Finalizer] ffmpeg.exec DONE ms=' + Math.round(performance.now() - execStarted));
             clearInterval(mergingVideoMessageInterval);
             mergingVideoMessageInterval = null;
             updateProgressBar("merging", 1);
@@ -476,10 +535,13 @@
                 clearInterval(mergingVideoMessageInterval);
                 mergingVideoMessageInterval = null;
             }
-            console.error(err);
-            log('Merge failed: '+err.message,'error');
+            const errorMessage = err instanceof Error
+                ? (err.stack || err.message || String(err))
+                : String(err);
+            console.error('[Finalizer] FAILED while: ' + mergeStage + '\n' + errorMessage, err);
+            log('Merge failed: ' + errorMessage,'error');
             updateProgressTitle("Video processing failed");
-            updateProgressErrText(err.message);
+            updateProgressErrText('Failed while: ' + mergeStage + '\n\n' + errorMessage);
         }finally{
             mergeBtn.disabled = false;
         }
@@ -499,10 +561,46 @@
         log('Ready. Click "Load FFmpeg" to begin.');
     });
     
-    setTimeout(()=>{
+    let finalizerStarted = false;
+
+    function startFinalizer(){
+        if(finalizerStarted) return;
+        finalizerStarted = true;
+        console.log('[Finalizer] Flutter bridge ready; starting finalization');
         document.getElementById('load-button').click();
-        fetchVideoAndAudioFiles();
-    }, 600);
+        fetchVideoAndAudioFiles().catch(function(e){
+            console.error('[Finalizer] startup/fetch failed: ' + String(e));
+            updateProgressTitle('Video processing failed');
+            updateProgressErrText('Finalizer startup failed: ' + String(e));
+        });
+    }
+
+    function waitForFlutterBridge(){
+        if(window.flutter_inappwebview && typeof window.flutter_inappwebview.callHandler === 'function'){
+            startFinalizer();
+            return;
+        }
+
+        console.log('[Finalizer] waiting for Flutter JavaScript bridge');
+        window.addEventListener('flutterInAppWebViewPlatformReady', function(){
+            console.log('[Finalizer] flutterInAppWebViewPlatformReady received');
+            startFinalizer();
+        }, {once: true});
+
+        setTimeout(function(){
+            if(!finalizerStarted){
+                if(window.flutter_inappwebview && typeof window.flutter_inappwebview.callHandler === 'function'){
+                    startFinalizer();
+                } else {
+                    console.error('[Finalizer] Flutter JavaScript bridge unavailable after 10 seconds');
+                    updateProgressTitle('Video processing failed');
+                    updateProgressErrText('Flutter JavaScript bridge did not become ready. Please reopen the finalizer and try again.');
+                }
+            }
+        }, 10000);
+    }
+
+    window.addEventListener('load', waitForFlutterBridge);
     
     const progressBar = document.getElementById('progress');
     const progressTitle = document.getElementById('progress-title');
